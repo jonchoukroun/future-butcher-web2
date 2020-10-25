@@ -1,0 +1,22 @@
+{
+  "name": "future-butcher-web2",
+  "version": "0.0.1",
+  "description": "Future Butcher React App",
+  "prviate": true,
+  "author": "Jon Choukroun",
+  "license": "MIT",
+  "scripts": {
+    "clean": "rm -rf dist/*",
+    "build": "yarn clean && webpack",
+    "start": "webpack serve --port 3000"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^4.5.0",
+    "webpack": "^5.2.0",
+    "webpack-cli": "^4.1.0"
+  },
+  "dependencies": {
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1"
+  }
+}
