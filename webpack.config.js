@@ -5,7 +5,7 @@ const ESLintWebpackPlugin = require("eslint-webpack-plugin");
 
 module.exports = {
     mode: "development",
-    entry: "./src/index.ts",
+    entry: "./src/index.tsx",
     output: {
         filename: "main.js",
         path: path.resolve(__dirname, "dist"),
@@ -15,7 +15,6 @@ module.exports = {
         contentBase: path.join(__dirname, "dist"),
         compress: true,
         port: 3000,
-        open: true,
     },
     plugins: [
         new ESLintWebpackPlugin({
@@ -47,6 +46,12 @@ module.exports = {
                     "style-loader",
                     "css-loader",
                     "sass-loader",
+                ],
+            },
+            {
+                test: /.(woff|woff2|eot|ttf|otf)$/,
+                use: [
+                    "file-loader",
                 ],
             },
         ],
