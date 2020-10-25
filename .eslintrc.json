@@ -1,0 +1,24 @@
+{
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "lib": [
+            "es2018",
+            "DOM"
+        ],
+        "project": "./tsconfig.json"
+    },
+    "extends": [
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "rules": {
+        "no-console": "warn",
+        "no-undefined":"error"
+    }
+}

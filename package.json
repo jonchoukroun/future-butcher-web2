@@ -8,14 +8,23 @@
   "scripts": {
     "clean": "rm -rf dist/*",
     "build": "yarn clean && webpack",
+    "lint": "eslint --config .eslintrc.json 'src/**/*.ts'",
     "start": "webpack serve"
   },
   "devDependencies": {
+    "@types/eslint": "^7.2.4",
+    "@types/html-webpack-plugin": "^3.2.4",
+    "@typescript-eslint/eslint-plugin": "^4.5.0",
+    "@typescript-eslint/parser": "^4.5.0",
     "css-loader": "^5.0.0",
+    "eslint": "^7.12.0",
+    "eslint-webpack-plugin": "^2.1.0",
     "html-webpack-plugin": "^4.5.0",
     "sass": "^1.27.0",
     "sass-loader": "^10.0.4",
     "style-loader": "^2.0.0",
+    "ts-loader": "^8.0.7",
+    "typescript": "^4.0.3",
     "webpack": "^5.2.0",
     "webpack-cli": "^4.1.0",
     "webpack-dev-server": "^3.11.0"

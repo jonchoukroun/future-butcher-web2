@@ -1,11 +1,13 @@
 {
     "compilerOptions": {
         "outDir": "./dist",
+        "sourceMap": true,
         "noImplicitAny": true,
         "module": "CommonJS",
         "target": "ES5",
-        "lib": ["ES6", "ES5", "DOM"],
+        "lib": ["ES2018", "DOM"],
+        "strict": true,
         "jsx": "react",
-        "allowJs": false
+        "allowJs": true,
     }
 }
