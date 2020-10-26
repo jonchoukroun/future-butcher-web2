@@ -1,6 +1,10 @@
 @import "../Styles/colors";
 @import "../Styles/type";
 
+* {
+    box-sizing: border-box;
+}
+
 html {
     height: 100%;
     width: 100%;
@@ -22,15 +26,8 @@ html {
 }
 
 h1,
-h2,
-h3 {
+h2 {
     font-family: "Marvin Visions";
-}
-
-h4,
-h5 {
-    font-family: "Michroma", sans-serif;
-    letter-spacing: 0.5rem;
 }
 
 p {
