@@ -1,39 +1,67 @@
 {
-  "name": "future-butcher-web2",
-  "version": "0.0.1",
-  "description": "Future Butcher React App",
-  "prviate": true,
-  "author": "Jon Choukroun",
-  "license": "MIT",
-  "scripts": {
-    "clean": "rm -rf dist/*",
-    "build": "yarn clean && webpack",
-    "lint": "eslint --config .eslintrc.json 'src/**/*.ts'",
-    "start": "webpack serve"
-  },
-  "devDependencies": {
-    "@types/eslint": "^7.2.4",
-    "@types/html-webpack-plugin": "^3.2.4",
-    "@types/react": "^16.9.53",
-    "@types/react-dom": "^16.9.8",
-    "@typescript-eslint/eslint-plugin": "^4.5.0",
-    "@typescript-eslint/parser": "^4.5.0",
-    "css-loader": "^5.0.0",
-    "eslint": "^7.12.0",
-    "eslint-webpack-plugin": "^2.1.0",
-    "file-loader": "^6.1.1",
-    "html-webpack-plugin": "^4.5.0",
-    "sass": "^1.27.0",
-    "sass-loader": "^10.0.4",
-    "style-loader": "^2.0.0",
-    "ts-loader": "^8.0.7",
-    "typescript": "^4.0.3",
-    "webpack": "^5.2.0",
-    "webpack-cli": "^4.1.0",
-    "webpack-dev-server": "^3.11.0"
-  },
-  "dependencies": {
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1"
-  }
+    "name": "future-butcher-web2",
+    "version": "0.0.1",
+    "description": "Future Butcher React App",
+    "prviate": true,
+    "author": "Jon Choukroun",
+    "license": "MIT",
+    "scripts": {
+        "clean": "rm -rf dist/*",
+        "build": "yarn clean && webpack",
+        "fix": "yarn fix:eslint && yarn fix:stylelint",
+        "fix:eslint": "yarn lint:eslint --quiet --fix",
+        "fix:stylelint": "yarn lint:stylelint --fix",
+        "lint": "yarn lint:eslint && yarn lint:stylelint",
+        "lint:eslint": "eslint --config .eslintrc.json 'src/**/*.{ts,tsx}'",
+        "lint:stylelint": "stylelint './src/**/*.scss'",
+        "start": "webpack serve"
+    },
+    "devDependencies": {
+        "@types/eslint": "^7.2.4",
+        "@types/html-webpack-plugin": "^3.2.4",
+        "@types/react": "^16.9.53",
+        "@types/react-dom": "^16.9.8",
+        "@typescript-eslint/eslint-plugin": "^4.5.0",
+        "@typescript-eslint/parser": "^4.5.0",
+        "css-loader": "^5.0.0",
+        "eslint": "^7.12.0",
+        "eslint-config-prettier": "^6.14.0",
+        "eslint-plugin-prettier": "^3.1.4",
+        "eslint-plugin-react": "^7.21.5",
+        "eslint-webpack-plugin": "^2.1.0",
+        "file-loader": "^6.1.1",
+        "html-webpack-plugin": "^4.5.0",
+        "husky": "^4.3.0",
+        "lint-staged": "^10.4.2",
+        "prettier": "^2.1.2",
+        "sass": "^1.27.0",
+        "sass-loader": "^10.0.4",
+        "style-loader": "^2.0.0",
+        "stylelint": "^13.7.2",
+        "stylelint-config-recommended": "^3.0.0",
+        "stylelint-config-sass-guidelines": "^7.1.0",
+        "stylelint-config-styled-components": "^0.1.1",
+        "stylelint-processor-styled-components": "^1.10.0",
+        "stylelint-webpack-plugin": "^2.1.1",
+        "ts-loader": "^8.0.7",
+        "typescript": "^4.0.3",
+        "typescript-plugin-styled-components": "^1.4.4",
+        "webpack": "^5.2.0",
+        "webpack-cli": "^4.1.0",
+        "webpack-dev-server": "^3.11.0"
+    },
+    "dependencies": {
+        "react": "^17.0.1",
+        "react-dom": "^17.0.1"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.{ts,tsx}": [
+            "yarn fix"
+        ]
+    }
 }
