@@ -1,19 +1,44 @@
 @import "../../Styles/colors";
 
+.terminal-container {
+    display: flex;
+    height: 60vh;
+    justify-content: center;
+}
+
 .transaction-terminal {
-    animation: terminalOpen 0.7s ease-in forwards;
     background-color: $terminal-black;
     border: 8px solid rgba($grey, 0.3);
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-    left: 5vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    max-width: 350px;
     padding: 15px;
-    position: fixed;
-    top: 25vh;
-    z-index: 1000;
+    width: 90vw;
 
     h2 {
         font-family: "Digital 7";
     }
+
+    h2:last-of-type::after {
+        animation-duration: 0.8s;
+        animation-iteration-count: infinite;
+        animation-name: cursorBlink;
+        background-color: $primary;
+        content: "";
+        display: inline-block;
+        height: 20px;
+        margin-left: 5px;
+        right: -15px;
+        top: 0;
+        vertical-align: top;
+        width: 10px;
+    }
+}
+
+.terminal-prompt {
+    color: rgba($primary, 0.5);
 }
 
 .button-container {
@@ -32,39 +57,12 @@
     text-transform: uppercase;
 }
 
-.terminal-close {
-    animation: terminalClose 0.4s ease-out forwards;
-}
-
-@keyframes terminalOpen {
+@keyframes cursorBlink {
     from {
-        transform: scale(0);
+        opacity: 1;
     }
 
     to {
-        transform: scale(1);
-    }
-}
-
-@keyframes terminalClose {
-    from {
-        transform: scale(1);
-    }
-
-    to {
-        transform: scale(0);
-    }
-}
-
-@media (min-width: 768px) {
-    .transaction-terminal {
-        left: 27.5vw;
-        top: 20vh;
-    }
-}
-
-@media (min-width: 1200px) {
-    .transaction-terminal {
-        left: 33.5vw;
+        opacity: 0;
     }
 }

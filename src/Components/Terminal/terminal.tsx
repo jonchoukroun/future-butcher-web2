@@ -9,26 +9,35 @@ interface TerminalProps {
 
 export const Terminal: React.FC<TerminalProps> = ({
     textArray,
+    enterButtonBinding,
 }: TerminalProps) => {
-    const windowWidth = window.innerWidth;
-    let terminalWidth: number;
-    if (windowWidth >= 1200) terminalWidth = Math.floor(windowWidth * 0.33);
-    else if (windowWidth >= 768) terminalWidth = Math.floor(windowWidth * 0.45);
-    else terminalWidth = Math.floor(windowWidth * 0.9);
-    const terminalPosition = {
-        width: `${terminalWidth}px`,
-    };
-
+    const prompt = "//>";
     const textElements = textArray.map((text, idx) => (
-        <h2 key={idx}>{text}</h2>
+        <h2 key={idx}>
+            <span className="terminal-prompt">{prompt}</span> {text}
+        </h2>
     ));
 
-    return (
-        <div className="transaction-terminal" style={terminalPosition}>
-            {textElements}
+    const handleEnterClick = (e: React.MouseEvent) => {
+        e.preventDefault();
+        if (enterButtonBinding) enterButtonBinding();
+    };
 
-            <div className="button-container">
-                <button className="enter-button">Enter</button>
+    return (
+        <div className="terminal-container">
+            <div className="transaction-terminal">
+                {textElements}
+
+                {enterButtonBinding && (
+                    <div className="button-container">
+                        <button
+                            className="enter-button"
+                            onClick={handleEnterClick}
+                        >
+                            Enter
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     );
