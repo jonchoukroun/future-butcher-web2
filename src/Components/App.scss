@@ -1,0 +1,38 @@
+@import "../Styles/colors";
+@import "../Styles/type";
+
+html {
+    height: 100%;
+    width: 100%;
+
+    body {
+        margin: 0;
+        min-height: 100%;
+        overflow: hidden;
+        padding: 0;
+    }
+}
+
+#root {
+    background-color: $black;
+    color: $primary;
+    font-size: 12px;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1,
+h2,
+h3 {
+    font-family: "Marvin Visions";
+}
+
+h4,
+h5 {
+    font-family: "Michroma", sans-serif;
+    letter-spacing: 0.5rem;
+}
+
+p {
+    font-family: "Michroma", sans-serif;
+}
