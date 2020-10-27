@@ -1,0 +1,25 @@
+@import "../../Styles/colors";
+
+.stats-bar {
+    align-items: center;
+    border-bottom: 1px solid $secondary;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.cash-stat,
+.debt-stat,
+.turns-stat {
+    font-family: "Digital 7";
+    font-size: 18px;
+}
+
+.cash-stat,
+.turns-stat {
+    color: $primary;
+}
+
+.debt-stat {
+    color: $danger;
+}
