@@ -5,63 +5,64 @@ import { Terminal } from "../Terminal/terminal";
 import "./intro.scss";
 import "../../Styles/crtGrid.scss";
 
-enum ScreenEnum {
+const enum DetailEnum {
     Start,
     Background,
     Addiction,
     Turns,
     Loan,
     Compton,
-    End,
 }
 
-function renderTerminalText(screen: ScreenEnum): string[] {
-    switch (screen) {
-        case ScreenEnum.Start:
+function renderTerminalText(detail: DetailEnum): string[] {
+    switch (detail) {
+        case DetailEnum.Start:
             return [
                 "The economy is in ruins after the collapse of HypeCoin. Civil unrest, crime, and electric scooters have turned the City of Angels into a nightmare.",
                 "It's time to get out of town, but first you'll need some cash...",
             ];
 
-        case ScreenEnum.Background:
+        case DetailEnum.Background:
             return [
                 "Your only shot is to hustle the new premium addiction of the rich and famous.",
                 "You can make a lot dough servicing their demand for fresh, exclusive cuts of human meat...",
             ];
 
-        case ScreenEnum.Addiction:
+        case DetailEnum.Addiction:
             return ["...Not that you'd ever touch the stuff."];
 
-        case ScreenEnum.Turns:
+        case DetailEnum.Turns:
             return [
                 "You have 48 hours to buy and sell choice cuts and make a profit.",
                 "Prices change every hour, so keep on eye on the markets.",
                 "And don't let the clock run out...",
             ];
 
-        case ScreenEnum.Loan:
+        case DetailEnum.Loan:
             return [
                 "Your ShitiBank loan was approved, you now have $5,000 to hustle. But with an hourly interest rate of 5%, you better pay it off quick!",
                 "Yean, it's steep. Welcome to the People's Republic of LA...",
             ];
 
-        case ScreenEnum.Compton:
+        case DetailEnum.Compton:
             return [
-                "It's 5 am and you hit the streets of Compton. Better check the market for some cheap cuts.",
+                "It's 5 am in Compton. Time to hit the markets.",
                 "And if you need some protection, Gus' Army Surplus Store opens in a few hours.",
+                "Good luck, hustler.",
             ];
-
-        case ScreenEnum.End:
-            return ["This is it."];
     }
 }
 
-export const Intro: React.FC = () => {
-    const [screen, setScreen] = React.useState(ScreenEnum.Start);
+interface IntroProps {
+    screenChanger: () => void;
+}
 
-    const terminalText = renderTerminalText(screen);
+export const Intro: React.FC<IntroProps> = ({ screenChanger }: IntroProps) => {
+    const [detail, setDetail] = React.useState(DetailEnum.Start);
 
-    const screenChanger = () => setScreen(screen + 1);
+    const terminalText = renderTerminalText(detail);
+
+    const detailChanger = () => setDetail(detail + 1);
 
     const dateOptions = {
         year: "numeric",
@@ -77,12 +78,15 @@ export const Intro: React.FC = () => {
                 <h2>{currentDate}</h2>
             </div>
 
-            {screen === ScreenEnum.End ? (
-                <Terminal textArray={terminalText} />
-            ) : (
+            {detail === DetailEnum.Compton ? (
                 <Terminal
                     textArray={terminalText}
                     enterButtonBinding={screenChanger}
+                />
+            ) : (
+                <Terminal
+                    textArray={terminalText}
+                    enterButtonBinding={detailChanger}
                 />
             )}
         </div>
