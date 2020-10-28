@@ -21,7 +21,6 @@ module.exports = {
         new ESLintWebpackPlugin({
             files: "src",
             extensions: [".ts", ".tsx", ".js", ".jsx"],
-            failOnError: true,
             emitWarning: true,
             emitError: true,
         }),
