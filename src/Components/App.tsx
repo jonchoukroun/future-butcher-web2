@@ -18,17 +18,20 @@ export const App: React.FC = () => {
 
     const visitSubway = () => setGameScreen(GameScreen.Subway);
 
+    let screen: JSX.Element | null = null;
     switch (gameScreen) {
         case GameScreen.Intro:
-            return <Intro screenChanger={visitMarket} />;
+            screen = <Intro screenChanger={visitMarket} />;
+            break;
 
         case GameScreen.Market:
-            return <Market subwaySelector={visitSubway} />;
+            screen = <Market subwaySelector={visitSubway} />;
+            break;
 
         case GameScreen.Subway:
-            return <h1>Subway</h1>;
-
-        default:
-            return null;
+            screen = <h1>Subway</h1>;
+            break;
     }
+
+    return <div className="game-container">{screen}</div>;
 };

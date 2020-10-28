@@ -2,7 +2,10 @@
 
 #market {
     height: 100%;
+    margin: 0 auto;
+    max-width: 500px;
     position: relative;
+    width: 100vw;
 }
 
 .cuts-header {
@@ -13,6 +16,7 @@
 }
 
 .cuts-menu {
+    align-items: center;
     bottom: 75px;
     display: flex;
     flex-direction: column;
@@ -20,15 +24,45 @@
     left: 0;
     overflow: scroll;
     position: absolute;
-    top: 100px;
+    top: 110px;
     width: 100%;
+}
+
+%scroll-indicator {
+    align-items: center;
+    background-color: $black;
+    color: $primary;
+    display: none;
+    font-size: 20px;
+    justify-content: center;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+}
+
+.top-indicator {
+    @extend %scroll-indicator;
+    box-shadow: 0 3px 5px 2px rgba($black, 0.6);
+    z-index: 100;
+}
+
+.bottom-indicator {
+    @extend %scroll-indicator;
+    bottom: 70px;
+    box-shadow: 0 -3px 5px 2px rgba($black, 0.6);
+}
+
+.is-visible {
+    display: flex;
 }
 
 .cut-entry {
     border-bottom: 1px solid $secondary;
     display: flex;
-    padding: 10px 20px;
+    padding: 10px 0;
+    width: 80%;
 
+    h3,
     h4 {
         color: $primary;
         flex: 1;
@@ -45,12 +79,9 @@
     color: $secondary;
 }
 
-.cut-price {
-    text-align: right;
-}
-
+.cut-price,
 .cut-quantity {
-    text-align: center;
+    text-align: right;
 }
 
 .button-container {

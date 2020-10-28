@@ -13,9 +13,9 @@ export const Market: React.FC<MarketProps> = ({
 }: MarketProps) => {
     const menu = MARKET_FIXTURE.map((cut, i) => (
         <div key={i} className="cut-entry">
-            <h4 className="cut-name">
+            <h3 className="cut-name">
                 {cut.name} <span className="cut-info">(i)</span>
-            </h4>
+            </h3>
             <h4 className="cut-price">${cut.price}</h4>
             <h4 className="cut-quantity">({cut.quantity} lbs)</h4>
         </div>
@@ -26,11 +26,39 @@ export const Market: React.FC<MarketProps> = ({
         subwaySelector();
     };
 
+    const [isAtTop, setIsAtTop] = React.useState(true);
+    const [hasLowerContent, setHasLowerContent] = React.useState(true);
+    const handleScroll = (e: React.UIEvent) => {
+        const element = e.target as HTMLDivElement;
+        element.scrollTop > 0 ? setIsAtTop(false) : setIsAtTop(true);
+        element.scrollTop + element.clientHeight === element.scrollHeight
+            ? setHasLowerContent(false)
+            : setHasLowerContent(true);
+    };
+
     return (
         <div id="market">
             <StatsBar />
             <h3 className="cuts-header">Select a cut to buy or sell</h3>
-            <div className="cuts-menu">{menu}</div>
+            <div
+                className={
+                    isAtTop ? "top-indicator" : "top-indicator is-visible"
+                }
+            >
+                . . .
+            </div>
+            <div className="cuts-menu" onScroll={handleScroll}>
+                {menu}
+            </div>
+            <div
+                className={
+                    hasLowerContent
+                        ? "bottom-indicator is-visible"
+                        : "bottom-indicator"
+                }
+            >
+                . . .
+            </div>
             <div className="button-container">
                 <button className="subway-select" onClick={handleSubwayClick}>
                     Subway
@@ -41,31 +69,6 @@ export const Market: React.FC<MarketProps> = ({
 };
 
 const MARKET_FIXTURE = [
-    {
-        name: "heart",
-        price: 18000,
-        quantity: 12,
-    },
-    {
-        name: "flank",
-        price: 7312,
-        quantity: 17,
-    },
-    {
-        name: "brain",
-        price: 78900,
-        quantity: 3,
-    },
-    {
-        name: "loin",
-        price: 800,
-        quantity: 34,
-    },
-    {
-        name: "ribs",
-        price: 1011,
-        quantity: 24,
-    },
     {
         name: "heart",
         price: 18000,
