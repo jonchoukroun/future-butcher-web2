@@ -58,7 +58,7 @@ interface IntroProps {
 }
 
 export const Intro: React.FC<IntroProps> = ({ screenChanger }: IntroProps) => {
-    const [detail, setDetail] = React.useState(DetailEnum.Compton);
+    const [detail, setDetail] = React.useState(DetailEnum.Start);
 
     const terminalText = renderTerminalText(detail);
 

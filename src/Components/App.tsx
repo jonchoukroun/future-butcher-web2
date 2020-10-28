@@ -12,7 +12,7 @@ const enum GameScreen {
 }
 
 export const App: React.FC = () => {
-    const [gameScreen, setGameScreen] = React.useState(GameScreen.Market);
+    const [gameScreen, setGameScreen] = React.useState(GameScreen.Intro);
 
     const visitMarket = () => setGameScreen(GameScreen.Market);
 
