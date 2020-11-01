@@ -2,7 +2,6 @@
 
 .terminal-container {
     display: flex;
-    height: 60vh;
     justify-content: center;
 }
 
@@ -12,7 +11,9 @@
     box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    height: 60vh;
+    justify-content: flex-end;
+    max-height: 400px;
     max-width: 350px;
     padding: 15px;
     width: 90vw;
@@ -43,7 +44,7 @@
 
 .button-container {
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     margin-top: 20px;
 }
 

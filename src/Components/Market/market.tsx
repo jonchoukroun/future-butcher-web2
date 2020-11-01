@@ -59,7 +59,7 @@ export const Market: React.FC<MarketProps> = ({
             >
                 . . .
             </div>
-            <div className="button-container">
+            <div className="navigation-buttons">
                 <button className="subway-select" onClick={handleSubwayClick}>
                     Subway
                 </button>

@@ -20,7 +20,6 @@
     bottom: 75px;
     display: flex;
     flex-direction: column;
-    justify-content: start;
     left: 0;
     overflow: scroll;
     position: absolute;
@@ -84,7 +83,7 @@
     text-align: right;
 }
 
-.button-container {
+.navigation-buttons {
     align-items: center;
     bottom: 0;
     display: flex;
