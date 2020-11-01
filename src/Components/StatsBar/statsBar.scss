@@ -2,17 +2,21 @@
 
 .stats-bar {
     align-items: center;
+    background-color: $black;
     border-bottom: 1px solid $secondary;
     display: flex;
+    height: 40px;
     justify-content: space-between;
-    padding: 10px;
+    padding: 5px 10px;
+    position: relative;
+    z-index: 100;
 }
 
 .cash-stat,
 .debt-stat,
 .turns-stat {
     font-family: "Digital 7";
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .cash-stat,
@@ -22,4 +26,63 @@
 
 .debt-stat {
     color: $danger;
+}
+
+.debt-details,
+.turns-details,
+.settings {
+    display: none;
+}
+
+.stat-expander {
+    background-color: transparent;
+    border-style: none;
+    color: $primary;
+
+    svg {
+        font-size: 20px;
+    }
+}
+
+.stat-detail {
+    align-items: flex-start;
+    background-color: $black;
+    border: 2px outset $secondary;
+    border-radius: 2px;
+    border-top-style: none;
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    padding: 0 10px;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
+
+    p {
+        font-family: "Digital 7";
+        font-size: 22px;
+    }
+}
+
+.stat-detail-enter {
+    top: -200px;
+}
+
+.stat-detail-enter-active {
+    top: 41px;
+    transition: top 500ms;
+
+    p {
+        font-family: "Digital 7";
+        font-size: 22px;
+    }
+}
+
+.stat-detail-exit {
+    top: 41px;
+    transition: top 500ms;
+}
+
+.stat-detail-exit-active {
+    top: -200px;
 }
