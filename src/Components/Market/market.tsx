@@ -27,7 +27,14 @@ export const Market: React.FC<MarketProps> = ({
     };
 
     const [isAtTop, setIsAtTop] = React.useState(true);
-    const [hasLowerContent, setHasLowerContent] = React.useState(true);
+    const [hasLowerContent, setHasLowerContent] = React.useState(false);
+    React.useEffect(() => {
+        const menuContainer: Element = document.getElementsByClassName(
+            "cuts-menu",
+        )[0];
+        if (menuContainer.scrollHeight > menuContainer.clientHeight)
+            setHasLowerContent(true);
+    }, []);
     const handleScroll = (e: React.UIEvent) => {
         const element = e.target as HTMLDivElement;
         element.scrollTop > 0 ? setIsAtTop(false) : setIsAtTop(true);
