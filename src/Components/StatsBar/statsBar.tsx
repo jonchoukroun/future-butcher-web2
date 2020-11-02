@@ -1,8 +1,13 @@
 import * as React from "react";
 
-import { CashDetails } from "./cashDetails";
+import { CashDetail } from "./cashDetail";
+import { DebtDetail } from "./debtDetail";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faAngleDown, faCog } from "@fortawesome/free-solid-svg-icons";
+import {
+    faAngleDown,
+    faAngleUp,
+    faCog,
+} from "@fortawesome/free-solid-svg-icons";
 import { CSSTransition } from "react-transition-group";
 
 import "./statsBar.scss";
@@ -22,8 +27,17 @@ export const StatsBar: React.FC = () => {
     const [cashDetailIsVisible, setCashDetailIsVisible] = React.useState(false);
     const toggleCashDetail = (e: React.MouseEvent) => {
         e.preventDefault();
+        setDebtDetailIsVisible(false);
         setCashDetailIsVisible((cashDetailIsVisible) => !cashDetailIsVisible);
     };
+
+    const [debtDetailIsVisible, setDebtDetailIsVisible] = React.useState(false);
+    const toggleDebtDetail = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setCashDetailIsVisible(false);
+        setDebtDetailIsVisible((debtDetailIsVisible) => !debtDetailIsVisible);
+    };
+
     return (
         <>
             <div className="stats-bar">
@@ -33,13 +47,24 @@ export const StatsBar: React.FC = () => {
                         className="stat-expander"
                         onClick={toggleCashDetail}
                     >
-                        <FontAwesomeIcon icon={faAngleDown} />
+                        {cashDetailIsVisible ? (
+                            <FontAwesomeIcon icon={faAngleUp} />
+                        ) : (
+                            <FontAwesomeIcon icon={faAngleDown} />
+                        )}
                     </button>
                 </div>
                 <div className="debt-stat">
                     ${formatMoney(debt)}
-                    <button className="stat-expander">
-                        <FontAwesomeIcon icon={faAngleDown} />
+                    <button
+                        className="stat-expander"
+                        onClick={toggleDebtDetail}
+                    >
+                        {debtDetailIsVisible ? (
+                            <FontAwesomeIcon icon={faAngleUp} />
+                        ) : (
+                            <FontAwesomeIcon icon={faAngleDown} />
+                        )}
                     </button>
                 </div>
                 <div className="turns-stat">
@@ -61,9 +86,16 @@ export const StatsBar: React.FC = () => {
                 unmountOnExit
                 classNames="stat-detail"
             >
-                <CashDetails cash={cash} />
+                <CashDetail cash={cash} />
             </CSSTransition>
-            <div className="debt-details">Debt details</div>
+            <CSSTransition
+                in={debtDetailIsVisible}
+                timeout={500}
+                unmountOnExit
+                classNames="stat-detail"
+            >
+                <DebtDetail debt={debt} cash={cash} />
+            </CSSTransition>
             <div className="turns-details">Turns details</div>
             <div className="settings">Settings</div>
         </>
