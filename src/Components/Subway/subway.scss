@@ -2,6 +2,7 @@
 
 .station-list {
     list-style: none;
+    overflow-x: hidden;
     padding: 0 20px;
 }
 
@@ -10,6 +11,17 @@
     display: flex;
     justify-content: space-between;
     padding: 10px 0;
+}
+
+.subway-station-appear,
+.subway-station-enter {
+    transform: translateX(-1400px);
+}
+
+.subway-station-appear-active,
+.subway-station-enter-active {
+    transform: translateX(0);
+    transition: 500ms;
 }
 
 .station-name {

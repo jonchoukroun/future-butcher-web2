@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import { StatsBar } from "../StatsBar/statsBar";
+import { CSSTransition } from "react-transition-group";
 
 import "./subway.scss";
 
@@ -15,14 +16,29 @@ export const Subway: React.FC<SubwayProps> = ({
         e.preventDefault();
         marketSelector();
     };
-    const destinations = SUBWAY_FIXTURE.map((station) => (
-        <li key={station.name} className="subway-station">
-            <p className="station-name">{station.name}</p>
-            <button className="station-select">
-                {station.travelTime} hours
-            </button>
-        </li>
-    ));
+    const destinations = SUBWAY_FIXTURE.map((station, i) => {
+        const delay = 1000 - i * 200;
+        return (
+            <CSSTransition
+                key={station.name}
+                in
+                appear
+                timeout={1000 + delay}
+                classNames="subway-station"
+            >
+                <li
+                    key={station.name}
+                    className="subway-station"
+                    style={{ transitionDelay: `${delay}ms` }}
+                >
+                    <p className="station-name">{station.name}</p>
+                    <button className="station-select">
+                        {station.travelTime} hours
+                    </button>
+                </li>
+            </CSSTransition>
+        );
+    });
     return (
         <div className="game-screen">
             <StatsBar />
