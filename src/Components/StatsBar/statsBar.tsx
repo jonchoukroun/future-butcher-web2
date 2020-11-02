@@ -11,6 +11,7 @@ import {
 import { CSSTransition } from "react-transition-group";
 
 import "./statsBar.scss";
+import { TurnsDetail } from "./turnsDetail";
 
 function formatMoney(amount: number) {
     if (amount >= 1_000_000) return `${Math.floor(amount / 1_000_000)} M`;
@@ -28,6 +29,7 @@ export const StatsBar: React.FC = () => {
     const toggleCashDetail = (e: React.MouseEvent) => {
         e.preventDefault();
         setDebtDetailIsVisible(false);
+        setTurnsDetailIsVisible(false);
         setCashDetailIsVisible((cashDetailIsVisible) => !cashDetailIsVisible);
     };
 
@@ -35,7 +37,20 @@ export const StatsBar: React.FC = () => {
     const toggleDebtDetail = (e: React.MouseEvent) => {
         e.preventDefault();
         setCashDetailIsVisible(false);
+        setTurnsDetailIsVisible(false);
         setDebtDetailIsVisible((debtDetailIsVisible) => !debtDetailIsVisible);
+    };
+
+    const [turnsDetailIsVisible, setTurnsDetailIsVisible] = React.useState(
+        false,
+    );
+    const toggleTurnsDetail = (e: React.MouseEvent) => {
+        e.preventDefault();
+        setCashDetailIsVisible(false);
+        setDebtDetailIsVisible(false);
+        setTurnsDetailIsVisible(
+            (turnsDetailIsVisible) => !turnsDetailIsVisible,
+        );
     };
 
     return (
@@ -69,8 +84,15 @@ export const StatsBar: React.FC = () => {
                 </div>
                 <div className="turns-stat">
                     {turns}
-                    <button className="stat-expander">
-                        <FontAwesomeIcon icon={faAngleDown} />
+                    <button
+                        className="stat-expander"
+                        onClick={toggleTurnsDetail}
+                    >
+                        {turnsDetailIsVisible ? (
+                            <FontAwesomeIcon icon={faAngleUp} />
+                        ) : (
+                            <FontAwesomeIcon icon={faAngleDown} />
+                        )}
                     </button>
                 </div>
                 <div className="settings-button">
@@ -96,7 +118,14 @@ export const StatsBar: React.FC = () => {
             >
                 <DebtDetail debt={debt} cash={cash} />
             </CSSTransition>
-            <div className="turns-details">Turns details</div>
+            <CSSTransition
+                in={turnsDetailIsVisible}
+                timeout={500}
+                unmountOnExit
+                classNames="stat-detail"
+            >
+                <TurnsDetail turns={turns} debt={debt} />
+            </CSSTransition>
             <div className="settings">Settings</div>
         </>
     );
