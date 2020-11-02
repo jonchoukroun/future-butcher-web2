@@ -1,16 +1,10 @@
 import * as React from "react";
 
+import { formatMoney } from "../Utils/formatMoney";
+
 interface CashDetailProps {
     cash: number;
     bankBalance?: number;
-}
-
-function formatMoney(amount: number) {
-    return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-        minimumFractionDigits: 0,
-    }).format(amount);
 }
 
 export const CashDetail: React.FC<CashDetailProps> = ({
