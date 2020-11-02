@@ -2,8 +2,10 @@ import * as React from "react";
 
 import { Intro } from "./Intro/intro";
 import { Market } from "./Market/market";
+import { Subway } from "./Subway/subway";
 
 import "./App.scss";
+import "./GameScreen.scss";
 
 const enum GameScreen {
     Intro,
@@ -12,7 +14,7 @@ const enum GameScreen {
 }
 
 export const App: React.FC = () => {
-    const [gameScreen, setGameScreen] = React.useState(GameScreen.Market);
+    const [gameScreen, setGameScreen] = React.useState(GameScreen.Subway);
 
     const visitMarket = () => setGameScreen(GameScreen.Market);
 
@@ -29,7 +31,7 @@ export const App: React.FC = () => {
             break;
 
         case GameScreen.Subway:
-            screen = <h1>Subway</h1>;
+            screen = <Subway marketSelector={visitMarket} />;
             break;
     }
 

@@ -1,20 +1,5 @@
 @import "../../Styles/colors";
 
-#market {
-    height: 100%;
-    margin: 0 auto;
-    max-width: 500px;
-    position: relative;
-    width: 100vw;
-}
-
-.cuts-header {
-    color: $secondary;
-    font-family: "Michroma";
-    font-style: italic;
-    text-align: center;
-}
-
 .cuts-menu {
     align-items: center;
     bottom: 75px;
@@ -81,41 +66,4 @@
 .cut-price,
 .cut-quantity {
     text-align: right;
-}
-
-.navigation-buttons {
-    align-items: center;
-    bottom: 0;
-    display: flex;
-    height: 75px;
-    justify-content: center;
-    left: 0;
-    position: absolute;
-    width: 100%;
-}
-
-.subway-select {
-    background-color: rgba($primary, 0.1);
-    border-color: rgba($primary, 0.4);
-    border-radius: 2px;
-    border-style: outset;
-    box-shadow: inset 0 0 0 1px rgba($primary, 0.4);
-    color: $primary;
-    cursor: pointer;
-    font-family: "Michroma";
-    font-size: 14px;
-    font-weight: bold;
-    line-height: 1;
-    padding: 15px;
-    padding: 10px;
-    text-transform: uppercase;
-    transition: all 0.3s ease;
-    width: 80%;
-
-    &:hover,
-    &:active {
-        background-color: $secondary;
-        border-color: $primary;
-        color: $black;
-    }
 }

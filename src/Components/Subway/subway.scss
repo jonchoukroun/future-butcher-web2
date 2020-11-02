@@ -1,0 +1,29 @@
+@import "../../Styles/utilities";
+
+.station-list {
+    list-style: none;
+    padding: 0 20px;
+}
+
+.subway-station {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+}
+
+.station-name {
+    font-size: 16px;
+    margin: 0;
+    text-transform: capitalize;
+}
+
+.station-select {
+    @include button-primary;
+    padding: 0.5rem 0;
+    width: 120px;
+
+    &:focus {
+        @include button-primary-focus;
+    }
+}

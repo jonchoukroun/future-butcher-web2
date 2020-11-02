@@ -44,9 +44,9 @@ export const Market: React.FC<MarketProps> = ({
     };
 
     return (
-        <div id="market">
+        <div className="game-screen">
             <StatsBar />
-            <h3 className="cuts-header">Select a cut to buy or sell</h3>
+            <h3 className="screen-header">Select a cut to buy or sell</h3>
             <div
                 className={
                     isAtTop ? "top-indicator" : "top-indicator is-visible"
@@ -67,9 +67,7 @@ export const Market: React.FC<MarketProps> = ({
                 . . .
             </div>
             <div className="navigation-buttons">
-                <button className="subway-select" onClick={handleSubwayClick}>
-                    Subway
-                </button>
+                <button onClick={handleSubwayClick}>Subway</button>
             </div>
         </div>
     );
