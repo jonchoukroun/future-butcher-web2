@@ -38,8 +38,7 @@
         @include button-primary-focus;
     }
 
-    button:hover,
-    button:active {
+    button:hover {
         background-color: $secondary;
         border-color: $primary;
         color: $black;
