@@ -56,6 +56,10 @@
     font-weight: bold;
     padding: 10px;
     text-transform: uppercase;
+
+    &:focus {
+        outline: none;
+    }
 }
 
 @keyframes cursorBlink {
