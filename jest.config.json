@@ -1,0 +1,11 @@
+{
+    "moduleNameMapper": {
+        "^.+\\.(css|less|scss)$": "babel-jest"
+    },
+    "roots": ["<rootDir>/src"],
+    "setupFilesAfterEnv": ["<rootDir>/src/setupTests.ts"],
+    "testRegex": ".*\\.test\\.tsx?$",
+    "transform": {
+        "^.+\\.(ts|tsx)$": "ts-jest"
+    }
+}
