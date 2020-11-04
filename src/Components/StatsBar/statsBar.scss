@@ -14,13 +14,32 @@
 
 .cash-stat,
 .debt-stat,
-.turns-stat {
+.turns-stat,
+.settings-button {
+    background-color: transparent;
+    border-style: none;
     font-family: "Digital 7";
     font-size: 20px;
+
+    svg {
+        font-size: 20px;
+        margin-left: 10px;
+    }
+
+    &:focus {
+        outline: none;
+    }
+}
+
+.settings-button {
+    svg {
+        margin-left: 0;
+    }
 }
 
 .cash-stat,
-.turns-stat {
+.turns-stat,
+.settings-button {
     color: $primary;
 }
 
@@ -32,20 +51,6 @@
 .turns-details,
 .settings {
     display: none;
-}
-
-.stat-expander {
-    background-color: transparent;
-    border-style: none;
-    color: $primary;
-
-    svg {
-        font-size: 20px;
-    }
-
-    &:focus {
-        outline: none;
-    }
 }
 
 .stat-detail {

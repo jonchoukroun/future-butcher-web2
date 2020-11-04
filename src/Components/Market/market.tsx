@@ -4,6 +4,8 @@ import { StatsBar } from "../StatsBar/statsBar";
 import { CSSTransition } from "react-transition-group";
 import { formatMoney } from "../Utils/formatMoney";
 
+import { MARKET_CUTS } from "../../Fixtures/marketCuts";
+
 import "./market.scss";
 
 interface MarketProps {
@@ -13,8 +15,8 @@ interface MarketProps {
 export const Market: React.FC<MarketProps> = ({
     subwaySelector,
 }: MarketProps) => {
-    const menu = MARKET_FIXTURE.map((cut, i) => {
-        const delay = 1000 - i * Math.floor(1000 / MARKET_FIXTURE.length);
+    const menu = MARKET_CUTS.map((cut, i) => {
+        const delay = 1000 - i * Math.floor(1000 / MARKET_CUTS.length);
         return (
             <CSSTransition
                 key={cut.name}
@@ -89,31 +91,3 @@ export const Market: React.FC<MarketProps> = ({
         </div>
     );
 };
-
-const MARKET_FIXTURE = [
-    {
-        name: "heart",
-        price: 18000,
-        quantity: 12,
-    },
-    {
-        name: "flank",
-        price: 7312,
-        quantity: 17,
-    },
-    {
-        name: "brain",
-        price: 78900,
-        quantity: 3,
-    },
-    {
-        name: "loin",
-        price: 800,
-        quantity: 34,
-    },
-    {
-        name: "ribs",
-        price: 1011,
-        quantity: 24,
-    },
-];
