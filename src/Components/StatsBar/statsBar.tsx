@@ -56,50 +56,45 @@ export const StatsBar: React.FC = () => {
     return (
         <>
             <div className="stats-bar">
-                <div className="cash-stat">
+                <button
+                    className="cash-stat"
+                    data-testid="cash-stat"
+                    onClick={toggleCashDetail}
+                >
                     ${formatMoney(cash)}
-                    <button
-                        className="stat-expander"
-                        onClick={toggleCashDetail}
-                    >
-                        {cashDetailIsVisible ? (
-                            <FontAwesomeIcon icon={faAngleUp} />
-                        ) : (
-                            <FontAwesomeIcon icon={faAngleDown} />
-                        )}
-                    </button>
-                </div>
-                <div className="debt-stat">
-                    ${formatMoney(debt)}
-                    <button
-                        className="stat-expander"
-                        onClick={toggleDebtDetail}
-                    >
-                        {debtDetailIsVisible ? (
-                            <FontAwesomeIcon icon={faAngleUp} />
-                        ) : (
-                            <FontAwesomeIcon icon={faAngleDown} />
-                        )}
-                    </button>
-                </div>
-                <div className="turns-stat">
+                    {cashDetailIsVisible ? (
+                        <FontAwesomeIcon icon={faAngleUp} />
+                    ) : (
+                        <FontAwesomeIcon icon={faAngleDown} />
+                    )}
+                </button>
+                <button
+                    className="debt-stat"
+                    data-testid="debt-stat"
+                    onClick={toggleDebtDetail}
+                >
+                    -${formatMoney(debt)}
+                    {debtDetailIsVisible ? (
+                        <FontAwesomeIcon icon={faAngleUp} />
+                    ) : (
+                        <FontAwesomeIcon icon={faAngleDown} />
+                    )}
+                </button>
+                <button
+                    className="turns-stat"
+                    data-testid="turns-stat"
+                    onClick={toggleTurnsDetail}
+                >
                     {turns}
-                    <button
-                        className="stat-expander"
-                        onClick={toggleTurnsDetail}
-                    >
-                        {turnsDetailIsVisible ? (
-                            <FontAwesomeIcon icon={faAngleUp} />
-                        ) : (
-                            <FontAwesomeIcon icon={faAngleDown} />
-                        )}
-                    </button>
-                </div>
-                <div className="settings-button">
-                    <button className="stat-expander">
-                        <FontAwesomeIcon icon={faCog} />
-                    </button>
-                </div>
+                    {turnsDetailIsVisible ? (
+                        <FontAwesomeIcon icon={faAngleUp} />
+                    ) : (
+                        <FontAwesomeIcon icon={faAngleDown} />
+                    )}
+                </button>
+                <button className="settings-button">
+                    <FontAwesomeIcon icon={faCog} title="settings-icon" />
+                </button>
             </div>
 
             <CSSTransition
@@ -108,7 +103,7 @@ export const StatsBar: React.FC = () => {
                 unmountOnExit
                 classNames="stat-detail"
             >
-                <CashDetail cash={cash} />
+                <CashDetail cash={cash} data-testid="cash-detail" />
             </CSSTransition>
             <CSSTransition
                 in={debtDetailIsVisible}
@@ -116,7 +111,7 @@ export const StatsBar: React.FC = () => {
                 unmountOnExit
                 classNames="stat-detail"
             >
-                <DebtDetail debt={debt} cash={cash} />
+                <DebtDetail debt={debt} cash={cash} data-testid="debt-detail" />
             </CSSTransition>
             <CSSTransition
                 in={turnsDetailIsVisible}
@@ -124,7 +119,11 @@ export const StatsBar: React.FC = () => {
                 unmountOnExit
                 classNames="stat-detail"
             >
-                <TurnsDetail turns={turns} debt={debt} />
+                <TurnsDetail
+                    turns={turns}
+                    debt={debt}
+                    data-testid="turns-detail"
+                />
             </CSSTransition>
             <div className="settings">Settings</div>
         </>

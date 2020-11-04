@@ -4,7 +4,7 @@ import { render } from "@testing-library/react";
 import { Subway } from "./subway";
 import { SUBWAY_STATIONS } from "../../Fixtures/subwayStations";
 
-describe("Market component", function () {
+describe("Subway component", function () {
     const marketSelectorStub = () => {
         return;
     };
