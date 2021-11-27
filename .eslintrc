@@ -20,7 +20,9 @@
         "es2021": true,
         "jest": true
     },
-    "rules": {},
+    "rules": {
+        "@typescript-eslint/explicit-module-boundary-types": ["off"]
+    },
     "settings": {
         "react": {
             "version": "detect"

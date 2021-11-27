@@ -2,7 +2,6 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ESLintWebpackPlugin = require("eslint-webpack-plugin");
-const StyleLintPlugin = require("stylelint-webpack-plugin");
 
 module.exports = {
     mode: "development",
@@ -24,10 +23,6 @@ module.exports = {
             emitWarning: true,
             emitError: true,
         }),
-        new StyleLintPlugin({
-            configFile: ".stylelintrc.json",
-            files: "src/**/*.scss",
-        }),
         new HtmlWebpackPlugin({
             template: "src/index.html",
         }),
@@ -43,10 +38,6 @@ module.exports = {
                     },
                 },
                 exclude: /node_modules/,
-            },
-            {
-                test: /.scss$/,
-                use: ["style-loader", "css-loader", "sass-loader"],
             },
             {
                 test: /.(woff|woff2|eot|ttf|otf)$/,
