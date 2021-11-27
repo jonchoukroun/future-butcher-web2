@@ -41,14 +41,23 @@ export const Welcome = () => {
                             display: "flex",
                             flexDirection: "column",
                             alignItems: "center",
+                            marginBlockStart: "20px",
+                            backgroundColor: "black",
+                            borderWidth: "2px",
+                            borderStyle: "inset",
+                            borderBlockStartColor: Colors.Border.dark,
+                            borderInlineStartColor: Colors.Border.dark,
+                            borderBlockEndColor: Colors.Border.light,
+                            borderInlineEndColor: Colors.Border.light,
                         }}
                     >
                         <h1
                             css={css({
                                 fontFamily: "Arial black",
                                 fontSize: `${headingWidth}px`,
-                                color: Colors.Background.accent,
+                                color: "#0bd3d3",
                                 margin: 0,
+                                marginInlineStart: "-4px",
                             })}
                         >
                             FUTURE
@@ -57,11 +66,12 @@ export const Welcome = () => {
                             css={css({
                                 fontFamily: "Mr Dafoe",
                                 fontSize: `${headingWidth + 10}px`,
-                                color: Colors.Text.accent,
+                                color: "#f890e7",
                                 margin: 0,
-                                marginBlockStart: `-${
-                                    Math.round(headingWidth) / 1.5
-                                }px`,
+                                marginBlockStart: `-${Math.round(
+                                    headingWidth * 0.9,
+                                )}px`,
+                                marginInlineStart: "-4px",
                                 transform: "rotate(-10deg)",
                             })}
                         >
