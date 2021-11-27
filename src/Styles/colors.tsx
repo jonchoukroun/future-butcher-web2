@@ -3,10 +3,12 @@ export const Text = {
     headingDark: "black",
     bodyLight: "white",
     bodyDark: "black",
+    accent: "#960018",
 };
 
 export const Border = {
-    dark: "#b8b8b8",
+    dark: "#787878",
+    light: "#dfdfdf",
 };
 
 export const Background = {

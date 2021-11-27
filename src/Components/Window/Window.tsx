@@ -1,37 +1,18 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/react";
-import * as React from "react";
+import { ReactNode } from "react";
 
 import { TopBar } from "./TopBar";
+import { useWindowSize } from "../Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 
 interface WindowProps {
     title: string;
+    children: ReactNode;
 }
 
-export const Window = ({ title }: WindowProps) => {
-    const [viewportSize, setViewportSize] = React.useState<{
-        blockSize: number;
-        inlineSize: number;
-    }>({
-        blockSize: window.innerHeight - 10,
-        inlineSize: window.innerWidth - 10,
-    });
-
-    function resizeHandler() {
-        setViewportSize({
-            blockSize: window.innerHeight - 10,
-            inlineSize: window.innerWidth - 10,
-        });
-    }
-
-    React.useEffect(() => {
-        window.onresize = resizeHandler;
-
-        return () => {
-            window.onresize = null;
-        };
-    }, []);
+export const Window = ({ title, children }: WindowProps) => {
+    const windowSize = useWindowSize();
     return (
         <div
             className="container"
@@ -46,9 +27,9 @@ export const Window = ({ title }: WindowProps) => {
             <div
                 className="outer-window"
                 css={css({
-                    blockSize: viewportSize.blockSize,
+                    blockSize: windowSize.block,
                     maxBlockSize: "812px",
-                    inlineSize: viewportSize.inlineSize,
+                    inlineSize: windowSize.inline,
                     maxInlineSize: "990px",
                     paddingBlock: "1px",
                     paddingInlineStart: "1px",
@@ -60,10 +41,14 @@ export const Window = ({ title }: WindowProps) => {
                     borderInlineEndWidth: "3px",
                     borderStyle: "outset",
                     borderRadius: "2px",
-                    borderColor: "#c3c3c3",
+                    borderBlockStartColor: Colors.Border.light,
+                    borderInlineStartColor: Colors.Border.light,
+                    borderBlockEndColor: Colors.Border.dark,
+                    borderInlineEndColor: Colors.Border.dark,
                 })}
             >
                 <TopBar title={title} />
+                {children}
             </div>
         </div>
     );

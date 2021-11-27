@@ -21,7 +21,10 @@ const TopBarButtonStyles = css({
     borderInlineEndWidth: "3px",
     borderStyle: "outset",
     borderRadius: "2px",
-    borderColor: Colors.Border.dark,
+    borderBlockStartColor: Colors.Border.light,
+    borderInlineStartColor: Colors.Border.light,
+    borderBlockEndColor: Colors.Border.dark,
+    borderInlineEndColor: Colors.Border.dark,
 });
 
 export const TopBar = ({ title }: TopBarProps) => {
@@ -34,7 +37,10 @@ export const TopBar = ({ title }: TopBarProps) => {
                 borderWidth: "2px",
                 borderStyle: "inset",
                 borderRadius: "2px",
-                borderColor: Colors.Border.dark,
+                borderBlockStartColor: Colors.Border.dark,
+                borderInlineStartColor: Colors.Border.dark,
+                borderBlockEndColor: Colors.Border.light,
+                borderInlineEndColor: Colors.Border.light,
             })}
         >
             <h2

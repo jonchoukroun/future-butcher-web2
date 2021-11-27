@@ -1,25 +1,38 @@
 /** @jsx jsx */
 import { Global, css, jsx } from "@emotion/react";
-import * as React from "react";
 
+import { PlayerProvider } from "./Player/PlayerContext";
+import { Welcome } from "./Welcome/Welcome";
 import { Window } from "./Window/Window";
+import { WindowSizeProvider } from "./Window/WindowSizeProvider";
 import * as Colors from "../Styles/colors";
 
 export const App = () => {
     return (
-        <div>
+        <WindowSizeProvider>
             <Global
-                styles={css({
-                    body: {
-                        margin: 0,
-                        backgroundColor: Colors.Background.page,
-                    },
-                    "h1, h2, h3, h4, h5, h6, p": {
-                        fontFamily: "Trebuchet MS, sans-serif",
-                    },
-                })}
+                styles={css`
+                    @import url("https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap");
+                    body {
+                        margin: 0;
+                        background: ${Colors.Background.page};
+                    }
+                    h1,
+                    h2,
+                    h3,
+                    h4,
+                    h5,
+                    h6,
+                    p {
+                        font-family: Trebuchet MS, sans-serif;
+                    }
+                `}
             />
-            <Window title="Future Butcher" />
-        </div>
+            <PlayerProvider>
+                <Window title="Future Butcher">
+                    <Welcome />
+                </Window>
+            </PlayerProvider>
+        </WindowSizeProvider>
     );
 };
