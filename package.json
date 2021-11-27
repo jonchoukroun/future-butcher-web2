@@ -11,7 +11,7 @@
         "fix": "yarn fix:eslint",
         "fix:eslint": "yarn lint:eslint --quiet --fix",
         "lint": "yarn lint:eslint",
-        "lint:eslint": "eslint --config .eslintrc.json 'src/**/*.{ts,tsx}'",
+        "lint:eslint": "eslint --config .eslintrc 'src/**/*.{ts,tsx}'",
         "start": "webpack serve",
         "test": "jest --runInBand --detectOpenHandles --forceExit"
     },

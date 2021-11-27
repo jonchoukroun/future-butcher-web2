@@ -26,7 +26,6 @@ export const Window = ({ title }: WindowProps) => {
     }
 
     React.useEffect(() => {
-        console.log("!!hey nong");
         window.onresize = resizeHandler;
 
         return () => {
@@ -51,9 +50,9 @@ export const Window = ({ title }: WindowProps) => {
                     maxBlockSize: "812px",
                     inlineSize: viewportSize.inlineSize,
                     maxInlineSize: "990px",
-                    paddingBlock: "2px",
-                    paddingInlineStart: "2px",
-                    paddingInlineEnd: "5px",
+                    paddingBlock: "1px",
+                    paddingInlineStart: "1px",
+                    paddingInlineEnd: "4px",
                     backgroundColor: Colors.Background.body,
                     borderBlockStartWidth: "2px",
                     borderBlockEndWidth: "3px",
