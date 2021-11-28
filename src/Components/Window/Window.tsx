@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/react";
 import { useState } from "react";
 
 import { TopBar } from "./TopBar";
-import { useGameState } from "../GameState/GameStateProvider";
+// import { useGameState } from "../GameState/GameStateProvider";
 import { Subway } from "../Subway/Subway";
 import { Welcome } from "../Welcome/Welcome";
 import { useWindowSize } from "../Window/WindowSizeProvider";
@@ -16,10 +16,10 @@ const enum Screen {
 }
 
 export const Window = () => {
-    const { playerName } = useGameState();
+    // const { playerName } = useGameState();
 
     const [currentScreen] = useState<Screen>(() => {
-        if (playerName === undefined) return Screen.Welcome;
+        // if (playerName === undefined) return Screen.Welcome;
         return Screen.Subway;
     });
 
@@ -40,9 +40,7 @@ export const Window = () => {
                 className="outer-window"
                 css={css({
                     blockSize: windowSize.blockSize,
-                    maxBlockSize: "812px",
                     inlineSize: windowSize.inlineSize,
-                    maxInlineSize: "990px",
                     paddingBlock: "1px",
                     paddingInline: "1px",
                     backgroundColor: Colors.Background.body,

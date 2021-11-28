@@ -8,6 +8,7 @@ const WindowSizeContext = createContext<
     | {
           windowSize: Size;
           getContentSize: () => Size;
+          isCompact: boolean;
       }
     | undefined
 >(undefined);
@@ -21,10 +22,19 @@ export function WindowSizeProvider({
 }: {
     children: React.ReactNode;
 }) {
-    const [windowSize, setWindowSize] = useState<Size>(handleSizing());
+    const { blockSize, inlineSize } = handleSizing();
+    const [windowSize, setWindowSize] = useState<Size>({
+        blockSize,
+        inlineSize,
+    });
+    const [isCompact, setIsCompact] = useState(inlineSize <= 812);
 
     useEffect(() => {
-        window.onresize = () => setWindowSize(handleSizing());
+        window.onresize = () => {
+            const { blockSize, inlineSize } = handleSizing();
+            setWindowSize({ blockSize, inlineSize });
+            setIsCompact(inlineSize <= 812);
+        };
     }, []);
 
     const getContentSize = () => {
@@ -37,6 +47,7 @@ export function WindowSizeProvider({
     const value = {
         windowSize,
         getContentSize,
+        isCompact,
     };
 
     return (
@@ -61,7 +72,7 @@ function handleSizing() {
     const innerHeight = window.innerHeight - 8;
 
     return {
-        blockSize: Math.min(innerHeight, 990),
-        inlineSize: Math.min(innerWidth, 812),
+        blockSize: Math.min(innerHeight, 812),
+        inlineSize: Math.min(innerWidth, 990),
     };
 }

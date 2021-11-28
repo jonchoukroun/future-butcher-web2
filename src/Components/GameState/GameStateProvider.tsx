@@ -2,16 +2,8 @@ import * as React from "react";
 
 const { createContext, useContext, useState } = React;
 
-const enum Station {
-    Compton = "Compton",
-    Hollywood = "Hollywood",
-    VeniceBeach = "Venice Beach",
-    Downtown = "Downtown",
-    BeverlyHills = "Beverly Hills",
-}
-
 type GameState = {
-    currentStation: Station;
+    currentStation: string;
     playerName: string | undefined;
     savePlayerName: (playerName: string) => void;
 };
@@ -22,7 +14,7 @@ const GameStateContext = createContext<GameState | undefined>(undefined);
  * This provider manages state for the game including the player.
  */
 export function GameStateProvider({ children }: { children: React.ReactNode }) {
-    const [currentStation] = useState<Station>(Station.Compton);
+    const [currentStation] = useState("compton");
 
     const [playerName, setPlayerName] = useState<string | undefined>(undefined);
     const savePlayerName = (playerName: string) => {

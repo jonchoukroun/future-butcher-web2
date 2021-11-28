@@ -1,38 +1,56 @@
-export const SUBWAY_STATIONS = [
+export type Station = {
+    key: string;
+    name: string;
+    gangTax: number;
+    uniqueBuilding: string;
+    gangDescription: string;
+};
+
+export const subwayStations: Array<Station> = [
     {
-        name: "beverly hills",
-        travelTime: 3,
-        description: "Home of the rich & famous. Safest neighborhood.",
-        baseCrimeRate: 1,
+        key: "beverly_hills",
+        name: "Beverly Hills",
+        gangTax: 100000,
+        uniqueBuilding: "None",
+        gangDescription:
+            "Militarized private security who hunt undesirables for sport.",
     },
     {
-        name: "downtown",
-        travelTime: 2,
-        description: "Tight security.",
-        baseCrimeRate: 2,
+        key: "downtown",
+        name: "Downtown",
+        gangTax: 10000,
+        uniqueBuilding: "Bank",
+        gangDescription: "Mega bank turned organized crime franchise.",
     },
     {
-        name: "venice beach",
-        travelTime: 2,
-        description: "Relatively safe, but the palm trees are dead.",
-        baseCrimeRate: 3,
+        key: "venice_beach",
+        name: "Venice Beach",
+        gangTax: 2000,
+        uniqueBuilding: "Free Clinic",
+        gangDescription:
+            "Roided-out yogis who'll put you in a downward dog... for good.",
     },
     {
-        name: "hollywood",
-        travelTime: 1,
-        description: "Rough, grimy, seedy.",
-        baseCrimeRate: 4,
+        key: "hollywood",
+        name: "Hollywood",
+        gangTax: 0,
+        uniqueBuilding: "None",
+        gangDescription:
+            "Rampant street kids who'll rob you and leave you their headshot.",
     },
     {
-        name: "compton",
-        travelTime: 1,
-        description: "Anarchy - free subway rides and certain death.",
-        baseCrimeRate: 5,
+        key: "compton",
+        name: "Compton",
+        gangTax: 0,
+        uniqueBuilding: "Hardware Store",
+        gangDescription: "Disorganized maurauders, raiders, and cutthroats.",
     },
     {
-        name: "bell gardens",
-        travelTime: 2,
-        description: "Find Gus's Army Surplus Store here.",
-        baseCrimeRate: 0,
+        key: "bell_gardens",
+        name: "Bell Gardens",
+        gangTax: 5000,
+        uniqueBuilding: "Gus's Army Surplus Store",
+        gangDescription:
+            "Heavily armed small business owners who encourage shopping.",
     },
 ];
