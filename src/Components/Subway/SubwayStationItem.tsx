@@ -10,6 +10,7 @@ interface SubwayStationItemProps {
     isCurrentStation: boolean;
     blockSize: number;
     isLast: boolean;
+    isAboveCurrentStation: boolean;
 }
 
 export const SubwayStationItem = ({
@@ -17,6 +18,7 @@ export const SubwayStationItem = ({
     isCurrentStation,
     blockSize,
     isLast,
+    isAboveCurrentStation,
 }: SubwayStationItemProps) => {
     const baseStationItemStyle = {
         blockSize: `${blockSize}px`,
@@ -29,7 +31,8 @@ export const SubwayStationItem = ({
 
     const currentStationItemStyle = {
         ...baseStationItemStyle,
-        paddingInlineStart: "7px",
+        marginInline: "-1px",
+        // paddingInlineStart: "6px",
         backgroundColor: Colors.Background.dark,
         borderWidth: "2px",
         borderStyle: "inset",
@@ -48,7 +51,10 @@ export const SubwayStationItem = ({
         borderWidth: "2px",
         borderStyle: "groove",
         borderColor: "transparent",
-        borderBlockEndColor: isLast ? "transparent" : Colors.Border.light,
+        borderBlockEndColor:
+            isLast || isAboveCurrentStation
+                ? "transparent"
+                : Colors.Border.light,
     };
 
     return (

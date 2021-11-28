@@ -46,7 +46,7 @@ export const Subway = () => {
                 }}
             >
                 <FullButton
-                    label={"Cancel"}
+                    label={"Back"}
                     clickCB={() => {
                         return;
                     }}

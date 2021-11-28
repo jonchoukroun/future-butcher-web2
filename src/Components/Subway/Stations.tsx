@@ -8,11 +8,13 @@ import { subwayStations } from "../../Fixtures/subwayStations";
 
 export const Stations = () => {
     const { currentStation } = useGameState();
+    const currentStationIndex = subwayStations.findIndex(
+        ({ key }) => key == currentStation,
+    );
 
     const { getContentSize } = useWindowSize();
     const { blockSize } = getContentSize();
     const stationsCount = subwayStations.length;
-    console.log("!!stationsCount", stationsCount);
     const listItemBlockSize =
         Math.round((blockSize - 24) / stationsCount) - (stationsCount + 6);
 
@@ -32,6 +34,7 @@ export const Stations = () => {
                     isCurrentStation={station.key === currentStation}
                     blockSize={listItemBlockSize}
                     isLast={idx === stationsCount - 1}
+                    isAboveCurrentStation={idx === currentStationIndex - 1}
                 />
             ))}
         </ul>
