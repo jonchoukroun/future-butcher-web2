@@ -7,17 +7,8 @@ import { useGameState } from "../GameState/GameStateProvider";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 
-interface WelcomeProps {
-    contentSize: {
-        blockSize: number;
-        inlineSize: number;
-    };
-}
-
-export const Welcome = ({
-    contentSize: { blockSize, inlineSize },
-}: WelcomeProps) => {
-    const { windowSize } = useWindowSize();
+export const Welcome = () => {
+    const { getContentSize, windowSize } = useWindowSize();
     const headingWidth = Math.round(windowSize.inlineSize * 0.2);
 
     const [playerName, setPlayerName] = useState("");
@@ -31,6 +22,8 @@ export const Welcome = ({
         if (playerName.length < 3) return;
         savePlayerName(playerName);
     }
+
+    const { blockSize, inlineSize } = getContentSize();
 
     return (
         <div

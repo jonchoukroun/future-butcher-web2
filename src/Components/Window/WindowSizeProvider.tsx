@@ -7,7 +7,7 @@ type Size = { blockSize: number; inlineSize: number };
 const WindowSizeContext = createContext<
     | {
           windowSize: Size;
-          getContentSize: (el: HTMLElement) => Size;
+          getContentSize: () => Size;
       }
     | undefined
 >(undefined);
@@ -27,11 +27,10 @@ export function WindowSizeProvider({
         window.onresize = () => setWindowSize(handleSizing());
     }, []);
 
-    const getContentSize = (el: HTMLElement) => {
-        const { width, height } = el.getBoundingClientRect();
+    const getContentSize = () => {
         return {
-            blockSize: height - 39,
-            inlineSize: width - 7,
+            blockSize: windowSize.blockSize - 39,
+            inlineSize: windowSize.inlineSize - 7,
         };
     };
 

@@ -2,18 +2,13 @@
 import { css, jsx } from "@emotion/react";
 
 import { useGameState } from "../GameState/GameStateProvider";
+import { useWindowSize } from "../Window/WindowSizeProvider";
 
-interface SubwayProps {
-    contentSize: {
-        blockSize: number;
-        inlineSize: number;
-    };
-}
-
-export const Subway = ({
-    contentSize: { blockSize, inlineSize },
-}: SubwayProps) => {
+export const Subway = () => {
     const { currentStation } = useGameState();
+
+    const { getContentSize } = useWindowSize();
+    const { blockSize, inlineSize } = getContentSize();
 
     return (
         <div

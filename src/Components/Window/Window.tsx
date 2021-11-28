@@ -1,18 +1,30 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/react";
-import { ReactNode } from "react";
+import { useState } from "react";
 
 import { TopBar } from "./TopBar";
+import { useGameState } from "../GameState/GameStateProvider";
+import { Subway } from "../Subway/Subway";
+import { Welcome } from "../Welcome/Welcome";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 
-interface WindowProps {
-    title: string;
-    children: ReactNode;
+const enum Screen {
+    Welcome = "Future Butcher",
+    Subway = "Subway",
+    Market = "Market",
 }
 
-export const Window = ({ title, children }: WindowProps) => {
-    const windowSize = useWindowSize();
+export const Window = () => {
+    const { playerName } = useGameState();
+
+    const [currentScreen] = useState<Screen>(() => {
+        if (playerName === undefined) return Screen.Welcome;
+        return Screen.Subway;
+    });
+
+    const { windowSize } = useWindowSize();
+
     return (
         <div
             className="container"
@@ -27,13 +39,12 @@ export const Window = ({ title, children }: WindowProps) => {
             <div
                 className="outer-window"
                 css={css({
-                    blockSize: windowSize.block,
+                    blockSize: windowSize.blockSize,
                     maxBlockSize: "812px",
-                    inlineSize: windowSize.inline,
+                    inlineSize: windowSize.inlineSize,
                     maxInlineSize: "990px",
                     paddingBlock: "1px",
-                    paddingInlineStart: "1px",
-                    paddingInlineEnd: "4px",
+                    paddingInline: "1px",
                     backgroundColor: Colors.Background.body,
                     borderBlockStartWidth: "2px",
                     borderBlockEndWidth: "3px",
@@ -47,8 +58,11 @@ export const Window = ({ title, children }: WindowProps) => {
                     borderInlineEndColor: Colors.Border.dark,
                 })}
             >
-                <TopBar title={title} />
-                {children}
+                <TopBar title={currentScreen} />
+
+                {currentScreen === Screen.Welcome && <Welcome />}
+
+                {currentScreen === Screen.Subway && <Subway />}
             </div>
         </div>
     );
