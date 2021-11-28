@@ -2,9 +2,15 @@ import * as React from "react";
 
 const { createContext, useContext, useEffect, useState } = React;
 
-type WindowSize = { block: number; inline: number };
+type Size = { blockSize: number; inlineSize: number };
 
-const WindowSizeContext = createContext<WindowSize | undefined>(undefined);
+const WindowSizeContext = createContext<
+    | {
+          windowSize: Size;
+          getContentSize: (el: HTMLElement) => Size;
+      }
+    | undefined
+>(undefined);
 
 /**
  * This provider sets the size of the window from the viewport
@@ -15,14 +21,27 @@ export function WindowSizeProvider({
 }: {
     children: React.ReactNode;
 }) {
-    const [windowSize, setWindowSize] = useState<WindowSize>(handleSizing());
+    const [windowSize, setWindowSize] = useState<Size>(handleSizing());
 
     useEffect(() => {
         window.onresize = () => setWindowSize(handleSizing());
     }, []);
 
+    const getContentSize = (el: HTMLElement) => {
+        const { width, height } = el.getBoundingClientRect();
+        return {
+            blockSize: height - 39,
+            inlineSize: width - 7,
+        };
+    };
+
+    const value = {
+        windowSize,
+        getContentSize,
+    };
+
     return (
-        <WindowSizeContext.Provider value={windowSize}>
+        <WindowSizeContext.Provider value={value}>
             {children}
         </WindowSizeContext.Provider>
     );
@@ -39,11 +58,11 @@ export function useWindowSize() {
 }
 
 function handleSizing() {
-    const innerWidth = window.innerWidth - 10;
-    const innerHeight = window.innerHeight - 10;
+    const innerWidth = window.innerWidth - 8;
+    const innerHeight = window.innerHeight - 8;
 
     return {
-        block: Math.min(innerHeight, 990),
-        inline: Math.min(innerWidth, 812),
+        blockSize: Math.min(innerHeight, 990),
+        inlineSize: Math.min(innerWidth, 812),
     };
 }
