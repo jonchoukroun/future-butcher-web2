@@ -1,44 +1,46 @@
 /** @jsx jsx */
-import { css, jsx } from "@emotion/react";
+import { jsx } from "@emotion/react";
 import { useState } from "react";
 
 import { TopBar } from "./TopBar";
-// import { useGameState } from "../GameState/GameStateProvider";
 import { Subway } from "../Subway/Subway";
 import { Welcome } from "../Welcome/Welcome";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 
-const enum Screen {
+export enum Screen {
     Welcome = "Future Butcher",
     Subway = "Subway",
     Market = "Market",
 }
 
 export const Window = () => {
-    // const { playerName } = useGameState();
-
-    const [currentScreen] = useState<Screen>(() => {
-        // if (playerName === undefined) return Screen.Welcome;
-        return Screen.Subway;
-    });
+    const [currentScreen, setCurrentScreen] = useState<Screen>(Screen.Welcome);
+    const [isDesignMenuOpen, setIsDesignMenuOpen] = useState(false);
+    const handleDesignMenuButtonClick = () => {
+        setIsDesignMenuOpen((isOpen) => !isOpen);
+    };
+    const handleScreenChange = (screen: Screen) => {
+        setCurrentScreen(screen);
+        setIsDesignMenuOpen(false);
+    };
 
     const { windowSize } = useWindowSize();
 
     return (
         <div
             className="container"
-            css={css({
+            css={{
                 blockSize: window.innerHeight,
                 inlineSize: window.innerWidth,
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-            })}
+            }}
         >
             <div
                 className="outer-window"
-                css={css({
+                css={{
                     blockSize: windowSize.blockSize,
                     inlineSize: windowSize.inlineSize,
                     paddingBlock: "1px",
@@ -54,9 +56,14 @@ export const Window = () => {
                     borderInlineStartColor: Colors.Border.light,
                     borderBlockEndColor: Colors.Border.dark,
                     borderInlineEndColor: Colors.Border.dark,
-                })}
+                }}
             >
-                <TopBar title={currentScreen} />
+                <TopBar
+                    title={currentScreen}
+                    isDesignMenuOpen={isDesignMenuOpen}
+                    onDesignMenuButtonClick={handleDesignMenuButtonClick}
+                    handleScreenChange={handleScreenChange}
+                />
 
                 {currentScreen === Screen.Welcome && <Welcome />}
 
