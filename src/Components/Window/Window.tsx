@@ -12,6 +12,10 @@ export enum Screen {
     Welcome = "Future Butcher",
     Subway = "Subway",
     Market = "Market",
+    SurplusStore = "Gus's Army Surplus",
+    HardwareStore = "Hardware Store",
+    Bank = "Bank",
+    Clinic = "Free Clinic",
 }
 
 export const Window = () => {
