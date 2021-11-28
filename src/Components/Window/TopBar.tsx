@@ -10,15 +10,13 @@ interface TopBarProps {
 
 const TopBarButtonStyles = css({
     inlineSize: "30px",
-    marginBlock: "3px",
+    marginBlockStart: "2px",
+    marginBlockEnd: "3px",
     marginInlineEnd: "3px",
     paddingBlock: 0,
     paddingInline: "5px",
     backgroundColor: Colors.Background.body,
-    borderBlockStartWidth: "2px",
-    borderBlockEndWidth: "3px",
-    borderInlineStartWidth: "2px",
-    borderInlineEndWidth: "3px",
+    borderWidth: "2px",
     borderStyle: "outset",
     borderRadius: "2px",
     borderBlockStartColor: Colors.Border.light,
