@@ -55,6 +55,7 @@ export const DesignMenu = ({ onScreenItemClick }: DesignMenuProps) => {
                                 paddingInline: "24px",
                                 backgroundColor: "transparent",
                                 border: "none",
+                                color: Colors.Text.bodyDark,
                             }}
                             onClick={() => onScreenItemClick(v)}
                         >

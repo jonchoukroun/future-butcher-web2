@@ -64,6 +64,7 @@ export const TopBar = ({
                         borderInlineStartColor: Colors.Border.light,
                         borderBlockEndColor: Colors.Border.dark,
                         borderInlineEndColor: Colors.Border.dark,
+                        color: Colors.Text.bodyDark,
                     }}
                     onClick={onDesignMenuButtonClick}
                 >

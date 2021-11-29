@@ -25,6 +25,7 @@ export const FullButton = ({ label, clickCB }: FullButtonProps) => {
                 borderBlockEndColor: Colors.Border.dark,
                 borderInlineEndColor: Colors.Border.dark,
                 borderRadius: "2px",
+                color: Colors.Text.bodyDark,
             })}
             onClick={clickCB}
         >
