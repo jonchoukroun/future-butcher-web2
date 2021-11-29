@@ -2,6 +2,7 @@
 import { jsx } from "@emotion/react";
 
 import { FullButton } from "../Form/FullButton";
+import { useWindowSize } from "../Window/WindowSizeProvider";
 import { Station } from "../../Fixtures/subwayStations";
 import * as Colors from "../../Styles/colors";
 
@@ -20,6 +21,7 @@ export const SubwayStationItem = ({
     isLast,
     isAboveCurrentStation,
 }: SubwayStationItemProps) => {
+    const { windowSize } = useWindowSize();
     const baseStationItemStyle = {
         blockSize: `${blockSize}px`,
         display: "flex",
@@ -69,34 +71,73 @@ export const SubwayStationItem = ({
                 css={{
                     inlineSize: "100%",
                     display: "flex",
-                    flexDirection: "column",
+                    justifyContent: "space-between",
                 }}
             >
-                <h3
-                    css={{
-                        margin: 0,
-                    }}
-                >
-                    {station.name}
-                </h3>
-                <p
-                    css={{
-                        margin: 0,
-                    }}
-                >
-                    {isCurrentStation ? (
-                        <em>Current location.</em>
-                    ) : (
-                        <span>
-                            <strong>Gang Tax:</strong> ${station.gangTax}
-                        </span>
-                    )}
-                </p>
+                {windowSize.blockSize >= 667 ? (
+                    <div
+                        css={{
+                            display: "flex",
+                            flexDirection: "column",
+                        }}
+                    >
+                        <h3
+                            css={{
+                                margin: 0,
+                            }}
+                        >
+                            {station.name}
+                        </h3>
+                        <p
+                            css={{
+                                margin: 0,
+                            }}
+                        >
+                            {isCurrentStation ? (
+                                <em>Current location.</em>
+                            ) : (
+                                <span>
+                                    <strong>Gang Tax:</strong> $
+                                    {station.gangTax}
+                                </span>
+                            )}
+                        </p>
+                    </div>
+                ) : (
+                    <div
+                        css={{
+                            display: "flex",
+                            flexDirection: "column",
+                        }}
+                    >
+                        <h4
+                            css={{
+                                margin: 0,
+                            }}
+                        >
+                            {station.name}
+                        </h4>
+                        <small
+                            css={{
+                                margin: 0,
+                            }}
+                        >
+                            {isCurrentStation ? (
+                                <em>Current location.</em>
+                            ) : (
+                                <span>
+                                    <strong>Gang Tax:</strong> $
+                                    {station.gangTax}
+                                </span>
+                            )}
+                        </small>
+                    </div>
+                )}
                 {!isCurrentStation && (
                     <div
                         css={{
                             display: "flex",
-                            justifyContent: "end",
+                            justifyContent: "flex-end",
                         }}
                     >
                         <FullButton

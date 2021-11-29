@@ -13,8 +13,8 @@ export const FullButton = ({ label, clickCB }: FullButtonProps) => {
         <button
             css={css({
                 blockSize: "32px",
-                inlineSize: "160px",
-                alignSelf: "end",
+                inlineSize: "140px",
+                alignSelf: "flex-end",
                 marginBlock: "5px",
                 marginInline: 0,
                 backgroundColor: Colors.Background.body,
