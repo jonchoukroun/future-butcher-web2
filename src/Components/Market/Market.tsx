@@ -3,7 +3,7 @@ import { jsx } from "@emotion/react";
 
 import { CutList } from "./CutList";
 import { NavBar } from "../Window/NavBar";
-import { StatsBar } from "../Window/StatsBar";
+import { StatsBar } from "../Stats/StatsBar";
 
 export const Market = () => {
     return (

@@ -7,7 +7,7 @@ import { formatMoney } from "../Utils/formatMoney";
 import * as Colors from "../../Styles/colors";
 
 export const StatsBar = () => {
-    const { cash } = useGameState();
+    const { playerStats } = useGameState();
 
     return (
         <div
@@ -32,7 +32,7 @@ export const StatsBar = () => {
                     color: Colors.Text.secondary,
                 }}
             >
-                {formatMoney(cash)}
+                {formatMoney(playerStats.cash)}
             </p>
             <ButtonPrimary
                 type={"Sized"}
