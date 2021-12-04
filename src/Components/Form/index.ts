@@ -1,4 +1,4 @@
-import { FullButton } from "./FullButton";
+import { ButtonPrimary } from "./ButtonPrimary";
 import { TextInput } from "./TextInput";
 
-export { FullButton, TextInput };
+export { ButtonPrimary, TextInput };
