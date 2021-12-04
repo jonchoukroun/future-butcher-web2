@@ -2,9 +2,8 @@
 import { jsx } from "@emotion/react";
 
 import { Stations } from "./Stations";
-import { FullButton } from "../Form";
+import { ButtonPrimary } from "../Form";
 import { useWindowSize } from "../Window/WindowSizeProvider";
-import * as Colors from "../../Styles/colors";
 
 export const Subway = () => {
     const { isCompact } = useWindowSize();
@@ -26,13 +25,6 @@ export const Subway = () => {
                     alignItems: "center",
                     alignSelf: "stretch",
                     marginBlockStart: "20px",
-                    backgroundColor: Colors.Background.body,
-                    borderWidth: "2px",
-                    borderStyle: "inset",
-                    borderBlockStartColor: Colors.Border.dark,
-                    borderInlineStartColor: Colors.Border.dark,
-                    borderBlockEndColor: Colors.Border.light,
-                    borderInlineEndColor: Colors.Border.light,
                 }}
             >
                 <Stations />
@@ -45,14 +37,16 @@ export const Subway = () => {
                     paddingBlock: "10px",
                 }}
             >
-                <FullButton
+                <ButtonPrimary
                     label={"Back"}
+                    type={"Full"}
                     clickCB={() => {
                         return;
                     }}
                 />
-                <FullButton
+                <ButtonPrimary
                     label={"Details"}
+                    type={"Full"}
                     clickCB={() => {
                         return;
                     }}

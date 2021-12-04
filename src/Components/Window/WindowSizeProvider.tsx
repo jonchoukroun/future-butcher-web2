@@ -39,7 +39,7 @@ export function WindowSizeProvider({
 
     const getContentSize = () => {
         return {
-            blockSize: windowSize.blockSize - 39,
+            blockSize: Math.round((windowSize.blockSize - 100) * 0.9),
             inlineSize: windowSize.inlineSize - 7,
         };
     };

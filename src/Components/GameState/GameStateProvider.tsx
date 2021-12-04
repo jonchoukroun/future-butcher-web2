@@ -5,6 +5,7 @@ const { createContext, useContext, useState } = React;
 type GameState = {
     currentStation: string;
     playerName: string | undefined;
+    cash: number;
     savePlayerName: (playerName: string) => void;
 };
 
@@ -22,10 +23,13 @@ export function GameStateProvider({ children }: { children: React.ReactNode }) {
         setPlayerName(playerName);
     };
 
+    const [cash] = useState(5000);
+
     const value = {
         currentStation,
         playerName,
         savePlayerName,
+        cash,
     };
 
     return (

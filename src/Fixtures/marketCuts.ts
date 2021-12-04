@@ -1,4 +1,10 @@
-export const MARKET_CUTS = [
+export type CutType = {
+    name: string;
+    price: number;
+    quantity: number;
+};
+
+export const cuts: Array<CutType> = [
     {
         name: "heart",
         price: 18000,
