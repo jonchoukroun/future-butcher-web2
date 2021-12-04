@@ -1,12 +1,13 @@
 import * as React from "react";
 
+import { player, PlayerStatsType } from "../../Fixtures/player";
+
 const { createContext, useContext, useState } = React;
 
 type GameState = {
     currentStation: string;
-    playerName: string | undefined;
-    cash: number;
-    savePlayerName: (playerName: string) => void;
+    turnsLeft: number;
+    playerStats: PlayerStatsType;
 };
 
 const GameStateContext = createContext<GameState | undefined>(undefined);
@@ -17,19 +18,14 @@ const GameStateContext = createContext<GameState | undefined>(undefined);
 export function GameStateProvider({ children }: { children: React.ReactNode }) {
     const [currentStation] = useState("compton");
 
-    const [playerName, setPlayerName] = useState<string | undefined>(undefined);
-    const savePlayerName = (playerName: string) => {
-        // validate player name
-        setPlayerName(playerName);
-    };
+    const [turnsLeft] = useState(24);
 
-    const [cash] = useState(5000);
+    const [playerStats] = useState(player);
 
     const value = {
         currentStation,
-        playerName,
-        savePlayerName,
-        cash,
+        turnsLeft,
+        playerStats,
     };
 
     return (
