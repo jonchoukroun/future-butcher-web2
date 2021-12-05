@@ -30,6 +30,9 @@ export const Market = () => {
                         css={{
                             marginBlock: 0,
                             color: Colors.Text.heading,
+                            textTransform: "uppercase",
+                            letterSpacing: "2px",
+                            wordSpacing: "4px",
                         }}
                     >
                         Cuts Market

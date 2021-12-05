@@ -26,10 +26,20 @@ export const MainScreen = () => {
                 },
             }}
         >
-            <h2 css={{ textAlign: "center" }}>Welcome to {station.name}</h2>
+            <h2
+                css={{
+                    letterSpacing: "4px",
+                    textAlign: "center",
+                    textTransform: "uppercase",
+                    wordSpacing: "8px",
+                }}
+            >
+                {station.name}
+            </h2>
             <ul
                 css={{
                     inlineSize: "100%",
+                    marginBlockStart: "32px",
                     paddingInlineStart: 0,
                 }}
             >

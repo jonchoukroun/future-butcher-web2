@@ -1,9 +1,10 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
+import { ButtonPrimary } from "../Form";
+import { useGameState } from "../GameState/GameStateProvider";
 import { formatMoney } from "../Utils/formatMoney";
 import { CutType } from "../../Fixtures/marketCuts";
-import { ButtonPrimary } from "../Form";
 import * as Colors from "../../Styles/colors";
 
 interface CutListItemProps {
@@ -11,6 +12,9 @@ interface CutListItemProps {
 }
 
 export const CutListItem = ({ cut }: CutListItemProps) => {
+    const { playerStats } = useGameState();
+    const canAfford = playerStats.cash >= cut.price;
+
     return (
         <li
             css={{
@@ -34,7 +38,9 @@ export const CutListItem = ({ cut }: CutListItemProps) => {
                         margin: 0,
                         marginBlockEnd: "5px",
                         textTransform: "capitalize",
-                        color: Colors.Text.primary,
+                        color: canAfford
+                            ? Colors.Text.primary
+                            : Colors.Text.secondary,
                     }}
                 >
                     {cut.name}
@@ -51,18 +57,22 @@ export const CutListItem = ({ cut }: CutListItemProps) => {
                     },
                 }}
             >
-                <p
+                <h3
                     css={{
                         margin: 0,
                         marginInlineEnd: "10px",
                         fontFamily: "Share Tech Mono",
+                        color: canAfford
+                            ? Colors.Text.primary
+                            : Colors.Text.danger,
                     }}
                 >
                     {formatMoney(cut.price)}
-                </p>
+                </h3>
                 <ButtonPrimary
                     label={"Buy"}
                     type={"Half"}
+                    isDisabled={!canAfford}
                     clickCB={() => {
                         return;
                     }}

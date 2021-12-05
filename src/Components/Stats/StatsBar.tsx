@@ -45,8 +45,9 @@ export const StatsBar = () => {
                 {turnsLeft} H
             </p>
             <ButtonPrimary
-                type={"Sized"}
+                type={"Small"}
                 label={"Stats"}
+                border={"Thin"}
                 clickCB={() => changeScreen(Screen.Stats)}
             />
         </div>

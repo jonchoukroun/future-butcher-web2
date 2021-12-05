@@ -45,6 +45,11 @@ const GlobalStyles = css`
         word-spacing: 2px;
     }
 
+    small {
+        font-family: Michroma;
+        color: ${Colors.Text.primary};
+    }
+
     * {
         box-sizing: border-box;
         &:focus-visible {

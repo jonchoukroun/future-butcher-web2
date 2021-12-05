@@ -34,13 +34,15 @@ export const StatsScreen = () => {
                 "& p": {
                     margin: 0,
                     fontFamily: "Share Tech Mono",
+                    wordSpacing: 0,
                 },
                 "& small": {
                     display: "block",
                     marginBlockEnd,
+                    marginBlockStart: "2px",
                     fontFamily: "Share Tech Mono",
                     color: Colors.Text.secondary,
-                    marginBlockStart: "2px",
+                    wordSpacing: 0,
                 },
             }}
         >
@@ -82,7 +84,7 @@ export const StatsScreen = () => {
                 <p>Cash: {formatMoney(playerStats.cash)}</p>
                 <small>
                     <em>
-                        Keep hustling to grow this sum, but don&apos;t lost it
+                        Keep hustling to grow this sum, but don&apos;t lose it
                         to a mugger.
                     </em>
                 </small>
