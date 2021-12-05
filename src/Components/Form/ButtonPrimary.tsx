@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/react";
 
+import { useWindowSize } from "../Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 
 type ButtonType = "Full" | "Half" | "Sized" | "Stretch";
@@ -26,6 +27,7 @@ export const ButtonPrimary = ({
                 inlineSize,
                 marginBlock: "5px",
                 marginInline: 0,
+                paddingBlock: type === "Sized" ? "5px" : "1px",
                 backgroundColor: Colors.Background.screen,
                 borderColor: isDisabled
                     ? Colors.Border.subtle
@@ -37,7 +39,10 @@ export const ButtonPrimary = ({
                 "&:active": {
                     backgroundColor: Colors.Background.subtle,
                 },
+                fontFamily: "Michroma",
                 fontStyle: isDisabled ? "italic" : "normal",
+                textTransform: "uppercase",
+                wordSpacing: "4px",
             })}
             onClick={clickCB}
             disabled={isDisabled}
@@ -48,18 +53,21 @@ export const ButtonPrimary = ({
 };
 
 function getDimensions(type: ButtonType) {
+    const { layout } = useWindowSize();
+    const standardHeight = layout === "full" ? "46px" : "32px";
+
     switch (type) {
         case "Full":
-            return ["32px", "140px"];
+            return [standardHeight, "140px"];
 
         case "Half":
-            return ["32px", "70px"];
+            return [standardHeight, "70px"];
 
         case "Sized":
             return ["auto", "auto"];
 
         case "Stretch":
-            return ["32px", "80%"];
+            return [standardHeight, "80%"];
 
         default:
             return ["100%", "100%"];

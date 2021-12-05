@@ -2,6 +2,7 @@
 import { css, jsx } from "@emotion/react";
 import { ChangeEvent, KeyboardEvent } from "react";
 
+import { useWindowSize } from "../Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 
 interface TextInputProps {
@@ -17,6 +18,7 @@ export const TextInput = ({
     changeCB,
     keypressCB,
 }: TextInputProps) => {
+    const { layout } = useWindowSize();
     return (
         <input
             type="text"
@@ -25,7 +27,7 @@ export const TextInput = ({
             minLength={minLength}
             maxLength={maxLength}
             css={css({
-                blockSize: "32px",
+                blockSize: layout === "full" ? "46px" : "32px",
                 inlineSize: "calc(100%)",
                 marginBlockStart: "10px",
                 paddingInline: "8px",

@@ -1,0 +1,9 @@
+intro -> welcome
+
+inGame ->
+    full ->
+        [statsScreen, <market | subway>]
+    compact ->
+        <[statsBar, market] | [statsBar, subway] | statsScreen>
+
+end -> <win | lose>

@@ -1,56 +1,73 @@
 export type Station = {
     key: string;
     name: string;
+    stationDescription: string;
+    gangName: string;
+    gangDescription: string;
     gangTax: number;
     uniqueBuilding: string;
-    gangDescription: string;
 };
 
 export const subwayStations: Array<Station> = [
     {
         key: "beverly_hills",
         name: "Beverly Hills",
-        gangTax: 100000,
-        uniqueBuilding: "None",
+        stationDescription:
+            "High security, expensive cuts, and manicured lawns.",
+        gangName: "Rollin' Spa Girls",
         gangDescription:
             "Militarized private security who hunt undesirables for sport.",
+        gangTax: 100000,
+        uniqueBuilding: "None",
     },
     {
         key: "downtown",
         name: "Downtown",
+        stationDescription:
+            "High rises and high finance, with a taste for fine cuts.",
+        gangName: "Balls Fargaux",
+        gangDescription: "Mega bank turned organized crime franchise.",
         gangTax: 10000,
         uniqueBuilding: "Bank",
-        gangDescription: "Mega bank turned organized crime franchise.",
     },
     {
         key: "venice_beach",
         name: "Venice Beach",
-        gangTax: 2000,
-        uniqueBuilding: "Free Clinic",
+        stationDescription:
+            "Heal your body and soul with restorative yoga and free substandard medicine.",
+        gangName: "The 3rd Eye Boys",
         gangDescription:
             "Roided-out yogis who'll put you in a downward dog... for good.",
+        gangTax: 2000,
+        uniqueBuilding: "Free Clinic",
     },
     {
         key: "hollywood",
         name: "Hollywood",
-        gangTax: 0,
-        uniqueBuilding: "None",
+        stationDescription: "Cops are your friend, for a price.",
+        gangName: "Vine Street Raiders",
         gangDescription:
             "Rampant street kids who'll rob you and leave you their headshot.",
+        gangTax: 0,
+        uniqueBuilding: "Police Station",
     },
     {
         key: "compton",
         name: "Compton",
+        stationDescription: "Cheap cuts and cheap tools for any DIY needs.",
+        gangName: "None",
+        gangDescription: "Disorganized maurauders, raiders, and cutthroats.",
         gangTax: 0,
         uniqueBuilding: "Hardware Store",
-        gangDescription: "Disorganized maurauders, raiders, and cutthroats.",
     },
     {
         key: "bell_gardens",
         name: "Bell Gardens",
-        gangTax: 5000,
-        uniqueBuilding: "Gus's Army Surplus Store",
+        stationDescription: "The American dream at its seediest.",
+        gangName: "The Chamber of Commerce",
         gangDescription:
             "Heavily armed small business owners who encourage shopping.",
+        gangTax: 5000,
+        uniqueBuilding: "Gus's Army Surplus Store",
     },
 ];

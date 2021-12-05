@@ -2,12 +2,12 @@
 import { jsx } from "@emotion/react";
 
 import { ButtonPrimary } from "../Form";
-import { useGameState } from "../GameState/GameStateProvider";
+import { useGameState, Screen } from "../GameState/GameStateProvider";
 import { formatMoney } from "../Utils/formatMoney";
 import * as Colors from "../../Styles/colors";
 
 export const StatsBar = () => {
-    const { playerStats } = useGameState();
+    const { changeScreen, playerStats, turnsLeft } = useGameState();
 
     return (
         <div
@@ -29,17 +29,25 @@ export const StatsBar = () => {
             <p
                 css={{
                     margin: 0,
+                    fontFamily: "Share Tech Mono",
                     color: Colors.Text.secondary,
                 }}
             >
                 {formatMoney(playerStats.cash)}
             </p>
+            <p
+                css={{
+                    margin: 0,
+                    fontFamily: "Share Tech Mono",
+                    color: Colors.Text.secondary,
+                }}
+            >
+                {turnsLeft} H
+            </p>
             <ButtonPrimary
                 type={"Sized"}
                 label={"Stats"}
-                clickCB={() => {
-                    return;
-                }}
+                clickCB={() => changeScreen(Screen.Stats)}
             />
         </div>
     );

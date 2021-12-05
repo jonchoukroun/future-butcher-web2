@@ -17,12 +17,12 @@ export const CutListItem = ({ cut }: CutListItemProps) => {
                 display: "flex",
                 flex: 1,
                 flexDirection: "column",
-                justifyContent: "space-between",
-                padding: "8px",
+                justifyContent: "center",
             }}
         >
             <div
                 css={{
+                    marginBlockEnd: "5px",
                     borderColor: "transparent",
                     borderBlockEndColor: Colors.Border.subtle,
                     borderStyle: "solid",
@@ -32,8 +32,9 @@ export const CutListItem = ({ cut }: CutListItemProps) => {
                 <h3
                     css={{
                         margin: 0,
+                        marginBlockEnd: "5px",
                         textTransform: "capitalize",
-                        color: Colors.Text.heading,
+                        color: Colors.Text.primary,
                     }}
                 >
                     {cut.name}
@@ -50,7 +51,15 @@ export const CutListItem = ({ cut }: CutListItemProps) => {
                     },
                 }}
             >
-                <p css={{ margin: 0 }}>{formatMoney(cut.price)}</p>
+                <p
+                    css={{
+                        margin: 0,
+                        marginInlineEnd: "10px",
+                        fontFamily: "Share Tech Mono",
+                    }}
+                >
+                    {formatMoney(cut.price)}
+                </p>
                 <ButtonPrimary
                     label={"Buy"}
                     type={"Half"}

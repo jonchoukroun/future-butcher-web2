@@ -17,19 +17,18 @@ export const Welcome = () => {
             handleSubmit();
         }
     }
-    const { savePlayerName } = useGameState();
+    const { incrementGameProcess } = useGameState();
     function handleSubmit() {
         if (playerName.length < 3) return;
-        savePlayerName(playerName);
+        incrementGameProcess();
     }
 
-    const { blockSize, inlineSize } = getContentSize();
+    const { blockSize } = getContentSize();
 
     return (
         <div
             css={{
                 blockSize: `${blockSize}px`,
-                inlineSize: `${inlineSize}px`,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -54,7 +53,6 @@ export const Welcome = () => {
                         fontSize: `${headingWidth}px`,
                         color: Colors.Text.accent,
                         margin: 0,
-                        marginInlineStart: "-4px",
                     }}
                 >
                     FUTURE
@@ -68,7 +66,6 @@ export const Welcome = () => {
                         marginBlockStart: `-${Math.round(
                             headingWidth * 0.9,
                         )}px`,
-                        marginInlineStart: "-4px",
                         transform: "rotate(-10deg)",
                     }}
                 >

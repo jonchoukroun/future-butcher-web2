@@ -3,49 +3,74 @@ import { jsx } from "@emotion/react";
 
 import { useGameState } from "../GameState/GameStateProvider";
 import { formatMoney } from "../Utils/formatMoney";
+import { useWindowSize } from "../Window/WindowSizeProvider";
+import { subwayStations } from "../../Fixtures/subwayStations";
 import * as Colors from "../../Styles/colors";
 
 export const StatsScreen = () => {
-    const { playerStats, turnsLeft } = useGameState();
+    const { layout } = useWindowSize();
+    const { currentStation, playerStats, turnsLeft } = useGameState();
+
+    const station = subwayStations.find(
+        (station) => station.key === currentStation,
+    );
+
+    const containerPaddingInline = layout === "full" ? "16px" : "4px";
+    const marginBlockEnd = layout === "full" ? "10px" : "2px";
+    const paddingBlockStart = layout === "full" ? "28px" : "7px";
+    const paddingBlockEnd = layout === "full" ? "20px" : "5px";
+    const paddingInline = layout === "full" ? "28px" : "7px";
 
     return (
         <div
             css={{
                 blockSize: "100%",
+                inlineSize: "100%",
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "stretch",
-                paddingBlock: "20px",
-                paddingInline: "16px",
+                justifyContent: "space-evenly",
+                paddingInline: containerPaddingInline,
+                paddingBlockEnd: layout === "compact" ? "50px" : 0,
                 "& p": {
-                    marginBlockEnd: 0,
+                    margin: 0,
+                    fontFamily: "Share Tech Mono",
                 },
                 "& small": {
+                    display: "block",
+                    marginBlockEnd,
+                    fontFamily: "Share Tech Mono",
                     color: Colors.Text.secondary,
+                    marginBlockStart: "2px",
                 },
             }}
         >
             <div
                 css={{
-                    paddingBlockEnd: "20px",
-                    borderColor: "transparent",
-                    borderBlockEndColor: Colors.Border.subtle,
+                    paddingBlockStart,
+                    paddingBlockEnd,
+                    paddingInline,
+                    borderColor: Colors.Border.standard,
+                    borderRadius: "7px",
                     borderStyle: "solid",
                     borderWidth: "1px",
                 }}
             >
-                <div
-                    css={{
-                        paddingBlockEnd: "5px",
-                        borderColor: "transparent",
-                        borderBlockEndColor: Colors.Border.subtle,
-                        borderStyle: "solid",
-                        borderWidth: "1px",
-                    }}
-                >
-                    <h3 css={{ marginBlock: 0 }}>Name: {playerStats.name}</h3>
-                </div>
-
+                <p>Hours left: {turnsLeft}</p>
+                <small>
+                    <em>When your turns run out, the game is over.</em>
+                </small>
+            </div>
+            <div
+                css={{
+                    paddingBlockStart,
+                    paddingBlockEnd,
+                    paddingInline,
+                    borderColor: Colors.Border.standard,
+                    borderRadius: "7px",
+                    borderStyle: "solid",
+                    borderWidth: "1px",
+                }}
+            >
                 <p>Health: {playerStats.health}</p>
                 <small>
                     <em>
@@ -73,10 +98,35 @@ export const StatsScreen = () => {
                 </small>
             </div>
 
-            <div>
-                <p>Hours left: {turnsLeft}</p>
+            <div
+                css={{
+                    paddingBlockStart,
+                    paddingBlockEnd,
+                    paddingInline,
+                    borderColor: Colors.Border.standard,
+                    borderRadius: "7px",
+                    borderStyle: "solid",
+                    borderWidth: "1px",
+                }}
+            >
+                <p>Current Station: {station?.name}</p>
                 <small>
-                    <em>When your turns run out, the game is over.</em>
+                    <em>{station?.stationDescription}</em>
+                </small>
+
+                <p>
+                    {currentStation === "compton"
+                        ? "Total anarchy. No single gang is in change here."
+                        : `Run by: ${station?.gangName}`}
+                </p>
+                <small>{station?.gangDescription}</small>
+
+                <p>Reputation: Hunted</p>
+                <small>
+                    <em>
+                        Too many sticks has drawn the attention of the locals.
+                        Watch your back.
+                    </em>
                 </small>
             </div>
         </div>

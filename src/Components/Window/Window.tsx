@@ -1,33 +1,25 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { useEffect, useState } from "react";
 
-import { useGameState } from "../GameState/GameStateProvider";
+import {
+    useGameState,
+    GameProcess,
+    Screen,
+} from "../GameState/GameStateProvider";
+import { MainScreen } from "../MainScreen/MainScreen";
 import { Market } from "../Market/Market";
-// import { Subway } from "../Subway/Subway";
+import { StatsScreen } from "../Stats/StatsScreen";
 import { Welcome } from "../Welcome/Welcome";
+import { GameScreen } from "../Window/GameScreen";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 
-export enum Screen {
-    Welcome = "Future Butcher",
-    Subway = "Subway",
-    Market = "Market",
-    SurplusStore = "Gus's Army Surplus",
-    HardwareStore = "Hardware Store",
-    Bank = "Bank",
-    Clinic = "Free Clinic",
-}
-
 export const Window = () => {
-    const { playerName } = useGameState();
-    const [currentScreen, setCurrentScreen] = useState<Screen>(Screen.Market);
-    useEffect(() => {
-        if (!playerName) return;
-        setCurrentScreen(Screen.Market);
-    });
+    const { layout, windowSize } = useWindowSize();
 
-    const { windowSize } = useWindowSize();
+    const { process, currentScreen } = useGameState();
+
+    const ScreenComponent = getComponent(currentScreen);
 
     return (
         <div
@@ -54,10 +46,38 @@ export const Window = () => {
                     borderWidth: "2px",
                 }}
             >
-                {currentScreen === Screen.Welcome && <Welcome />}
+                {process === GameProcess.intro && <Welcome />}
 
-                {currentScreen === Screen.Market && <Market />}
+                {process === GameProcess.inGame && (
+                    <GameScreen
+                        layout={layout}
+                        Component={ScreenComponent}
+                        shouldShowNavBar={currentScreen !== Screen.Main}
+                    />
+                )}
+
+                {process === GameProcess.end && (
+                    <div>
+                        <h1>Game Over</h1>
+                    </div>
+                )}
             </div>
         </div>
     );
 };
+
+function getComponent(screen: Screen): (() => JSX.Element) | null {
+    switch (screen) {
+        case Screen.Main:
+            return MainScreen;
+
+        case Screen.Market:
+            return Market;
+
+        case Screen.Stats:
+            return StatsScreen;
+
+        default:
+            return null;
+    }
+}
