@@ -40,6 +40,7 @@ export const TextInput = ({
                 "&::placeholder": {
                     color: Colors.Text.secondary,
                 },
+                fontSize: "16px",
             })}
             onChange={changeCB}
             onKeyPress={(e) => keypressCB && keypressCB(e)}
