@@ -1,35 +1,25 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { useState } from "react";
 
-import { TopBar } from "./TopBar";
-import { Subway } from "../Subway/Subway";
+import {
+    useGameState,
+    GameProcess,
+    Screen,
+} from "../GameState/GameStateProvider";
+import { MainScreen } from "../MainScreen/MainScreen";
+import { Market } from "../Market/Market";
+import { StatsScreen } from "../Stats/StatsScreen";
 import { Welcome } from "../Welcome/Welcome";
+import { GameScreen } from "../Window/GameScreen";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 
-export enum Screen {
-    Welcome = "Future Butcher",
-    Subway = "Subway",
-    Market = "Market",
-    SurplusStore = "Gus's Army Surplus",
-    HardwareStore = "Hardware Store",
-    Bank = "Bank",
-    Clinic = "Free Clinic",
-}
-
 export const Window = () => {
-    const [currentScreen, setCurrentScreen] = useState<Screen>(Screen.Welcome);
-    const [isDesignMenuOpen, setIsDesignMenuOpen] = useState(false);
-    const handleDesignMenuButtonClick = () => {
-        setIsDesignMenuOpen((isOpen) => !isOpen);
-    };
-    const handleScreenChange = (screen: Screen) => {
-        setCurrentScreen(screen);
-        setIsDesignMenuOpen(false);
-    };
+    const { layout, windowSize } = useWindowSize();
 
-    const { windowSize } = useWindowSize();
+    const { process, currentScreen } = useGameState();
+
+    const ScreenComponent = getComponent(currentScreen);
 
     return (
         <div
@@ -49,30 +39,45 @@ export const Window = () => {
                     inlineSize: windowSize.inlineSize,
                     paddingBlock: "1px",
                     paddingInline: "1px",
-                    backgroundColor: Colors.Background.body,
-                    borderBlockStartWidth: "2px",
-                    borderBlockEndWidth: "3px",
-                    borderInlineStartWidth: "2px",
-                    borderInlineEndWidth: "3px",
-                    borderStyle: "outset",
-                    borderRadius: "2px",
-                    borderBlockStartColor: Colors.Border.light,
-                    borderInlineStartColor: Colors.Border.light,
-                    borderBlockEndColor: Colors.Border.dark,
-                    borderInlineEndColor: Colors.Border.dark,
+                    backgroundColor: Colors.Background.screen,
+                    borderColor: Colors.Border.subtle,
+                    borderRadius: "14px",
+                    borderStyle: "solid",
+                    borderWidth: "2px",
                 }}
             >
-                <TopBar
-                    title={currentScreen}
-                    isDesignMenuOpen={isDesignMenuOpen}
-                    onDesignMenuButtonClick={handleDesignMenuButtonClick}
-                    handleScreenChange={handleScreenChange}
-                />
+                {process === GameProcess.intro && <Welcome />}
 
-                {currentScreen === Screen.Welcome && <Welcome />}
+                {process === GameProcess.inGame && (
+                    <GameScreen
+                        layout={layout}
+                        Component={ScreenComponent}
+                        shouldShowNavBar={currentScreen !== Screen.Main}
+                    />
+                )}
 
-                {currentScreen === Screen.Subway && <Subway />}
+                {process === GameProcess.end && (
+                    <div>
+                        <h1>Game Over</h1>
+                    </div>
+                )}
             </div>
         </div>
     );
 };
+
+function getComponent(screen: Screen): (() => JSX.Element) | null {
+    switch (screen) {
+        case Screen.Main:
+            return MainScreen;
+
+        case Screen.Market:
+            return Market;
+
+        case Screen.Stats:
+            return StatsScreen;
+
+        default:
+            return null;
+    }
+}

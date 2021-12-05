@@ -18,11 +18,11 @@ export const App = () => {
 };
 
 const GlobalStyles = css`
-    @import url("https://fonts.googleapis.com/css2?family=Mr+Dafoe&display=swap");
+    @import url("https://fonts.googleapis.com/css2?family=Michroma&family=Mr+Dafoe&family=Saira+Stencil+One&family=Share+Tech+Mono&display=swap");
 
     body {
         margin: 0;
-        background: ${Colors.Background.page};
+        background: black;
     }
 
     h1,
@@ -32,13 +32,15 @@ const GlobalStyles = css`
     h5,
     h6,
     p {
-        font-family: Trebuchet MS, sans-serif;
+        font-family: Michroma;
+        color: ${Colors.Text.primary};
+        word-spacing: 2px;
     }
 
     * {
         box-sizing: border-box;
         &:focus-visible {
-            outline: black dotted 1px;
+            outline: solid ${Colors.Border.accent};
         }
     }
 `;

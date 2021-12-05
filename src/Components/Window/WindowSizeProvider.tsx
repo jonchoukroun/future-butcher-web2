@@ -2,13 +2,16 @@ import * as React from "react";
 
 const { createContext, useContext, useEffect, useState } = React;
 
-type Size = { blockSize: number; inlineSize: number };
+const MINIMUM_COLUMN_WIDTH = 320;
+
+export type Size = { blockSize: number; inlineSize: number };
+export type LayoutType = "compact" | "full";
 
 const WindowSizeContext = createContext<
     | {
           windowSize: Size;
           getContentSize: () => Size;
-          isCompact: boolean;
+          layout: LayoutType;
       }
     | undefined
 >(undefined);
@@ -27,27 +30,29 @@ export function WindowSizeProvider({
         blockSize,
         inlineSize,
     });
-    const [isCompact, setIsCompact] = useState(inlineSize <= 812);
+    const [layout, setLayout] = useState<LayoutType>(getLayout(inlineSize));
 
     useEffect(() => {
         window.onresize = () => {
             const { blockSize, inlineSize } = handleSizing();
             setWindowSize({ blockSize, inlineSize });
-            setIsCompact(inlineSize <= 812);
+            setLayout(getLayout(inlineSize));
         };
     }, []);
 
     const getContentSize = () => {
+        const baseInline = windowSize.inlineSize - 7;
         return {
-            blockSize: windowSize.blockSize - 39,
-            inlineSize: windowSize.inlineSize - 7,
+            blockSize: Math.round((windowSize.blockSize - 100) * 0.9),
+            inlineSize:
+                layout === "compact" ? baseInline : Math.round(baseInline / 2),
         };
     };
 
     const value = {
         windowSize,
         getContentSize,
-        isCompact,
+        layout,
     };
 
     return (
@@ -75,4 +80,8 @@ function handleSizing() {
         blockSize: Math.min(innerHeight, 812),
         inlineSize: Math.min(innerWidth, 990),
     };
+}
+
+function getLayout(inlineSize: number): LayoutType {
+    return inlineSize >= 2 * MINIMUM_COLUMN_WIDTH ? "full" : "compact";
 }
