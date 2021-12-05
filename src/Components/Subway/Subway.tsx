@@ -3,11 +3,8 @@ import { jsx } from "@emotion/react";
 
 import { Stations } from "./Stations";
 import { ButtonPrimary } from "../Form";
-import { useWindowSize } from "../Window/WindowSizeProvider";
 
 export const Subway = () => {
-    const { isCompact } = useWindowSize();
-
     return (
         <div
             css={{
@@ -33,7 +30,6 @@ export const Subway = () => {
                 css={{
                     inlineSize: "100%",
                     display: "flex",
-                    justifyContent: isCompact ? "space-between" : "end",
                     paddingBlock: "10px",
                 }}
             >
