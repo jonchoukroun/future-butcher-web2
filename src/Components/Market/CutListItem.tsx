@@ -72,6 +72,7 @@ export const CutListItem = ({ cut }: CutListItemProps) => {
                 <ButtonPrimary
                     label={"Buy"}
                     type={"Half"}
+                    border={"Thin"}
                     isDisabled={!canAfford}
                     clickCB={() => {
                         return;
@@ -80,6 +81,7 @@ export const CutListItem = ({ cut }: CutListItemProps) => {
                 <ButtonPrimary
                     label={"Sell"}
                     type={"Half"}
+                    border={"Thin"}
                     isDisabled={true}
                     clickCB={() => {
                         return;
