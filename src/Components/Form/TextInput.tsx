@@ -19,6 +19,9 @@ export const TextInput = ({
     keypressCB,
 }: TextInputProps) => {
     const { layout } = useWindowSize();
+    const handleBlur = () => {
+        document.body.scrollTop = document.documentElement.scrollTop = 0;
+    };
     return (
         <input
             type="text"
@@ -44,6 +47,7 @@ export const TextInput = ({
             })}
             onChange={changeCB}
             onKeyPress={(e) => keypressCB && keypressCB(e)}
+            onBlur={handleBlur}
         />
     );
 };
