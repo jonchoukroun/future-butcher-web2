@@ -82,7 +82,7 @@ export const Welcome = () => {
                     marginBlockStart: "50px",
                 }}
             >
-                <h4 css={{ margin: 0 }}>Enter your name to play</h4>
+                <h4 css={{ margin: 0 }}>Enter your name</h4>
                 <TextInput
                     placeholder="(3 to 20 characters long)"
                     lengthOptions={[3, 20]}

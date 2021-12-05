@@ -3,6 +3,8 @@ import * as React from "react";
 const { createContext, useContext, useEffect, useState } = React;
 
 const MINIMUM_COLUMN_WIDTH = 320;
+const STATS_BAR_HEIGHT = 40;
+const NAV_BAR_HEIGHT = 70;
 
 export type Size = { blockSize: number; inlineSize: number };
 export type LayoutType = "compact" | "full";
@@ -12,6 +14,7 @@ const WindowSizeContext = createContext<
           windowSize: Size;
           getContentSize: () => Size;
           layout: LayoutType;
+          heightAdjustment: number;
       }
     | undefined
 >(undefined);
@@ -53,6 +56,10 @@ export function WindowSizeProvider({
         windowSize,
         getContentSize,
         layout,
+        heightAdjustment:
+            layout === "full"
+                ? NAV_BAR_HEIGHT
+                : NAV_BAR_HEIGHT + STATS_BAR_HEIGHT,
     };
 
     return (

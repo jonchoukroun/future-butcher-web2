@@ -8,6 +8,8 @@ export type Station = {
     uniqueBuilding: string;
 };
 
+export type StationKey = Station["key"];
+
 export const subwayStations: Array<Station> = [
     {
         key: "beverly_hills",

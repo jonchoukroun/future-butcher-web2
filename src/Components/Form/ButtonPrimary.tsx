@@ -71,7 +71,7 @@ function getDimensions(type: ButtonType) {
             return ["auto", "auto"];
 
         case "Stretch":
-            return [standardHeight, "80%"];
+            return [standardHeight, "90%"];
 
         default:
             return ["100%", "100%"];

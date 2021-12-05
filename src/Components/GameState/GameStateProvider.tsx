@@ -3,6 +3,7 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { player, PlayerStatsType } from "../../Fixtures/player";
+import { StationKey } from "../../Fixtures/subwayStations";
 
 const { createContext, useContext, useState } = React;
 
@@ -31,6 +32,7 @@ type GameState = {
     currentScreen: Screen;
     changeScreen: (screen: Screen) => void;
     currentStation: string;
+    changeStation: (station: StationKey) => void;
     turnsLeft: number;
     playerStats: PlayerStatsType;
 };
@@ -48,7 +50,7 @@ export function GameStateProvider({ children }: { children: React.ReactNode }) {
     const [currentScreen, setCurrentScreen] = useState<Screen>(() => {
         if (process === GameProcess.intro) return Screen.Welcome;
         if (process === GameProcess.end) return Screen.HighScores;
-        return Screen.Market;
+        return Screen.Subway;
     });
     const changeScreen = (screen: Screen) => {
         if (process === GameProcess.intro) return Screen.Welcome;
@@ -72,7 +74,12 @@ export function GameStateProvider({ children }: { children: React.ReactNode }) {
             setCurrentScreen(Screen.Main);
         });
 
-    const [currentStation] = useState("compton");
+    const [currentStation, setCurrentStation] = useState<StationKey>("compton");
+    const changeStation = (station: StationKey) => {
+        if (station === currentStation) return;
+        setCurrentStation(station);
+        setCurrentScreen(Screen.Main);
+    };
 
     const [turnsLeft] = useState(24);
 
@@ -84,6 +91,7 @@ export function GameStateProvider({ children }: { children: React.ReactNode }) {
         currentScreen,
         changeScreen,
         currentStation,
+        changeStation,
         turnsLeft,
         playerStats,
     };

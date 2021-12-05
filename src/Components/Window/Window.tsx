@@ -9,6 +9,7 @@ import {
 import { MainScreen } from "../MainScreen/MainScreen";
 import { Market } from "../Market/Market";
 import { StatsScreen } from "../Stats/StatsScreen";
+import { Subway } from "../Subway/Subway";
 import { Welcome } from "../Welcome/Welcome";
 import { GameScreen } from "../Window/GameScreen";
 import { useWindowSize } from "../Window/WindowSizeProvider";
@@ -73,6 +74,9 @@ function getComponent(screen: Screen): (() => JSX.Element) | null {
 
         case Screen.Market:
             return Market;
+
+        case Screen.Subway:
+            return Subway;
 
         case Screen.Stats:
             return StatsScreen;

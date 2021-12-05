@@ -2,16 +2,15 @@
 import { jsx } from "@emotion/react";
 
 import { SubwayStationItem } from "./SubwayStationItem";
-import { useGameState } from "../GameState/GameStateProvider";
 import { subwayStations } from "../../Fixtures/subwayStations";
 
 export const Stations = () => {
-    const { currentStation } = useGameState();
-
     return (
         <ul
             css={{
-                inlineSize: "100%",
+                blockSize: "100%",
+                display: "flex",
+                flexDirection: "column",
                 margin: 0,
                 padding: 0,
                 listStyleType: "none",
@@ -21,7 +20,6 @@ export const Stations = () => {
                 <SubwayStationItem
                     key={`${station.key}-${idx}`}
                     station={station}
-                    isCurrentStation={station.key === currentStation}
                 />
             ))}
         </ul>

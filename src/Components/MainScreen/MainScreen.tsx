@@ -4,6 +4,7 @@ import { jsx } from "@emotion/react";
 import { ButtonPrimary } from "../Form/ButtonPrimary";
 import { Screen, useGameState } from "../GameState/GameStateProvider";
 import { subwayStations } from "../../Fixtures/subwayStations";
+import * as Colors from "../../Styles/colors";
 
 export const MainScreen = () => {
     const { changeScreen, currentStation } = useGameState();
@@ -28,10 +29,13 @@ export const MainScreen = () => {
         >
             <h2
                 css={{
-                    letterSpacing: "4px",
-                    textAlign: "center",
+                    marginBlockStart: "5px",
+                    marginBlockEnd: "20px",
+                    color: Colors.Text.heading,
                     textTransform: "uppercase",
-                    wordSpacing: "8px",
+                    letterSpacing: "2px",
+                    wordSpacing: "4px",
+                    textAlign: "center",
                 }}
             >
                 {station.name}
@@ -54,14 +58,14 @@ export const MainScreen = () => {
                     <ButtonPrimary
                         type={"Stretch"}
                         label={station.uniqueBuilding}
-                        clickCB={() => changeScreen(Screen.Subway)}
+                        clickCB={() => changeScreen(Screen.Main)}
                     />
                 </li>
                 <li>
                     <ButtonPrimary
                         type={"Stretch"}
                         label={"Gang Hideout"}
-                        clickCB={() => changeScreen(Screen.Subway)}
+                        clickCB={() => changeScreen(Screen.Main)}
                     />
                 </li>
                 <li>

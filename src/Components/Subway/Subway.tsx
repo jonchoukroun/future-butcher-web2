@@ -2,52 +2,74 @@
 import { jsx } from "@emotion/react";
 
 import { Stations } from "./Stations";
-import { ButtonPrimary } from "../Form";
+import { useWindowSize } from "../Window/WindowSizeProvider";
+import * as Colors from "../../Styles/colors";
 
 export const Subway = () => {
+    const { heightAdjustment, layout } = useWindowSize();
+
     return (
         <div
             css={{
+                blockSize: `calc(100% - ${heightAdjustment}px)`,
+                maxBlockSize: "600px",
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "space-between",
-                paddingInline: "10px",
+                paddingInline: "8px",
             }}
         >
             <div
                 css={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    alignSelf: "stretch",
-                    marginBlockStart: "20px",
+                    marginBlockStart: "5px",
+                    marginBlockEnd: layout === "full" ? "20px" : "5px",
+                    textAlign: "center",
                 }}
             >
-                <Stations />
+                {layout === "full" && (
+                    <h2
+                        css={{
+                            marginBlock: 0,
+                            color: Colors.Text.heading,
+                            textTransform: "uppercase",
+                            letterSpacing: "2px",
+                            wordSpacing: "4px",
+                        }}
+                    >
+                        Subway
+                    </h2>
+                )}
+                <small css={{ color: Colors.Text.secondary }}>
+                    Travel to another neighborhood.
+                </small>
             </div>
             <div
                 css={{
-                    inlineSize: "100%",
+                    inlineSize: "95%",
                     display: "flex",
-                    paddingBlock: "10px",
+                    justifyContent: "flex-end",
+                    paddingBlock: layout === "full" ? "10px" : "4px",
                 }}
             >
-                <ButtonPrimary
-                    label={"Back"}
-                    type={"Full"}
-                    clickCB={() => {
-                        return;
+                <button
+                    css={{
+                        padding: "4px",
+                        backgroundColor: Colors.Background.subtle,
+                        borderColor: "transparent",
+                        borderRadius: "7px",
+                        borderWidth: "1px",
+                        color: "black",
+                        fontSize: "16px",
+                        "&:active": {
+                            backgroundColor: "transparent",
+                            borderColor: Colors.Border.subtle,
+                            color: Colors.Text.primary,
+                        },
                     }}
-                />
-                <ButtonPrimary
-                    label={"Details"}
-                    type={"Full"}
-                    clickCB={() => {
-                        return;
-                    }}
-                />
+                >
+                    Toggle Details
+                </button>
             </div>
+            <Stations />
         </div>
     );
 };

@@ -6,8 +6,7 @@ import { useWindowSize } from "../Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 
 export const Market = () => {
-    const { layout } = useWindowSize();
-    const heightAdjustment = layout === "full" ? 70 : 70 + 40;
+    const { heightAdjustment, layout } = useWindowSize();
     return (
         <div
             css={{

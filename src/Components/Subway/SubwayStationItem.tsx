@@ -2,104 +2,45 @@
 import { jsx } from "@emotion/react";
 
 import { ButtonPrimary } from "../Form/ButtonPrimary";
-import { useWindowSize } from "../Window/WindowSizeProvider";
+import { useGameState } from "../GameState/GameStateProvider";
 import { Station } from "../../Fixtures/subwayStations";
+import { formatMoney } from "../Utils/formatMoney";
+import * as Colors from "../../Styles/colors";
 
 interface SubwayStationItemProps {
     station: Station;
-    isCurrentStation: boolean;
 }
 
-export const SubwayStationItem = ({
-    station,
-    isCurrentStation,
-}: SubwayStationItemProps) => {
-    const { windowSize } = useWindowSize();
+export const SubwayStationItem = ({ station }: SubwayStationItemProps) => {
+    const { changeStation, currentStation, playerStats } = useGameState();
+    const isCurrentStation = currentStation === station.key;
+    const canAfford = playerStats.cash >= station.gangTax;
     return (
-        <li>
-            <div
-                css={{
-                    inlineSize: "100%",
-                    display: "flex",
-                    justifyContent: "space-between",
-                }}
-            >
-                {windowSize.blockSize >= 667 ? (
-                    <div
-                        css={{
-                            display: "flex",
-                            flexDirection: "column",
-                        }}
-                    >
-                        <h3
-                            css={{
-                                margin: 0,
-                            }}
-                        >
-                            {station.name}
-                        </h3>
-                        <p
-                            css={{
-                                margin: 0,
-                            }}
-                        >
-                            {isCurrentStation ? (
-                                <em>Current location.</em>
-                            ) : (
-                                <span>
-                                    <strong>Gang Tax:</strong> $
-                                    {station.gangTax}
-                                </span>
-                            )}
-                        </p>
-                    </div>
-                ) : (
-                    <div
-                        css={{
-                            display: "flex",
-                            flexDirection: "column",
-                        }}
-                    >
-                        <h4
-                            css={{
-                                margin: 0,
-                            }}
-                        >
-                            {station.name}
-                        </h4>
-                        <small
-                            css={{
-                                margin: 0,
-                            }}
-                        >
-                            {isCurrentStation ? (
-                                <em>Current location.</em>
-                            ) : (
-                                <span>
-                                    <strong>Gang Tax:</strong> $
-                                    {station.gangTax}
-                                </span>
-                            )}
-                        </small>
-                    </div>
-                )}
-                {!isCurrentStation && (
-                    <div
-                        css={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                        }}
-                    >
-                        <ButtonPrimary
-                            label={"Go"}
-                            type={"Half"}
-                            clickCB={() => {
-                                return;
-                            }}
-                        />
-                    </div>
-                )}
-            </div>
+        <li
+            css={{
+                inlineSize: "100%",
+                display: "flex",
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+
+                "& button": {
+                    fontSize: "16px",
+                    color: canAfford ? Colors.Text.primary : Colors.Text.danger,
+                },
+            }}
+        >
+            <ButtonPrimary
+                type={"Stretch"}
+                label={
+                    isCurrentStation
+                        ? `${station.name} - (Here)`
+                        : `${station.name} - ${formatMoney(station.gangTax)}`
+                }
+                border={"Thin"}
+                isDisabled={isCurrentStation}
+                clickCB={() => changeStation(station.key)}
+            />
         </li>
     );
 };
