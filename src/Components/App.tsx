@@ -20,8 +20,16 @@ export const App = () => {
 const GlobalStyles = css`
     @import url("https://fonts.googleapis.com/css2?family=Michroma&family=Mr+Dafoe&family=Saira+Stencil+One&family=Share+Tech+Mono&display=swap");
 
+    html {
+        block-size: 100%;
+        inline-size: 100%;
+    }
+
     body {
+        min-block-size: 100%;
+        overflow: hidden;
         margin: 0;
+        padding: 0;
         background: black;
     }
 
