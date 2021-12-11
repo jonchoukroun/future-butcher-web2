@@ -27,7 +27,6 @@ const GameStateContext = React.createContext<
 >(undefined);
 
 function gameStateReducer(state: GameState, action: Action) {
-    console.log("!!gameStateReducer", action);
     switch (action.type) {
         case "updateChannelStatus":
             return { ...state, isConnected: action.isConnected };
