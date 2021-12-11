@@ -2,16 +2,17 @@
 import { jsx } from "@emotion/react";
 
 import { MainScreen } from "../MainScreen/MainScreen";
-// import { Market } from "../Market/Market";
-// import { StatsScreen } from "../Stats/StatsScreen";
-// import { Subway } from "../Subway/Subway";
+import { Market } from "../Market/Market";
+import { StatsScreen } from "../Stats/StatsScreen";
+import { Subway } from "../Subway/Subway";
 import { Welcome } from "../Welcome/Welcome";
+import { GameScreen } from "../Window/GameScreen";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { Screen, useGameState } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
 export const Window = () => {
-    const { windowSize } = useWindowSize();
+    const { layout, windowSize } = useWindowSize();
 
     const {
         state: { currentScreen },
@@ -43,7 +44,30 @@ export const Window = () => {
                 }}
             >
                 {currentScreen === Screen.Welcome && <Welcome />}
-                {currentScreen === Screen.Main && <MainScreen />}
+
+                {currentScreen === Screen.Main && (
+                    <GameScreen layout={layout} shouldShowNavBar={false}>
+                        <MainScreen />
+                    </GameScreen>
+                )}
+
+                {currentScreen === Screen.Market && (
+                    <GameScreen layout={layout} shouldShowNavBar={true}>
+                        <Market />
+                    </GameScreen>
+                )}
+
+                {currentScreen === Screen.Subway && (
+                    <GameScreen layout={layout} shouldShowNavBar={true}>
+                        <Subway />
+                    </GameScreen>
+                )}
+
+                {currentScreen === Screen.Stats && (
+                    <GameScreen layout={layout} shouldShowNavBar={true}>
+                        <StatsScreen />
+                    </GameScreen>
+                )}
             </div>
         </div>
     );

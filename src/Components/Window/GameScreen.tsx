@@ -9,14 +9,14 @@ import { Screen, useGameState } from "../../GameData/GameStateProvider";
 
 interface GameScreenProps {
     layout: LayoutType;
-    Component: JSX.Element | null;
     shouldShowNavBar: boolean;
+    children: React.ReactNode;
 }
 
 export const GameScreen = ({
     layout,
-    Component,
     shouldShowNavBar,
+    children,
 }: GameScreenProps) => {
     const {
         state: { currentScreen },
@@ -51,7 +51,7 @@ export const GameScreen = ({
                         justifyContent: "space-between",
                     }}
                 >
-                    {Component}
+                    {children}
                     {shouldShowNavBar && <NavBar />}
                 </div>
             </div>
@@ -68,7 +68,7 @@ export const GameScreen = ({
             >
                 {}
                 {currentScreen !== Screen.Stats && <StatsBar />}
-                {Component}
+                {children}
                 {shouldShowNavBar && <NavBar />}
             </div>
         );
