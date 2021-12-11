@@ -2,12 +2,18 @@
 import { jsx } from "@emotion/react";
 
 import { ButtonPrimary } from "../Form";
-import { useGameState, Screen } from "../GameState/GameStateProvider";
 import { formatMoney } from "../Utils/formatMoney";
+import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
 export const StatsBar = () => {
-    const { changeScreen, playerStats, turnsLeft } = useGameState();
+    // const { changeScreen, playerStats, turnsLeft } = useGameState();
+    const {
+        state: { stateData },
+        dispatch,
+    } = useGameState();
+    const playerStats = stateData && stateData.player;
+    const turnsLeft = stateData && stateData.rules.turnsLeft;
 
     return (
         <div
@@ -33,7 +39,7 @@ export const StatsBar = () => {
                     color: Colors.Text.secondary,
                 }}
             >
-                {formatMoney(playerStats.cash)}
+                {playerStats && formatMoney(playerStats.funds)}
             </p>
             <p
                 css={{
@@ -48,7 +54,9 @@ export const StatsBar = () => {
                 type={"Small"}
                 label={"Stats"}
                 border={"Thin"}
-                clickCB={() => changeScreen(Screen.Stats)}
+                clickCB={() =>
+                    dispatch({ type: "changeScreen", screen: Screen.Stats })
+                }
             />
         </div>
     );

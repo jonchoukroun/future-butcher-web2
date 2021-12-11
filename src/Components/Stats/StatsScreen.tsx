@@ -1,15 +1,20 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
-import { useGameState } from "../GameState/GameStateProvider";
 import { formatMoney } from "../Utils/formatMoney";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { subwayStations } from "../../Fixtures/subwayStations";
+import { useGameState } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
 export const StatsScreen = () => {
     const { layout } = useWindowSize();
-    const { currentStation, playerStats, turnsLeft } = useGameState();
+    const {
+        state: { stateData },
+    } = useGameState();
+    const currentStation = stateData && stateData.station.stationName;
+    const playerStats = stateData && stateData.player;
+    const turnsLeft = stateData && stateData.rules.turnsLeft;
 
     const station = subwayStations.find(
         (station) => station.key === currentStation,
@@ -73,7 +78,7 @@ export const StatsScreen = () => {
                     borderWidth: "1px",
                 }}
             >
-                <p>Health: {playerStats.health}</p>
+                <p>Health: {playerStats?.health}</p>
                 <small>
                     <em>
                         If this drops to zero, you&apos;re dead! Get patched up
@@ -81,7 +86,7 @@ export const StatsScreen = () => {
                     </em>
                 </small>
 
-                <p>Cash: {formatMoney(playerStats.cash)}</p>
+                <p>Cash: {playerStats && formatMoney(playerStats.funds)}</p>
                 <small>
                     <em>
                         Keep hustling to grow this sum, but don&apos;t lose it
@@ -90,7 +95,7 @@ export const StatsScreen = () => {
                 </small>
 
                 <p css={{ color: Colors.Text.danger }}>
-                    Debt: {formatMoney(playerStats.debt)}
+                    Debt: {playerStats && formatMoney(playerStats.debt)}
                 </p>
                 <small>
                     <em>

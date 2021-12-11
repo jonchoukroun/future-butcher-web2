@@ -2,12 +2,15 @@
 import { jsx } from "@emotion/react";
 
 import { ButtonPrimary } from "../Form/ButtonPrimary";
-import { Screen, useGameState } from "../GameState/GameStateProvider";
 import { subwayStations } from "../../Fixtures/subwayStations";
+import { Screen, useGameState } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
 export const MainScreen = () => {
-    const { changeScreen, currentStation } = useGameState();
+    const {
+        state: { currentStation },
+        dispatch,
+    } = useGameState();
     const station = subwayStations.find((s) => s.key === currentStation);
     if (station === undefined) throw new Error("Station not found");
 
@@ -51,28 +54,48 @@ export const MainScreen = () => {
                     <ButtonPrimary
                         type={"Stretch"}
                         label={Screen.Market}
-                        clickCB={() => changeScreen(Screen.Market)}
+                        clickCB={() =>
+                            dispatch({
+                                type: "changeScreen",
+                                screen: Screen.Market,
+                            })
+                        }
                     />
                 </li>
                 <li>
                     <ButtonPrimary
                         type={"Stretch"}
                         label={station.uniqueBuilding}
-                        clickCB={() => changeScreen(Screen.Main)}
+                        clickCB={() =>
+                            dispatch({
+                                type: "changeScreen",
+                                screen: Screen.Main,
+                            })
+                        }
                     />
                 </li>
                 <li>
                     <ButtonPrimary
                         type={"Stretch"}
                         label={"Gang Hideout"}
-                        clickCB={() => changeScreen(Screen.Main)}
+                        clickCB={() =>
+                            dispatch({
+                                type: "changeScreen",
+                                screen: Screen.Main,
+                            })
+                        }
                     />
                 </li>
                 <li>
                     <ButtonPrimary
                         type={"Stretch"}
                         label={Screen.Subway}
-                        clickCB={() => changeScreen(Screen.Subway)}
+                        clickCB={() =>
+                            dispatch({
+                                type: "changeScreen",
+                                screen: Screen.Subway,
+                            })
+                        }
                     />
                 </li>
             </ul>

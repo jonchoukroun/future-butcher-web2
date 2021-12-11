@@ -2,12 +2,13 @@
 import { jsx } from "@emotion/react";
 
 import { useWindowSize } from "./WindowSizeProvider";
-import { useGameState, Screen } from "../GameState/GameStateProvider";
 import { ButtonPrimary } from "../Form/ButtonPrimary";
+import { useGameState, Screen } from "../../GameData/GameStateProvider";
 
 export const NavBar = () => {
     const { layout } = useWindowSize();
-    const { changeScreen } = useGameState();
+
+    const { dispatch } = useGameState();
 
     return (
         <div
@@ -24,7 +25,9 @@ export const NavBar = () => {
             <ButtonPrimary
                 type={"Stretch"}
                 label={"Back"}
-                clickCB={() => changeScreen(Screen.Main)}
+                clickCB={() =>
+                    dispatch({ type: "changeScreen", screen: Screen.Main })
+                }
             />
         </div>
     );

@@ -2,8 +2,8 @@
 import { jsx } from "@emotion/react";
 
 import { ButtonPrimary } from "../Form/ButtonPrimary";
-import { useGameState } from "../GameState/GameStateProvider";
 import { Station } from "../../Fixtures/subwayStations";
+import { useGameState } from "../../GameData/GameStateProvider";
 import { formatMoney } from "../Utils/formatMoney";
 import * as Colors from "../../Styles/colors";
 
@@ -12,9 +12,12 @@ interface SubwayStationItemProps {
 }
 
 export const SubwayStationItem = ({ station }: SubwayStationItemProps) => {
-    const { changeStation, currentStation, playerStats } = useGameState();
-    const isCurrentStation = currentStation === station.key;
-    const canAfford = playerStats.cash >= station.gangTax;
+    const {
+        state: { stateData },
+    } = useGameState();
+    const isCurrentStation =
+        stateData && stateData.station.stationName === station.key;
+    const canAfford = stateData && stateData.player.funds >= station.gangTax;
     return (
         <li
             css={{
@@ -39,7 +42,9 @@ export const SubwayStationItem = ({ station }: SubwayStationItemProps) => {
                 }
                 border={"Thin"}
                 isDisabled={isCurrentStation}
-                clickCB={() => changeStation(station.key)}
+                clickCB={() => {
+                    return;
+                }}
             />
         </li>
     );

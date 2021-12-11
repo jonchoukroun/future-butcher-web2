@@ -2,9 +2,9 @@
 import { jsx } from "@emotion/react";
 
 import { ButtonPrimary } from "../Form";
-import { useGameState } from "../GameState/GameStateProvider";
 import { formatMoney } from "../Utils/formatMoney";
 import { CutType } from "../../Fixtures/marketCuts";
+import { useGameState } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
 interface CutListItemProps {
@@ -12,8 +12,10 @@ interface CutListItemProps {
 }
 
 export const CutListItem = ({ cut }: CutListItemProps) => {
-    const { playerStats } = useGameState();
-    const canAfford = playerStats.cash >= cut.price;
+    const {
+        state: { stateData },
+    } = useGameState();
+    const canAfford = stateData && stateData.player.funds >= cut.price;
 
     return (
         <li

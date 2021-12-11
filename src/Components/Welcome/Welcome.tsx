@@ -1,13 +1,22 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { KeyboardEvent, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 
 import { ButtonPrimary, TextInput } from "../Form";
-import { useGameState } from "../GameState/GameStateProvider";
 import { useWindowSize } from "../Window/WindowSizeProvider";
+import { useChannel } from "../../GameData/ChannelProvider";
+import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
 export const Welcome = () => {
+    const isMountedRef = useRef(false);
+    useEffect(() => {
+        isMountedRef.current = true;
+        return () => {
+            isMountedRef.current = false;
+        };
+    }, []);
+
     const { getContentSize, windowSize } = useWindowSize();
     const headingWidth = Math.round(windowSize.inlineSize * 0.2);
 
@@ -17,10 +26,18 @@ export const Welcome = () => {
             handleSubmit();
         }
     }
-    const { incrementGameProcess } = useGameState();
-    function handleSubmit() {
+    const { handleJoinChannel } = useChannel();
+    const { dispatch } = useGameState();
+    const [isLoading, setIsLoading] = useState(false);
+    async function handleSubmit() {
+        if (isLoading) return;
         if (playerName.length < 3) return;
-        incrementGameProcess();
+        setIsLoading(true);
+        await handleJoinChannel(playerName);
+        dispatch({ type: "changeScreen", screen: Screen.Main });
+        if (isMountedRef.current) {
+            setIsLoading(false);
+        }
     }
 
     const { blockSize } = getContentSize();
@@ -97,8 +114,8 @@ export const Welcome = () => {
                     }}
                 >
                     <ButtonPrimary
-                        type="Full"
-                        label="Start"
+                        type={"Full"}
+                        label={isLoading ? "Joining" : "Start"}
                         clickCB={handleSubmit}
                     />
                 </div>

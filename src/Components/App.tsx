@@ -1,17 +1,20 @@
 /** @jsx jsx */
 import { Global, css, jsx } from "@emotion/react";
 
-import { GameStateProvider } from "./GameState/GameStateProvider";
 import { Window } from "./Window/Window";
 import { WindowSizeProvider } from "./Window/WindowSizeProvider";
+import { ChannelProvider } from "../GameData/ChannelProvider";
+import { GameStateProvider } from "../GameData/GameStateProvider";
 import * as Colors from "../Styles/colors";
 
 export const App = () => {
     return (
         <WindowSizeProvider>
-            <Global styles={GlobalStyles} />
             <GameStateProvider>
-                <Window />
+                <ChannelProvider>
+                    <Global styles={GlobalStyles} />
+                    <Window />
+                </ChannelProvider>
             </GameStateProvider>
         </WindowSizeProvider>
     );
