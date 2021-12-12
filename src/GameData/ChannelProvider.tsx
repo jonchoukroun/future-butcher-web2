@@ -1,5 +1,6 @@
-import * as React from "react";
 import { Channel, Socket } from "phoenix";
+import * as React from "react";
+import { unstable_batchedUpdates } from "react-dom";
 
 import { useGameState } from "./GameStateProvider";
 import { getScores } from "./getScores";
@@ -47,8 +48,10 @@ export const ChannelProvider = ({
             if (socket === undefined || !socket.isConnected()) return;
 
             const response = await joinChannel(playerName, socket);
-            dispatch({ type: "updateChannelStatus", isConnected: true });
-            setChannel(response);
+            unstable_batchedUpdates(() => {
+                dispatch({ type: "updateChannelStatus", isConnected: true });
+                setChannel(response);
+            });
         },
         [socket],
     );
