@@ -1,6 +1,13 @@
 import * as React from "react";
 
+export enum GameProcess {
+    intro,
+    inGame,
+    end,
+}
+
 export enum Screen {
+    Login = "Login",
     Welcome = "Future Butcher",
     Main = "Main",
     Subway = "Subway",
@@ -14,11 +21,12 @@ export enum Screen {
 }
 
 type GameState = {
-    isConnected: boolean;
+    process: GameProcess;
     currentScreen: Screen;
     currentStation: string;
 };
 type Action =
+    | { type: "incrementProcess" }
     | { type: "updateChannelStatus"; isConnected: boolean }
     | { type: "changeScreen"; screen: Screen };
 
@@ -28,6 +36,9 @@ const GameStateContext = React.createContext<
 
 function gameStateReducer(state: GameState, action: Action) {
     switch (action.type) {
+        case "incrementProcess":
+            return state;
+
         case "updateChannelStatus":
             return { ...state, isConnected: action.isConnected };
 
@@ -45,7 +56,7 @@ interface GameStateProviderProps {
 
 export function GameStateProvider({ children }: GameStateProviderProps) {
     const [state, dispatch] = React.useReducer(gameStateReducer, {
-        isConnected: false,
+        process: GameProcess.intro,
         currentScreen: Screen.Welcome,
         currentStation: "compton",
     });
@@ -69,10 +80,10 @@ export function useGameState() {
 function handleChangeScreen(state: GameState, nextScreen: Screen): GameState {
     if (state.currentScreen === nextScreen) return state;
 
-    if (nextScreen !== Screen.Welcome && !state.isConnected) {
+    if (state.process > GameProcess.intro && nextScreen !== Screen.Login) {
         return {
             ...state,
-            currentScreen: Screen.Welcome,
+            currentScreen: Screen.Login,
         };
     }
 

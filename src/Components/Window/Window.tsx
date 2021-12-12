@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
+import { Login } from "../Login/Login";
 import { MainScreen } from "../MainScreen/MainScreen";
 import { Market } from "../Market/Market";
 import { StatsScreen } from "../Stats/StatsScreen";
@@ -43,6 +44,8 @@ export const Window = () => {
                     borderWidth: "2px",
                 }}
             >
+                {currentScreen === Screen.Login && <Login />}
+
                 {currentScreen === Screen.Welcome && <Welcome />}
 
                 {currentScreen === Screen.Main && (
