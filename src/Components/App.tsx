@@ -41,15 +41,19 @@ const GlobalStyles = css`
     h3,
     h4,
     h5,
-    h6,
-    p {
+    h6 {
         font-family: Michroma;
         color: ${Colors.Text.primary};
         word-spacing: 2px;
     }
 
+    p {
+        font-family: Share Tech Mono;
+        color: ${Colors.Text.primary};
+    }
+
     small {
-        font-family: Michroma;
+        font-family: Share Tech Mono;
         color: ${Colors.Text.primary};
     }
 
