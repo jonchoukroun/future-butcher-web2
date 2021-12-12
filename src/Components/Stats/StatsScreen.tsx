@@ -3,6 +3,7 @@ import { jsx } from "@emotion/react";
 
 import { formatMoney } from "../Utils/formatMoney";
 import { useWindowSize } from "../Window/WindowSizeProvider";
+import { player } from "../../Fixtures/player";
 import { subwayStations } from "../../Fixtures/subwayStations";
 import { useGameState } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
@@ -10,11 +11,9 @@ import * as Colors from "../../Styles/colors";
 export const StatsScreen = () => {
     const { layout } = useWindowSize();
     const {
-        state: { stateData },
+        state: { currentStation },
     } = useGameState();
-    const currentStation = stateData && stateData.station.stationName;
-    const playerStats = stateData && stateData.player;
-    const turnsLeft = stateData && stateData.rules.turnsLeft;
+    const turnsLeft = 24;
 
     const station = subwayStations.find(
         (station) => station.key === currentStation,
@@ -78,7 +77,7 @@ export const StatsScreen = () => {
                     borderWidth: "1px",
                 }}
             >
-                <p>Health: {playerStats?.health}</p>
+                <p>Health: {player.health}</p>
                 <small>
                     <em>
                         If this drops to zero, you&apos;re dead! Get patched up
@@ -86,7 +85,7 @@ export const StatsScreen = () => {
                     </em>
                 </small>
 
-                <p>Cash: {playerStats && formatMoney(playerStats.funds)}</p>
+                <p>Cash: {formatMoney(player.cash)}</p>
                 <small>
                     <em>
                         Keep hustling to grow this sum, but don&apos;t lose it
@@ -95,7 +94,7 @@ export const StatsScreen = () => {
                 </small>
 
                 <p css={{ color: Colors.Text.danger }}>
-                    Debt: {playerStats && formatMoney(playerStats.debt)}
+                    Debt: {player && formatMoney(player.debt)}
                 </p>
                 <small>
                     <em>

@@ -3,17 +3,13 @@ import { jsx } from "@emotion/react";
 
 import { ButtonPrimary } from "../Form";
 import { formatMoney } from "../Utils/formatMoney";
+import { player } from "../../Fixtures/player";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
 export const StatsBar = () => {
-    // const { changeScreen, playerStats, turnsLeft } = useGameState();
-    const {
-        state: { stateData },
-        dispatch,
-    } = useGameState();
-    const playerStats = stateData && stateData.player;
-    const turnsLeft = stateData && stateData.rules.turnsLeft;
+    const { dispatch } = useGameState();
+    const turnsLeft = 24;
 
     return (
         <div
@@ -39,7 +35,7 @@ export const StatsBar = () => {
                     color: Colors.Text.secondary,
                 }}
             >
-                {playerStats && formatMoney(playerStats.funds)}
+                {formatMoney(player.cash)}
             </p>
             <p
                 css={{

@@ -2,6 +2,7 @@
 import { jsx } from "@emotion/react";
 
 import { ButtonPrimary } from "../Form/ButtonPrimary";
+import { player } from "../../Fixtures/player";
 import { Station } from "../../Fixtures/subwayStations";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { formatMoney } from "../Utils/formatMoney";
@@ -13,11 +14,11 @@ interface SubwayStationItemProps {
 
 export const SubwayStationItem = ({ station }: SubwayStationItemProps) => {
     const {
-        state: { stateData },
+        state: { currentStation },
     } = useGameState();
-    const isCurrentStation =
-        stateData && stateData.station.stationName === station.key;
-    const canAfford = stateData && stateData.player.funds >= station.gangTax;
+
+    const canAfford = player.cash >= station.gangTax;
+
     return (
         <li
             css={{
@@ -36,12 +37,12 @@ export const SubwayStationItem = ({ station }: SubwayStationItemProps) => {
             <ButtonPrimary
                 type={"Stretch"}
                 label={
-                    isCurrentStation
+                    station.key === currentStation
                         ? `${station.name} - (Here)`
                         : `${station.name} - ${formatMoney(station.gangTax)}`
                 }
                 border={"Thin"}
-                isDisabled={isCurrentStation}
+                isDisabled={currentStation === station.key}
                 clickCB={() => {
                     return;
                 }}
