@@ -3,6 +3,8 @@ import { jsx } from "@emotion/react";
 
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { ButtonPrimary } from "../Form";
+import { formatMoney } from "../Utils/formatMoney";
+import { player } from "../../Fixtures/player";
 
 export const Welcome = () => {
     const { getContentSize, layout } = useWindowSize();
@@ -87,8 +89,9 @@ export const Welcome = () => {
                 </p>
 
                 <p>
-                    You have 24 hours to hustle. Get a loan from the bank and
-                    hit the markets.
+                    You have 24 hours and a {formatMoney(player.debt)} loan.
+                    Hurry up, it&apos;s got a 5% hourly interest rate. Welcome
+                    to the People&apos;s Republic of Los Angeles.
                 </p>
             </div>
 
