@@ -1,46 +1,20 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { KeyboardEvent, useEffect, useRef, useState } from "react";
 
-import { ButtonPrimary, TextInput } from "../Form";
 import { useWindowSize } from "../Window/WindowSizeProvider";
-import { useChannel } from "../../GameData/ChannelProvider";
-import { useGameState, Screen } from "../../GameData/GameStateProvider";
-import * as Colors from "../../Styles/colors";
 
 export const Welcome = () => {
-    const isMountedRef = useRef(false);
-    useEffect(() => {
-        isMountedRef.current = true;
-        return () => {
-            isMountedRef.current = false;
-        };
-    }, []);
-
-    const { getContentSize, windowSize } = useWindowSize();
-    const headingWidth = Math.round(windowSize.inlineSize * 0.2);
-
-    const [playerName, setPlayerName] = useState("");
-    function handleKeypress(event: KeyboardEvent<HTMLInputElement>) {
-        if (event.key === "Enter") {
-            handleSubmit();
-        }
-    }
-    const { handleJoinChannel } = useChannel();
-    const { dispatch } = useGameState();
-    const [isLoading, setIsLoading] = useState(false);
-    async function handleSubmit() {
-        if (isLoading) return;
-        if (playerName.length < 3) return;
-        setIsLoading(true);
-        await handleJoinChannel(playerName);
-        dispatch({ type: "changeScreen", screen: Screen.Main });
-        if (isMountedRef.current) {
-            setIsLoading(false);
-        }
-    }
-
+    const { getContentSize } = useWindowSize();
     const { blockSize } = getContentSize();
+
+    const date = new Date();
+    date.setFullYear(2055, date.getMonth(), date.getDate());
+    const options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+    };
+    const displayDate = date.toLocaleDateString("en-US", options);
 
     return (
         <div
@@ -53,72 +27,35 @@ export const Welcome = () => {
         >
             <div
                 css={{
+                    inlineSize: "100%",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    marginBlockStart: "20px",
-                    backgroundColor: "black",
-                    borderColor: Colors.Border.subtle,
-                    borderRadius: "7px",
-                    borderStyle: "inset",
-                    borderWidth: "2px",
+                    marginBlock: "20px",
                 }}
             >
-                <h1
+                <h2
                     css={{
-                        fontFamily: "Saira Stencil One",
-                        fontSize: `${headingWidth}px`,
-                        color: Colors.Text.accent,
-                        margin: 0,
+                        marginBlockStart: 0,
+                        marginBlockEnd: "5px",
+                        fontVariantCaps: "small-caps",
                     }}
                 >
-                    FUTURE
-                </h1>
-                <h1
-                    css={{
-                        fontFamily: "Mr Dafoe",
-                        fontSize: `${headingWidth + 10}px`,
-                        color: Colors.Text.danger,
-                        margin: 0,
-                        marginBlockStart: `-${Math.round(
-                            headingWidth * 0.9,
-                        )}px`,
-                        transform: "rotate(-10deg)",
-                    }}
-                >
-                    Butcher
-                </h1>
+                    Los Angeles
+                </h2>
+                <h4 css={{ marginBlock: 0, fontFamily: "Share Tech Mono" }}>
+                    {displayDate}
+                </h4>
             </div>
+
             <div
                 css={{
-                    inlineSize: "80%",
-                    maxInlineSize: "322px",
+                    inlineSize: "100%",
                     display: "flex",
                     flexDirection: "column",
-                    justifyContent: "center",
-                    marginBlockStart: "50px",
                 }}
             >
-                <h4 css={{ margin: 0 }}>Enter your name</h4>
-                <TextInput
-                    placeholder="(3 to 20 characters long)"
-                    lengthOptions={[3, 20]}
-                    changeCB={(e) => setPlayerName(e.target.value)}
-                    keypressCB={handleKeypress}
-                />
-                <div
-                    css={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginBlockStart: "8px",
-                    }}
-                >
-                    <ButtonPrimary
-                        type={"Full"}
-                        label={isLoading ? "Joining" : "Start"}
-                        clickCB={handleSubmit}
-                    />
-                </div>
+                <p>The economy is ruins after the collapse of HypeCoin.</p>
             </div>
         </div>
     );
