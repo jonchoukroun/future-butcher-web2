@@ -5,6 +5,7 @@ import { ApiState } from ".";
 import { getScores } from "./getScores";
 import { joinChannel } from "./joinChannel";
 import { newGame } from "./newGame";
+import { restoreState } from "./restoreState";
 import { startGame } from "./startGame";
 
 const {
@@ -19,8 +20,9 @@ const {
 const API_URL = "ws://localhost:5000/socket";
 
 export const enum Callback {
-    newGame = "new_game",
-    startGame = "start_game",
+    newGame,
+    startGame,
+    restoreState,
 }
 
 const ChannelContext = createContext<
@@ -34,7 +36,7 @@ const ChannelContext = createContext<
           handlePushCallback: (
               callback: Callback,
               payload?: Record<string, unknown>,
-          ) => Promise<ApiState | undefined>;
+          ) => Promise<ApiState | string | undefined>;
           handleGetScores: () => Promise<
               { player: string; score: number }[] | void
           >;
@@ -100,6 +102,13 @@ export const ChannelProvider = ({
             switch (callback) {
                 case Callback.startGame:
                     return await startGame(channel);
+
+                case Callback.restoreState:
+                    if (payload === undefined)
+                        throw new Error(
+                            "Cannot restore game state with player name",
+                        );
+                    return await restoreState(channel, payload);
 
                 default:
                     console.log("!!payload", payload);

@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { useChannel } from "./ChannelProvider";
+import { useChannel, Callback } from "./ChannelProvider";
 import { Cut, ApiState } from ".";
 
 export enum GameProcess {
@@ -86,6 +86,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
         didJoinChannel,
         handleInitGame,
         handleJoinChannel,
+        handlePushCallback,
         isConnected,
     } = useChannel();
 
@@ -112,7 +113,19 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
         const initGame = async () => {
             const response = await handleInitGame();
             console.log("!!handleInitGame", response);
-            return response;
+            if (response === "alreadyStarted") {
+                const response = await handlePushCallback(
+                    Callback.restoreState,
+                    { name: playerName },
+                );
+                if (response === undefined)
+                    throw new Error("Failed to restore game state");
+                if (response === "noExistingProcess") return;
+
+                if (typeof response !== "string") {
+                    dispatch({ type: "updateStateData", stateData: response });
+                }
+            }
         };
         if (didJoinChannel) initGame();
     }, [didJoinChannel]);
