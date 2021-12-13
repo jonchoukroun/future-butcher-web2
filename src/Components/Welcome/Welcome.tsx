@@ -5,6 +5,9 @@ import { useWindowSize } from "../Window/WindowSizeProvider";
 import { ButtonPrimary } from "../Form";
 import { formatMoney } from "../Utils/formatMoney";
 import { player } from "../../Fixtures/player";
+import { Callback, useChannel } from "../../GameData/ChannelProvider";
+import { Screen, useGameState } from "../../GameData/GameStateProvider";
+import { unstable_batchedUpdates } from "react-dom";
 
 export const Welcome = () => {
     const { getContentSize, layout } = useWindowSize();
@@ -19,10 +22,18 @@ export const Welcome = () => {
     };
     const displayDate = date.toLocaleDateString("en-US", options);
 
-    const handleStartClick = () => {
-        console.log("!!push start game");
-        console.log("!!dispatch incrementProcess");
-        console.log("!!dispatch changeScreen: main");
+    const { handlePushCallback } = useChannel();
+    const { dispatch } = useGameState();
+    const handleStartClick = async () => {
+        const response = await handlePushCallback(Callback.startGame);
+        if (response === undefined) throw new Error("No response");
+        if (response.rules.state !== "in_game") {
+            dispatch({ type: "changeScreen", screen: Screen.Login });
+        }
+        unstable_batchedUpdates(() => {
+            dispatch({ type: "updateStateData", stateData: response });
+            dispatch({ type: "changeScreen", screen: Screen.Main });
+        });
     };
 
     return (

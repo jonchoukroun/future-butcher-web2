@@ -10,12 +10,12 @@ import * as Colors from "../Styles/colors";
 export const App = () => {
     return (
         <WindowSizeProvider>
-            <GameStateProvider>
-                <ChannelProvider>
+            <ChannelProvider>
+                <GameStateProvider>
                     <Global styles={GlobalStyles} />
                     <Window />
-                </ChannelProvider>
-            </GameStateProvider>
+                </GameStateProvider>
+            </ChannelProvider>
         </WindowSizeProvider>
     );
 };

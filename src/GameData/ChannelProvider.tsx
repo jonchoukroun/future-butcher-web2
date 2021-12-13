@@ -1,21 +1,44 @@
 import { Channel, Socket } from "phoenix";
 import * as React from "react";
-import { unstable_batchedUpdates } from "react-dom";
 
-import { useGameState } from "./GameStateProvider";
+import { ApiState } from ".";
 import { getScores } from "./getScores";
 import { joinChannel } from "./joinChannel";
+import { newGame } from "./newGame";
+import { startGame } from "./startGame";
 
-const { createContext, useCallback, useContext, useEffect, useState } = React;
+const {
+    createContext,
+    useCallback,
+    useContext,
+    useMemo,
+    useEffect,
+    useState,
+} = React;
 
 const API_URL = "ws://localhost:5000/socket";
 
+export const enum Callback {
+    newGame = "new_game",
+    startGame = "start_game",
+}
+
 const ChannelContext = createContext<
     | {
-          handleJoinChannel: (playerName: string) => Promise<void>;
+          didJoinChannel: boolean;
+          handleInitGame: () => Promise<"ok" | "alreadyStarted" | undefined>;
+          handleJoinChannel: (
+              playerName: string,
+              playerHash?: string,
+          ) => Promise<Channel | undefined>;
+          handlePushCallback: (
+              callback: Callback,
+              payload?: Record<string, unknown>,
+          ) => Promise<ApiState | undefined>;
           handleGetScores: () => Promise<
               { player: string; score: number }[] | void
           >;
+          isConnected: boolean;
       }
     | undefined
 >(undefined);
@@ -26,34 +49,64 @@ export const ChannelProvider = ({
     children: React.ReactNode;
 }) => {
     const [socket] = useState<Socket>(new Socket(API_URL, {}));
+    const [isConnected, setIsConnected] = useState(false);
+
     useEffect(() => {
         if (socket.isConnected()) return;
         socket.onOpen(() => {
             console.log("Successfully opened socket");
+            setIsConnected(true);
         });
         socket.onError(() => {
             console.error("Failed to open socket");
+            setIsConnected(false);
         });
         socket.onClose(() => {
             console.log("Closed socket");
+            setIsConnected(false);
         });
         socket.connect();
     }, [socket]);
 
     const [channel, setChannel] = useState<Channel | undefined>(undefined);
 
-    const { dispatch } = useGameState();
+    const [didJoinChannel, setDidJoinChannel] = useState(false);
     const handleJoinChannel = useCallback(
-        async (playerName: string) => {
+        async (playerName: string, playerHash?: string) => {
             if (socket === undefined || !socket.isConnected()) return;
 
-            const response = await joinChannel(playerName, socket);
-            unstable_batchedUpdates(() => {
-                dispatch({ type: "updateChannelStatus", isConnected: true });
-                setChannel(response);
+            const response = await joinChannel({
+                playerName,
+                playerHash,
+                socket,
             });
+            setChannel(response);
+            if (response !== undefined) setDidJoinChannel(true);
+            return response;
         },
         [socket],
+    );
+
+    const handleInitGame = useCallback(async () => {
+        if (channel === undefined) return;
+        return await newGame(channel);
+    }, [channel]);
+
+    const handlePushCallback = useCallback(
+        async (callback: Callback, payload?: Record<string, unknown>) => {
+            console.log("!!handlePushCallback", callback, channel);
+            if (channel === undefined) return;
+
+            switch (callback) {
+                case Callback.startGame:
+                    return await startGame(channel);
+
+                default:
+                    console.log("!!payload", payload);
+                    throw new Error(`Unhandled callback ${callback}`);
+            }
+        },
+        [channel],
     );
 
     const handleGetScores = useCallback(async () => {
@@ -62,10 +115,24 @@ export const ChannelProvider = ({
         return await getScores(channel);
     }, [channel]);
 
-    const value = {
-        handleJoinChannel,
-        handleGetScores,
-    };
+    const value = useMemo(
+        () => ({
+            didJoinChannel,
+            handleInitGame,
+            handleJoinChannel,
+            handlePushCallback,
+            handleGetScores,
+            isConnected,
+        }),
+        [
+            didJoinChannel,
+            handleInitGame,
+            handleJoinChannel,
+            handlePushCallback,
+            handleGetScores,
+            isConnected,
+        ],
+    );
 
     return (
         <ChannelContext.Provider value={value}>
