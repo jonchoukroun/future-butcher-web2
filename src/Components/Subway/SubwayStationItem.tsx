@@ -2,7 +2,6 @@
 import { jsx } from "@emotion/react";
 
 import { ButtonPrimary } from "../Form/ButtonPrimary";
-import { player } from "../../Fixtures/player";
 import { Station } from "../../Fixtures/subwayStations";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { formatMoney } from "../Utils/formatMoney";
@@ -14,10 +13,10 @@ interface SubwayStationItemProps {
 
 export const SubwayStationItem = ({ station }: SubwayStationItemProps) => {
     const {
-        state: { currentStation },
+        state: { currentStation, player },
     } = useGameState();
 
-    const canAfford = player.cash >= station.gangTax;
+    const canAfford = player && player.funds >= station.gangTax;
 
     return (
         <li

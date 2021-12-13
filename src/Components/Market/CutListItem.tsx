@@ -3,16 +3,20 @@ import { jsx } from "@emotion/react";
 
 import { ButtonPrimary } from "../Form";
 import { formatMoney } from "../Utils/formatMoney";
-import { CutType } from "../../Fixtures/marketCuts";
-import { player } from "../../Fixtures/player";
+import { useGameState } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
 interface CutListItemProps {
-    cut: CutType;
+    name: string;
+    price: number;
+    quantity: number;
 }
 
-export const CutListItem = ({ cut }: CutListItemProps) => {
-    const canAfford = player.cash >= cut.price;
+export const CutListItem = ({ name, price, quantity }: CutListItemProps) => {
+    const {
+        state: { player },
+    } = useGameState();
+    const canAfford = player && player.funds >= price;
 
     return (
         <li
@@ -25,6 +29,9 @@ export const CutListItem = ({ cut }: CutListItemProps) => {
         >
             <div
                 css={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                     marginBlockEnd: "5px",
                     borderColor: "transparent",
                     borderBlockEndColor: Colors.Border.subtle,
@@ -42,8 +49,9 @@ export const CutListItem = ({ cut }: CutListItemProps) => {
                             : Colors.Text.secondary,
                     }}
                 >
-                    {cut.name}
+                    {name}
                 </h3>
+                <small>Stock: {quantity}</small>
             </div>
             <div
                 css={{
@@ -66,7 +74,7 @@ export const CutListItem = ({ cut }: CutListItemProps) => {
                             : Colors.Text.danger,
                     }}
                 >
-                    {formatMoney(cut.price)}
+                    {formatMoney(price)}
                 </h3>
                 <ButtonPrimary
                     label={"Buy"}
