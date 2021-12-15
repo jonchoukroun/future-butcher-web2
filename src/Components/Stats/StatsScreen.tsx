@@ -1,5 +1,11 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
+import {
+    faDollarSign,
+    faClock,
+    faHeart,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 import { formatMoney } from "../Utils/formatMoney";
 import { useWindowSize } from "../Window/WindowSizeProvider";
@@ -54,51 +60,38 @@ export const StatsScreen = () => {
                     paddingBlockEnd,
                     paddingInline,
                     borderColor: Colors.Border.standard,
-                    borderRadius: "7px",
+                    borderRadius: "4px",
                     borderStyle: "solid",
                     borderWidth: "1px",
                 }}
             >
-                <p>Hours left: {turnsLeft}</p>
-                <small>
-                    <em>When your turns run out, the game is over.</em>
-                </small>
-            </div>
-            <div
-                css={{
-                    paddingBlockStart,
-                    paddingBlockEnd,
-                    paddingInline,
-                    borderColor: Colors.Border.standard,
-                    borderRadius: "7px",
-                    borderStyle: "solid",
-                    borderWidth: "1px",
-                }}
-            >
-                <p>Health: {player && player.health}</p>
-                <small>
-                    <em>
-                        If this drops to zero, you&apos;re dead! Get patched up
-                        at the Free Clinic in Venice Beach.
-                    </em>
-                </small>
+                <div
+                    css={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginBlockEnd: "5px",
+                    }}
+                >
+                    <p>
+                        <span css={{ marginInlineEnd: "5px" }}>
+                            <FontAwesomeIcon icon={faHeart} />
+                        </span>
+                        {player && player.health}
+                    </p>
 
-                <p>Cash: {player && formatMoney(player.funds)}</p>
-                <small>
-                    <em>
-                        Keep hustling to grow this sum, but don&apos;t lose it
-                        to a mugger.
-                    </em>
-                </small>
+                    <p>
+                        <span css={{ marginInlineEnd: "5px" }}>
+                            <FontAwesomeIcon icon={faDollarSign} />
+                        </span>
+                        $100,000,000
+                    </p>
+                </div>
 
                 <p css={{ color: Colors.Text.danger }}>
                     Debt: {player && formatMoney(player.debt)}
                 </p>
                 <small>
-                    <em>
-                        Don&apos;t let the interest get out of hand. It grows at
-                        5% each hour.
-                    </em>
+                    <em>Interest rate: 5% per hour</em>
                 </small>
             </div>
 
@@ -108,7 +101,29 @@ export const StatsScreen = () => {
                     paddingBlockEnd,
                     paddingInline,
                     borderColor: Colors.Border.standard,
-                    borderRadius: "7px",
+                    borderRadius: "4px",
+                    borderStyle: "solid",
+                    borderWidth: "1px",
+                }}
+            >
+                <p>
+                    <span css={{ marginInlineEnd: "5px" }}>
+                        <FontAwesomeIcon icon={faClock} />
+                    </span>
+                    5:00am
+                </p>
+                <small>
+                    <em>{turnsLeft} hours left.</em>
+                </small>
+            </div>
+
+            <div
+                css={{
+                    paddingBlockStart,
+                    paddingBlockEnd,
+                    paddingInline,
+                    borderColor: Colors.Border.standard,
+                    borderRadius: "4px",
                     borderStyle: "solid",
                     borderWidth: "1px",
                 }}

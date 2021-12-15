@@ -35,7 +35,7 @@ export const ButtonPrimary = ({
                 borderColor: isDisabled
                     ? Colors.Border.subtle
                     : Colors.Border.standard,
-                borderRadius: "7px",
+                borderRadius: "4px",
                 borderStyle: border === "None" ? "none" : "solid",
                 borderWidth: border === "Full" ? "2px" : "1px",
                 color: isDisabled ? Colors.Text.secondary : Colors.Text.primary,

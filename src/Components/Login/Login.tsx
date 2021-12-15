@@ -59,7 +59,7 @@ export const Login = () => {
                     marginBlockStart: "20px",
                     backgroundColor: "black",
                     borderColor: Colors.Border.subtle,
-                    borderRadius: "7px",
+                    borderRadius: "4px",
                     borderStyle: "inset",
                     borderWidth: "2px",
                 }}

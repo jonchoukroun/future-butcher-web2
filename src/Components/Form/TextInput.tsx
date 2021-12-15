@@ -36,7 +36,7 @@ export const TextInput = ({
                 paddingInline: "8px",
                 backgroundColor: Colors.Background.screen,
                 borderColor: Colors.Border.standard,
-                borderRadius: "7px",
+                borderRadius: "4px",
                 borderStyle: "solid",
                 borderWidth: "1px",
                 color: Colors.Text.primary,

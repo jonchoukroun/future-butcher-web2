@@ -5,7 +5,8 @@ const WHITE = "rgb(255, 233, 142)";
 // const GREEN = "#467414";
 // const DARK_GREEN = "#284D00";
 const BLUE = "rgb(45, 70, 113)";
-const BLACK = "rgba(45, 70, 113, 0.1)";
+// const BLACK = "rgba(45, 70, 113, 0.1)";
+const BLACK = "#05070b";
 const DANGER = "#802E16";
 const GREY = "#282828";
 

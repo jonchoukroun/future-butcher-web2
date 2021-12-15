@@ -39,7 +39,7 @@ export const Window = () => {
                     paddingInline: "1px",
                     backgroundColor: Colors.Background.screen,
                     borderColor: Colors.Border.subtle,
-                    borderRadius: "14px",
+                    borderRadius: "8px",
                     borderStyle: "solid",
                     borderWidth: "2px",
                 }}

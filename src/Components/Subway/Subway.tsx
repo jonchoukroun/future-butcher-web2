@@ -55,7 +55,7 @@ export const Subway = () => {
                         padding: "4px",
                         backgroundColor: Colors.Background.subtle,
                         borderColor: "transparent",
-                        borderRadius: "7px",
+                        borderRadius: "4px",
                         borderWidth: "1px",
                         color: "black",
                         fontSize: "16px",
