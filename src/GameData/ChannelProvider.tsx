@@ -36,7 +36,7 @@ const ChannelContext = createContext<
           handlePushCallback: (
               callback: Callback,
               payload?: Record<string, unknown>,
-          ) => Promise<ApiState | string | undefined>;
+          ) => Promise<ApiState | undefined>;
           handleGetScores: () => Promise<
               { player: string; score: number }[] | void
           >;
@@ -104,11 +104,12 @@ export const ChannelProvider = ({
                     return await startGame(channel);
 
                 case Callback.restoreState:
-                    if (payload === undefined)
+                    const name = localStorage.getItem("playerName");
+                    if (name === undefined)
                         throw new Error(
-                            "Cannot restore game state with player name",
+                            "Cannot restore state without a player name",
                         );
-                    return await restoreState(channel, payload);
+                    return await restoreState(channel, name);
 
                 default:
                     console.log("!!payload", payload);

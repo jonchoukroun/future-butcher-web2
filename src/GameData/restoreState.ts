@@ -3,12 +3,12 @@ import { ApiState } from ".";
 
 export async function restoreState(
     channel: Channel,
-    payload: Record<string, unknown>,
-): Promise<ApiState | string> {
-    const { name } = payload;
+    name: string,
+): Promise<ApiState | undefined> {
     return new Promise((resolve, reject) => {
         channel
-            .push("restore_game_state", { name })
+            // eslint-disable-next-line @typescript-eslint/ban-types
+            .push("restore_game_state", (name as unknown) as object)
             .receive("ok", ({ state_data }: { state_data: ApiState }) => {
                 console.log("!!restore_game_state | ok", state_data);
                 resolve(state_data);
@@ -16,7 +16,7 @@ export async function restoreState(
             .receive("error", ({ reason }) => {
                 console.log("!!restore_game_state | error", reason);
                 if (JSON.parse(reason) === "No existing process") {
-                    return resolve("noExistingProcess");
+                    return resolve(undefined);
                 }
                 reject(reason);
             });

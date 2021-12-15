@@ -105,7 +105,6 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
             await handleJoinChannel(playerName, playerHash);
             console.log("!!handleRejoin");
         };
-
         if (isConnected) handleRejoin();
     }, [isConnected]);
 
@@ -113,18 +112,14 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
         const initGame = async () => {
             const response = await handleInitGame();
             console.log("!!handleInitGame", response);
-            if (response === "alreadyStarted") {
-                const response = await handlePushCallback(
+            if (response === "alreadyStarted" && playerName) {
+                const lastState = await handlePushCallback(
                     Callback.restoreState,
-                    { name: playerName },
                 );
-                if (response === undefined)
-                    throw new Error("Failed to restore game state");
-                if (response === "noExistingProcess") return;
+                if (lastState === undefined) return;
 
-                if (typeof response !== "string") {
-                    dispatch({ type: "updateStateData", stateData: response });
-                }
+                dispatch({ type: "updateStateData", stateData: lastState });
+                dispatch({ type: "incrementProcess" });
             }
         };
         if (didJoinChannel) initGame();
@@ -151,7 +146,11 @@ function handleIncrementProcess(state: GameState): GameState {
     if (state.process === GameProcess.end)
         throw new Error("Cannot increment, already at game end");
 
-    return { ...state, process: state.process + 1 };
+    const process = state.process + 1;
+    const currentScreen =
+        process === GameProcess.inGame ? Screen.Main : state.currentScreen;
+
+    return { ...state, process, currentScreen };
 }
 
 function handleChangeScreen(state: GameState, nextScreen: Screen): GameState {
