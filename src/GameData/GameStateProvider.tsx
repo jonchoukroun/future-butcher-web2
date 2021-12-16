@@ -2,6 +2,7 @@ import * as React from "react";
 
 import { useChannel, Callback } from "./ChannelProvider";
 import { Cut, ApiState } from ".";
+import { unstable_batchedUpdates } from "react-dom";
 
 export enum Screen {
     Login = "Login",
@@ -35,7 +36,7 @@ type GameProcess = "initialized" | "in_game" | "mugging" | "game_over";
 type HighScores = { player: string; score: number }[];
 
 type GameState = {
-    currentScreen: Screen;
+    currentScreen?: Screen;
     currentProcess?: GameProcess;
     currentStation?: string;
     turnsLeft?: number;
@@ -90,18 +91,18 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
     const playerName = localStorage.getItem("playerName");
     const playerHash = localStorage.getItem("playerHash");
 
-    const [state, dispatch] = React.useReducer(gameStateReducer, {
-        currentScreen:
-            !playerName || !playerHash ? Screen.Login : Screen.Welcome,
-    });
+    const [state, dispatch] = React.useReducer(gameStateReducer, {});
 
     useEffect(() => {
-        const handleRejoin = async () => {
-            if (!playerName || !playerHash) return;
+        const handleJoin = async () => {
+            if (!playerName || !playerHash) {
+                dispatch({ type: "changeScreen", screen: Screen.Login });
+                return;
+            }
             await handleJoinChannel(playerName, playerHash);
             console.log("!!handleRejoin");
         };
-        if (isConnected) handleRejoin();
+        if (isConnected) handleJoin();
     }, [isConnected]);
 
     useEffect(() => {
@@ -117,9 +118,19 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
 
                 if (lastState.rules.state === "initialized") {
                     dispatch({ type: "changeScreen", screen: Screen.Welcome });
-                } else {
-                    dispatch({ type: "updateStateData", stateData: lastState });
+                    return;
                 }
+                if (lastState.rules.state === "in_game") {
+                    unstable_batchedUpdates(() => {
+                        dispatch({
+                            type: "updateStateData",
+                            stateData: lastState,
+                        });
+                        dispatch({ type: "changeScreen", screen: Screen.Main });
+                    });
+                }
+            } else {
+                dispatch({ type: "changeScreen", screen: Screen.Welcome });
             }
         };
         if (didJoinChannel) initGame();
@@ -143,8 +154,6 @@ export function useGameState() {
 }
 
 function handleChangeScreen(state: GameState, nextScreen: Screen): GameState {
-    if (state.currentScreen === nextScreen) return state;
-
     return {
         ...state,
         currentScreen: nextScreen,

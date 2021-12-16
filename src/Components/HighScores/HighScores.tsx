@@ -4,6 +4,7 @@ import { jsx } from "@emotion/react";
 import { ButtonPrimary } from "../Form/ButtonPrimary";
 import { formatMoney } from "../Utils/formatMoney";
 import { useWindowSize } from "../Window/WindowSizeProvider";
+import { useChannel } from "../../GameData/ChannelProvider";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
@@ -16,7 +17,9 @@ export const HighScores = () => {
     const { getContentSize } = useWindowSize();
     const { inlineSize } = getContentSize();
 
+    const { handleInitGame } = useChannel();
     const handleStartOverClick = () => {
+        handleInitGame();
         dispatch({ type: "changeScreen", screen: Screen.Welcome });
     };
 
