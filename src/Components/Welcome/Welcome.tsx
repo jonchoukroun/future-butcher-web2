@@ -25,7 +25,7 @@ export const Welcome = () => {
     const { handlePushCallback } = useChannel();
     const { dispatch } = useGameState();
     const handleStartClick = async () => {
-        const response = await handlePushCallback(Callback.startGame);
+        const response = await handlePushCallback(Callback.startGame, {});
         if (response === undefined) throw new Error("No response");
         if (response.rules.state !== "in_game") {
             dispatch({ type: "changeScreen", screen: Screen.Login });

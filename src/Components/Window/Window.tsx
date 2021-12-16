@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
+import { HighScores } from "../HighScores/HighScores";
 import { Login } from "../Login/Login";
 import { MainScreen } from "../MainScreen/MainScreen";
 import { Market } from "../Market/Market";
@@ -71,6 +72,8 @@ export const Window = () => {
                         <StatsScreen />
                     </GameScreen>
                 )}
+
+                {currentScreen === Screen.HighScores && <HighScores />}
             </div>
         </div>
     );

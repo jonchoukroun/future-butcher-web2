@@ -6,22 +6,41 @@ import {
     faHeart,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { unstable_batchedUpdates } from "react-dom";
 
+import { ButtonPrimary } from "../Form/ButtonPrimary";
 import { formatMoney } from "../Utils/formatMoney";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { subwayStations } from "../../Fixtures/subwayStations";
-import { useGameState } from "../../GameData/GameStateProvider";
+import { useChannel } from "../../GameData/ChannelProvider";
+import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
 export const StatsScreen = () => {
     const { layout } = useWindowSize();
     const {
         state: { currentStation, turnsLeft, player },
+        dispatch,
     } = useGameState();
 
     const station = subwayStations.find(
         (station) => station.key === currentStation,
     );
+
+    const { handleEndGame } = useChannel();
+    const handleEndGameClick = async () => {
+        const hashId = localStorage.getItem("playerHash");
+        if (!hashId) {
+            throw new Error("Cannot end game without a hash ID");
+        }
+        const highScores = await handleEndGame(hashId, 0);
+        if (highScores !== undefined) {
+            unstable_batchedUpdates(() => {
+                dispatch({ type: "setHighScores", highScores });
+                dispatch({ type: "changeScreen", screen: Screen.HighScores });
+            });
+        }
+    };
 
     const containerPaddingInline = layout === "full" ? "16px" : "4px";
     const marginBlockEnd = layout === "full" ? "10px" : "2px";
@@ -97,6 +116,9 @@ export const StatsScreen = () => {
 
             <div
                 css={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
                     paddingBlockStart,
                     paddingBlockEnd,
                     paddingInline,
@@ -106,15 +128,22 @@ export const StatsScreen = () => {
                     borderWidth: "1px",
                 }}
             >
-                <p>
-                    <span css={{ marginInlineEnd: "5px" }}>
-                        <FontAwesomeIcon icon={faClock} />
-                    </span>
-                    5:00am
-                </p>
-                <small>
-                    <em>{turnsLeft} hours left.</em>
-                </small>
+                <div>
+                    <p>
+                        <span css={{ marginInlineEnd: "5px" }}>
+                            <FontAwesomeIcon icon={faClock} />
+                        </span>
+                        5:00am
+                    </p>
+                    <small>
+                        <em>{turnsLeft} hours left.</em>
+                    </small>
+                </div>
+                <ButtonPrimary
+                    label={"End Game"}
+                    type={"Full"}
+                    clickCB={handleEndGameClick}
+                />
             </div>
 
             <div

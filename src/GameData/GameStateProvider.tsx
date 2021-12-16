@@ -3,12 +3,6 @@ import * as React from "react";
 import { useChannel, Callback } from "./ChannelProvider";
 import { Cut, ApiState } from ".";
 
-export enum GameProcess {
-    intro,
-    inGame,
-    end,
-}
-
 export enum Screen {
     Login = "Login",
     Welcome = "Future Butcher",
@@ -36,20 +30,25 @@ type Pack = Record<Cut, number>;
 
 type Market = Record<Cut, { price: number; quantity: number }>;
 
+type GameProcess = "initialized" | "in_game" | "mugging" | "game_over";
+
+type HighScores = { player: string; score: number }[];
+
 type GameState = {
-    process: GameProcess;
     currentScreen: Screen;
+    currentProcess?: GameProcess;
     currentStation?: string;
     turnsLeft?: number;
     player?: Player;
     pack?: Pack;
     market?: Market;
+    highScores?: HighScores;
 };
 type Action =
-    | { type: "incrementProcess" }
     | { type: "updateChannelStatus"; isConnected: boolean }
     | { type: "changeScreen"; screen: Screen }
-    | { type: "updateStateData"; stateData: ApiState };
+    | { type: "updateStateData"; stateData: ApiState }
+    | { type: "setHighScores"; highScores: HighScores };
 
 const GameStateContext = React.createContext<
     { state: GameState; dispatch: (action: Action) => void } | undefined
@@ -60,15 +59,14 @@ function gameStateReducer(state: GameState, action: Action) {
         case "changeScreen":
             return handleChangeScreen(state, action.screen);
 
-        case "incrementProcess":
-            return handleIncrementProcess(state);
-
         case "updateChannelStatus":
             return { ...state, isConnected: action.isConnected };
 
         case "updateStateData":
             return handleUpdateState(action.stateData, state);
 
+        case "setHighScores":
+            return { ...state, highScores: action.highScores };
         default:
             throw new Error("Invalid action type");
     }
@@ -81,7 +79,6 @@ interface GameStateProviderProps {
 const { useEffect } = React;
 
 export function GameStateProvider({ children }: GameStateProviderProps) {
-    console.log("!!GameStateProvider");
     const {
         didJoinChannel,
         handleInitGame,
@@ -94,7 +91,6 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
     const playerHash = localStorage.getItem("playerHash");
 
     const [state, dispatch] = React.useReducer(gameStateReducer, {
-        process: GameProcess.intro,
         currentScreen:
             !playerName || !playerHash ? Screen.Login : Screen.Welcome,
     });
@@ -115,11 +111,15 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
             if (response === "alreadyStarted" && playerName) {
                 const lastState = await handlePushCallback(
                     Callback.restoreState,
+                    {},
                 );
                 if (lastState === undefined) return;
 
-                dispatch({ type: "updateStateData", stateData: lastState });
-                dispatch({ type: "incrementProcess" });
+                if (lastState.rules.state === "initialized") {
+                    dispatch({ type: "changeScreen", screen: Screen.Welcome });
+                } else {
+                    dispatch({ type: "updateStateData", stateData: lastState });
+                }
             }
         };
         if (didJoinChannel) initGame();
@@ -142,26 +142,8 @@ export function useGameState() {
     return context;
 }
 
-function handleIncrementProcess(state: GameState): GameState {
-    if (state.process === GameProcess.end)
-        throw new Error("Cannot increment, already at game end");
-
-    const process = state.process + 1;
-    const currentScreen =
-        process === GameProcess.inGame ? Screen.Main : state.currentScreen;
-
-    return { ...state, process, currentScreen };
-}
-
 function handleChangeScreen(state: GameState, nextScreen: Screen): GameState {
     if (state.currentScreen === nextScreen) return state;
-
-    if (state.process > GameProcess.intro && nextScreen !== Screen.Login) {
-        return {
-            ...state,
-            currentScreen: Screen.Login,
-        };
-    }
 
     return {
         ...state,
@@ -173,15 +155,15 @@ function handleUpdateState(
     apiState: ApiState,
     currentState: GameState,
 ): GameState {
-    const { process, currentScreen } = currentState;
+    const { currentScreen } = currentState;
     const {
         player: { player_name, funds, debt, weapon, pack, pack_space },
         station: { market, station_name },
-        rules: { turns_left },
+        rules: { turns_left, state },
     } = apiState;
 
     return {
-        process,
+        currentProcess: state,
         currentScreen,
         turnsLeft: turns_left,
         currentStation: station_name,

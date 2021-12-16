@@ -7,6 +7,7 @@ import { joinChannel } from "./joinChannel";
 import { newGame } from "./newGame";
 import { restoreState } from "./restoreState";
 import { startGame } from "./startGame";
+import { endGame } from "./endGame";
 
 const {
     createContext,
@@ -35,8 +36,12 @@ const ChannelContext = createContext<
           ) => Promise<Channel | undefined>;
           handlePushCallback: (
               callback: Callback,
-              payload?: Record<string, unknown>,
+              payload: Record<string, unknown>,
           ) => Promise<ApiState | undefined>;
+          handleEndGame: (
+              hashId: string,
+              score: number,
+          ) => Promise<{ player: string; score: number }[] | undefined>;
           handleGetScores: () => Promise<
               { player: string; score: number }[] | void
           >;
@@ -95,7 +100,7 @@ export const ChannelProvider = ({
     }, [channel]);
 
     const handlePushCallback = useCallback(
-        async (callback: Callback, payload?: Record<string, unknown>) => {
+        async (callback: Callback, payload: Record<string, unknown>) => {
             console.log("!!handlePushCallback", callback, channel);
             if (channel === undefined) return;
 
@@ -105,16 +110,28 @@ export const ChannelProvider = ({
 
                 case Callback.restoreState:
                     const name = localStorage.getItem("playerName");
-                    if (name === undefined)
+                    if (!name) {
                         throw new Error(
                             "Cannot restore state without a player name",
                         );
+                    }
                     return await restoreState(channel, name);
 
                 default:
                     console.log("!!payload", payload);
                     throw new Error(`Unhandled callback ${callback}`);
             }
+        },
+        [channel],
+    );
+
+    const handleEndGame = useCallback(
+        async (hashId: string, score: number) => {
+            if (channel === undefined) return;
+
+            const highScores = await endGame(channel, { hashId, score });
+            console.log("!!highScores", highScores);
+            return highScores;
         },
         [channel],
     );
@@ -131,6 +148,7 @@ export const ChannelProvider = ({
             handleInitGame,
             handleJoinChannel,
             handlePushCallback,
+            handleEndGame,
             handleGetScores,
             isConnected,
         }),
@@ -139,6 +157,7 @@ export const ChannelProvider = ({
             handleInitGame,
             handleJoinChannel,
             handlePushCallback,
+            handleEndGame,
             handleGetScores,
             isConnected,
         ],
