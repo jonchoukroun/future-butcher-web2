@@ -8,7 +8,12 @@ import { useGameState, Screen } from "../../GameData/GameStateProvider";
 export const NavBar = () => {
     const { layout } = useWindowSize();
 
-    const { dispatch } = useGameState();
+    const {
+        state: { currentScreen },
+        dispatch,
+    } = useGameState();
+
+    const label = getButtonLabel(currentScreen);
 
     return (
         <div
@@ -24,7 +29,7 @@ export const NavBar = () => {
         >
             <ButtonPrimary
                 type={"Stretch"}
-                label={"Back"}
+                label={label}
                 clickCB={() =>
                     dispatch({ type: "changeScreen", screen: Screen.Main })
                 }
@@ -32,3 +37,16 @@ export const NavBar = () => {
         </div>
     );
 };
+
+function getButtonLabel(screen: Screen | undefined) {
+    switch (screen) {
+        case Screen.Subway:
+            return "Leave Subway";
+
+        case Screen.Market:
+            return "Leave Market";
+
+        default:
+            return "Back to the Streets";
+    }
+}
