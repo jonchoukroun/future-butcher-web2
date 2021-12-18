@@ -1,5 +1,14 @@
+export const enum StationKey {
+    beverlyHills = "beverly_hills",
+    downtown = "downtown",
+    veniceBeach = "venice_beach",
+    hollywood = "hollywood",
+    compton = "compton",
+    bellGardens = "bell_gardens",
+}
+
 export type Station = {
-    key: string;
+    key: StationKey;
     name: string;
     stationDescription: string;
     gangName: string;
@@ -8,11 +17,9 @@ export type Station = {
     uniqueBuilding: string;
 };
 
-export type StationKey = Station["key"];
-
 export const subwayStations: Array<Station> = [
     {
-        key: "beverly_hills",
+        key: StationKey.beverlyHills,
         name: "Beverly Hills",
         stationDescription:
             "High security, expensive cuts, and manicured lawns.",
@@ -23,7 +30,7 @@ export const subwayStations: Array<Station> = [
         uniqueBuilding: "None",
     },
     {
-        key: "downtown",
+        key: StationKey.downtown,
         name: "Downtown",
         stationDescription:
             "High rises and high finance, with a taste for fine cuts.",
@@ -33,7 +40,7 @@ export const subwayStations: Array<Station> = [
         uniqueBuilding: "Bank",
     },
     {
-        key: "venice_beach",
+        key: StationKey.veniceBeach,
         name: "Venice Beach",
         stationDescription:
             "Heal your body and soul with restorative yoga and free substandard medicine.",
@@ -44,7 +51,7 @@ export const subwayStations: Array<Station> = [
         uniqueBuilding: "Free Clinic",
     },
     {
-        key: "hollywood",
+        key: StationKey.hollywood,
         name: "Hollywood",
         stationDescription: "Cops are your friend, for a price.",
         gangName: "Vine Street Raiders",
@@ -54,7 +61,7 @@ export const subwayStations: Array<Station> = [
         uniqueBuilding: "Police Station",
     },
     {
-        key: "compton",
+        key: StationKey.compton,
         name: "Compton",
         stationDescription: "Cheap cuts and cheap tools for any DIY needs.",
         gangName: "None",
@@ -63,7 +70,7 @@ export const subwayStations: Array<Station> = [
         uniqueBuilding: "Hardware Store",
     },
     {
-        key: "bell_gardens",
+        key: StationKey.bellGardens,
         name: "Bell Gardens",
         stationDescription: "The American dream at its seediest.",
         gangName: "The Chamber of Commerce",

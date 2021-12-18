@@ -102,7 +102,7 @@ export const StatsScreen = () => {
                         <span css={{ marginInlineEnd: "5px" }}>
                             <FontAwesomeIcon icon={faDollarSign} />
                         </span>
-                        $100,000,000
+                        {player && formatMoney(player.funds)}
                     </p>
                 </div>
 
@@ -126,6 +126,10 @@ export const StatsScreen = () => {
                     borderRadius: "4px",
                     borderStyle: "solid",
                     borderWidth: "1px",
+
+                    "& button": {
+                        marginBlockStart: layout === "full" ? "-10px" : "-2px",
+                    },
                 }}
             >
                 <div>
@@ -142,6 +146,7 @@ export const StatsScreen = () => {
                 <ButtonPrimary
                     label={"End Game"}
                     type={"Full"}
+                    border={"Thin"}
                     clickCB={handleEndGameClick}
                 />
             </div>

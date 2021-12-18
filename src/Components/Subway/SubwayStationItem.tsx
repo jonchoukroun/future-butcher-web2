@@ -1,22 +1,27 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
-import { ButtonPrimary } from "../Form/ButtonPrimary";
-import { Station } from "../../Fixtures/subwayStations";
+import { StationKey, subwayStations } from "../../Fixtures/subwayStations";
 import { useGameState } from "../../GameData/GameStateProvider";
-import { formatMoney } from "../Utils/formatMoney";
 import * as Colors from "../../Styles/colors";
 
 interface SubwayStationItemProps {
-    station: Station;
+    stationKey: StationKey;
+    onSelectStation: (stationKey: StationKey) => void;
 }
 
-export const SubwayStationItem = ({ station }: SubwayStationItemProps) => {
+export const SubwayStationItem = ({
+    stationKey,
+    onSelectStation,
+}: SubwayStationItemProps) => {
     const {
-        state: { currentStation, player },
+        state: { currentStation },
     } = useGameState();
 
-    const canAfford = player && player.funds >= station.gangTax;
+    const station = subwayStations.find(({ key }) => key === stationKey);
+    if (station === undefined) throw new Error("Cannot find station");
+
+    const isCurrentStation = station.key === currentStation;
 
     return (
         <li
@@ -24,28 +29,41 @@ export const SubwayStationItem = ({ station }: SubwayStationItemProps) => {
                 inlineSize: "100%",
                 display: "flex",
                 flex: 1,
-                alignItems: "center",
-                justifyContent: "center",
-
-                "& button": {
-                    fontSize: "16px",
-                    color: canAfford ? Colors.Text.primary : Colors.Text.danger,
-                },
+                borderColor: "transparent",
+                borderBlockEndColor: Colors.Border.subtle,
+                borderStyle: "solid",
+                borderWidth: "1px",
             }}
         >
-            <ButtonPrimary
-                type={"Stretch"}
-                label={
-                    station.key === currentStation
-                        ? `${station.name} - (Here)`
-                        : `${station.name} - ${formatMoney(station.gangTax)}`
-                }
-                border={"Thin"}
-                isDisabled={currentStation === station.key}
-                clickCB={() => {
-                    return;
+            <button
+                css={{
+                    inlineSize: "100%",
+                    blockSize: "auto",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "transparent",
+                    paddingBlock: 0,
+                    paddingInline: "20x",
+                    border: "none",
                 }}
-            />
+                disabled={isCurrentStation}
+                onClick={() => onSelectStation(stationKey)}
+            >
+                <h4
+                    css={{
+                        marginBlock: 0,
+                        color: isCurrentStation
+                            ? Colors.Text.secondary
+                            : Colors.Text.primary,
+                        fontSize: "20px",
+                        fontStyle: isCurrentStation ? "italic" : "normal",
+                        fontVariantCaps: "small-caps",
+                    }}
+                >
+                    {station.name}
+                </h4>
+            </button>
         </li>
     );
 };
