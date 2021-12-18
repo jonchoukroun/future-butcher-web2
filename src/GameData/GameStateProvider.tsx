@@ -16,6 +16,7 @@ export enum Screen {
     Clinic = "Free Clinic",
     Stats = "Stats",
     HighScores = "High Scores",
+    Mugging = "Mugging",
     Error = "Error SCreen",
 }
 

@@ -42,19 +42,12 @@ export const StationDetails = ({
             return;
         }
 
-        if (stateData.rules.state === "mugging") {
-            const response = await handlePushCallback(Callback.fightMugger, {});
-            if (response === undefined) return;
-            unstable_batchedUpdates(() => {
-                dispatch({ type: "updateStateData", stateData: response });
-                dispatch({ type: "changeScreen", screen: Screen.Main });
-            });
-        } else {
-            unstable_batchedUpdates(() => {
-                dispatch({ type: "updateStateData", stateData });
-                dispatch({ type: "changeScreen", screen: Screen.Main });
-            });
-        }
+        const screen =
+            stateData.rules.state === "mugging" ? Screen.Mugging : Screen.Main;
+        unstable_batchedUpdates(() => {
+            dispatch({ type: "updateStateData", stateData });
+            dispatch({ type: "changeScreen", screen });
+        });
     };
 
     const { layout } = useWindowSize();

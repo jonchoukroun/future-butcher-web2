@@ -9,11 +9,14 @@ export const NavBar = () => {
     const { layout } = useWindowSize();
 
     const {
-        state: { currentScreen },
+        state: { currentProcess, currentScreen },
         dispatch,
     } = useGameState();
 
     const label = getButtonLabel(currentScreen);
+
+    const defaultScreen =
+        currentProcess === "mugging" ? Screen.Mugging : Screen.Main;
 
     return (
         <div
@@ -31,7 +34,7 @@ export const NavBar = () => {
                 type={"Stretch"}
                 label={label}
                 clickCB={() =>
-                    dispatch({ type: "changeScreen", screen: Screen.Main })
+                    dispatch({ type: "changeScreen", screen: defaultScreen })
                 }
             />
         </div>

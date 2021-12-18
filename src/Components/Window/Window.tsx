@@ -6,6 +6,7 @@ import { HighScores } from "../HighScores/HighScores";
 import { Login } from "../Login/Login";
 import { MainScreen } from "../MainScreen/MainScreen";
 import { Market } from "../Market/Market";
+import { Mugging } from "../Mugging/Mugging";
 import { StatsScreen } from "../Stats/StatsScreen";
 import { Subway } from "../Subway/Subway";
 import { Welcome } from "../Welcome/Welcome";
@@ -67,6 +68,12 @@ export const Window = () => {
                 {currentScreen === Screen.Subway && (
                     <GameScreen layout={layout} shouldShowNavBar={true}>
                         <Subway />
+                    </GameScreen>
+                )}
+
+                {currentScreen === Screen.Mugging && (
+                    <GameScreen layout={layout} shouldShowNavBar={false}>
+                        <Mugging />
                     </GameScreen>
                 )}
 
