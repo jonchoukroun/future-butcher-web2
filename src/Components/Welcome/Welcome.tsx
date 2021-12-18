@@ -26,10 +26,16 @@ export const Welcome = () => {
     const { dispatch } = useGameState();
     const handleStartClick = async () => {
         const response = await handlePushCallback(Callback.startGame, {});
-        if (response === undefined) throw new Error("No response");
+        if (response === undefined) {
+            dispatch({ type: "changeScreen", screen: Screen.Error });
+            return;
+        }
+
         if (response.rules.state !== "in_game") {
             dispatch({ type: "changeScreen", screen: Screen.Login });
+            return;
         }
+
         unstable_batchedUpdates(() => {
             dispatch({ type: "updateStateData", stateData: response });
             dispatch({ type: "changeScreen", screen: Screen.Main });

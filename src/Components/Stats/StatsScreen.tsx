@@ -34,12 +34,15 @@ export const StatsScreen = () => {
             throw new Error("Cannot end game without a hash ID");
         }
         const highScores = await handleEndGame(hashId, 0);
-        if (highScores !== undefined) {
-            unstable_batchedUpdates(() => {
-                dispatch({ type: "setHighScores", highScores });
-                dispatch({ type: "changeScreen", screen: Screen.HighScores });
-            });
+        if (highScores === undefined) {
+            dispatch({ type: "changeScreen", screen: Screen.Error });
+            return;
         }
+
+        unstable_batchedUpdates(() => {
+            dispatch({ type: "setHighScores", highScores });
+            dispatch({ type: "changeScreen", screen: Screen.HighScores });
+        });
     };
 
     const containerPaddingInline = layout === "full" ? "16px" : "4px";

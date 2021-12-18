@@ -37,7 +37,10 @@ export const StationDetails = ({
             station: stationKey,
         });
 
-        if (stateData === undefined) return;
+        if (stateData === undefined) {
+            dispatch({ type: "changeScreen", screen: Screen.Error });
+            return;
+        }
 
         if (stateData.rules.state === "mugging") {
             const response = await handlePushCallback(Callback.fightMugger, {});

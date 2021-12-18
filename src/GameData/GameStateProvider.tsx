@@ -16,6 +16,7 @@ export enum Screen {
     Clinic = "Free Clinic",
     Stats = "Stats",
     HighScores = "High Scores",
+    Error = "Error SCreen",
 }
 
 type Player = {
@@ -100,7 +101,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                 return;
             }
             await handleJoinChannel(playerName, playerHash);
-            console.log("!!handleRejoin");
+            console.log("!!handleRejoin | TODO: implement retry");
         };
         if (isConnected) handleJoin();
     }, [isConnected]);
@@ -108,13 +109,20 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
     useEffect(() => {
         const initGame = async () => {
             const response = await handleInitGame();
-            console.log("!!handleInitGame", response);
+            if (response === undefined) {
+                dispatch({ type: "changeScreen", screen: Screen.Error });
+                return;
+            }
+
             if (response === "alreadyStarted" && playerName) {
                 const lastState = await handlePushCallback(
                     Callback.restoreState,
                     {},
                 );
-                if (lastState === undefined) return;
+                if (lastState === undefined) {
+                    dispatch({ type: "changeScreen", screen: Screen.Error });
+                    return;
+                }
 
                 if (lastState.rules.state === "initialized") {
                     dispatch({ type: "changeScreen", screen: Screen.Welcome });
@@ -128,6 +136,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                         });
                         dispatch({ type: "changeScreen", screen: Screen.Main });
                     });
+                    return;
                 }
             } else {
                 dispatch({ type: "changeScreen", screen: Screen.Welcome });
