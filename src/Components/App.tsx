@@ -3,7 +3,7 @@ import { Global, css, jsx } from "@emotion/react";
 
 import { Window } from "./Window/Window";
 import { WindowSizeProvider } from "./Window/WindowSizeProvider";
-import { ChannelProvider } from "../GameData/ChannelProvider";
+import { ChannelProvider } from "../PhoenixChannel/ChannelProvider";
 import { GameStateProvider } from "../GameData/GameStateProvider";
 import * as Colors from "../Styles/colors";
 

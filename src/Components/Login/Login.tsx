@@ -4,7 +4,7 @@ import { KeyboardEvent, useEffect, useRef, useState } from "react";
 
 import { ButtonPrimary, TextInput } from "../Form";
 import { useWindowSize } from "../Window/WindowSizeProvider";
-import { useChannel } from "../../GameData/ChannelProvider";
+import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 

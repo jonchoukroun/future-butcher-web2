@@ -5,7 +5,7 @@ import { useWindowSize } from "../Window/WindowSizeProvider";
 import { ButtonPrimary } from "../Form";
 import { formatMoney } from "../Utils/formatMoney";
 import { player } from "../../Fixtures/player";
-import { Callback, useChannel } from "../../GameData/ChannelProvider";
+import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { Screen, useGameState } from "../../GameData/GameStateProvider";
 import { unstable_batchedUpdates } from "react-dom";
 
