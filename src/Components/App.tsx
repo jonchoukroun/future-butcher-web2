@@ -1,18 +1,21 @@
 /** @jsx jsx */
 import { Global, css, jsx } from "@emotion/react";
 
-import { GameStateProvider } from "./GameState/GameStateProvider";
 import { Window } from "./Window/Window";
 import { WindowSizeProvider } from "./Window/WindowSizeProvider";
+import { ChannelProvider } from "../PhoenixChannel/ChannelProvider";
+import { GameStateProvider } from "../GameData/GameStateProvider";
 import * as Colors from "../Styles/colors";
 
 export const App = () => {
     return (
         <WindowSizeProvider>
-            <Global styles={GlobalStyles} />
-            <GameStateProvider>
-                <Window />
-            </GameStateProvider>
+            <ChannelProvider>
+                <GameStateProvider>
+                    <Global styles={GlobalStyles} />
+                    <Window />
+                </GameStateProvider>
+            </ChannelProvider>
         </WindowSizeProvider>
     );
 };
@@ -38,15 +41,19 @@ const GlobalStyles = css`
     h3,
     h4,
     h5,
-    h6,
-    p {
+    h6 {
         font-family: Michroma;
         color: ${Colors.Text.primary};
         word-spacing: 2px;
     }
 
+    p {
+        font-family: Share Tech Mono;
+        color: ${Colors.Text.primary};
+    }
+
     small {
-        font-family: Michroma;
+        font-family: Share Tech Mono;
         color: ${Colors.Text.primary};
     }
 

@@ -1,19 +1,49 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
+import {
+    faDollarSign,
+    faClock,
+    faHeart,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { unstable_batchedUpdates } from "react-dom";
 
-import { useGameState } from "../GameState/GameStateProvider";
-import { formatMoney } from "../Utils/formatMoney";
+import { ButtonPrimary } from "../Form/ButtonPrimary";
+import { formatMoney, getTimeLeft } from "../Utils";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { subwayStations } from "../../Fixtures/subwayStations";
+import { useChannel } from "../../PhoenixChannel/ChannelProvider";
+import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
 export const StatsScreen = () => {
     const { layout } = useWindowSize();
-    const { currentStation, playerStats, turnsLeft } = useGameState();
+    const {
+        state: { currentStation, turnsLeft, player },
+        dispatch,
+    } = useGameState();
 
     const station = subwayStations.find(
         (station) => station.key === currentStation,
     );
+
+    const { handleEndGame } = useChannel();
+    const handleEndGameClick = async () => {
+        const hashId = localStorage.getItem("playerHash");
+        if (!hashId) {
+            throw new Error("Cannot end game without a hash ID");
+        }
+        const highScores = await handleEndGame(hashId, 0);
+        if (highScores === undefined) {
+            dispatch({ type: "changeScreen", screen: Screen.Error });
+            return;
+        }
+
+        unstable_batchedUpdates(() => {
+            dispatch({ type: "setHighScores", highScores });
+            dispatch({ type: "changeScreen", screen: Screen.HighScores });
+        });
+    };
 
     const containerPaddingInline = layout === "full" ? "16px" : "4px";
     const marginBlockEnd = layout === "full" ? "10px" : "2px";
@@ -52,52 +82,76 @@ export const StatsScreen = () => {
                     paddingBlockEnd,
                     paddingInline,
                     borderColor: Colors.Border.standard,
-                    borderRadius: "7px",
+                    borderRadius: "4px",
                     borderStyle: "solid",
                     borderWidth: "1px",
                 }}
             >
-                <p>Hours left: {turnsLeft}</p>
-                <small>
-                    <em>When your turns run out, the game is over.</em>
-                </small>
-            </div>
-            <div
-                css={{
-                    paddingBlockStart,
-                    paddingBlockEnd,
-                    paddingInline,
-                    borderColor: Colors.Border.standard,
-                    borderRadius: "7px",
-                    borderStyle: "solid",
-                    borderWidth: "1px",
-                }}
-            >
-                <p>Health: {playerStats.health}</p>
-                <small>
-                    <em>
-                        If this drops to zero, you&apos;re dead! Get patched up
-                        at the Free Clinic in Venice Beach.
-                    </em>
-                </small>
+                <div
+                    css={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginBlockEnd: "5px",
+                    }}
+                >
+                    <p>
+                        <span css={{ marginInlineEnd: "5px" }}>
+                            <FontAwesomeIcon icon={faHeart} />
+                        </span>
+                        {player && player.health}
+                    </p>
 
-                <p>Cash: {formatMoney(playerStats.cash)}</p>
-                <small>
-                    <em>
-                        Keep hustling to grow this sum, but don&apos;t lose it
-                        to a mugger.
-                    </em>
-                </small>
+                    <p>
+                        <span css={{ marginInlineEnd: "5px" }}>
+                            <FontAwesomeIcon icon={faDollarSign} />
+                        </span>
+                        {player && formatMoney(player.funds)}
+                    </p>
+                </div>
 
                 <p css={{ color: Colors.Text.danger }}>
-                    Debt: {formatMoney(playerStats.debt)}
+                    Debt: {player && formatMoney(player.debt)}
                 </p>
                 <small>
-                    <em>
-                        Don&apos;t let the interest get out of hand. It grows at
-                        5% each hour.
-                    </em>
+                    <em>Interest rate: 5% per hour</em>
                 </small>
+            </div>
+
+            <div
+                css={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    paddingBlockStart,
+                    paddingBlockEnd,
+                    paddingInline,
+                    borderColor: Colors.Border.standard,
+                    borderRadius: "4px",
+                    borderStyle: "solid",
+                    borderWidth: "1px",
+
+                    "& button": {
+                        marginBlockStart: layout === "full" ? "-10px" : "-2px",
+                    },
+                }}
+            >
+                <div>
+                    <p>
+                        <span css={{ marginInlineEnd: "5px" }}>
+                            <FontAwesomeIcon icon={faClock} />
+                        </span>
+                        {turnsLeft && getTimeLeft(turnsLeft)}
+                    </p>
+                    <small>
+                        <em>{turnsLeft} hours left.</em>
+                    </small>
+                </div>
+                <ButtonPrimary
+                    label={"End Game"}
+                    type={"Full"}
+                    border={"Thin"}
+                    clickCB={handleEndGameClick}
+                />
             </div>
 
             <div
@@ -106,7 +160,7 @@ export const StatsScreen = () => {
                     paddingBlockEnd,
                     paddingInline,
                     borderColor: Colors.Border.standard,
-                    borderRadius: "7px",
+                    borderRadius: "4px",
                     borderStyle: "solid",
                     borderWidth: "1px",
                 }}

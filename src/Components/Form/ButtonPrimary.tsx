@@ -23,19 +23,20 @@ export const ButtonPrimary = ({
     clickCB,
 }: ButtonPrimaryProps) => {
     const [blockSize, inlineSize] = getDimensions(type);
+    const fontSize = getFontSize(type);
     return (
         <button
             css={css({
                 blockSize,
                 inlineSize,
-                marginBlock: "5px",
+                marginBlock: 0,
                 marginInline: 0,
                 paddingBlock: type === "Small" ? "5px" : "1px",
                 backgroundColor: Colors.Background.screen,
                 borderColor: isDisabled
                     ? Colors.Border.subtle
                     : Colors.Border.standard,
-                borderRadius: "7px",
+                borderRadius: "4px",
                 borderStyle: border === "None" ? "none" : "solid",
                 borderWidth: border === "Full" ? "2px" : "1px",
                 color: isDisabled ? Colors.Text.secondary : Colors.Text.primary,
@@ -43,10 +44,12 @@ export const ButtonPrimary = ({
                     backgroundColor: Colors.Background.subtle,
                 },
                 fontFamily: "Share Tech Mono",
-                fontSize: type === "Small" ? "14px" : "20px",
+                fontSize,
                 fontStyle: isDisabled ? "italic" : "normal",
                 fontVariantCaps: type === "Small" ? "all-small-caps" : "normal",
+                // letterSpacing: type === "Small" ? "1px" : "4px",
                 lineHeight: type === "Small" ? "14px" : "26px",
+                textTransform: type === "Small" ? "none" : "uppercase",
             })}
             onClick={clickCB}
             disabled={isDisabled}
@@ -75,5 +78,18 @@ function getDimensions(type: ButtonType) {
 
         default:
             return ["100%", "100%"];
+    }
+}
+
+function getFontSize(type: ButtonType) {
+    switch (type) {
+        case "Full":
+            return "20px";
+        case "Stretch":
+            return "20px";
+        case "Half":
+            return "16px";
+        default:
+            return "14px";
     }
 }

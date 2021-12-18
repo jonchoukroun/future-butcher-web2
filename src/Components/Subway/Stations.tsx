@@ -2,9 +2,14 @@
 import { jsx } from "@emotion/react";
 
 import { SubwayStationItem } from "./SubwayStationItem";
-import { subwayStations } from "../../Fixtures/subwayStations";
+import { subwayStations, StationKey } from "../../Fixtures/subwayStations";
+import * as Colors from "../../Styles/colors";
 
-export const Stations = () => {
+export const Stations = ({
+    handleSelectStation,
+}: {
+    handleSelectStation: (station: StationKey) => void;
+}) => {
     return (
         <ul
             css={{
@@ -16,10 +21,19 @@ export const Stations = () => {
                 listStyleType: "none",
             }}
         >
-            {subwayStations.map((station, idx) => (
+            <small
+                css={{
+                    color: Colors.Text.secondary,
+                    textAlign: "center",
+                }}
+            >
+                Select a neighborhood for details.
+            </small>
+            {subwayStations.map(({ key }, idx) => (
                 <SubwayStationItem
-                    key={`${station.key}-${idx}`}
-                    station={station}
+                    key={`${key}-${idx}`}
+                    stationKey={key}
+                    onSelectStation={handleSelectStation}
                 />
             ))}
         </ul>

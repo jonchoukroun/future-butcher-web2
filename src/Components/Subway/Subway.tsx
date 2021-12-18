@@ -1,12 +1,22 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
+import { useState } from "react";
 
+import { StationDetails } from "./StationDetails";
 import { Stations } from "./Stations";
 import { useWindowSize } from "../Window/WindowSizeProvider";
+import { StationKey } from "../../Fixtures/subwayStations";
 import * as Colors from "../../Styles/colors";
 
 export const Subway = () => {
     const { heightAdjustment, layout } = useWindowSize();
+
+    const [selectedStation, setSelectedStation] = useState<
+        StationKey | undefined
+    >(undefined);
+    const handleSelectStation = (station: StationKey | undefined) => {
+        setSelectedStation(station);
+    };
 
     return (
         <div
@@ -38,38 +48,15 @@ export const Subway = () => {
                         Subway
                     </h2>
                 )}
-                <small css={{ color: Colors.Text.secondary }}>
-                    Travel to another neighborhood.
-                </small>
             </div>
-            <div
-                css={{
-                    inlineSize: "95%",
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    paddingBlock: layout === "full" ? "10px" : "4px",
-                }}
-            >
-                <button
-                    css={{
-                        padding: "4px",
-                        backgroundColor: Colors.Background.subtle,
-                        borderColor: "transparent",
-                        borderRadius: "7px",
-                        borderWidth: "1px",
-                        color: "black",
-                        fontSize: "16px",
-                        "&:active": {
-                            backgroundColor: "transparent",
-                            borderColor: Colors.Border.subtle,
-                            color: Colors.Text.primary,
-                        },
-                    }}
-                >
-                    Toggle Details
-                </button>
-            </div>
-            <Stations />
+            {selectedStation ? (
+                <StationDetails
+                    stationKey={selectedStation}
+                    onDeselectStation={() => handleSelectStation(undefined)}
+                />
+            ) : (
+                <Stations handleSelectStation={handleSelectStation} />
+            )}
         </div>
     );
 };

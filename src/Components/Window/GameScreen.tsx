@@ -2,23 +2,25 @@
 import { jsx } from "@emotion/react";
 
 import { LayoutType } from "./WindowSizeProvider";
-import { Screen, useGameState } from "../GameState/GameStateProvider";
 import { StatsBar } from "../Stats/StatsBar";
 import { StatsScreen } from "../Stats/StatsScreen";
 import { NavBar } from "../Window/NavBar";
+import { Screen, useGameState } from "../../GameData/GameStateProvider";
 
 interface GameScreenProps {
     layout: LayoutType;
-    Component: (() => JSX.Element) | null;
     shouldShowNavBar: boolean;
+    children: React.ReactNode;
 }
 
 export const GameScreen = ({
     layout,
-    Component,
     shouldShowNavBar,
+    children,
 }: GameScreenProps) => {
-    const { currentScreen } = useGameState();
+    const {
+        state: { currentScreen },
+    } = useGameState();
     if (layout === "full") {
         return (
             <div
@@ -49,7 +51,7 @@ export const GameScreen = ({
                         justifyContent: "space-between",
                     }}
                 >
-                    {Component && <Component />}
+                    {children}
                     {shouldShowNavBar && <NavBar />}
                 </div>
             </div>
@@ -66,7 +68,7 @@ export const GameScreen = ({
             >
                 {}
                 {currentScreen !== Screen.Stats && <StatsBar />}
-                {Component && <Component />}
+                {children}
                 {shouldShowNavBar && <NavBar />}
             </div>
         );

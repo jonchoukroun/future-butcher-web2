@@ -1,34 +1,52 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { KeyboardEvent, useState } from "react";
 
-import { ButtonPrimary, TextInput } from "../Form";
-import { useGameState } from "../GameState/GameStateProvider";
 import { useWindowSize } from "../Window/WindowSizeProvider";
-import * as Colors from "../../Styles/colors";
+import { ButtonPrimary } from "../Form";
+import { formatMoney } from "../Utils/formatMoney";
+import { player } from "../../Fixtures/player";
+import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
+import { Screen, useGameState } from "../../GameData/GameStateProvider";
+import { unstable_batchedUpdates } from "react-dom";
 
 export const Welcome = () => {
-    const { getContentSize, windowSize } = useWindowSize();
-    const headingWidth = Math.round(windowSize.inlineSize * 0.2);
+    const { getContentSize, layout } = useWindowSize();
+    const { blockSize, inlineSize } = getContentSize();
 
-    const [playerName, setPlayerName] = useState("");
-    function handleKeypress(event: KeyboardEvent<HTMLInputElement>) {
-        if (event.key === "Enter") {
-            handleSubmit();
+    const date = new Date();
+    date.setFullYear(2055, date.getMonth(), date.getDate());
+    const options = {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+    };
+    const displayDate = date.toLocaleDateString("en-US", options);
+
+    const { handlePushCallback } = useChannel();
+    const { dispatch } = useGameState();
+    const handleStartClick = async () => {
+        const response = await handlePushCallback(Callback.startGame, {});
+        if (response === undefined) {
+            dispatch({ type: "changeScreen", screen: Screen.Error });
+            return;
         }
-    }
-    const { incrementGameProcess } = useGameState();
-    function handleSubmit() {
-        if (playerName.length < 3) return;
-        incrementGameProcess();
-    }
 
-    const { blockSize } = getContentSize();
+        if (response.rules.state !== "in_game") {
+            dispatch({ type: "changeScreen", screen: Screen.Login });
+            return;
+        }
+
+        unstable_batchedUpdates(() => {
+            dispatch({ type: "updateStateData", stateData: response });
+            dispatch({ type: "changeScreen", screen: Screen.Main });
+        });
+    };
 
     return (
         <div
             css={{
                 blockSize: `${blockSize}px`,
+                inlineSize: "100%",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -36,72 +54,81 @@ export const Welcome = () => {
         >
             <div
                 css={{
+                    inlineSize: `${inlineSize}px`,
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    marginBlockStart: "20px",
-                    backgroundColor: "black",
-                    borderColor: Colors.Border.subtle,
-                    borderRadius: "7px",
-                    borderStyle: "inset",
-                    borderWidth: "2px",
+                    marginBlock: "20px",
                 }}
             >
-                <h1
+                <h2
                     css={{
-                        fontFamily: "Saira Stencil One",
-                        fontSize: `${headingWidth}px`,
-                        color: Colors.Text.accent,
-                        margin: 0,
+                        marginBlockStart: 0,
+                        marginBlockEnd: "5px",
+                        fontVariantCaps: "small-caps",
                     }}
                 >
-                    FUTURE
-                </h1>
-                <h1
-                    css={{
-                        fontFamily: "Mr Dafoe",
-                        fontSize: `${headingWidth + 10}px`,
-                        color: Colors.Text.danger,
-                        margin: 0,
-                        marginBlockStart: `-${Math.round(
-                            headingWidth * 0.9,
-                        )}px`,
-                        transform: "rotate(-10deg)",
-                    }}
-                >
-                    Butcher
-                </h1>
+                    Los Angeles
+                </h2>
+                <h4 css={{ marginBlock: 0, fontFamily: "Share Tech Mono" }}>
+                    {displayDate}
+                </h4>
             </div>
+
             <div
                 css={{
-                    inlineSize: "80%",
-                    maxInlineSize: "322px",
+                    inlineSize: `${inlineSize}px`,
                     display: "flex",
                     flexDirection: "column",
-                    justifyContent: "center",
-                    marginBlockStart: "50px",
+                    alignItems: "center",
+                    marginBlockStart: layout === "full" ? "40px" : 0,
+                    paddingInline: "5px",
+                    p: {
+                        marginBlockEnd: layout === "full" ? "16px" : 0,
+                    },
                 }}
             >
-                <h4 css={{ margin: 0 }}>Enter your name</h4>
-                <TextInput
-                    placeholder="(3 to 20 characters long)"
-                    lengthOptions={[3, 20]}
-                    changeCB={(e) => setPlayerName(e.target.value)}
-                    keypressCB={handleKeypress}
+                <p>
+                    The economy is ruins after the collapse of HypeCoin. The
+                    rich and famous are nuts for the latest fad -{" "}
+                    <em>fresh, human meat</em>.
+                </p>
+
+                <p>
+                    Two-bit hustlers like you have only one option: get rich off
+                    this new addiction, or become the product.
+                </p>
+
+                <p>
+                    Travel the city&apos;s neighborhoods and seize opportunity.
+                    But watch your back! Gangs run the city, and you don&apos;t
+                    want to cross them.
+                </p>
+
+                <p>
+                    You have 24 hours and a {formatMoney(player.debt)} loan.
+                    Hurry up, it&apos;s got a 5% hourly interest rate. Welcome
+                    to the People&apos;s Republic of Los Angeles.
+                </p>
+            </div>
+
+            <div
+                css={{
+                    position: layout === "compact" ? "absolute" : "relative",
+                    bottom: 0,
+                    blockSize: "70px",
+                    inlineSize: `${inlineSize}px`,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginBlockStart: layout === "full" ? "40px" : 0,
+                }}
+            >
+                <ButtonPrimary
+                    label={"Start Game"}
+                    type={"Stretch"}
+                    clickCB={handleStartClick}
                 />
-                <div
-                    css={{
-                        display: "flex",
-                        justifyContent: "flex-end",
-                        marginBlockStart: "8px",
-                    }}
-                >
-                    <ButtonPrimary
-                        type="Full"
-                        label="Start"
-                        clickCB={handleSubmit}
-                    />
-                </div>
             </div>
         </div>
     );

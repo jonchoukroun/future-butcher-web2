@@ -2,12 +2,21 @@
 import { jsx } from "@emotion/react";
 
 import { useWindowSize } from "./WindowSizeProvider";
-import { useGameState, Screen } from "../GameState/GameStateProvider";
 import { ButtonPrimary } from "../Form/ButtonPrimary";
+import { useGameState, Screen } from "../../GameData/GameStateProvider";
 
 export const NavBar = () => {
     const { layout } = useWindowSize();
-    const { changeScreen } = useGameState();
+
+    const {
+        state: { currentProcess, currentScreen },
+        dispatch,
+    } = useGameState();
+
+    const label = getButtonLabel(currentScreen);
+
+    const defaultScreen =
+        currentProcess === "mugging" ? Screen.Mugging : Screen.Main;
 
     return (
         <div
@@ -23,9 +32,24 @@ export const NavBar = () => {
         >
             <ButtonPrimary
                 type={"Stretch"}
-                label={"Back"}
-                clickCB={() => changeScreen(Screen.Main)}
+                label={label}
+                clickCB={() =>
+                    dispatch({ type: "changeScreen", screen: defaultScreen })
+                }
             />
         </div>
     );
 };
+
+function getButtonLabel(screen: Screen | undefined) {
+    switch (screen) {
+        case Screen.Subway:
+            return "Leave Subway";
+
+        case Screen.Market:
+            return "Leave Market";
+
+        default:
+            return "Back to the Streets";
+    }
+}
