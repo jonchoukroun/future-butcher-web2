@@ -1,0 +1,22 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+const path = require("path");
+const { merge } = require("webpack-merge");
+const { DefinePlugin } = require("webpack");
+const common = require("./webpack.common.js");
+
+module.exports = merge(common, {
+    mode: "development",
+    devtool: "inline-source-map",
+    devServer: {
+        contentBase: path.join(__dirname, "dist"),
+        compress: true,
+        port: 3000,
+    },
+    plugins: [
+        new DefinePlugin({
+            "process.env": {
+                API_URL: JSON.stringify("ws://localhost:5000/socket"),
+            },
+        }),
+    ],
+});

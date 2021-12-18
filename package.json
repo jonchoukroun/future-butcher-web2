@@ -7,12 +7,12 @@
     "license": "MIT",
     "scripts": {
         "clean": "rm -rf dist/*",
-        "build": "yarn clean && webpack",
+        "build": "yarn clean && webpack --config webpack.prod.js",
         "fix": "yarn fix:eslint",
         "fix:eslint": "yarn lint:eslint --quiet --fix",
         "lint": "yarn lint:eslint",
         "lint:eslint": "eslint --config .eslintrc 'src/**/*.{ts,tsx}'",
-        "start": "webpack serve",
+        "start": "webpack serve --config webpack.dev.js",
         "test": "jest --runInBand --detectOpenHandles --forceExit"
     },
     "devDependencies": {
@@ -53,7 +53,8 @@
         "typescript-plugin-styled-components": "^1.4.4",
         "webpack": "^5.2.0",
         "webpack-cli": "^4.1.0",
-        "webpack-dev-server": "^3.11.0"
+        "webpack-dev-server": "^3.11.0",
+        "webpack-merge": "^5.8.0"
     },
     "dependencies": {
         "@emotion/react": "^11.7.0",
