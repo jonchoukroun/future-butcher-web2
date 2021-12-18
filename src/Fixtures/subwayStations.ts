@@ -27,7 +27,7 @@ export const subwayStations: Array<Station> = [
         gangDescription:
             "Militarized private security who hunt undesirables for sport.",
         gangTax: 100000,
-        uniqueBuilding: "None",
+        uniqueBuilding: "TBD",
     },
     {
         key: StationKey.downtown,
