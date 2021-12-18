@@ -20,8 +20,6 @@ const {
     useState,
 } = React;
 
-const API_URL = "wss://api.futurebutcher.com/socket";
-
 export const enum Callback {
     newGame,
     startGame,
@@ -59,7 +57,10 @@ export const ChannelProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const [socket] = useState<Socket>(new Socket(API_URL, {}));
+    const apiUrl = process.env.API_URL;
+    if (!apiUrl) throw new Error("API URL is not defined");
+
+    const [socket] = useState<Socket>(new Socket(apiUrl, {}));
     const [isConnected, setIsConnected] = useState(false);
 
     useEffect(() => {
