@@ -13,7 +13,7 @@ export const Subway = () => {
 
     const [selectedStation, setSelectedStation] = useState<
         StationKey | undefined
-    >(StationKey.bellGardens);
+    >(undefined);
     const handleSelectStation = (station: StationKey | undefined) => {
         setSelectedStation(station);
     };

@@ -1,7 +1,7 @@
 import * as React from "react";
 
-import { useChannel, Callback } from "./ChannelProvider";
-import { Cut, ApiState } from ".";
+import { useChannel, Callback } from "../PhoenixChannel/ChannelProvider";
+import { Cut, ApiState } from "../PhoenixChannel";
 import { unstable_batchedUpdates } from "react-dom";
 
 export enum Screen {

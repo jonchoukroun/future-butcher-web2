@@ -77,6 +77,6 @@ export const subwayStations: Array<Station> = [
         gangDescription:
             "Heavily armed small business owners who encourage shopping.",
         gangTax: 5000,
-        uniqueBuilding: "Gus's Army Surplus Store",
+        uniqueBuilding: "Gus's Army Surplus",
     },
 ];

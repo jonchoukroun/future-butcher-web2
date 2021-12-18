@@ -3,10 +3,12 @@ import { jsx } from "@emotion/react";
 
 import { ButtonPrimary } from "../Form/ButtonPrimary";
 import { subwayStations, StationKey } from "../../Fixtures/subwayStations";
-// import { useGameState } from "../../GameData/GameStateProvider";
+import { useGameState, Screen } from "../../GameData/GameStateProvider";
+import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 import { formatMoney } from "../Utils/formatMoney";
+import { unstable_batchedUpdates } from "react-dom";
 
 interface StationDetailsProps {
     stationKey: StationKey;
@@ -20,9 +22,36 @@ export const StationDetails = ({
     const station = subwayStations.find(({ key }) => key === stationKey);
     if (station === undefined) throw new Error("Could not find station");
 
-    // const { dispatch } = useGameState();
-    const handleTravel = () => {
-        console.log("!!travel to:", stationKey);
+    const { handlePushCallback } = useChannel();
+    const {
+        dispatch,
+        state: { turnsLeft },
+    } = useGameState();
+    if (turnsLeft === undefined) throw new Error("Turns left is not defined");
+
+    const isStationOpen =
+        stationKey !== StationKey.bellGardens || turnsLeft <= 20;
+
+    const handleTravel = async () => {
+        const stateData = await handlePushCallback(Callback.travel, {
+            station: stationKey,
+        });
+
+        if (stateData === undefined) return;
+
+        if (stateData.rules.state === "mugging") {
+            const response = await handlePushCallback(Callback.fightMugger, {});
+            if (response === undefined) return;
+            unstable_batchedUpdates(() => {
+                dispatch({ type: "updateStateData", stateData: response });
+                dispatch({ type: "changeScreen", screen: Screen.Main });
+            });
+        } else {
+            unstable_batchedUpdates(() => {
+                dispatch({ type: "updateStateData", stateData });
+                dispatch({ type: "changeScreen", screen: Screen.Main });
+            });
+        }
     };
 
     const { layout } = useWindowSize();
@@ -54,7 +83,13 @@ export const StationDetails = ({
                 </small>
             </div>
 
-            <p css={{ marginBlockStart: "4px" }}>Travel to {station.name}?</p>
+            {isStationOpen ? (
+                <p css={{ marginBlockStart: "4px" }}>
+                    Travel to {station.name}?
+                </p>
+            ) : (
+                <p css={{ marginBlockStart: "4px" }}>Opens at 9:00am</p>
+            )}
 
             <div
                 css={{
@@ -74,6 +109,7 @@ export const StationDetails = ({
                     type={"Stretch"}
                     label={"Go"}
                     border={"Thin"}
+                    isDisabled={!isStationOpen}
                     clickCB={handleTravel}
                 />
             </div>

@@ -9,10 +9,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { ButtonPrimary } from "../Form/ButtonPrimary";
-import { formatMoney } from "../Utils/formatMoney";
+import { formatMoney, getTimeLeft } from "../Utils";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { subwayStations } from "../../Fixtures/subwayStations";
-import { useChannel } from "../../GameData/ChannelProvider";
+import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
@@ -137,7 +137,7 @@ export const StatsScreen = () => {
                         <span css={{ marginInlineEnd: "5px" }}>
                             <FontAwesomeIcon icon={faClock} />
                         </span>
-                        5:00am
+                        {turnsLeft && getTimeLeft(turnsLeft)}
                     </p>
                     <small>
                         <em>{turnsLeft} hours left.</em>
