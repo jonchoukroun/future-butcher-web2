@@ -20,7 +20,7 @@ const {
     useState,
 } = React;
 
-const API_URL = "ws://localhost:5000/socket";
+const API_URL = "wss://api.futurebutcher.com/socket";
 
 export const enum Callback {
     newGame,
