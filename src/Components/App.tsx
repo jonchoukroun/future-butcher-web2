@@ -43,24 +43,24 @@ const GlobalStyles = css`
     h5,
     h6 {
         font-family: Michroma;
-        color: ${Colors.Text.primary};
+        color: ${Colors.Text.base};
         word-spacing: 2px;
     }
 
     p {
         font-family: Share Tech Mono;
-        color: ${Colors.Text.primary};
+        color: ${Colors.Text.base};
     }
 
     small {
         font-family: Share Tech Mono;
-        color: ${Colors.Text.primary};
+        color: ${Colors.Text.subtle};
     }
 
     * {
         box-sizing: border-box;
         &:focus-visible {
-            outline: solid ${Colors.Border.accent};
+            outline: solid ${Colors.Border.subtle};
         }
     }
 `;

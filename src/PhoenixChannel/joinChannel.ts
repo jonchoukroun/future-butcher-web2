@@ -8,7 +8,7 @@ export async function joinChannel({
     playerName: string;
     playerHash?: string;
     socket: Socket;
-}): Promise<Channel | undefined> {
+}): Promise<Channel | string | undefined> {
     const payload: { player_name: string; hash_id?: string } = {
         player_name: playerName,
     };
@@ -22,11 +22,14 @@ export async function joinChannel({
                 console.log("Channel joined successfully");
                 localStorage.setItem("playerName", playerName);
                 localStorage.setItem("playerHash", hash_id);
-                resolve(channel);
+                return resolve(channel);
             })
-            .receive("error", (reason) => {
+            .receive("error", ({ reason }) => {
                 console.error("Failed to join channel", reason);
-                reject(undefined);
+                if (reason === "join crashed") {
+                    return resolve(reason);
+                }
+                return reject(undefined);
             });
     });
 }

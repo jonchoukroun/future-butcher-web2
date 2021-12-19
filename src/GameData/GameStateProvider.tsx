@@ -88,6 +88,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
         handleJoinChannel,
         handlePushCallback,
         isConnected,
+        isDisconnected,
     } = useChannel();
 
     const playerName = localStorage.getItem("playerName");
@@ -96,13 +97,21 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
     const [state, dispatch] = React.useReducer(gameStateReducer, {});
 
     useEffect(() => {
+        if (!isDisconnected) return;
+
+        dispatch({ type: "changeScreen", screen: Screen.Error });
+    }, [isDisconnected]);
+
+    useEffect(() => {
         const handleJoin = async () => {
             if (!playerName || !playerHash) {
                 dispatch({ type: "changeScreen", screen: Screen.Login });
                 return;
             }
-            await handleJoinChannel(playerName, playerHash);
-            console.log("!!handleRejoin | TODO: implement retry");
+            const reply = await handleJoinChannel(playerName, playerHash);
+            if (reply === "join crashed") {
+                dispatch({ type: "changeScreen", screen: Screen.Login });
+            }
         };
         if (isConnected) handleJoin();
     }, [isConnected]);
@@ -138,6 +147,18 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                         dispatch({ type: "changeScreen", screen: Screen.Main });
                     });
                     return;
+                }
+                if (lastState.rules.state === "mugging") {
+                    unstable_batchedUpdates(() => {
+                        dispatch({
+                            type: "updateStateData",
+                            stateData: lastState,
+                        });
+                        dispatch({
+                            type: "changeScreen",
+                            screen: Screen.Mugging,
+                        });
+                    });
                 }
             } else {
                 dispatch({ type: "changeScreen", screen: Screen.Welcome });

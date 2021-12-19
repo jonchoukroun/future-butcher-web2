@@ -35,7 +35,7 @@ export const Mugging = () => {
             <h2
                 css={{
                     marginBlock: "20px",
-                    color: Colors.Text.heading,
+                    color: Colors.Text.danger,
                     textTransform: "uppercase",
                     letterSpacing: "2px",
                     wordSpacing: "4px",
@@ -68,6 +68,7 @@ export const Mugging = () => {
                     <ButtonPrimary
                         type={"Full"}
                         label={"Fight"}
+                        isDanger={true}
                         clickCB={handleFightMuggerClick}
                     />
                 </div>

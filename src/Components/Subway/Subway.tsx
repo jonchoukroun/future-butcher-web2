@@ -39,7 +39,7 @@ export const Subway = () => {
                     <h2
                         css={{
                             marginBlock: 0,
-                            color: Colors.Text.heading,
+                            color: Colors.Text.base,
                             textTransform: "uppercase",
                             letterSpacing: "2px",
                             wordSpacing: "4px",

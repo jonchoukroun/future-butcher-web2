@@ -11,6 +11,7 @@ interface ButtonPrimaryProps {
     type: ButtonType;
     label: string;
     isDisabled?: boolean;
+    isDanger?: boolean;
     border?: BorderType;
     clickCB: () => void;
 }
@@ -19,6 +20,7 @@ export const ButtonPrimary = ({
     type,
     label,
     isDisabled,
+    isDanger,
     border = "Full",
     clickCB,
 }: ButtonPrimaryProps) => {
@@ -32,22 +34,28 @@ export const ButtonPrimary = ({
                 marginBlock: 0,
                 marginInline: 0,
                 paddingBlock: type === "Small" ? "5px" : "1px",
-                backgroundColor: Colors.Background.screen,
+                backgroundColor: Colors.Background.base,
                 borderColor: isDisabled
                     ? Colors.Border.subtle
-                    : Colors.Border.standard,
-                borderRadius: "4px",
+                    : isDanger
+                    ? Colors.Border.danger
+                    : Colors.Border.base,
+                borderRadius: "2px",
                 borderStyle: border === "None" ? "none" : "solid",
                 borderWidth: border === "Full" ? "2px" : "1px",
-                color: isDisabled ? Colors.Text.secondary : Colors.Text.primary,
+                color: isDisabled
+                    ? Colors.Text.subtle
+                    : isDanger
+                    ? Colors.Text.danger
+                    : Colors.Text.base,
                 "&:active": {
-                    backgroundColor: Colors.Background.subtle,
+                    backgroundColor: Colors.Background.invert,
+                    color: Colors.Text.invert,
                 },
                 fontFamily: "Share Tech Mono",
                 fontSize,
                 fontStyle: isDisabled ? "italic" : "normal",
                 fontVariantCaps: type === "Small" ? "all-small-caps" : "normal",
-                // letterSpacing: type === "Small" ? "1px" : "4px",
                 lineHeight: type === "Small" ? "14px" : "26px",
                 textTransform: type === "Small" ? "none" : "uppercase",
             })}
@@ -61,7 +69,7 @@ export const ButtonPrimary = ({
 
 function getDimensions(type: ButtonType) {
     const { layout } = useWindowSize();
-    const standardHeight = layout === "full" ? "46px" : "32px";
+    const standardHeight = layout === "full" ? "46px" : "38px";
 
     switch (type) {
         case "Full":

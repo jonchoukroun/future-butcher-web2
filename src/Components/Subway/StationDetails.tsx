@@ -71,7 +71,7 @@ export const StationDetails = ({
                 <small
                     css={{
                         marginBlock: "4px",
-                        color: Colors.Text.secondary,
+                        color: Colors.Text.subtle,
                         fontStyle: "italic",
                     }}
                 >
@@ -118,7 +118,7 @@ export const StationDetails = ({
                         marginBlockEnd: layout === "full" ? "2px" : 0,
                     },
                     "& small": {
-                        color: Colors.Text.secondary,
+                        color: Colors.Text.subtle,
                         fontStyle: "italic",
                         marginBlockEnd: layout === "full" ? "10px" : "4px",
                     },

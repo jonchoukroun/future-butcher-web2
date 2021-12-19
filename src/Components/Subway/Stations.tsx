@@ -23,7 +23,7 @@ export const Stations = ({
         >
             <small
                 css={{
-                    color: Colors.Text.secondary,
+                    color: Colors.Text.subtle,
                     textAlign: "center",
                 }}
             >
