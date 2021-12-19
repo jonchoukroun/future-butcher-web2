@@ -1,10 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import {
-    faDollarSign,
-    faClock,
-    faHeart,
-} from "@fortawesome/free-solid-svg-icons";
+import { faClock, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { unstable_batchedUpdates } from "react-dom";
 
@@ -71,7 +67,7 @@ export const StatsScreen = () => {
                     marginBlockEnd,
                     marginBlockStart: "2px",
                     fontFamily: "Share Tech Mono",
-                    color: Colors.Text.secondary,
+                    color: Colors.Text.subtle,
                     wordSpacing: 0,
                 },
             }}
@@ -81,8 +77,8 @@ export const StatsScreen = () => {
                     paddingBlockStart,
                     paddingBlockEnd,
                     paddingInline,
-                    borderColor: Colors.Border.standard,
-                    borderRadius: "4px",
+                    borderColor: Colors.Border.base,
+                    borderRadius: "2px",
                     borderStyle: "solid",
                     borderWidth: "1px",
                 }}
@@ -101,12 +97,7 @@ export const StatsScreen = () => {
                         {player && player.health}
                     </p>
 
-                    <p>
-                        <span css={{ marginInlineEnd: "5px" }}>
-                            <FontAwesomeIcon icon={faDollarSign} />
-                        </span>
-                        {player && formatMoney(player.funds)}
-                    </p>
+                    <p>{player && formatMoney(player.funds)}</p>
                 </div>
 
                 <p css={{ color: Colors.Text.danger }}>
@@ -125,8 +116,8 @@ export const StatsScreen = () => {
                     paddingBlockStart,
                     paddingBlockEnd,
                     paddingInline,
-                    borderColor: Colors.Border.standard,
-                    borderRadius: "4px",
+                    borderColor: Colors.Border.base,
+                    borderRadius: "2px",
                     borderStyle: "solid",
                     borderWidth: "1px",
 
@@ -149,7 +140,8 @@ export const StatsScreen = () => {
                 <ButtonPrimary
                     label={"End Game"}
                     type={"Full"}
-                    border={"Thin"}
+                    border={"None"}
+                    isDanger={true}
                     clickCB={handleEndGameClick}
                 />
             </div>
@@ -159,8 +151,8 @@ export const StatsScreen = () => {
                     paddingBlockStart,
                     paddingBlockEnd,
                     paddingInline,
-                    borderColor: Colors.Border.standard,
-                    borderRadius: "4px",
+                    borderColor: Colors.Border.base,
+                    borderRadius: "2px",
                     borderStyle: "solid",
                     borderWidth: "1px",
                 }}

@@ -45,8 +45,8 @@ export const CutListItem = ({ name, price, quantity }: CutListItemProps) => {
                         marginBlockEnd: "5px",
                         textTransform: "capitalize",
                         color: canAfford
-                            ? Colors.Text.primary
-                            : Colors.Text.secondary,
+                            ? Colors.Text.base
+                            : Colors.Text.subtle,
                     }}
                 >
                     {name}
@@ -70,8 +70,8 @@ export const CutListItem = ({ name, price, quantity }: CutListItemProps) => {
                         marginInlineEnd: "10px",
                         fontFamily: "Share Tech Mono",
                         color: canAfford
-                            ? Colors.Text.primary
-                            : Colors.Text.danger,
+                            ? Colors.Text.base
+                            : Colors.Text.subtle,
                     }}
                 >
                     {formatMoney(price)}

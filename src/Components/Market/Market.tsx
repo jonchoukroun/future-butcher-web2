@@ -28,7 +28,7 @@ export const Market = () => {
                     <h2
                         css={{
                             marginBlock: 0,
-                            color: Colors.Text.heading,
+                            color: Colors.Text.base,
                             textTransform: "uppercase",
                             letterSpacing: "2px",
                             wordSpacing: "4px",
@@ -37,7 +37,7 @@ export const Market = () => {
                         Cuts Market
                     </h2>
                 )}
-                <small css={{ color: Colors.Text.secondary }}>
+                <small css={{ color: Colors.Text.subtle }}>
                     Buy low, sell high.
                 </small>
             </div>

@@ -37,9 +37,9 @@ export const MainScreen = () => {
         >
             <h2
                 css={{
-                    marginBlockStart: "5px",
-                    marginBlockEnd: "20px",
-                    color: Colors.Text.heading,
+                    marginBlockStart: "20px",
+                    marginBlockEnd: "10px",
+                    color: Colors.Text.base,
                     textTransform: "uppercase",
                     letterSpacing: "2px",
                     wordSpacing: "4px",
@@ -66,7 +66,7 @@ export const MainScreen = () => {
                         paddingBlock: "25px",
                         backgroundColor: "transparent",
                         borderColor: Colors.Border.subtle,
-                        borderRadius: "4px",
+                        borderRadius: "2px",
                         borderStyle: "solid",
                         borderWidth: "1px",
                     },
@@ -79,7 +79,7 @@ export const MainScreen = () => {
 
                     "& h3": {
                         marginBlock: 0,
-                        color: Colors.Text.primary,
+                        color: Colors.Text.base,
                     },
                 }}
             >

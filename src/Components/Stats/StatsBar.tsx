@@ -1,7 +1,8 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faSortDown } from "@fortawesome/free-solid-svg-icons";
 
-import { ButtonPrimary } from "../Form";
 import { formatMoney, getTimeLeft } from "../Utils";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
@@ -33,7 +34,7 @@ export const StatsBar = () => {
                 css={{
                     margin: 0,
                     fontFamily: "Share Tech Mono",
-                    color: Colors.Text.secondary,
+                    color: Colors.Text.base,
                 }}
             >
                 {player && formatMoney(player.funds)}
@@ -42,19 +43,35 @@ export const StatsBar = () => {
                 css={{
                     margin: 0,
                     fontFamily: "Share Tech Mono",
-                    color: Colors.Text.secondary,
+                    color: Colors.Text.base,
                 }}
             >
                 {turnsLeft && getTimeLeft(turnsLeft)}
             </p>
-            <ButtonPrimary
-                type={"Small"}
-                label={"Stats"}
-                border={"Thin"}
-                clickCB={() =>
+            <button
+                css={{
+                    inlineSize: "auto",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    padding: "2px",
+                    backgroundColor: Colors.Background.base,
+                    border: "none",
+                    color: Colors.Text.base,
+                    fontFamily: "Share Tech Mono",
+                    fontSize: "16px",
+                    "& svg": {
+                        marginBlockStart: "-10px",
+                        marginInlineStart: "4px",
+                    },
+                }}
+                onClick={() =>
                     dispatch({ type: "changeScreen", screen: Screen.Stats })
                 }
-            />
+            >
+                INFO
+                <FontAwesomeIcon icon={faSortDown} />
+            </button>
         </div>
     );
 };

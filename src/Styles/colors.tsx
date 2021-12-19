@@ -1,45 +1,34 @@
-const PRIMARY = "rgb(170, 148, 57)";
-const SECONDARY = "rgba(170, 148, 57, 0.5)";
-const TERTIARY = "rgba(170, 148, 57, 0.25)";
-const WHITE = "rgb(255, 233, 142)";
-// const GREEN = "#467414";
-// const DARK_GREEN = "#284D00";
-const BLUE = "rgb(45, 70, 113)";
-// const BLACK = "rgba(45, 70, 113, 0.1)";
-const BLACK = "#05070b";
-const DANGER = "#802E16";
-const GREY = "#282828";
-
-// const PRIMARY = "#4CAD54";
-// const SECONDARY = "rgba(76, 173, 84, 0.5)";
-// const TERTIARY = "rgba(76, 173, 84, 0.25)";
-// const WHITE = "rgb(158, 255, 166)";
-const DARK_BLUE = "#236669";
-// const BLACK = "#040c05";
-// const DANGER = "#ae3c39";
-// const GREY = "#282828";
+// const BRIGHT_GREEN = "#33ff33";
+const GREEN = "rgba(51, 255, 51, 0.75)";
+const LIGHT_GREEN = "rgba(51, 255, 51, 0.25)";
+// const AMBER = "#ffb000";
+// const LIGHT_AMBER = "rgba(255, 176, 0, 0.25)";
+const BLUE = "#4880ff";
+// const BRIGHT_RED = "#ff3333";
+const RED = "rgba(255, 51, 51, 0.75)";
+const BLACK = "#171717";
 
 export const Text = {
-    primary: PRIMARY,
-    secondary: SECONDARY,
-    heading: WHITE,
-    danger: DANGER,
+    base: GREEN,
+    subtle: LIGHT_GREEN,
+    // base: AMBER,
+    // subtle: LIGHT_AMBER,
+    invert: BLACK,
     accent: BLUE,
-    // accent: GREEN,
+    danger: RED,
 };
 
 export const Border = {
-    bright: PRIMARY,
-    standard: SECONDARY,
-    subtle: TERTIARY,
-    accent: DARK_BLUE,
-    // accent: DARK_GREEN,
+    base: GREEN,
+    subtle: LIGHT_GREEN,
+    // base: AMBER,
+    // subtle: LIGHT_AMBER,
+    accent: BLUE,
+    danger: RED,
 };
 
 export const Background = {
-    screen: BLACK,
-    accent: BLUE,
-    // accent: GREEN,
-    terminal: GREY,
-    subtle: TERTIARY,
+    base: BLACK,
+    invert: LIGHT_GREEN,
+    // invert: LIGHT_AMBER,
 };

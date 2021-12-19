@@ -40,9 +40,9 @@ export const Window = () => {
                     inlineSize: windowSize.inlineSize,
                     paddingBlock: "1px",
                     paddingInline: "1px",
-                    backgroundColor: Colors.Background.screen,
+                    backgroundColor: Colors.Background.base,
                     borderColor: Colors.Border.subtle,
-                    borderRadius: "8px",
+                    borderRadius: "10px",
                     borderStyle: "solid",
                     borderWidth: "2px",
                 }}
