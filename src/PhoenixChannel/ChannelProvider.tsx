@@ -35,7 +35,7 @@ const ChannelContext = createContext<
           handleJoinChannel: (
               playerName: string,
               playerHash?: string,
-          ) => Promise<Channel | undefined>;
+          ) => Promise<Channel | string | undefined>;
           handlePushCallback: (
               callback: Callback,
               payload: Record<string, unknown>,
@@ -92,6 +92,10 @@ export const ChannelProvider = ({
                 playerHash,
                 socket,
             });
+            if (typeof response === "string") {
+                setChannel(undefined);
+                return response;
+            }
             setChannel(response);
             if (response !== undefined) setDidJoinChannel(true);
             return response;

@@ -101,8 +101,10 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                 dispatch({ type: "changeScreen", screen: Screen.Login });
                 return;
             }
-            await handleJoinChannel(playerName, playerHash);
-            console.log("!!handleRejoin | TODO: implement retry");
+            const reply = await handleJoinChannel(playerName, playerHash);
+            if (reply === "join crashed") {
+                dispatch({ type: "changeScreen", screen: Screen.Login });
+            }
         };
         if (isConnected) handleJoin();
     }, [isConnected]);
