@@ -82,7 +82,7 @@ export const Welcome = () => {
                     flexDirection: "column",
                     alignItems: "center",
                     marginBlockStart: layout === "full" ? "40px" : 0,
-                    paddingInline: "5px",
+                    paddingInline: "10px",
                     p: {
                         marginBlockEnd: layout === "full" ? "16px" : 0,
                     },

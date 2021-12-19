@@ -48,6 +48,7 @@ const ChannelContext = createContext<
               { player: string; score: number }[] | void
           >;
           isConnected: boolean;
+          isDisconnected: boolean;
       }
     | undefined
 >(undefined);
@@ -62,6 +63,7 @@ export const ChannelProvider = ({
 
     const [socket] = useState<Socket>(new Socket(apiUrl, {}));
     const [isConnected, setIsConnected] = useState(false);
+    const [isDisconnected, setIsDisconnected] = useState(false);
 
     useEffect(() => {
         if (socket.isConnected()) return;
@@ -72,10 +74,12 @@ export const ChannelProvider = ({
         socket.onError(() => {
             console.error("Failed to open socket");
             setIsConnected(false);
+            setIsDisconnected(true);
         });
         socket.onClose(() => {
             console.log("Closed socket");
             setIsConnected(false);
+            setIsDisconnected(true);
         });
         socket.connect();
     }, [socket]);
@@ -166,6 +170,7 @@ export const ChannelProvider = ({
             handleEndGame,
             handleGetScores,
             isConnected,
+            isDisconnected,
         }),
         [
             didJoinChannel,
@@ -175,6 +180,7 @@ export const ChannelProvider = ({
             handleEndGame,
             handleGetScores,
             isConnected,
+            isDisconnected,
         ],
     );
 
