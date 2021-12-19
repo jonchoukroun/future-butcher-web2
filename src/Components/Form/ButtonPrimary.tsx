@@ -67,19 +67,18 @@ function getButtonTypeStyles(type: ButtonType) {
         margin: 0,
         borderRadius: "2px",
         fontFamily: "Share Tech Mono, monospace",
+        lineHeight: "26px",
+        textTransform: "uppercase",
     });
 
     switch (type) {
         case "Full":
             return css(
                 {
-                    blockSize: "46px",
+                    blockSize: "36px",
                     inlineSize: "140px",
                     paddingBlock: "1px",
                     fontSize: "20px",
-                    fontVariantCaps: "normal",
-                    lineHeight: "26px",
-                    textTransform: "uppercase",
                 },
                 baseButtonTypeStyles,
             );
@@ -87,13 +86,10 @@ function getButtonTypeStyles(type: ButtonType) {
         case "Half":
             return css(
                 {
-                    blockSize: "46px",
+                    blockSize: "36px",
                     inlineSize: "70px",
                     paddingBlock: "1px",
                     fontSize: "16px",
-                    fontVariantCaps: "normal",
-                    lineHeight: "26px",
-                    textTransform: "uppercase",
                 },
                 baseButtonTypeStyles,
             );
@@ -104,10 +100,7 @@ function getButtonTypeStyles(type: ButtonType) {
                     blockSize: "auto",
                     inlineSize: "auto",
                     paddingBlock: "5px",
-                    fontSize: "14px",
-                    fontVariantCaps: "all-small-caps",
-                    lineHeight: "14px",
-                    textTransform: "none",
+                    fontSize: "16px",
                 },
                 baseButtonTypeStyles,
             );
@@ -119,10 +112,7 @@ function getButtonTypeStyles(type: ButtonType) {
                     inlineSize: "90%",
                     paddingBlock: "1px",
                     fontSize: "20px",
-                    fontVariantCaps: "normal",
                     letterSpacing: "2px",
-                    lineHeight: "26px",
-                    textTransform: "uppercase",
                 },
                 baseButtonTypeStyles,
             );

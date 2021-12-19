@@ -138,9 +138,8 @@ export const StatsScreen = () => {
                     </small>
                 </div>
                 <ButtonPrimary
-                    label={"End Game"}
                     type={"Sized"}
-                    scheme={"Inverse"}
+                    label={"End Game"}
                     border={"None"}
                     isDanger={true}
                     clickCB={handleEndGameClick}
