@@ -84,14 +84,14 @@ export const HighScores = () => {
                             paddingInline: "8px",
                             backgroundColor:
                                 playerName === player
-                                    ? Colors.Background.invert
+                                    ? Colors.Background.inverse
                                     : Colors.Background.base,
                             borderRadius: "2px",
                             "& p": {
                                 marginBlock: "4px",
                                 color:
                                     playerName === player
-                                        ? Colors.Text.invert
+                                        ? Colors.Text.inverse
                                         : Colors.Text.base,
                             },
                         }}
@@ -101,7 +101,7 @@ export const HighScores = () => {
                                 css={{
                                     color:
                                         playerName === player
-                                            ? Colors.Text.invert
+                                            ? Colors.Text.inverse
                                             : Colors.Text.subtle,
                                 }}
                             >
@@ -127,7 +127,7 @@ export const HighScores = () => {
                 }}
             >
                 <ButtonPrimary
-                    type={"Stretch"}
+                    type={"Block"}
                     label={"Start Over"}
                     clickCB={handleStartOverClick}
                 />

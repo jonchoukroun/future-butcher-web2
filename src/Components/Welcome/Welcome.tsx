@@ -126,7 +126,7 @@ export const Welcome = () => {
             >
                 <ButtonPrimary
                     label={"Start Game"}
-                    type={"Stretch"}
+                    type={"Block"}
                     clickCB={handleStartClick}
                 />
             </div>

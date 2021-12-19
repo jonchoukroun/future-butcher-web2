@@ -139,7 +139,8 @@ export const StatsScreen = () => {
                 </div>
                 <ButtonPrimary
                     label={"End Game"}
-                    type={"Full"}
+                    type={"Sized"}
+                    scheme={"Inverse"}
                     border={"None"}
                     isDanger={true}
                     clickCB={handleEndGameClick}

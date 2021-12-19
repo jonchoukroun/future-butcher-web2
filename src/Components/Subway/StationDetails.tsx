@@ -95,14 +95,14 @@ export const StationDetails = ({
                 }}
             >
                 <ButtonPrimary
-                    type={"Stretch"}
+                    type={"Block"}
                     label={"Back"}
                     border={"Thin"}
                     clickCB={onDeselectStation}
                 />
                 <div css={{ marginInline: "4px" }}> </div>
                 <ButtonPrimary
-                    type={"Stretch"}
+                    type={"Block"}
                     label={"Go"}
                     border={"Thin"}
                     isDisabled={!isStationOpen}
