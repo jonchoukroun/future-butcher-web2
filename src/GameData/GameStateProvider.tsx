@@ -139,6 +139,18 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                     });
                     return;
                 }
+                if (lastState.rules.state === "mugging") {
+                    unstable_batchedUpdates(() => {
+                        dispatch({
+                            type: "updateStateData",
+                            stateData: lastState,
+                        });
+                        dispatch({
+                            type: "changeScreen",
+                            screen: Screen.Mugging,
+                        });
+                    });
+                }
             } else {
                 dispatch({ type: "changeScreen", screen: Screen.Welcome });
             }
