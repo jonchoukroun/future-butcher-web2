@@ -124,7 +124,7 @@ export const StationDetails = ({
                     },
                 }}
             >
-                <p>Unique Building: {station.uniqueBuilding}</p>
+                <p>POI: {station.uniqueBuilding}</p>
 
                 <p>Travel Cost: {formatMoney(station.gangTax)}</p>
                 <small>Travel will take 1 hour</small>

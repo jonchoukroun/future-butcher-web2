@@ -69,7 +69,7 @@ export const Login = () => {
                     css={{
                         fontFamily: "Saira Stencil One",
                         fontSize: `${headingWidth}px`,
-                        color: Colors.Text.accent,
+                        color: Colors.Text.base,
                         margin: 0,
                     }}
                 >

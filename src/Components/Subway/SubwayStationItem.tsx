@@ -59,6 +59,8 @@ export const SubwayStationItem = ({
                         fontSize: "20px",
                         fontStyle: isCurrentStation ? "italic" : "normal",
                         fontVariantCaps: "small-caps",
+                        letterSpacing: "4px",
+                        wordSpacing: "8px",
                     }}
                 >
                     {station.name}

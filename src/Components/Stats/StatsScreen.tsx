@@ -42,43 +42,58 @@ export const StatsScreen = () => {
     };
 
     const containerPaddingInline = layout === "full" ? "16px" : "4px";
-    const marginBlockEnd = layout === "full" ? "10px" : "2px";
-    const paddingBlockStart = layout === "full" ? "28px" : "7px";
-    const paddingBlockEnd = layout === "full" ? "20px" : "5px";
+    const paddingBlock = layout === "full" ? "28px" : "7px";
     const paddingInline = layout === "full" ? "28px" : "7px";
 
     return (
         <div
             css={{
-                blockSize: "100%",
+                blockSize: "calc(100% - 70px)",
                 inlineSize: "100%",
                 display: "flex",
                 flexDirection: "column",
+                alignItems: "center",
                 justifyContent: "space-evenly",
                 paddingInline: containerPaddingInline,
-                paddingBlockEnd: layout === "compact" ? "50px" : 0,
                 "& p": {
-                    margin: 0,
                     fontFamily: "Share Tech Mono",
-                    wordSpacing: 0,
-                },
-                "& small": {
-                    display: "block",
-                    marginBlockEnd,
-                    marginBlockStart: "2px",
-                    fontFamily: "Share Tech Mono",
-                    color: Colors.Text.subtle,
                     wordSpacing: 0,
                 },
             }}
         >
             <div
                 css={{
-                    paddingBlockStart,
-                    paddingBlockEnd,
+                    inlineSize: "100%",
+                    paddingBlock,
                     paddingInline,
-                    borderColor: Colors.Border.base,
-                    borderRadius: "2px",
+                    borderColor: "transparent",
+                    borderBlockEndColor: Colors.Border.subtle,
+                    borderRadius: "1px",
+                    borderStyle: "solid",
+                    borderWidth: "1px",
+                }}
+            >
+                <h3
+                    css={{
+                        marginBlockStart: 0,
+                        marginBlockEnd: "15px",
+                        fontFamily: "Michroma",
+                        fontVariantCaps: "small-caps",
+                        textTransform: "capitalize",
+                        textAlign: "center",
+                    }}
+                >
+                    {player?.playerName}
+                </h3>
+            </div>
+            <div
+                css={{
+                    inlineSize: "100%",
+                    paddingBlock,
+                    paddingInline,
+                    borderColor: "transparent",
+                    borderBlockEndColor: Colors.Border.subtle,
+                    borderRadius: "1px",
                     borderStyle: "solid",
                     borderWidth: "1px",
                 }}
@@ -90,34 +105,41 @@ export const StatsScreen = () => {
                         marginBlockEnd: "5px",
                     }}
                 >
-                    <p>
+                    <p css={{ marginBlockStart: 0, marginBlockEnd: "5px" }}>
+                        {player && formatMoney(player.funds)}
+                    </p>
+
+                    <p css={{ marginBlock: 0 }}>
                         <span css={{ marginInlineEnd: "5px" }}>
-                            <FontAwesomeIcon icon={faHeart} />
+                            <FontAwesomeIcon icon={faHeart} fontSize={16} />
                         </span>
                         {player && player.health}
                     </p>
-
-                    <p>{player && formatMoney(player.funds)}</p>
                 </div>
 
-                <p css={{ color: Colors.Text.danger }}>
-                    Debt: {player && formatMoney(player.debt)}
+                <p
+                    css={{
+                        marginBlockStart: 0,
+                        marginBlockEnd: "5px",
+                        color: Colors.Text.danger,
+                    }}
+                >
+                    Debt: {player && formatMoney(player.debt)}{" "}
+                    <span css={{ color: Colors.Text.subtle }}>(5%)</span>
                 </p>
-                <small>
-                    <em>Interest rate: 5% per hour</em>
-                </small>
             </div>
 
             <div
                 css={{
+                    inlineSize: "100%",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "space-between",
-                    paddingBlockStart,
-                    paddingBlockEnd,
+                    paddingBlock,
                     paddingInline,
-                    borderColor: Colors.Border.base,
-                    borderRadius: "2px",
+                    borderColor: "transparent",
+                    borderBlockEndColor: Colors.Border.subtle,
+                    borderRadius: "1px",
                     borderStyle: "solid",
                     borderWidth: "1px",
 
@@ -127,19 +149,20 @@ export const StatsScreen = () => {
                 }}
             >
                 <div>
-                    <p>
+                    <p css={{ marginBlockStart: 0, marginBlockEnd: "5px" }}>
                         <span css={{ marginInlineEnd: "5px" }}>
                             <FontAwesomeIcon icon={faClock} />
                         </span>
                         {turnsLeft && getTimeLeft(turnsLeft)}
                     </p>
-                    <small>
-                        <em>{turnsLeft} hours left.</em>
-                    </small>
+                    <p css={{ marginBlock: 0, color: Colors.Text.subtle }}>
+                        {turnsLeft} hours left
+                    </p>
                 </div>
                 <ButtonPrimary
                     type={"Sized"}
                     label={"End Game"}
+                    scheme={"Inverse"}
                     border={"None"}
                     isDanger={true}
                     clickCB={handleEndGameClick}
@@ -148,34 +171,58 @@ export const StatsScreen = () => {
 
             <div
                 css={{
-                    paddingBlockStart,
-                    paddingBlockEnd,
+                    paddingBlock,
                     paddingInline,
-                    borderColor: Colors.Border.base,
-                    borderRadius: "2px",
-                    borderStyle: "solid",
-                    borderWidth: "1px",
                 }}
             >
-                <p>Current Station: {station?.name}</p>
-                <small>
-                    <em>{station?.stationDescription}</em>
-                </small>
+                <h3
+                    css={{
+                        marginBlockStart: 0,
+                        marginBlockEnd: "15px",
+                        fontFamily: "Michroma",
+                        fontVariantCaps: "small-caps",
+                        textTransform: "capitalize",
+                        textAlign: "center",
+                    }}
+                >
+                    {station?.name}
+                </h3>
 
-                <p>
-                    {currentStation === "compton"
-                        ? "Total anarchy. No single gang is in change here."
-                        : `Run by: ${station?.gangName}`}
+                <h4
+                    css={{
+                        marginBlockStart: 0,
+                        marginBlockEnd: "5px",
+                        fontFamily: "Michroma",
+                        fontVariantCaps: "small-caps",
+                        textTransform: "capitalize",
+                    }}
+                >
+                    {station?.gangName}
+                </h4>
+                <p
+                    css={{
+                        marginBlockStart: 0,
+                        marginBlockEnd: "5px",
+                        color: Colors.Text.subtle,
+                    }}
+                >
+                    {station?.gangDescription}
                 </p>
-                <small>{station?.gangDescription}</small>
 
-                <p>Reputation: Hunted</p>
-                <small>
-                    <em>
-                        Too many sticks has drawn the attention of the locals.
-                        Watch your back.
-                    </em>
-                </small>
+                <h4
+                    css={{
+                        marginBlockStart: 0,
+                        marginBlockEnd: "5px",
+                        fontFamily: "Michroma",
+                        fontVariantCaps: "small-caps",
+                    }}
+                >
+                    Hunted
+                </h4>
+                <p css={{ marginBlock: 0, color: Colors.Text.subtle }}>
+                    Too many stick-ups has drawn the attention of the locals.
+                    Watch your back.
+                </p>
             </div>
         </div>
     );

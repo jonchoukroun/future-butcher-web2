@@ -44,7 +44,7 @@ export const ButtonPrimary = ({
                 borderStyle: border === "None" ? "none" : "outset",
                 borderWidth: border === "Full" ? "2px" : "1px",
                 boxShadow:
-                    border === "None"
+                    border === "None" || isDisabled
                         ? "none"
                         : "2px 2px 8px 2px rgba(0, 0, 0, 0.4)",
                 color: fontColor,
