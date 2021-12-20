@@ -2,12 +2,18 @@
 import { jsx } from "@emotion/react";
 
 import { CutListItem } from "./CutListItem";
+import { TransactionMode } from "./TransactionModal";
 import { useGameState } from "../../GameData/GameStateProvider";
 
-export const CutList = () => {
+export const CutList = ({
+    handleTransactionMode,
+}: {
+    handleTransactionMode: (mode: TransactionMode, cut?: string) => void;
+}) => {
     const {
         state: { market },
     } = useGameState();
+
     return (
         <ul
             css={{
@@ -28,6 +34,7 @@ export const CutList = () => {
                         name={name}
                         price={price}
                         quantity={quantity}
+                        onTransactionSelect={handleTransactionMode}
                     />
                 ))}
         </ul>

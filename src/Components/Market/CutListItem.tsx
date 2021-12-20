@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
+import { TransactionMode } from "./TransactionModal";
 import { ButtonPrimary } from "../Form";
 import { formatMoney } from "../Utils/formatMoney";
 import { useGameState } from "../../GameData/GameStateProvider";
@@ -10,13 +11,25 @@ interface CutListItemProps {
     name: string;
     price: number;
     quantity: number;
+    onTransactionSelect: (mode: TransactionMode, cut?: string) => void;
 }
 
-export const CutListItem = ({ name, price, quantity }: CutListItemProps) => {
+export const CutListItem = ({
+    name,
+    price,
+    quantity,
+    onTransactionSelect,
+}: CutListItemProps) => {
     const {
-        state: { player },
+        state: { pack, player },
     } = useGameState();
-    const canAfford = player && player.funds >= price;
+    if (pack === undefined || player === undefined) {
+        throw new Error("State is undefined");
+    }
+
+    const canAfford = player.funds >= price;
+
+    const owned = pack[name];
 
     return (
         <li
@@ -52,16 +65,31 @@ export const CutListItem = ({ name, price, quantity }: CutListItemProps) => {
                 >
                     {name}
                 </h3>
-                <p
-                    css={{
-                        marginBlock: 0,
-                        color: canAfford
-                            ? Colors.Text.subtle
-                            : Colors.Text.disable,
-                    }}
-                >
-                    Stock: {quantity}
-                </p>
+                <div css={{ display: "flex" }}>
+                    {owned > 0 && (
+                        <p
+                            css={{
+                                marginBlock: 0,
+                                marginInlineEnd: "10px",
+                                color: canAfford
+                                    ? Colors.Text.subtle
+                                    : Colors.Text.disable,
+                            }}
+                        >
+                            Owned: {owned}
+                        </p>
+                    )}
+                    <p
+                        css={{
+                            marginBlock: 0,
+                            color: canAfford
+                                ? Colors.Text.subtle
+                                : Colors.Text.disable,
+                        }}
+                    >
+                        Stock: {quantity}
+                    </p>
+                </div>
             </div>
             <div
                 css={{
@@ -91,18 +119,14 @@ export const CutListItem = ({ name, price, quantity }: CutListItemProps) => {
                     type={"Half"}
                     border={"Thin"}
                     isDisabled={!canAfford}
-                    clickCB={() => {
-                        return;
-                    }}
+                    clickCB={() => onTransactionSelect("buy", name)}
                 />
                 <ButtonPrimary
                     label={"Sell"}
                     type={"Half"}
                     border={"Thin"}
-                    isDisabled={true}
-                    clickCB={() => {
-                        return;
-                    }}
+                    isDisabled={owned === 0}
+                    clickCB={() => onTransactionSelect("sell", name)}
                 />
             </div>
         </li>
