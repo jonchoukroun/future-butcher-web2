@@ -69,7 +69,7 @@ export const HighScores = () => {
                 }}
             >
                 {highScores &&
-                    highScores.slice(0, 10).map(({ player, score }, idx) => (
+                    highScores.slice(0, 15).map(({ player, score }, idx) => (
                         <div
                             key={`${idx}-${player}`}
                             css={{
