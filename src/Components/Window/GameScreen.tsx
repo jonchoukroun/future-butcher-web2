@@ -66,7 +66,6 @@ export const GameScreen = ({
                     flexDirection: "column",
                 }}
             >
-                {}
                 {currentScreen !== Screen.Stats && <StatsBar />}
                 {children}
                 {shouldShowNavBar && <NavBar />}

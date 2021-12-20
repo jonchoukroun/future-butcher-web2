@@ -8,6 +8,8 @@ import * as Colors from "../../Styles/colors";
 interface TextInputProps {
     placeholder: string;
     lengthOptions?: [number, number];
+    type?: string;
+    value?: string;
     changeCB?: (e: ChangeEvent<HTMLInputElement>) => void;
     keypressCB?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
@@ -15,6 +17,8 @@ interface TextInputProps {
 export const TextInput = ({
     placeholder,
     lengthOptions: [minLength, maxLength] = [0, 100],
+    type = "text",
+    value,
     changeCB,
     keypressCB,
 }: TextInputProps) => {
@@ -24,8 +28,9 @@ export const TextInput = ({
     };
     return (
         <input
-            type="text"
+            type={type}
             placeholder={placeholder}
+            value={value}
             required
             minLength={minLength}
             maxLength={maxLength}

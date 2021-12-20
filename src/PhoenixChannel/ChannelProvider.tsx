@@ -2,14 +2,16 @@ import { Channel, Socket } from "phoenix";
 import * as React from "react";
 
 import { ApiState } from ".";
+import { buyCut } from "./buyCut";
 import { endGame } from "./endGame";
+import { fightMugger } from "./fightMugger";
 import { getScores } from "./getScores";
 import { joinChannel } from "./joinChannel";
 import { newGame } from "./newGame";
 import { restoreState } from "./restoreState";
 import { startGame } from "./startGame";
 import { travel } from "./travel";
-import { fightMugger } from "./fightMugger";
+import { sellCut } from "./sellCut";
 
 const {
     createContext,
@@ -26,6 +28,8 @@ export const enum Callback {
     restoreState,
     travel,
     fightMugger,
+    buyCut,
+    sellCut,
 }
 
 const ChannelContext = createContext<
@@ -135,6 +139,12 @@ export const ChannelProvider = ({
 
                 case Callback.fightMugger:
                     return await fightMugger(channel, payload);
+
+                case Callback.buyCut:
+                    return await buyCut(channel, payload);
+
+                case Callback.sellCut:
+                    return await sellCut(channel, payload);
 
                 default:
                     console.log("!!payload", payload);

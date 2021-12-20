@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { useChannel, Callback } from "../PhoenixChannel/ChannelProvider";
-import { Cut, ApiState } from "../PhoenixChannel";
+import { ApiState } from "../PhoenixChannel";
 import { unstable_batchedUpdates } from "react-dom";
 
 export enum Screen {
@@ -29,9 +29,9 @@ type Player = {
     weapon: string | null;
 };
 
-type Pack = Record<Cut, number>;
+type Pack = Record<string, number>;
 
-type Market = Record<Cut, { price: number; quantity: number }>;
+type Market = Record<string, { price: number; quantity: number }>;
 
 type GameProcess = "initialized" | "in_game" | "mugging" | "game_over";
 

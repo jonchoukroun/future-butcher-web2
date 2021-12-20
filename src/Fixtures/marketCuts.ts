@@ -1,10 +1,10 @@
-export type CutType = {
+export type string = {
     name: string;
     price: number;
     quantity: number;
 };
 
-export const cuts: Array<CutType> = [
+export const cuts: Array<string> = [
     {
         name: "heart",
         price: 18000,

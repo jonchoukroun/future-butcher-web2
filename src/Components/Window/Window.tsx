@@ -41,7 +41,6 @@ export const Window = () => {
                     paddingBlock: "1px",
                     paddingInline: "1px",
                     backgroundColor: Colors.Background.base,
-                    // backgroundColor: "white",
                     borderColor: Colors.Border.subtle,
                     borderRadius: "10px",
                     borderStyle: "solid",
