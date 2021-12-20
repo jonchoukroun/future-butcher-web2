@@ -64,22 +64,23 @@ export const MainScreen = () => {
                         justifyContent:
                             layout === "full" ? "center" : "space-between",
                         paddingBlock: "25px",
-                        backgroundColor: "transparent",
+                        backgroundColor: Colors.Background.inverse,
                         borderColor: Colors.Border.subtle,
                         borderRadius: "2px",
-                        borderStyle: "solid",
-                        borderWidth: "1px",
+                        borderStyle: "outset",
+                        borderWidth: "2px",
+                        boxShadow: "2px 2px 8px 2px rgba(0, 0, 0, 0.4)",
                     },
 
                     "& svg": {
                         marginBlockEnd: "5px",
-                        color: Colors.Text.accent,
+                        color: Colors.Text.inverse,
                         fontSize: "30px",
                     },
 
                     "& h3": {
                         marginBlock: 0,
-                        color: Colors.Text.base,
+                        color: Colors.Text.inverse,
                     },
                 }}
             >

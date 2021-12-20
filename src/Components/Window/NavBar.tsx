@@ -31,7 +31,7 @@ export const NavBar = () => {
             }}
         >
             <ButtonPrimary
-                type={"Stretch"}
+                type={"Block"}
                 label={label}
                 clickCB={() =>
                     dispatch({ type: "changeScreen", screen: defaultScreen })

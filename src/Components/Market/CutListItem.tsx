@@ -43,15 +43,25 @@ export const CutListItem = ({ name, price, quantity }: CutListItemProps) => {
                     css={{
                         margin: 0,
                         marginBlockEnd: "5px",
-                        textTransform: "capitalize",
                         color: canAfford
                             ? Colors.Text.base
                             : Colors.Text.subtle,
+                        fontVariantCaps: "small-caps",
+                        textTransform: "capitalize",
                     }}
                 >
                     {name}
                 </h3>
-                <small>Stock: {quantity}</small>
+                <p
+                    css={{
+                        marginBlock: 0,
+                        color: canAfford
+                            ? Colors.Text.subtle
+                            : Colors.Text.disable,
+                    }}
+                >
+                    Stock: {quantity}
+                </p>
             </div>
             <div
                 css={{

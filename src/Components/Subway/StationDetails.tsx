@@ -95,14 +95,14 @@ export const StationDetails = ({
                 }}
             >
                 <ButtonPrimary
-                    type={"Stretch"}
+                    type={"Block"}
                     label={"Back"}
                     border={"Thin"}
                     clickCB={onDeselectStation}
                 />
                 <div css={{ marginInline: "4px" }}> </div>
                 <ButtonPrimary
-                    type={"Stretch"}
+                    type={"Block"}
                     label={"Go"}
                     border={"Thin"}
                     isDisabled={!isStationOpen}
@@ -124,7 +124,7 @@ export const StationDetails = ({
                     },
                 }}
             >
-                <p>Unique Building: {station.uniqueBuilding}</p>
+                <p>POI: {station.uniqueBuilding}</p>
 
                 <p>Travel Cost: {formatMoney(station.gangTax)}</p>
                 <small>Travel will take 1 hour</small>

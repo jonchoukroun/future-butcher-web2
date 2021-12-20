@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx, keyframes } from "@emotion/react";
+import { jsx } from "@emotion/react";
 
 import { ButtonPrimary } from "../Form/ButtonPrimary";
 import { formatMoney } from "../Utils/formatMoney";
@@ -24,11 +24,6 @@ export const HighScores = () => {
 
     const { getContentSize } = useWindowSize();
     const { blockSize, inlineSize } = getContentSize();
-
-    const scrollUp = keyframes`
-        from { transform: translateY(20vh); }
-        to   { transform: translateY(-1270vh); }
-    `;
 
     return (
         <div
@@ -70,48 +65,48 @@ export const HighScores = () => {
                     inlineSize: `${inlineSize}px`,
                     marginBlock: "15px",
                     paddingInline: "8px",
-                    animation: `${scrollUp} 450s linear`,
                     zIndex: 0,
                 }}
             >
-                {highScores?.map(({ player, score }, idx) => (
-                    <div
-                        key={`${idx}-${player}`}
-                        css={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            paddingBlock: playerName === player ? "4px" : 0,
-                            paddingInline: "8px",
-                            backgroundColor:
-                                playerName === player
-                                    ? Colors.Background.invert
-                                    : Colors.Background.base,
-                            borderRadius: "2px",
-                            "& p": {
-                                marginBlock: "4px",
-                                color:
+                {highScores &&
+                    highScores.slice(0, 10).map(({ player, score }, idx) => (
+                        <div
+                            key={`${idx}-${player}`}
+                            css={{
+                                display: "flex",
+                                justifyContent: "space-between",
+                                paddingBlock: playerName === player ? "4px" : 0,
+                                paddingInline: "8px",
+                                backgroundColor:
                                     playerName === player
-                                        ? Colors.Text.invert
-                                        : Colors.Text.base,
-                            },
-                        }}
-                    >
-                        <p>
-                            <span
-                                css={{
+                                        ? Colors.Background.inverse
+                                        : Colors.Background.base,
+                                borderRadius: "2px",
+                                "& p": {
+                                    marginBlock: "4px",
                                     color:
                                         playerName === player
-                                            ? Colors.Text.invert
-                                            : Colors.Text.subtle,
-                                }}
-                            >
-                                {idx + 1}
-                            </span>
-                            . {player}
-                        </p>
-                        <p>{formatMoney(score)}</p>
-                    </div>
-                ))}
+                                            ? Colors.Text.inverse
+                                            : Colors.Text.base,
+                                },
+                            }}
+                        >
+                            <p>
+                                <span
+                                    css={{
+                                        color:
+                                            playerName === player
+                                                ? Colors.Text.inverse
+                                                : Colors.Text.subtle,
+                                    }}
+                                >
+                                    {idx + 1}
+                                </span>
+                                . {player}
+                            </p>
+                            <p>{formatMoney(score)}</p>
+                        </div>
+                    ))}
             </div>
 
             <div
@@ -127,7 +122,7 @@ export const HighScores = () => {
                 }}
             >
                 <ButtonPrimary
-                    type={"Stretch"}
+                    type={"Block"}
                     label={"Start Over"}
                     clickCB={handleStartOverClick}
                 />
