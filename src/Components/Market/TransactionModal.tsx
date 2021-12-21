@@ -25,10 +25,15 @@ export const TransactionModal = ({
 }: TransactionModalProps) => {
     const {
         dispatch,
-        state: { market, pack, player },
+        state: { market, pack, player, spaceAvailable },
     } = useGameState();
 
-    if (pack === undefined || market === undefined || player === undefined) {
+    if (
+        pack === undefined ||
+        market === undefined ||
+        player === undefined ||
+        spaceAvailable === undefined
+    ) {
         throw new Error("State is undefined");
     }
 
@@ -39,7 +44,11 @@ export const TransactionModal = ({
         setAmount(() => {
             if (mode === "sell") return pack[cut];
 
-            return Math.min(quantity, Math.floor(player.funds / price));
+            return Math.min(
+                quantity,
+                Math.floor(player.funds / price),
+                spaceAvailable,
+            );
         });
     };
 
@@ -48,6 +57,7 @@ export const TransactionModal = ({
     const { handlePushCallback } = useChannel();
     const handleSubmit = async () => {
         if (!amount) return;
+
         if (mode === "buy") {
             if (price * amount > player.funds) return;
             if (amount > player.packSpace) return;

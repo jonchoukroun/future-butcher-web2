@@ -46,7 +46,7 @@ export const TextInput = ({
                 borderWidth: "1px",
                 color: Colors.Text.base,
                 "&::placeholder": {
-                    color: Colors.Text.subtle,
+                    color: Colors.Text.disable,
                 },
                 fontSize: "16px",
             })}

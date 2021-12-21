@@ -44,6 +44,7 @@ type GameState = {
     turnsLeft?: number;
     player?: Player;
     pack?: Pack;
+    spaceAvailable?: number;
     market?: Market;
     highScores?: HighScores;
 };
@@ -216,6 +217,13 @@ function handleUpdateState(
             packSpace: pack_space,
         },
         pack,
+        spaceAvailable: pack_space - countPackUse(pack),
         market,
     };
+}
+
+function countPackUse(pack: Pack) {
+    return Object.entries(pack).reduce((sum, [, amount]) => {
+        return sum + amount;
+    }, 0);
 }
