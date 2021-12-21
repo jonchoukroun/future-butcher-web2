@@ -12,6 +12,7 @@ import { restoreState } from "./restoreState";
 import { startGame } from "./startGame";
 import { travel } from "./travel";
 import { sellCut } from "./sellCut";
+import { handleMessage } from "../Logging/handleMessage";
 
 const {
     createContext,
@@ -71,17 +72,18 @@ export const ChannelProvider = ({
 
     useEffect(() => {
         if (socket.isConnected()) return;
+
         socket.onOpen(() => {
-            console.log("Successfully opened socket");
+            handleMessage("Successfully opened socket", "success");
             setIsConnected(true);
         });
         socket.onError(() => {
-            console.error("Failed to open socket");
+            handleMessage("Failed to open socket", "error");
             setIsConnected(false);
             setIsDisconnected(true);
         });
         socket.onClose(() => {
-            console.log("Closed socket");
+            handleMessage("Closed socket", "info");
             setIsConnected(false);
             setIsDisconnected(true);
         });
@@ -100,7 +102,7 @@ export const ChannelProvider = ({
                 playerHash,
                 socket,
             });
-            if (typeof response === "string") {
+            if (response === "join crashed") {
                 setChannel(undefined);
                 return response;
             }
@@ -118,7 +120,6 @@ export const ChannelProvider = ({
 
     const handlePushCallback = useCallback(
         async (callback: Callback, payload: Record<string, unknown>) => {
-            console.log("!!handlePushCallback", callback, channel);
             if (channel === undefined) return;
 
             switch (callback) {
@@ -128,9 +129,8 @@ export const ChannelProvider = ({
                 case Callback.restoreState:
                     const name = localStorage.getItem("playerName");
                     if (!name) {
-                        throw new Error(
-                            "Cannot restore state without a player name",
-                        );
+                        setChannel(undefined);
+                        return;
                     }
                     return await restoreState(channel, name);
 
@@ -147,7 +147,6 @@ export const ChannelProvider = ({
                     return await sellCut(channel, payload);
 
                 default:
-                    console.log("!!payload", payload);
                     throw new Error(`Unhandled callback ${callback}`);
             }
         },
@@ -158,9 +157,7 @@ export const ChannelProvider = ({
         async (hashId: string, score: number) => {
             if (channel === undefined) return;
 
-            const highScores = await endGame(channel, { hashId, score });
-            console.log("!!highScores", highScores);
-            return highScores;
+            return await endGame(channel, { hashId, score });
         },
         [channel],
     );

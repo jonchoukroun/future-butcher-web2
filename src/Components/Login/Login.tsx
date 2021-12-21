@@ -32,9 +32,9 @@ export const Login = () => {
     async function handleSubmit() {
         if (isLoading) return;
         if (playerName.length < 3) return;
+
         setIsLoading(true);
         await handleJoinChannel(playerName);
-        console.log("!!handleRejoin | TODO: implement retry");
         dispatch({ type: "changeScreen", screen: Screen.Welcome });
         if (isMountedRef.current) {
             setIsLoading(false);

@@ -1,5 +1,5 @@
 import { Channel } from "phoenix";
-import { ApiState } from ".";
+import { ApiState } from "./";
 
 export async function buyCut(
     channel: Channel,
@@ -14,11 +14,9 @@ export async function buyCut(
         channel
             .push("buy_cut", payload)
             .receive("ok", ({ state_data }: { state_data: ApiState }) => {
-                console.log("!!buy_cut | ok", state_data);
                 return resolve(state_data);
             })
             .receive("error", ({ reason }) => {
-                console.log("!!buy_cut | error", reason);
                 return reject(reason);
             });
     });

@@ -12,11 +12,9 @@ export async function endGame(
         channel
             .push("end_game", payload)
             .receive("ok", ({ state_data }) => {
-                console.log("!!end_game | ok", state_data);
                 resolve(state_data);
             })
             .receive("error", ({ reason }) => {
-                console.log("!!end_game | error", reason);
                 reject(reason);
             });
     });

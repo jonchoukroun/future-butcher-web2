@@ -1,4 +1,5 @@
 import { Channel } from "phoenix";
+import { handleMessage } from "../Logging/handleMessage";
 
 export async function newGame(
     channel: Channel,
@@ -7,13 +8,16 @@ export async function newGame(
         channel
             .push("new_game", {})
             .receive("ok", ({ state_data }) => {
-                if (state_data !== "ok") throw new Error("Invalid response");
-                console.log("!!new_game | ok");
+                if (state_data !== "ok") {
+                    handleMessage(
+                        "Invalid state data response to push: 'new_game'",
+                        "error",
+                    );
+                }
                 resolve(state_data);
             })
             .receive("error", ({ reason }: { reason: string }) => {
                 if (reason.includes(":already_started")) {
-                    console.log("!!new_game | error", reason);
                     resolve("alreadyStarted");
                 }
                 reject(reason);

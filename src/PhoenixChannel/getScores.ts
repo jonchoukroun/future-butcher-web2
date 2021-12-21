@@ -7,11 +7,9 @@ export async function getScores(
         channel
             .push("get_scores", {})
             .receive("ok", ({ state_data }) => {
-                console.log("Successfully fetched scores", state_data);
                 return resolve(state_data);
             })
             .receive("error", ({ reason }) => {
-                console.error("Failed to fetch scores", reason);
                 return reject(reason);
             });
     });

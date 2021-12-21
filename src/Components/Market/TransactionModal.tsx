@@ -79,8 +79,16 @@ export const TransactionModal = ({
     };
 
     const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Enter") {
-            console.log("!!submit");
+        if (event.key === "Enter") handleSubmit();
+        switch (event.key) {
+            case "Enter":
+                handleSubmit();
+                return;
+            case "Escape":
+                setAmount(undefined);
+                return;
+            default:
+                return;
         }
     };
 
