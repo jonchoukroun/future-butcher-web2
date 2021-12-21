@@ -6,6 +6,7 @@ import {
     faHandshake,
     faHotel,
     faRoute,
+    faUmbrellaBeach,
 } from "@fortawesome/free-solid-svg-icons";
 
 import { useWindowSize } from "../Window/WindowSizeProvider";
@@ -15,9 +16,11 @@ import * as Colors from "../../Styles/colors";
 
 export const MainScreen = () => {
     const {
-        state: { currentStation },
+        state: { currentStation, turnsLeft },
         dispatch,
     } = useGameState();
+    if (turnsLeft === undefined) throw new Error("State is undefined");
+
     const station = subwayStations.find((s) => s.key === currentStation);
     if (station === undefined) throw new Error("Station not found");
 
@@ -105,17 +108,31 @@ export const MainScreen = () => {
                     <FontAwesomeIcon icon={faDungeon} size={"lg"} />
                     <h3>Gang Hideout</h3>
                 </button>
-                <button
-                    onClick={() =>
-                        dispatch({
-                            type: "changeScreen",
-                            screen: Screen.Subway,
-                        })
-                    }
-                >
-                    <FontAwesomeIcon icon={faRoute} size={"lg"} />
-                    <h3>Subway</h3>
-                </button>
+                {turnsLeft > 0 ? (
+                    <button
+                        onClick={() =>
+                            dispatch({
+                                type: "changeScreen",
+                                screen: Screen.Subway,
+                            })
+                        }
+                    >
+                        <FontAwesomeIcon icon={faRoute} size={"lg"} />
+                        <h3>Subway</h3>
+                    </button>
+                ) : (
+                    <button
+                        onClick={() =>
+                            dispatch({
+                                type: "changeScreen",
+                                screen: Screen.EndGame,
+                            })
+                        }
+                    >
+                        <FontAwesomeIcon icon={faUmbrellaBeach} size={"lg"} />
+                        <h3>Retire</h3>
+                    </button>
+                )}
             </div>
 
             <button

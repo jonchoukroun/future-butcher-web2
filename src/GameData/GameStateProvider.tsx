@@ -10,13 +10,14 @@ export enum Screen {
     Main = "Main",
     Subway = "Subway",
     Market = "Market",
-    SurplusStore = "Gus's Army Surplus",
-    HardwareStore = "Hardware Store",
-    Bank = "Bank",
-    Clinic = "Free Clinic",
+    // SurplusStore = "Gus's Army Surplus",
+    // HardwareStore = "Hardware Store",
+    // Bank = "Bank",
+    // Clinic = "Free Clinic",
     Stats = "Stats",
     HighScores = "High Scores",
     Mugging = "Mugging",
+    EndGame = "End Game",
     Error = "Error SCreen",
 }
 

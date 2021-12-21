@@ -33,6 +33,7 @@ export const enum Callback {
     buyCut,
     sellCut,
     payDebt,
+    endGame,
 }
 
 const ChannelContext = createContext<

@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
+import { EndGame } from "../EndGame/EndGame";
 import { ErrorScreen } from "../ErrorScreen/ErrorScreen";
 import { HighScores } from "../HighScores/HighScores";
 import { Login } from "../Login/Login";
@@ -74,6 +75,12 @@ export const Window = () => {
                 {currentScreen === Screen.Mugging && (
                     <GameScreen layout={layout} shouldShowNavBar={false}>
                         <Mugging />
+                    </GameScreen>
+                )}
+
+                {currentScreen === Screen.EndGame && (
+                    <GameScreen layout={layout} shouldShowNavBar={true}>
+                        <EndGame />
                     </GameScreen>
                 )}
 
