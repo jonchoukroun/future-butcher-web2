@@ -54,7 +54,7 @@ export const SubwayStationItem = ({
                     css={{
                         marginBlock: 0,
                         color: isCurrentStation
-                            ? Colors.Text.subtle
+                            ? Colors.Text.disable
                             : Colors.Text.base,
                         fontSize: "20px",
                         fontStyle: isCurrentStation ? "italic" : "normal",

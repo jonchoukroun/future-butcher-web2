@@ -80,7 +80,9 @@ export const MainScreen = () => {
 
                     "& h3": {
                         marginBlock: 0,
-                        color: Colors.Text.inverse,
+                        color: "black",
+                        fontVariantCaps: "small-caps",
+                        textTransform: "capitalize",
                     },
                 }}
             >
@@ -124,7 +126,7 @@ export const MainScreen = () => {
                 }}
                 onClick={() => alert("Here's some help, sucka!")}
             >
-                <small>Need help?</small>
+                <p css={{ color: Colors.Text.subtle }}>Need help?</p>
             </button>
         </div>
     );

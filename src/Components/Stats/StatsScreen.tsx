@@ -172,7 +172,11 @@ export const StatsScreen = () => {
                         }}
                     >
                         Debt: {player && formatMoney(player.debt)}{" "}
-                        <span css={{ color: Colors.Text.subtle }}>(5%)</span>
+                        {player.debt > 0 && (
+                            <span css={{ color: Colors.Text.subtle }}>
+                                (5%)
+                            </span>
+                        )}
                     </p>
 
                     {player.debt > 0 && canAfford && (
