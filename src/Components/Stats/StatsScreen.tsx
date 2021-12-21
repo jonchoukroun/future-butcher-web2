@@ -2,33 +2,55 @@
 import { jsx } from "@emotion/react";
 import { faClock, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect, useRef, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { ButtonPrimary } from "../Form/ButtonPrimary";
 import { formatMoney, getTimeLeft } from "../Utils";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { subwayStations } from "../../Fixtures/subwayStations";
-import { useChannel } from "../../PhoenixChannel/ChannelProvider";
+import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
 export const StatsScreen = () => {
+    const isMountedRef = useRef(false);
+    useEffect(() => {
+        isMountedRef.current = true;
+        return () => {
+            isMountedRef.current = false;
+        };
+    }, []);
+
+    const [isLoading, setIsLoading] = useState(false);
+
     const { layout } = useWindowSize();
     const {
         state: { currentStation, turnsLeft, player },
         dispatch,
     } = useGameState();
 
+    if (
+        currentStation === undefined ||
+        player === undefined ||
+        turnsLeft === undefined
+    ) {
+        throw new Error("State is undefined");
+    }
+
     const station = subwayStations.find(
         (station) => station.key === currentStation,
     );
 
-    const { handleEndGame } = useChannel();
+    const { handleEndGame, handlePushCallback } = useChannel();
     const handleEndGameClick = async () => {
+        if (isLoading) return;
+
         const hashId = localStorage.getItem("playerHash");
         if (!hashId) {
             throw new Error("Cannot end game without a hash ID");
         }
+        setIsLoading(true);
         const highScores = await handleEndGame(hashId, 0);
         if (highScores === undefined) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
@@ -39,6 +61,24 @@ export const StatsScreen = () => {
             dispatch({ type: "setHighScores", highScores });
             dispatch({ type: "changeScreen", screen: Screen.HighScores });
         });
+        if (isMountedRef.current) {
+            setIsLoading(false);
+        }
+    };
+
+    const canAfford = player?.funds > player?.debt;
+    const handlePayDebtClick = async () => {
+        if (isLoading) return;
+        if (!canAfford) return;
+
+        setIsLoading(true);
+        const response = await handlePushCallback(Callback.payDebt, {});
+        if (response !== undefined) {
+            dispatch({ type: "updateStateData", stateData: response });
+        }
+        if (isMountedRef.current) {
+            setIsLoading(false);
+        }
     };
 
     const containerPaddingInline = layout === "full" ? "16px" : "4px";
@@ -117,16 +157,34 @@ export const StatsScreen = () => {
                     </p>
                 </div>
 
-                <p
+                <div
                     css={{
-                        marginBlockStart: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "space-between",
                         marginBlockEnd: "5px",
-                        color: Colors.Text.danger,
                     }}
                 >
-                    Debt: {player && formatMoney(player.debt)}{" "}
-                    <span css={{ color: Colors.Text.subtle }}>(5%)</span>
-                </p>
+                    <p
+                        css={{
+                            marginBlock: 0,
+                            color: Colors.Text.danger,
+                        }}
+                    >
+                        Debt: {player && formatMoney(player.debt)}{" "}
+                        <span css={{ color: Colors.Text.subtle }}>(5%)</span>
+                    </p>
+
+                    {player.debt > 0 && canAfford && (
+                        <ButtonPrimary
+                            type={"Sized"}
+                            label={"Pay Debt"}
+                            border={"None"}
+                            scheme={"Inverse"}
+                            clickCB={handlePayDebtClick}
+                        />
+                    )}
+                </div>
             </div>
 
             <div

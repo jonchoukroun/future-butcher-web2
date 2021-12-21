@@ -8,6 +8,7 @@ import { fightMugger } from "./fightMugger";
 import { getScores } from "./getScores";
 import { joinChannel } from "./joinChannel";
 import { newGame } from "./newGame";
+import { payDebt } from "./payDebt";
 import { restoreState } from "./restoreState";
 import { startGame } from "./startGame";
 import { travel } from "./travel";
@@ -31,6 +32,7 @@ export const enum Callback {
     fightMugger,
     buyCut,
     sellCut,
+    payDebt,
 }
 
 const ChannelContext = createContext<
@@ -145,6 +147,9 @@ export const ChannelProvider = ({
 
                 case Callback.sellCut:
                     return await sellCut(channel, payload);
+
+                case Callback.payDebt:
+                    return await payDebt(channel, payload);
 
                 default:
                     throw new Error(`Unhandled callback ${callback}`);
