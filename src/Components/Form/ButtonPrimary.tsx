@@ -135,7 +135,7 @@ function getColorScheme(
                     : Colors.Background.inverse,
             borderColor: Colors.Border.subtle,
             fontColor:
-                scheme === "Normal" ? Colors.Text.subtle : Colors.Text.inverse,
+                scheme === "Normal" ? Colors.Text.disable : Colors.Text.inverse,
         };
 
     if (isDanger)
