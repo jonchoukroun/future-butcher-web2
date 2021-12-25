@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx, keyframes } from "@emotion/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSpinner } from "@fortawesome/free-solid-svg-icons";
+import { faRedo } from "@fortawesome/free-solid-svg-icons";
 
 import * as Colors from "../../Styles/colors";
 
@@ -69,7 +69,7 @@ export const ButtonPrimary = ({
             onClick={clickCB}
             disabled={isDisabled}
         >
-            {isLoading ? <FontAwesomeIcon icon={faSpinner} /> : label}
+            {isLoading ? <FontAwesomeIcon icon={faRedo} /> : label}
         </button>
     );
 };
