@@ -1,17 +1,22 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
+import { useState } from "react";
+import { unstable_batchedUpdates } from "react-dom";
 
 import { ButtonPrimary } from "../Form/ButtonPrimary";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";
 import * as Colors from "../../Styles/colors";
-import { unstable_batchedUpdates } from "react-dom";
 
 export const Mugging = () => {
     const { dispatch } = useGameState();
 
     const { handlePushCallback } = useChannel();
+    const [isLoading, setIsLoading] = useState(false);
     const handleFightMuggerClick = async () => {
+        if (isLoading) return;
+        setIsLoading(true);
+
         const response = await handlePushCallback(Callback.fightMugger, {});
         if (response === undefined) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
@@ -20,6 +25,7 @@ export const Mugging = () => {
         unstable_batchedUpdates(() => {
             dispatch({ type: "updateStateData", stateData: response });
             dispatch({ type: "changeScreen", screen: Screen.Main });
+            setIsLoading(false);
         });
     };
 
@@ -69,6 +75,7 @@ export const Mugging = () => {
                         type={"Full"}
                         label={"Fight"}
                         isDanger={true}
+                        isLoading={isLoading}
                         clickCB={handleFightMuggerClick}
                     />
                 </div>

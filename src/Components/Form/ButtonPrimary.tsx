@@ -1,5 +1,7 @@
 /** @jsx jsx */
-import { css, jsx } from "@emotion/react";
+import { css, jsx, keyframes } from "@emotion/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faRedo } from "@fortawesome/free-solid-svg-icons";
 
 import * as Colors from "../../Styles/colors";
 
@@ -11,9 +13,10 @@ interface ButtonPrimaryProps {
     type: ButtonType;
     label: string;
     scheme?: SchemeType;
+    border?: BorderType;
     isDisabled?: boolean;
     isDanger?: boolean;
-    border?: BorderType;
+    isLoading?: boolean;
     clickCB: () => void;
 }
 
@@ -21,9 +24,10 @@ export const ButtonPrimary = ({
     type,
     label,
     scheme = "Normal",
+    border = "Full",
     isDisabled = false,
     isDanger = false,
-    border = "Full",
+    isLoading = false,
     clickCB,
 }: ButtonPrimaryProps) => {
     const buttonTypeStyles = getButtonTypeStyles(type);
@@ -34,6 +38,11 @@ export const ButtonPrimary = ({
         fontColor,
         fontColorActive,
     } = getColorScheme(isDisabled, isDanger, scheme);
+
+    const spinAnimation = keyframes`
+        from { transform: rotate(0deg); }
+        to { transform: rotate(359deg); }
+    `;
 
     return (
         <button
@@ -53,11 +62,14 @@ export const ButtonPrimary = ({
                     color: fontColorActive,
                 },
                 fontStyle: isDisabled ? "italic" : "normal",
+                "& svg": {
+                    animation: `${spinAnimation} 2s infinite ease`,
+                },
             })}
             onClick={clickCB}
             disabled={isDisabled}
         >
-            {label}
+            {isLoading ? <FontAwesomeIcon icon={faRedo} /> : label}
         </button>
     );
 };

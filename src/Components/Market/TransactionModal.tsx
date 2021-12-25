@@ -54,9 +54,12 @@ export const TransactionModal = ({
 
     const [amount, setAmount] = useState<number | undefined>(undefined);
 
+    const [isLoading, setIsLoading] = useState(false);
     const { handlePushCallback } = useChannel();
     const handleSubmit = async () => {
+        if (isLoading) return;
         if (!amount) return;
+        setIsLoading(true);
 
         if (mode === "buy") {
             if (price * amount > player.funds) return;
@@ -67,6 +70,7 @@ export const TransactionModal = ({
             });
             unstable_batchedUpdates(() => {
                 setAmount(undefined);
+                setIsLoading(false);
                 if (response !== undefined) {
                     dispatch({ type: "updateStateData", stateData: response });
                 }
@@ -80,6 +84,7 @@ export const TransactionModal = ({
             });
             unstable_batchedUpdates(() => {
                 setAmount(undefined);
+                setIsLoading(false);
                 if (response !== undefined) {
                     dispatch({ type: "updateStateData", stateData: response });
                 }
@@ -142,6 +147,7 @@ export const TransactionModal = ({
                         label={"Close"}
                         border={"None"}
                         clickCB={onModalClose}
+                        isDisabled={isLoading}
                     />
                 </div>
                 <div
@@ -196,6 +202,7 @@ export const TransactionModal = ({
                             type={"Sized"}
                             border={"None"}
                             label={"Max"}
+                            isDisabled={isLoading}
                             clickCB={handleMaxClick}
                         />
                     </div>
@@ -204,6 +211,7 @@ export const TransactionModal = ({
                         border={"Thin"}
                         scheme={"Inverse"}
                         label={mode}
+                        isLoading={isLoading}
                         clickCB={handleSubmit}
                     />
                 </div>
