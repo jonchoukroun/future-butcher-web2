@@ -106,7 +106,7 @@ export const Welcome = () => {
                 </p>
 
                 <p>
-                    Use the Subway to nagivate the city&spos;s neighborhoods.
+                    Use the Subway to nagivate the city&apos;s neighborhoods.
                     Buy and sell from the Meat Markets, but watch your back!
                     Gangs run the city, and you don&apos;t want to cross them.
                 </p>
