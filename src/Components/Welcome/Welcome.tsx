@@ -102,13 +102,13 @@ export const Welcome = () => {
 
                 <p>
                     Two-bit hustlers like you have only one option: get rich off
-                    this new addiction, or become the product.
+                    this new addiction before becoming the product.
                 </p>
 
                 <p>
-                    Travel the city&apos;s neighborhoods and seize opportunity.
-                    But watch your back! Gangs run the city, and you don&apos;t
-                    want to cross them.
+                    Use the Subway to nagivate the city&spos;s neighborhoods.
+                    Buy and sell from the Meat Markets, but watch your back!
+                    Gangs run the city, and you don&apos;t want to cross them.
                 </p>
 
                 <p>
