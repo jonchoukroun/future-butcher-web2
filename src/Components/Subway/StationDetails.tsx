@@ -1,5 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
+import { useState } from "react";
+import { unstable_batchedUpdates } from "react-dom";
 
 import { ButtonPrimary } from "../Form/ButtonPrimary";
 import { subwayStations, StationKey } from "../../Fixtures/subwayStations";
@@ -8,7 +10,6 @@ import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 import { formatMoney } from "../Utils/formatMoney";
-import { unstable_batchedUpdates } from "react-dom";
 
 interface StationDetailsProps {
     stationKey: StationKey;
@@ -32,7 +33,10 @@ export const StationDetails = ({
     const isStationOpen =
         stationKey !== StationKey.bellGardens || turnsLeft <= 20;
 
+    const [isLoading, setIsLoading] = useState(false);
     const handleTravel = async () => {
+        if (isLoading) return;
+        setIsLoading(true);
         const stateData = await handlePushCallback(Callback.travel, {
             station: stationKey,
         });
@@ -47,6 +51,7 @@ export const StationDetails = ({
         unstable_batchedUpdates(() => {
             dispatch({ type: "updateStateData", stateData });
             dispatch({ type: "changeScreen", screen });
+            setIsLoading(false);
         });
     };
 
@@ -98,6 +103,7 @@ export const StationDetails = ({
                     type={"Block"}
                     label={"Back"}
                     border={"Thin"}
+                    isDisabled={isLoading}
                     clickCB={onDeselectStation}
                 />
                 <div css={{ marginInline: "4px" }}> </div>
@@ -105,6 +111,8 @@ export const StationDetails = ({
                     type={"Block"}
                     label={"Go"}
                     border={"Thin"}
+                    scheme={"Inverse"}
+                    isLoading={isLoading}
                     isDisabled={!isStationOpen}
                     clickCB={handleTravel}
                 />

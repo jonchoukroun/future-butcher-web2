@@ -46,11 +46,11 @@ export const StatsScreen = () => {
     const handleEndGameClick = async () => {
         if (isLoading) return;
 
+        setIsLoading(true);
         const hashId = localStorage.getItem("playerHash");
         if (!hashId) {
             throw new Error("Cannot end game without a hash ID");
         }
-        setIsLoading(true);
         const highScores = await handleEndGame(hashId, 0);
         if (highScores === undefined) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
@@ -179,15 +179,27 @@ export const StatsScreen = () => {
                         )}
                     </p>
 
-                    {player.debt > 0 && canAfford && (
-                        <ButtonPrimary
-                            type={"Sized"}
-                            label={"Pay Debt"}
-                            border={"None"}
-                            scheme={"Inverse"}
-                            clickCB={handlePayDebtClick}
-                        />
-                    )}
+                    {player.debt > 0 &&
+                        canAfford &&
+                        (isLoading ? (
+                            <p
+                                css={{
+                                    marginBlock: 0,
+                                    color: Colors.Text.subtle,
+                                }}
+                            >
+                                Paying...
+                            </p>
+                        ) : (
+                            <ButtonPrimary
+                                type={"Sized"}
+                                label={"Pay Debt"}
+                                border={"None"}
+                                scheme={"Inverse"}
+                                isLoading={isLoading}
+                                clickCB={handlePayDebtClick}
+                            />
+                        ))}
                 </div>
             </div>
 

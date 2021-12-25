@@ -1,5 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
+import { useState } from "react";
+import { unstable_batchedUpdates } from "react-dom";
 
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { ButtonPrimary } from "../Form";
@@ -7,7 +9,6 @@ import { formatMoney } from "../Utils/formatMoney";
 import { player } from "../../Fixtures/player";
 import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { Screen, useGameState } from "../../GameData/GameStateProvider";
-import { unstable_batchedUpdates } from "react-dom";
 
 export const Welcome = () => {
     const { getContentSize, layout } = useWindowSize();
@@ -24,7 +25,11 @@ export const Welcome = () => {
 
     const { handlePushCallback } = useChannel();
     const { dispatch } = useGameState();
+    const [isLoading, setIsLoading] = useState(false);
     const handleStartClick = async () => {
+        if (isLoading) return;
+        setIsLoading(true);
+
         const response = await handlePushCallback(Callback.startGame, {});
         if (response === undefined) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
@@ -39,6 +44,7 @@ export const Welcome = () => {
         unstable_batchedUpdates(() => {
             dispatch({ type: "updateStateData", stateData: response });
             dispatch({ type: "changeScreen", screen: Screen.Main });
+            setIsLoading(false);
         });
     };
 
@@ -127,6 +133,7 @@ export const Welcome = () => {
                 <ButtonPrimary
                     label={"Start Game"}
                     type={"Block"}
+                    isLoading={isLoading}
                     clickCB={handleStartClick}
                 />
             </div>

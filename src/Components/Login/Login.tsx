@@ -117,6 +117,7 @@ export const Login = () => {
                     <ButtonPrimary
                         type={"Full"}
                         label={isLoading ? "Joining" : "Start"}
+                        isLoading={isLoading}
                         clickCB={handleSubmit}
                     />
                 </div>
