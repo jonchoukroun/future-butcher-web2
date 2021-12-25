@@ -21,7 +21,7 @@ export const CutListItem = ({
     onTransactionSelect,
 }: CutListItemProps) => {
     const {
-        state: { pack, player },
+        state: { pack, player, spaceAvailable },
     } = useGameState();
     if (pack === undefined || player === undefined) {
         throw new Error("State is undefined");
@@ -72,7 +72,7 @@ export const CutListItem = ({
                                 marginBlock: 0,
                                 marginInlineEnd: "10px",
                                 color: canAfford
-                                    ? Colors.Text.subtle
+                                    ? Colors.Text.base
                                     : Colors.Text.disable,
                             }}
                         >
@@ -118,7 +118,7 @@ export const CutListItem = ({
                     label={"Buy"}
                     type={"Half"}
                     border={"Thin"}
-                    isDisabled={!canAfford}
+                    isDisabled={!canAfford || spaceAvailable === 0}
                     clickCB={() => onTransactionSelect("buy", name)}
                 />
                 <ButtonPrimary
