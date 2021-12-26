@@ -13,6 +13,9 @@ export const StatsBar = () => {
         state: { player, turnsLeft },
     } = useGameState();
 
+    if (player === undefined || turnsLeft === undefined)
+        throw new Error("State is undefined");
+
     return (
         <div
             css={{
@@ -37,16 +40,20 @@ export const StatsBar = () => {
                     color: Colors.Text.base,
                 }}
             >
-                {player && formatMoney(player.funds)}
+                {formatMoney(player.funds)}
+                {player.debt > 0 && (
+                    <span css={{ color: Colors.Text.danger }}>!</span>
+                )}
             </p>
             <p
                 css={{
                     margin: 0,
                     fontFamily: "Share Tech Mono",
-                    color: Colors.Text.base,
+                    color:
+                        turnsLeft >= 5 ? Colors.Text.base : Colors.Text.danger,
                 }}
             >
-                {turnsLeft && getTimeLeft(turnsLeft)}
+                {getTimeLeft(turnsLeft)}
             </p>
             <button
                 css={{
