@@ -30,8 +30,6 @@ export const StatsScreen = () => {
         dispatch,
     } = useGameState();
 
-    console.log("!!state", pack, player);
-
     if (
         currentStation === undefined ||
         pack === undefined ||
