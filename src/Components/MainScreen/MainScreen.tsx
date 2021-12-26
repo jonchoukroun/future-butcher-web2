@@ -117,7 +117,11 @@ export const MainScreen = () => {
                     <FontAwesomeIcon icon={faHandshake} size={"lg"} />
                     <h3>Market</h3>
                 </button>
-                <button>
+                <button
+                    disabled={
+                        !(turnsLeft < 20 && currentStation === "bell_gardens")
+                    }
+                >
                     <FontAwesomeIcon icon={faHotel} size={"lg"} />
                     <h3>{station.uniqueBuilding}</h3>
                 </button>

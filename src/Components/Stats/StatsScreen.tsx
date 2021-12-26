@@ -26,12 +26,15 @@ export const StatsScreen = () => {
 
     const { layout } = useWindowSize();
     const {
-        state: { currentStation, turnsLeft, player },
+        state: { currentStation, turnsLeft, pack, player },
         dispatch,
     } = useGameState();
 
+    console.log("!!state", pack, player);
+
     if (
         currentStation === undefined ||
+        pack === undefined ||
         player === undefined ||
         turnsLeft === undefined
     ) {
@@ -40,6 +43,10 @@ export const StatsScreen = () => {
 
     const station = subwayStations.find(
         (station) => station.key === currentStation,
+    );
+
+    const sortedPack = Object.entries(pack).sort(
+        ([, amount1], [, amount2]) => amount2 - amount1,
     );
 
     const { handleEndGame, handlePushCallback } = useChannel();
@@ -104,6 +111,9 @@ export const StatsScreen = () => {
             <div
                 css={{
                     inlineSize: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "space-between",
                     paddingBlock,
                     paddingInline,
                     borderColor: "transparent",
@@ -111,21 +121,33 @@ export const StatsScreen = () => {
                     borderRadius: "1px",
                     borderStyle: "solid",
                     borderWidth: "1px",
+
+                    "& button": {
+                        marginBlockStart: layout === "full" ? "-10px" : "-2px",
+                    },
                 }}
             >
-                <h3
-                    css={{
-                        marginBlockStart: 0,
-                        marginBlockEnd: "15px",
-                        fontFamily: "Michroma",
-                        fontVariantCaps: "small-caps",
-                        textTransform: "capitalize",
-                        textAlign: "center",
-                    }}
-                >
-                    {player?.playerName}
-                </h3>
+                <div>
+                    <p css={{ marginBlockStart: 0, marginBlockEnd: "5px" }}>
+                        <span css={{ marginInlineEnd: "5px" }}>
+                            <FontAwesomeIcon icon={faClock} />
+                        </span>
+                        {turnsLeft && getTimeLeft(turnsLeft)}
+                    </p>
+                    <p css={{ marginBlock: 0, color: Colors.Text.subtle }}>
+                        {turnsLeft} hours left
+                    </p>
+                </div>
+                <ButtonPrimary
+                    type={"Sized"}
+                    label={"End Game"}
+                    scheme={"Inverse"}
+                    border={"None"}
+                    isDanger={true}
+                    clickCB={handleEndGameClick}
+                />
             </div>
+
             <div
                 css={{
                     inlineSize: "100%",
@@ -202,13 +224,12 @@ export const StatsScreen = () => {
                         ))}
                 </div>
             </div>
-
             <div
                 css={{
                     inlineSize: "100%",
                     display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
                     paddingBlock,
                     paddingInline,
                     borderColor: "transparent",
@@ -222,25 +243,35 @@ export const StatsScreen = () => {
                     },
                 }}
             >
-                <div>
-                    <p css={{ marginBlockStart: 0, marginBlockEnd: "5px" }}>
-                        <span css={{ marginInlineEnd: "5px" }}>
-                            <FontAwesomeIcon icon={faClock} />
-                        </span>
-                        {turnsLeft && getTimeLeft(turnsLeft)}
-                    </p>
-                    <p css={{ marginBlock: 0, color: Colors.Text.subtle }}>
-                        {turnsLeft} hours left
-                    </p>
+                <p css={{ marginBlockStart: 0, marginBlockEnd: "15px" }}>
+                    Pack Type: Backpack
+                </p>
+
+                <div
+                    css={{
+                        inlineSize: "100%",
+                        display: "grid",
+                        gridTemplateColumns: "1fr 1fr",
+                    }}
+                >
+                    {sortedPack.map(([cut, amount], idx) => (
+                        <p
+                            key={`${cut}-${idx}`}
+                            css={{
+                                marginBlockStart: 0,
+                                marginBlockEnd: "5px",
+                                color:
+                                    amount > 0
+                                        ? Colors.Text.base
+                                        : Colors.Text.disable,
+                                fontStyle: amount > 0 ? "normal" : "italic",
+                                textTransform: "capitalize",
+                            }}
+                        >
+                            {cut}: {amount > 0 ? amount : "--"}
+                        </p>
+                    ))}
                 </div>
-                <ButtonPrimary
-                    type={"Sized"}
-                    label={"End Game"}
-                    scheme={"Inverse"}
-                    border={"None"}
-                    isDanger={true}
-                    clickCB={handleEndGameClick}
-                />
             </div>
 
             <div
@@ -249,54 +280,39 @@ export const StatsScreen = () => {
                     paddingInline,
                 }}
             >
-                <h3
+                <h4
                     css={{
                         marginBlockStart: 0,
                         marginBlockEnd: "15px",
                         fontFamily: "Michroma",
                         fontVariantCaps: "small-caps",
                         textTransform: "capitalize",
-                        textAlign: "center",
                     }}
                 >
                     {station?.name}
-                </h3>
-
-                <h4
-                    css={{
-                        marginBlockStart: 0,
-                        marginBlockEnd: "5px",
-                        fontFamily: "Michroma",
-                        fontVariantCaps: "small-caps",
-                        textTransform: "capitalize",
-                    }}
-                >
-                    {station?.gangName}
                 </h4>
+
                 <p
                     css={{
                         marginBlockStart: 0,
                         marginBlockEnd: "5px",
-                        color: Colors.Text.subtle,
                     }}
                 >
-                    {station?.gangDescription}
+                    Gang: {station?.gangName}
                 </p>
 
-                <h4
+                <p
                     css={{
                         marginBlockStart: 0,
                         marginBlockEnd: "5px",
-                        fontFamily: "Michroma",
-                        fontVariantCaps: "small-caps",
                     }}
                 >
-                    Hunted
-                </h4>
-                <p css={{ marginBlock: 0, color: Colors.Text.subtle }}>
+                    Street Rep: Hunted
+                </p>
+                <small css={{ marginBlock: 0, color: Colors.Text.subtle }}>
                     Too many stick-ups has drawn the attention of the locals.
                     Watch your back.
-                </p>
+                </small>
             </div>
         </div>
     );
