@@ -28,8 +28,6 @@ export const MainScreen = () => {
     const { blockSize } = getContentSize();
     const gridRowHeight = Math.round(blockSize / 3.5);
 
-    console.log("!!current", currentStation);
-
     return (
         <div
             css={{
