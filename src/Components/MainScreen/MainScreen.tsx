@@ -28,6 +28,8 @@ export const MainScreen = () => {
     const { blockSize } = getContentSize();
     const gridRowHeight = Math.round(blockSize / 3.5);
 
+    console.log("!!current", currentStation);
+
     return (
         <div
             css={{
@@ -87,9 +89,26 @@ export const MainScreen = () => {
                         fontVariantCaps: "small-caps",
                         textTransform: "capitalize",
                     },
+
+                    "& button:disabled": {
+                        backgroundColor: Colors.Background.base,
+                        borderStyle: "solid",
+                        borderWidth: "thin",
+                        boxShadow: "none",
+                    },
+
+                    "& button:disabled h3": {
+                        color: Colors.Text.disable,
+                        fontStyle: "italic",
+                    },
+
+                    "& button:disabled svg": {
+                        color: Colors.Text.disable,
+                    },
                 }}
             >
                 <button
+                    disabled={currentStation === "bell_gardens"}
                     onClick={() =>
                         dispatch({
                             type: "changeScreen",
@@ -104,7 +123,7 @@ export const MainScreen = () => {
                     <FontAwesomeIcon icon={faHotel} size={"lg"} />
                     <h3>{station.uniqueBuilding}</h3>
                 </button>
-                <button>
+                <button disabled={true}>
                     <FontAwesomeIcon icon={faDungeon} size={"lg"} />
                     <h3>Gang Hideout</h3>
                 </button>
