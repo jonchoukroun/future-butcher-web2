@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 import { KeyboardEvent, useState } from "react";
+import { unstable_batchedUpdates } from "react-dom";
 
 import { ButtonPrimary, TextInput } from "../Form";
 import { useWindowSize } from "../Window/WindowSizeProvider";
@@ -8,7 +9,6 @@ import { formatMoney } from "../Utils";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
 import * as Colors from "../../Styles/colors";
-import { unstable_batchedUpdates } from "react-dom";
 
 export type TransactionMode = "buy" | "sell";
 
@@ -152,7 +152,6 @@ export const TransactionModal = ({
                 </div>
                 <div
                     css={{
-                        inlineSize: layout === "full" ? "75%" : "90%",
                         display: "flex",
                         justifyContent: "center",
                         marginBlock: "20px",
