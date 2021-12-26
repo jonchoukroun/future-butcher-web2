@@ -10,7 +10,7 @@ export enum Screen {
     Main = "Main",
     Subway = "Subway",
     Market = "Market",
-    // SurplusStore = "Gus's Army Surplus",
+    SurplusStore = "Gus's Army Surplus",
     // HardwareStore = "Hardware Store",
     // Bank = "Bank",
     // Clinic = "Free Clinic",

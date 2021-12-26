@@ -24,6 +24,19 @@ export const MainScreen = () => {
     const station = subwayStations.find((s) => s.key === currentStation);
     if (station === undefined) throw new Error("Station not found");
 
+    const handleUniqueBuildingClick = () => {
+        let screen: Screen;
+        switch (currentStation) {
+            case "bell_gardens":
+                screen = Screen.SurplusStore;
+                break;
+            default:
+                screen = Screen.Main;
+                break;
+        }
+        dispatch({ type: "changeScreen", screen });
+    };
+
     const { getContentSize, layout } = useWindowSize();
     const { blockSize } = getContentSize();
     const gridRowHeight = Math.round(blockSize / 3.5);
@@ -121,6 +134,7 @@ export const MainScreen = () => {
                     disabled={
                         !(turnsLeft < 20 && currentStation === "bell_gardens")
                     }
+                    onClick={handleUniqueBuildingClick}
                 >
                     <FontAwesomeIcon icon={faHotel} size={"lg"} />
                     <h3>{station.uniqueBuilding}</h3>

@@ -10,6 +10,7 @@ import { Market } from "../Market/Market";
 import { Mugging } from "../Mugging/Mugging";
 import { StatsScreen } from "../Stats/StatsScreen";
 import { Subway } from "../Subway/Subway";
+import { SurplusStore } from "../SurplusStore/SurplusStore";
 import { Welcome } from "../Welcome/Welcome";
 import { GameScreen } from "../Window/GameScreen";
 import { useWindowSize } from "../Window/WindowSizeProvider";
@@ -69,6 +70,12 @@ export const Window = () => {
                 {currentScreen === Screen.Subway && (
                     <GameScreen layout={layout} shouldShowNavBar={true}>
                         <Subway />
+                    </GameScreen>
+                )}
+
+                {currentScreen === Screen.SurplusStore && (
+                    <GameScreen layout={layout} shouldShowNavBar={true}>
+                        <SurplusStore />
                     </GameScreen>
                 )}
 
