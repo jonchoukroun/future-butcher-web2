@@ -1,7 +1,6 @@
 import * as React from "react";
 
 import { useChannel, Callback } from "../PhoenixChannel/ChannelProvider";
-import { ApiState } from "../PhoenixChannel";
 import { unstable_batchedUpdates } from "react-dom";
 
 export enum Screen {
@@ -30,10 +29,6 @@ type Player = {
     weapon: string | null;
 };
 
-type Pack = Record<string, number>;
-
-type Market = Record<string, { price: number; quantity: number }>;
-
 type GameProcess = "initialized" | "in_game" | "mugging" | "game_over";
 
 type HighScores = { player: string; score: number }[];
@@ -47,6 +42,7 @@ type GameState = {
     pack?: Pack;
     spaceAvailable?: number;
     market?: Market;
+    store?: Store;
     highScores?: HighScores;
 };
 type Action =
@@ -200,15 +196,16 @@ function handleUpdateState(
     const { currentScreen } = currentState;
     const {
         player: { player_name, funds, debt, weapon, pack, pack_space },
-        station: { market, station_name },
+        station: { market, station_name, store },
         rules: { turns_left, state },
     } = apiState;
 
     return {
         currentProcess: state,
         currentScreen,
-        turnsLeft: turns_left,
         currentStation: station_name,
+        market: market ? market : undefined,
+        pack,
         player: {
             playerName: player_name,
             health: 100,
@@ -217,9 +214,9 @@ function handleUpdateState(
             weapon,
             packSpace: pack_space,
         },
-        pack,
+        store: store ? store : undefined,
         spaceAvailable: pack_space - countPackUse(pack),
-        market,
+        turnsLeft: turns_left,
     };
 }
 

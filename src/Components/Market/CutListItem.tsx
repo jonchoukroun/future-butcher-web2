@@ -8,7 +8,7 @@ import { useGameState } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
 interface CutListItemProps {
-    name: string;
+    name: CutName;
     price: number;
     quantity: number;
     onTransactionSelect: (mode: TransactionMode, cut?: string) => void;

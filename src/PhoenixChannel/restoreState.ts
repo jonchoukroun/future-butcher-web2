@@ -1,5 +1,4 @@
 import { Channel } from "phoenix";
-import { ApiState } from "./";
 
 export async function restoreState(
     channel: Channel,

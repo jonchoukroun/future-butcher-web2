@@ -68,7 +68,7 @@ export const Market = () => {
             {transactionMode && transactionCut && (
                 <TransactionModal
                     mode={transactionMode}
-                    cut={transactionCut}
+                    cut={transactionCut as CutName}
                     onModalClose={() => setTransactionMode(undefined)}
                 />
             )}

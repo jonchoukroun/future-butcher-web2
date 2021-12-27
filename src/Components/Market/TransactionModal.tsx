@@ -14,7 +14,7 @@ export type TransactionMode = "buy" | "sell";
 
 interface TransactionModalProps {
     mode: TransactionMode;
-    cut: string;
+    cut: CutName;
     onModalClose: () => void;
 }
 

@@ -31,7 +31,7 @@ export const CutList = ({
                 ).map(([name, { price, quantity }], idx) => (
                     <CutListItem
                         key={`${name}-${idx}`}
-                        name={name}
+                        name={name as CutName}
                         price={price}
                         quantity={quantity}
                         onTransactionSelect={handleTransactionMode}
