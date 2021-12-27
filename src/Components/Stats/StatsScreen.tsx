@@ -8,6 +8,7 @@ import { EndModal } from "./EndModal";
 import { ButtonPrimary } from "../Form/ButtonPrimary";
 import { formatMoney, getTimeLeft } from "../Utils";
 import { useWindowSize } from "../Window/WindowSizeProvider";
+import { PackDetails } from "../../Fixtures/store";
 import { subwayStations } from "../../Fixtures/subwayStations";
 import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";
 import { useGameState } from "../../GameData/GameStateProvider";
@@ -26,7 +27,7 @@ export const StatsScreen = () => {
 
     const { layout } = useWindowSize();
     const {
-        state: { currentStation, turnsLeft, pack, player },
+        state: { currentStation, turnsLeft, pack, player, spaceAvailable },
         dispatch,
     } = useGameState();
 
@@ -34,6 +35,7 @@ export const StatsScreen = () => {
         currentStation === undefined ||
         pack === undefined ||
         player === undefined ||
+        spaceAvailable === undefined ||
         turnsLeft === undefined
     ) {
         throw new Error("State is undefined");
@@ -42,6 +44,12 @@ export const StatsScreen = () => {
     const station = subwayStations.find(
         (station) => station.key === currentStation,
     );
+
+    const packName = (
+        Object.values(PackDetails).find(
+            ({ packSpace }) => packSpace === player.packSpace,
+        ) || { name: "Backpack" }
+    ).name;
 
     const sortedPack = Object.entries(pack).sort(
         ([, amount1], [, amount2]) => amount2 - amount1,
@@ -233,7 +241,7 @@ export const StatsScreen = () => {
                     }}
                 >
                     <p css={{ marginBlockStart: 0, marginBlockEnd: "15px" }}>
-                        Pack Type: Backpack
+                        Pack Type: {packName} ({player.packSpace} lbs)
                     </p>
 
                     <div

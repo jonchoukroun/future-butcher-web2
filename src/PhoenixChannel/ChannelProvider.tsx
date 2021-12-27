@@ -1,8 +1,9 @@
 import { Channel, Socket } from "phoenix";
 import * as React from "react";
 
-import { ApiState } from ".";
 import { buyCut } from "./buyCut";
+import { buyPack } from "./buyPack";
+import { dropPack } from "./dropPack";
 import { endGame } from "./endGame";
 import { fightMugger } from "./fightMugger";
 import { getScores } from "./getScores";
@@ -32,6 +33,8 @@ export const enum Callback {
     fightMugger,
     buyCut,
     sellCut,
+    buyPack,
+    dropPack,
     payDebt,
     endGame,
 }
@@ -151,6 +154,18 @@ export const ChannelProvider = ({
 
                 case Callback.payDebt:
                     return await payDebt(channel, payload);
+
+                case Callback.buyPack:
+                    return await buyPack(
+                        channel,
+                        payload as { pack: PackName },
+                    );
+
+                case Callback.dropPack:
+                    return await dropPack(
+                        channel,
+                        payload as { pack: PackName },
+                    );
 
                 default:
                     throw new Error(`Unhandled callback ${callback}`);
