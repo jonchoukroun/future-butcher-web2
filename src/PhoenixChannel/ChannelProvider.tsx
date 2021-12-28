@@ -3,7 +3,6 @@ import * as React from "react";
 
 import { buyCut } from "./buyCut";
 import { buyPack } from "./buyPack";
-import { dropPack } from "./dropPack";
 import { endGame } from "./endGame";
 import { fightMugger } from "./fightMugger";
 import { getScores } from "./getScores";
@@ -36,7 +35,6 @@ export const enum Callback {
     buyCut,
     sellCut,
     buyPack,
-    dropPack,
     buyWeapon,
     replaceWeapon,
     payDebt,
@@ -161,12 +159,6 @@ export const ChannelProvider = ({
 
                 case Callback.buyPack:
                     return await buyPack(
-                        channel,
-                        payload as { pack: PackName },
-                    );
-
-                case Callback.dropPack:
-                    return await dropPack(
                         channel,
                         payload as { pack: PackName },
                     );

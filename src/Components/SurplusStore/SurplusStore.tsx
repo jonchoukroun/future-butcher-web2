@@ -11,7 +11,6 @@ import { useWindowSize } from "../Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 
 export type PackModalState = {
-    mode: "buy" | "drop" | undefined;
     name: PackName | undefined;
     packSpace: number | undefined;
     price: number | undefined;
@@ -31,7 +30,6 @@ export const SurplusStore = () => {
     const handleStoreBackClick = () => setMenuType(undefined);
 
     const buyPackState: PackModalState = {
-        mode: undefined,
         name: undefined,
         packSpace: undefined,
         price: undefined,
@@ -130,12 +128,10 @@ export const SurplusStore = () => {
                         handleModalOpen={handlePackModalOpen}
                         onStoreBackClick={handleStoreBackClick}
                     />
-                    {packState.mode &&
-                        packState.name &&
+                    {packState.name &&
                         packState.packSpace &&
                         packState.price && (
                             <PackModal
-                                mode={packState.mode}
                                 name={packState.name}
                                 packSpace={packState.packSpace}
                                 price={packState.price}
@@ -172,7 +168,6 @@ type PackAction = { type: "close" } | { type: "open"; props: PackModalState };
 function buyPackReducer(_packState: PackModalState, action: PackAction) {
     if (action.type === "close")
         return {
-            mode: undefined,
             name: undefined,
             packSpace: undefined,
             price: undefined,

@@ -12,7 +12,6 @@ import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
 import * as Colors from "../../Styles/colors";
 
 interface PackModalProps {
-    mode: "buy" | "drop";
     name: PackName;
     packSpace: number;
     price: number;
@@ -20,7 +19,6 @@ interface PackModalProps {
 }
 
 export const PackModal = ({
-    mode,
     name,
     packSpace,
     price,
@@ -53,22 +51,6 @@ export const PackModal = ({
             }
             onModalClose();
         });
-    };
-
-    const handleDropClick = async () => {
-        // if (isLoading) return;
-        // if (player.packSpace !== packSpace) return;
-        // setIsLoading(true);
-        // const response = await handlePushCallback(Callback.dropPack, {
-        //     pack: name,
-        // });
-        // unstable_batchedUpdates(() => {
-        //     setIsLoading(false);
-        //     if (response !== undefined) {
-        //         dispatch({ type: "updateStateData", stateData: response });
-        //     }
-        //     onModalClose();
-        // });
     };
 
     const { getContentSize, layout } = useWindowSize();
@@ -146,7 +128,7 @@ export const PackModal = ({
 
                 <p>Pack Space: {packSpace} lbs</p>
 
-                {mode === "buy" && <p>Price: {formatMoney(price)}</p>}
+                <p>Price: {formatMoney(price)}</p>
 
                 <div
                     css={{
@@ -156,27 +138,14 @@ export const PackModal = ({
                         marginBlockEnd: "10px",
                     }}
                 >
-                    {mode === "buy" ? (
-                        <ButtonPrimary
-                            type={"Full"}
-                            border={"Thin"}
-                            scheme={"Inverse"}
-                            label={"Buy"}
-                            isLoading={isLoading}
-                            clickCB={handleBuyClick}
-                        />
-                    ) : (
-                        <ButtonPrimary
-                            type={"Full"}
-                            border={"Thin"}
-                            scheme={"Inverse"}
-                            label={"Buy"}
-                            isDanger={true}
-                            isDisabled={true}
-                            isLoading={isLoading}
-                            clickCB={handleDropClick}
-                        />
-                    )}
+                    <ButtonPrimary
+                        type={"Full"}
+                        border={"Thin"}
+                        scheme={"Inverse"}
+                        label={"Buy"}
+                        isLoading={isLoading}
+                        clickCB={handleBuyClick}
+                    />
                 </div>
             </div>
         </div>

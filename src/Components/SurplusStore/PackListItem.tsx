@@ -97,32 +97,14 @@ export const PackListItem = ({
                 >
                     {formatMoney(price)}
                 </h3>
-                {isOwned ? (
-                    <ButtonPrimary
-                        label={"Drop"}
-                        type={"Half"}
-                        border={"Thin"}
-                        isDanger={true}
-                        clickCB={() =>
-                            onModalOpen({
-                                mode: "drop",
-                                name,
-                                packSpace,
-                                price,
-                            })
-                        }
-                    />
-                ) : (
-                    <ButtonPrimary
-                        label={"Buy"}
-                        type={"Half"}
-                        border={"Thin"}
-                        isDisabled={!canAfford}
-                        clickCB={() =>
-                            onModalOpen({ mode: "buy", name, packSpace, price })
-                        }
-                    />
-                )}
+
+                <ButtonPrimary
+                    label={isOwned ? "Owned" : "Buy"}
+                    type={"Half"}
+                    border={isOwned ? "None" : "Thin"}
+                    isDisabled={!canAfford || isOwned}
+                    clickCB={() => onModalOpen({ name, packSpace, price })}
+                />
             </div>
         </li>
     );
