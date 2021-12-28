@@ -31,3 +31,11 @@ export const PackDetails: Record<
         packSpace: 40,
     },
 };
+
+export const WeaponDetails: Record<WeaponName, string> = {
+    box_cutter: "Box Cutter",
+    brass_knuckles: "Brass Knuckles",
+    hedge_clippers: "Hedge Clippers",
+    hockey_stick: "Hockey Stick",
+    machete: "Machete",
+};

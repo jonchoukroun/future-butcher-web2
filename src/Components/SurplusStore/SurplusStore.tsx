@@ -4,6 +4,8 @@ import { Fragment, useReducer, useState } from "react";
 
 import { PackModal } from "./PackModal";
 import { PacksList } from "./PacksList";
+import { WeaponsList } from "./WeaponsList";
+import { WeaponModal } from "./WeaponModal";
 import { ButtonPrimary } from "../Form";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
@@ -12,6 +14,13 @@ export type PackModalState = {
     mode: "buy" | "drop" | undefined;
     name: PackName | undefined;
     packSpace: number | undefined;
+    price: number | undefined;
+};
+
+export type WeaponModalState = {
+    name: WeaponName | undefined;
+    cuts: CutName[] | undefined;
+    damage: number | undefined;
     price: number | undefined;
 };
 
@@ -27,11 +36,26 @@ export const SurplusStore = () => {
         packSpace: undefined,
         price: undefined,
     };
-    const [state, dispatch] = useReducer(buyPackReducer, buyPackState);
+    const [packState, packDispatch] = useReducer(buyPackReducer, buyPackState);
     const handlePackModalOpen = (modalProps: PackModalState) => {
-        dispatch({ type: "open", props: modalProps });
+        packDispatch({ type: "open", props: modalProps });
     };
-    const handlePackModalClose = () => dispatch({ type: "close" });
+    const handlePackModalClose = () => packDispatch({ type: "close" });
+
+    const buyWeaponState: WeaponModalState = {
+        name: undefined,
+        cuts: undefined,
+        damage: undefined,
+        price: undefined,
+    };
+    const [weaponState, weaponDispatch] = useReducer(
+        buyWeaponReducer,
+        buyWeaponState,
+    );
+    const handleWeaponModalOpen = (modalProps: WeaponModalState) => {
+        weaponDispatch({ type: "open", props: modalProps });
+    };
+    const handleWeaponModalClose = () => weaponDispatch({ type: "close" });
 
     const { heightAdjustment, layout } = useWindowSize();
     return (
@@ -106,29 +130,38 @@ export const SurplusStore = () => {
                         handleModalOpen={handlePackModalOpen}
                         onStoreBackClick={handleStoreBackClick}
                     />
-
-                    {state.mode &&
-                        state.name &&
-                        state.packSpace &&
-                        state.price && (
+                    {packState.mode &&
+                        packState.name &&
+                        packState.packSpace &&
+                        packState.price && (
                             <PackModal
-                                mode={state.mode}
-                                name={state.name}
-                                packSpace={state.packSpace}
-                                price={state.price}
+                                mode={packState.mode}
+                                name={packState.name}
+                                packSpace={packState.packSpace}
+                                price={packState.price}
                                 onModalClose={handlePackModalClose}
                             />
                         )}
                 </Fragment>
             ) : (
-                <div css={{ display: "flex", justifyContent: "flex-start" }}>
-                    <ButtonPrimary
-                        type={"Sized"}
-                        label={"Back"}
-                        border={"None"}
-                        clickCB={handleStoreBackClick}
+                <Fragment>
+                    <WeaponsList
+                        handleModalOpen={handleWeaponModalOpen}
+                        onStoreBackClick={handleStoreBackClick}
                     />
-                </div>
+                    {weaponState.name &&
+                        weaponState.cuts !== undefined &&
+                        weaponState.damage &&
+                        weaponState.price !== undefined && (
+                            <WeaponModal
+                                name={weaponState.name}
+                                cuts={weaponState.cuts}
+                                damage={weaponState.damage}
+                                price={weaponState.price}
+                                onModalClose={handleWeaponModalClose}
+                            />
+                        )}
+                </Fragment>
             )}
         </div>
     );
@@ -136,12 +169,31 @@ export const SurplusStore = () => {
 
 type PackAction = { type: "close" } | { type: "open"; props: PackModalState };
 
-function buyPackReducer(state: PackModalState, action: PackAction) {
+function buyPackReducer(_packState: PackModalState, action: PackAction) {
     if (action.type === "close")
         return {
             mode: undefined,
             name: undefined,
             packSpace: undefined,
+            price: undefined,
+        };
+
+    return action.props;
+}
+
+type WeaponAction =
+    | { type: "close" }
+    | { type: "open"; props: WeaponModalState };
+
+function buyWeaponReducer(
+    _weaponState: WeaponModalState,
+    action: WeaponAction,
+) {
+    if (action.type === "close")
+        return {
+            name: undefined,
+            cuts: undefined,
+            damage: undefined,
             price: undefined,
         };
 

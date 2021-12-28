@@ -10,11 +10,13 @@ import { getScores } from "./getScores";
 import { joinChannel } from "./joinChannel";
 import { newGame } from "./newGame";
 import { payDebt } from "./payDebt";
+import { replaceWeapon } from "./replaceWeapon";
 import { restoreState } from "./restoreState";
 import { startGame } from "./startGame";
 import { travel } from "./travel";
 import { sellCut } from "./sellCut";
 import { handleMessage } from "../Logging/handleMessage";
+import { buyWeapon } from "./buyWeapon";
 
 const {
     createContext,
@@ -35,6 +37,8 @@ export const enum Callback {
     sellCut,
     buyPack,
     dropPack,
+    buyWeapon,
+    replaceWeapon,
     payDebt,
     endGame,
 }
@@ -165,6 +169,18 @@ export const ChannelProvider = ({
                     return await dropPack(
                         channel,
                         payload as { pack: PackName },
+                    );
+
+                case Callback.buyWeapon:
+                    return await buyWeapon(
+                        channel,
+                        payload as { weapon: WeaponName },
+                    );
+
+                case Callback.replaceWeapon:
+                    return await replaceWeapon(
+                        channel,
+                        payload as { weapon: WeaponName },
                     );
 
                 default:
