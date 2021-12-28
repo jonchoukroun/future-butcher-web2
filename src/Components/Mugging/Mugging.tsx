@@ -9,7 +9,12 @@ import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";
 import * as Colors from "../../Styles/colors";
 
 export const Mugging = () => {
-    const { dispatch } = useGameState();
+    const {
+        dispatch,
+        state: { player },
+    } = useGameState();
+
+    if (player === undefined) throw new Error("State is undefined");
 
     const { handlePushCallback } = useChannel();
     const [isLoading, setIsLoading] = useState(false);
@@ -28,6 +33,8 @@ export const Mugging = () => {
             setIsLoading(false);
         });
     };
+
+    console.log("!!player", player);
 
     return (
         <div
@@ -79,6 +86,10 @@ export const Mugging = () => {
                         clickCB={handleFightMuggerClick}
                     />
                 </div>
+
+                {!player.weapon && (
+                    <p>A weapon would have come in handy here.</p>
+                )}
             </div>
         </div>
     );
