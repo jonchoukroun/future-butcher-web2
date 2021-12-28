@@ -134,8 +134,11 @@ export const StationDetails = ({
             >
                 <p>POI: {station.uniqueBuilding}</p>
 
-                <p>Travel Cost: {formatMoney(station.gangTax)}</p>
-                <small>Travel will take 1 hour</small>
+                <p>Travel Cost: {formatMoney(0)}</p>
+                <small>
+                    Travel will take {station.hours}{" "}
+                    {station.hours > 1 ? "hours" : "hour"}
+                </small>
 
                 <p>Dominant Gang: {station.gangName}</p>
                 <small>{station.gangDescription}</small>

@@ -14,6 +14,7 @@ export type Station = {
     gangName: string;
     gangDescription: string;
     gangTax: number;
+    hours: number;
     uniqueBuilding: string;
 };
 
@@ -27,6 +28,7 @@ export const subwayStations: Array<Station> = [
         gangDescription:
             "Militarized private security who hunt undesirables for sport.",
         gangTax: 100000,
+        hours: 3,
         uniqueBuilding: "TBD",
     },
     {
@@ -37,6 +39,7 @@ export const subwayStations: Array<Station> = [
         gangName: "Balls Fargaux",
         gangDescription: "Mega bank turned organized crime franchise.",
         gangTax: 10000,
+        hours: 2,
         uniqueBuilding: "Bank",
     },
     {
@@ -48,6 +51,7 @@ export const subwayStations: Array<Station> = [
         gangDescription:
             "Roided-out yogis who'll put you in a downward dog... for good.",
         gangTax: 2000,
+        hours: 2,
         uniqueBuilding: "Free Clinic",
     },
     {
@@ -58,6 +62,7 @@ export const subwayStations: Array<Station> = [
         gangDescription:
             "Rampant street kids who'll rob you and leave you their headshot.",
         gangTax: 0,
+        hours: 1,
         uniqueBuilding: "Police Station",
     },
     {
@@ -67,6 +72,7 @@ export const subwayStations: Array<Station> = [
         gangName: "None",
         gangDescription: "Disorganized maurauders, raiders, and cutthroats.",
         gangTax: 0,
+        hours: 1,
         uniqueBuilding: "Hardware Store",
     },
     {
@@ -77,6 +83,7 @@ export const subwayStations: Array<Station> = [
         gangDescription:
             "Heavily armed small business owners who encourage shopping.",
         gangTax: 5000,
+        hours: 2,
         uniqueBuilding: "Gus's Army Surplus",
     },
 ];
