@@ -4,7 +4,7 @@ import { faClock, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Fragment, useState } from "react";
 
-import { EndModal } from "./EndModal";
+import { EndGameModal } from "./EndGameModal";
 import { ButtonPrimary } from "../Form/ButtonPrimary";
 import { formatMoney, getTimeLeft } from "../Utils";
 import { useWindowSize } from "../Window/WindowSizeProvider";
@@ -305,7 +305,7 @@ export const StatsScreen = () => {
                 </div>
             </div>
 
-            {isModalOpen && <EndModal onCloseModal={handleCancelEndGame} />}
+            {isModalOpen && <EndGameModal onCloseModal={handleCancelEndGame} />}
         </Fragment>
     );
 };

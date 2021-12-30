@@ -10,7 +10,11 @@ import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { Screen, useGameState } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
-export const EndModal = ({ onCloseModal }: { onCloseModal: () => void }) => {
+export const EndGameModal = ({
+    onCloseModal,
+}: {
+    onCloseModal: () => void;
+}) => {
     const isMountedRef = useRef(false);
     useEffect(() => {
         isMountedRef.current = true;
@@ -82,9 +86,17 @@ export const EndModal = ({ onCloseModal }: { onCloseModal: () => void }) => {
                     zIndex: 1001,
                 }}
             >
-                <h4 css={{ marginBlockEnd: "40px" }}>
-                    Are you sure you want to quit?
-                </h4>
+                <div
+                    css={{
+                        display: "flex",
+                        justifyContent: "center",
+                        paddingInline: "20px",
+                    }}
+                >
+                    <p css={{ marginBlockEnd: "40px" }}>
+                        Are you sure you want to quit?
+                    </p>
+                </div>
 
                 <div css={{ display: "flex", justifyContent: "space-between" }}>
                     <ButtonPrimary
