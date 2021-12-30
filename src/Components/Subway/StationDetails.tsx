@@ -39,7 +39,7 @@ export const StationDetails = ({
 
         setIsLoading(true);
         const stateData = await handlePushCallback(Callback.travel, {
-            station: stationKey,
+            destination: stationKey,
         });
 
         if (stateData === undefined) {

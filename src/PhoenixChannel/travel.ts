@@ -2,12 +2,11 @@ import { Channel } from "phoenix";
 
 export async function travel(
     channel: Channel,
-    payload: Record<string, unknown>,
+    payload: { destination: string },
 ): Promise<ApiState | undefined> {
-    const { station } = payload;
     return new Promise((resolve, reject) => {
         channel
-            .push("change_station", { destination: station })
+            .push("change_station", payload)
             .receive("ok", ({ state_data }: { state_data: ApiState }) => {
                 return resolve(state_data);
             })

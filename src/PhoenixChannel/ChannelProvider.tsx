@@ -143,16 +143,31 @@ export const ChannelProvider = ({
                     return await restoreState(channel, name);
 
                 case Callback.travel:
-                    return await travel(channel, payload);
+                    return await travel(
+                        channel,
+                        payload as { destination: string },
+                    );
 
                 case Callback.fightMugger:
                     return await fightMugger(channel, payload);
 
                 case Callback.buyCut:
-                    return await buyCut(channel, payload);
+                    return await buyCut(
+                        channel,
+                        payload as {
+                            cut: CutName;
+                            amount: number;
+                        },
+                    );
 
                 case Callback.sellCut:
-                    return await sellCut(channel, payload);
+                    return await sellCut(
+                        channel,
+                        payload as {
+                            cut: CutName;
+                            amount: number;
+                        },
+                    );
 
                 case Callback.payDebt:
                     return await payDebt(channel, payload);

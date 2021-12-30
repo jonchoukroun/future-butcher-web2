@@ -2,12 +2,8 @@ import { Channel } from "phoenix";
 
 export async function endGame(
     channel: Channel,
-    payload: Record<string, unknown>,
+    payload: { hashId: string; score: number },
 ): Promise<{ player: string; score: number }[]> {
-    const { hashId, score } = payload;
-    if (hashId === undefined || score === undefined) {
-        throw new Error("Invalid payload");
-    }
     return new Promise((resolve, reject) => {
         channel
             .push("end_game", payload)

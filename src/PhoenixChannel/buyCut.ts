@@ -2,13 +2,8 @@ import { Channel } from "phoenix";
 
 export async function buyCut(
     channel: Channel,
-    payload: Record<string, unknown>,
+    payload: { cut: CutName; amount: number },
 ): Promise<ApiState | undefined> {
-    const { cut, amount } = payload;
-    if (typeof cut !== "string" || typeof amount !== "number") {
-        throw new Error("Invalid payload for buyCut");
-    }
-
     return new Promise((resolve, reject) => {
         channel
             .push("buy_cut", payload)
