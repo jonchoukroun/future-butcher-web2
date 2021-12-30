@@ -63,7 +63,7 @@ export const WeaponListItem = ({
                         textTransform: "capitalize",
                     }}
                 >
-                    {WeaponDetails[name]}
+                    {WeaponDetails[name].name}
                 </h3>
 
                 <p

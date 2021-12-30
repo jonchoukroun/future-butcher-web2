@@ -129,7 +129,7 @@ export const WeaponModal = ({
                             wordSpacing: "8px",
                         }}
                     >
-                        {WeaponDetails[name]}
+                        {WeaponDetails[name].name}
                     </h2>
                     <p css={{ marginBlockEnd: "5px", textAlign: "center" }}>
                         {cuts.length > 0

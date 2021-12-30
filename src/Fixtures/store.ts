@@ -32,10 +32,13 @@ export const PackDetails: Record<
     },
 };
 
-export const WeaponDetails: Record<WeaponName, string> = {
-    box_cutter: "Box Cutter",
-    brass_knuckles: "Brass Knuckles",
-    hedge_clippers: "Hedge Clippers",
-    hockey_stick: "Hockey Stick",
-    machete: "Machete",
+export const WeaponDetails: Record<
+    WeaponName,
+    { name: string; damage: number }
+> = {
+    box_cutter: { name: "Box Cutter", damage: 4 },
+    brass_knuckles: { name: "Brass Knuckles", damage: 5 },
+    hedge_clippers: { name: "Hedge Clippers", damage: 6 },
+    hockey_stick: { name: "Hockey Stick", damage: 8 },
+    machete: { name: "Machete", damage: 7 },
 };
