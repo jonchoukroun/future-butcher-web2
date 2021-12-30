@@ -53,7 +53,7 @@ export const ButtonPrimary = ({
                 borderStyle: border === "None" ? "none" : "outset",
                 borderWidth: border === "Full" ? "2px" : "1px",
                 boxShadow:
-                    border === "None" || isDisabled
+                    isDisabled || scheme === "Normal"
                         ? "none"
                         : "2px 2px 8px 2px rgba(0, 0, 0, 0.4)",
                 color: fontColor,

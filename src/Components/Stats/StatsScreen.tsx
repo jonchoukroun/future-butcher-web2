@@ -239,7 +239,7 @@ export const StatsScreen = () => {
                     }}
                 >
                     <p css={{ marginBlockStart: 0, marginBlockEnd: "5px" }}>
-                        Pack Type: {packName} ({player.packSpace} lbs)
+                        Pack: {packName} ({player.packSpace} lbs)
                     </p>
 
                     <p
@@ -249,10 +249,11 @@ export const StatsScreen = () => {
                             textTransform: "capitalize",
                         }}
                     >
-                        {packListstring}
+                        Cuts: {packListstring.length ? packListstring : "None"}
                     </p>
 
                     <p css={{ marginBlockStart: 0, marginBlockEnd: "5px" }}>
+                        Weapon:{" "}
                         {player.weapon
                             ? `${
                                   WeaponDetails[player.weapon as WeaponName]
@@ -261,7 +262,7 @@ export const StatsScreen = () => {
                                   WeaponDetails[player.weapon as WeaponName]
                                       .damage
                               } damage)`
-                            : "Currently unarmed"}
+                            : "Unarmed"}
                     </p>
                 </div>
 
