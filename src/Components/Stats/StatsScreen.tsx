@@ -48,7 +48,7 @@ export const StatsScreen = () => {
     );
     const packListstring = sortedPack
         .filter(([, amount]) => amount > 0)
-        .map(([cutName, amount]) => `${cutName}: ${amount}`)
+        .map(([cutName, amount]) => `${amount} ${cutName}`)
         .join(", ");
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -299,11 +299,11 @@ export const StatsScreen = () => {
                             marginBlockEnd: "5px",
                         }}
                     >
-                        Street Rep: Hunted
+                        Street Rep: None
                     </p>
                     <small css={{ marginBlock: 0, color: Colors.Text.subtle }}>
-                        Too many stick-ups has drawn the attention of the
-                        locals. Watch your back.
+                        Flying under the radar. You won&apos;t get hassled by
+                        the local gang.
                     </small>
                 </div>
             </div>

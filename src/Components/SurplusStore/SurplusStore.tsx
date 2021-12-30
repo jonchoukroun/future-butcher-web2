@@ -100,8 +100,10 @@ export const SurplusStore = () => {
                         }}
                     >
                         <ButtonPrimary
-                            type={"Full"}
-                            label={"Buy Weapons"}
+                            type={"Block"}
+                            label={"See Weapons"}
+                            border={"None"}
+                            scheme={"Inverse"}
                             clickCB={() => setMenuType("weapons")}
                         />
                     </div>
@@ -116,8 +118,10 @@ export const SurplusStore = () => {
                         }}
                     >
                         <ButtonPrimary
-                            type={"Full"}
-                            label={"Buy Packs"}
+                            type={"Block"}
+                            label={"See Packs"}
+                            border={"None"}
+                            scheme={"Inverse"}
                             clickCB={() => setMenuType("packs")}
                         />
                     </div>

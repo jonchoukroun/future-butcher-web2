@@ -28,10 +28,8 @@ export const Mugging = () => {
         "victory" | "defeat" | undefined
     >(undefined);
 
-    const muggerNamesRef = useRef(muggerNames);
-
-    const rndIndx = Math.floor(Math.random() * muggerNamesRef.current.length);
-    const currentMugger = muggerNamesRef.current.slice(rndIndx, rndIndx + 1)[0];
+    const muggerNamesRef = useRef<string[]>(shuffleMuggerNames(muggerNames));
+    const currentMuggerRef = useRef(muggerNamesRef.current.pop());
 
     const { handlePushCallback } = useChannel();
     const [isLoading, setIsLoading] = useState(false);
@@ -50,8 +48,9 @@ export const Mugging = () => {
                 initialTurnsLeft.current > response.rules.turns_left
                     ? "defeat"
                     : "victory";
-            if (outcome === "victory") {
-                muggerNamesRef.current.splice(rndIndx, 1);
+            // If the mugger hasn't been wasted, return him to the top of the list
+            if (outcome === "defeat" && currentMuggerRef.current) {
+                muggerNamesRef.current.unshift(currentMuggerRef.current);
             }
             setMuggingState(outcome);
             setIsLoading(false);
@@ -97,8 +96,10 @@ export const Mugging = () => {
                 >
                     <p>
                         One of the city&apos;s relentless muggers
-                        {currentMugger ? ` ${currentMugger} ` : " "}follows you
-                        from the subway.
+                        {currentMuggerRef.current
+                            ? ` ${currentMuggerRef.current} `
+                            : " "}
+                        follows you from the subway.
                     </p>
                     <p>
                         Pulling a well-used blade, he charges you. You have a
@@ -129,3 +130,16 @@ export const Mugging = () => {
         </div>
     );
 };
+
+function shuffleMuggerNames(names: string[]) {
+    let currIdx = names.length,
+        rndIdx;
+
+    while (currIdx !== 0) {
+        rndIdx = Math.floor(Math.random() * currIdx);
+        currIdx--;
+        [names[currIdx], names[rndIdx]] = [names[rndIdx], names[currIdx]];
+    }
+
+    return names;
+}
