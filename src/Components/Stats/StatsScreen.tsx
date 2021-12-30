@@ -8,7 +8,7 @@ import { EndGameModal } from "./EndGameModal";
 import { ButtonPrimary } from "../Form/ButtonPrimary";
 import { formatMoney, getTimeLeft } from "../Utils";
 import { useWindowSize } from "../Window/WindowSizeProvider";
-import { PackDetails } from "../../Fixtures/store";
+import { PackDetails, WeaponDetails } from "../../Fixtures/store";
 import { subwayStations } from "../../Fixtures/subwayStations";
 import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
@@ -46,6 +46,10 @@ export const StatsScreen = () => {
     const sortedPack = Object.entries(pack).sort(
         ([, amount1], [, amount2]) => amount2 - amount1,
     );
+    const packListstring = sortedPack
+        .filter(([, amount]) => amount > 0)
+        .map(([cutName, amount]) => `${cutName}: ${amount}`)
+        .join(", ");
 
     const [isModalOpen, setIsModalOpen] = useState(false);
     const handleConfirmEndGame = () => {
@@ -232,35 +236,31 @@ export const StatsScreen = () => {
                         },
                     }}
                 >
-                    <p css={{ marginBlockStart: 0, marginBlockEnd: "15px" }}>
+                    <p css={{ marginBlockStart: 0, marginBlockEnd: "5px" }}>
                         Pack Type: {packName} ({player.packSpace} lbs)
                     </p>
 
-                    <div
+                    <p
                         css={{
-                            inlineSize: "100%",
-                            display: "grid",
-                            gridTemplateColumns: "1fr 1fr",
+                            marginBlockStart: 0,
+                            marginBlockEnd: "5px",
+                            textTransform: "capitalize",
                         }}
                     >
-                        {sortedPack.map(([cut, amount], idx) => (
-                            <p
-                                key={`${cut}-${idx}`}
-                                css={{
-                                    marginBlockStart: 0,
-                                    marginBlockEnd: "5px",
-                                    color:
-                                        amount > 0
-                                            ? Colors.Text.base
-                                            : Colors.Text.disable,
-                                    fontStyle: amount > 0 ? "normal" : "italic",
-                                    textTransform: "capitalize",
-                                }}
-                            >
-                                {cut}: {amount > 0 ? amount : "--"}
-                            </p>
-                        ))}
-                    </div>
+                        {packListstring}
+                    </p>
+
+                    <p css={{ marginBlockStart: 0, marginBlockEnd: "5px" }}>
+                        {player.weapon
+                            ? `${
+                                  WeaponDetails[player.weapon as WeaponName]
+                                      .name
+                              } (${
+                                  WeaponDetails[player.weapon as WeaponName]
+                                      .damage
+                              } damage)`
+                            : "Currently unarmed"}
+                    </p>
                 </div>
 
                 <div
