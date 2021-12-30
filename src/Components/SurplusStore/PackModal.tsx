@@ -7,7 +7,7 @@ import { ButtonPrimary } from "../Form";
 import { formatMoney } from "../Utils/formatMoney";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { PackDetails } from "../../Fixtures/store";
-import { useGameState } from "../../GameData/GameStateProvider";
+import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
 import * as Colors from "../../Styles/colors";
 
@@ -37,6 +37,8 @@ export const PackModal = ({
     const { handlePushCallback } = useChannel();
     const handleBuyClick = async () => {
         if (isLoading) return;
+
+        // TODO: handle validation, error messages
         if (player.funds < price) return;
         if (player.packSpace === packSpace) return;
 
@@ -44,11 +46,13 @@ export const PackModal = ({
         const response = await handlePushCallback(Callback.buyPack, {
             pack: name,
         });
+        if (response === undefined) {
+            dispatch({ type: "changeScreen", screen: Screen.Error });
+            return;
+        }
         unstable_batchedUpdates(() => {
             setIsLoading(false);
-            if (response !== undefined) {
-                dispatch({ type: "updateStateData", stateData: response });
-            }
+            dispatch({ type: "updateStateData", stateData: response });
             onModalClose();
         });
     };

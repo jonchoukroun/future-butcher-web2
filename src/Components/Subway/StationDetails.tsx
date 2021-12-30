@@ -28,7 +28,7 @@ export const StationDetails = ({
         dispatch,
         state: { turnsLeft },
     } = useGameState();
-    if (turnsLeft === undefined) throw new Error("Turns left is not defined");
+    if (turnsLeft === undefined) throw new Error("State is undefined");
 
     const isStationOpen =
         stationKey !== StationKey.bellGardens || turnsLeft <= 20;
@@ -36,6 +36,7 @@ export const StationDetails = ({
     const [isLoading, setIsLoading] = useState(false);
     const handleTravel = async () => {
         if (isLoading) return;
+
         setIsLoading(true);
         const stateData = await handlePushCallback(Callback.travel, {
             station: stationKey,

@@ -6,7 +6,7 @@ import { unstable_batchedUpdates } from "react-dom";
 import { ButtonPrimary, TextInput } from "../Form";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { formatMoney } from "../Utils";
-import { useGameState } from "../../GameData/GameStateProvider";
+import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
 import * as Colors from "../../Styles/colors";
 
@@ -68,12 +68,14 @@ export const TransactionModal = ({
                 cut,
                 amount,
             });
+            if (response === undefined) {
+                dispatch({ type: "changeScreen", screen: Screen.Error });
+                return;
+            }
             unstable_batchedUpdates(() => {
                 setAmount(undefined);
                 setIsLoading(false);
-                if (response !== undefined) {
-                    dispatch({ type: "updateStateData", stateData: response });
-                }
+                dispatch({ type: "updateStateData", stateData: response });
                 onModalClose();
             });
         } else {
@@ -82,12 +84,14 @@ export const TransactionModal = ({
                 cut,
                 amount,
             });
+            if (response === undefined) {
+                dispatch({ type: "changeScreen", screen: Screen.Error });
+                return;
+            }
             unstable_batchedUpdates(() => {
                 setAmount(undefined);
                 setIsLoading(false);
-                if (response !== undefined) {
-                    dispatch({ type: "updateStateData", stateData: response });
-                }
+                dispatch({ type: "updateStateData", stateData: response });
                 onModalClose();
             });
         }

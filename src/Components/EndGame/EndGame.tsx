@@ -1,13 +1,14 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 import { Fragment, useEffect, useRef, useState } from "react";
+import { unstable_batchedUpdates } from "react-dom";
 
 import { ButtonPrimary } from "../Form";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
+import { handleMessage } from "../../Logging/handleMessage";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import * as Colors from "../../Styles/colors";
-import { unstable_batchedUpdates } from "react-dom";
 
 export const EndGame = () => {
     const isMountedRef = useRef(false);
@@ -33,7 +34,9 @@ export const EndGame = () => {
         setIsLoading(true);
         const hashId = localStorage.getItem("playerHash");
         if (!hashId) {
-            throw new Error("Cannot end game without a hash ID");
+            handleMessage("Cannot end game without a hash ID", "error");
+            dispatch({ type: "changeScreen", screen: Screen.Error });
+            return;
         }
         const score = player.funds;
         const highScores = await handleEndGame(hashId, score);

@@ -5,6 +5,7 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import { ButtonPrimary } from "../Form";
 import { useWindowSize } from "../Window/WindowSizeProvider";
+import { handleMessage } from "../../Logging/handleMessage";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { Screen, useGameState } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
@@ -28,7 +29,9 @@ export const EndModal = ({ onCloseModal }: { onCloseModal: () => void }) => {
         setIsLoading(true);
         const hashId = localStorage.getItem("playerHash");
         if (!hashId) {
-            throw new Error("Cannot end game without a hash ID");
+            handleMessage("Cannot end game without a hash ID", "error");
+            dispatch({ type: "changeScreen", screen: Screen.Error });
+            return;
         }
         const highScores = await handleEndGame(hashId, 0);
         if (highScores === undefined) {

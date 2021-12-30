@@ -11,18 +11,10 @@ import { useWindowSize } from "../Window/WindowSizeProvider";
 import { PackDetails } from "../../Fixtures/store";
 import { subwayStations } from "../../Fixtures/subwayStations";
 import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";
-import { useGameState } from "../../GameData/GameStateProvider";
+import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
 export const StatsScreen = () => {
-    const isMountedRef = useRef(false);
-    useEffect(() => {
-        isMountedRef.current = true;
-        return () => {
-            isMountedRef.current = false;
-        };
-    }, []);
-
     const [isLoading, setIsLoading] = useState(false);
 
     const { layout } = useWindowSize();
@@ -74,12 +66,12 @@ export const StatsScreen = () => {
 
         setIsLoading(true);
         const response = await handlePushCallback(Callback.payDebt, {});
-        if (response !== undefined) {
-            dispatch({ type: "updateStateData", stateData: response });
+        if (response === undefined) {
+            dispatch({ type: "changeScreen", screen: Screen.Error });
+            return;
         }
-        if (isMountedRef.current) {
-            setIsLoading(false);
-        }
+        dispatch({ type: "updateStateData", stateData: response });
+        setIsLoading(false);
     };
 
     const containerPaddingInline = layout === "full" ? "16px" : "4px";
