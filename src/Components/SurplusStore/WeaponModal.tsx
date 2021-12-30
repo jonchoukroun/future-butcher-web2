@@ -157,7 +157,6 @@ export const WeaponModal = ({
                     <ButtonPrimary
                         type={"Full"}
                         border={"Thin"}
-                        scheme={"Inverse"}
                         label={"Buy"}
                         isLoading={isLoading}
                         clickCB={handleBuyClick}

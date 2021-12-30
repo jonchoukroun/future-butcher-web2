@@ -271,7 +271,6 @@ export const TransactionModal = ({
                     <ButtonPrimary
                         type={"Full"}
                         border={"Thin"}
-                        scheme={"Inverse"}
                         label={mode}
                         isLoading={isLoading}
                         clickCB={handleSubmit}

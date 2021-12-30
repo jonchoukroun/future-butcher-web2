@@ -103,7 +103,6 @@ export const EndGameModal = ({
                         type={"Half"}
                         label={"Cancel"}
                         border={"None"}
-                        scheme={"Normal"}
                         clickCB={onCloseModal}
                     />
 

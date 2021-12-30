@@ -74,6 +74,7 @@ export const WeaponsList = ({
                     type={"Sized"}
                     label={"Back"}
                     border={"None"}
+                    scheme={"Inverse"}
                     clickCB={onStoreBackClick}
                 />
             </div>

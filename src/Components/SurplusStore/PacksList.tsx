@@ -60,6 +60,7 @@ export const PacksList = ({
                     type={"Sized"}
                     label={"Back"}
                     border={"None"}
+                    scheme={"Inverse"}
                     clickCB={onStoreBackClick}
                 />
             </div>

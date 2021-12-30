@@ -109,7 +109,6 @@ export const EndGame = () => {
                 <ButtonPrimary
                     type={"Full"}
                     label={"Retire"}
-                    scheme={"Inverse"}
                     clickCB={handleRetireClick}
                 />
             </div>

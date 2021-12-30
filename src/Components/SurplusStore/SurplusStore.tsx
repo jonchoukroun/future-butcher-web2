@@ -83,25 +83,9 @@ export const SurplusStore = () => {
             {menuType === undefined ? (
                 <Fragment>
                     <p css={{ marginBlock: "40px" }}>
-                        Welcome to the last bastion of freedom in LA! We have
+                        Welcome to the last bastion of freedom in LA! We stock
                         the best gear to ensure your liberty.
                     </p>
-
-                    <p>You look like you could use more carrying space.</p>
-                    <div
-                        css={{
-                            display: "flex",
-                            justifyContent: "center",
-                            marginBlockEnd: "40px",
-                        }}
-                    >
-                        <ButtonPrimary
-                            type={"Block"}
-                            label={"Buy Packs"}
-                            scheme={"Inverse"}
-                            clickCB={() => setMenuType("packs")}
-                        />
-                    </div>
 
                     <p>
                         Ain&apos;t no more 2nd ammendment, but we still have all
@@ -111,14 +95,30 @@ export const SurplusStore = () => {
                         css={{
                             display: "flex",
                             justifyContent: "center",
+                            marginBlockStart: "10px",
                             marginBlockEnd: "40px",
                         }}
                     >
                         <ButtonPrimary
-                            type={"Block"}
+                            type={"Full"}
                             label={"Buy Weapons"}
-                            scheme={"Inverse"}
                             clickCB={() => setMenuType("weapons")}
+                        />
+                    </div>
+
+                    <p>You look like you could use more carrying space.</p>
+                    <div
+                        css={{
+                            display: "flex",
+                            justifyContent: "center",
+                            marginBlockStart: "10px",
+                            marginBlockEnd: "40px",
+                        }}
+                    >
+                        <ButtonPrimary
+                            type={"Full"}
+                            label={"Buy Packs"}
+                            clickCB={() => setMenuType("packs")}
                         />
                     </div>
                 </Fragment>
