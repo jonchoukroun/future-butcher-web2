@@ -31,6 +31,7 @@ export const WeaponListItem = ({
     }
 
     const canAfford = player.funds >= price;
+    const isUnarmed = !player.weapon;
     const isOwned = name === player.weapon;
     return (
         <li
@@ -86,21 +87,24 @@ export const WeaponListItem = ({
                     },
                 }}
             >
-                <h3
-                    css={{
-                        margin: 0,
-                        marginInlineEnd: "10px",
-                        fontFamily: "Share Tech Mono",
-                        color: canAfford
-                            ? Colors.Text.base
-                            : Colors.Text.disable,
-                        fontStyle: canAfford ? "normal" : "italic",
-                    }}
-                >
-                    {formatMoney(price)}
-                </h3>
+                {isUnarmed && (
+                    <h3
+                        css={{
+                            margin: 0,
+                            marginInlineEnd: "10px",
+                            fontFamily: "Share Tech Mono",
+                            color: canAfford
+                                ? Colors.Text.base
+                                : Colors.Text.disable,
+                            fontStyle: canAfford ? "normal" : "italic",
+                        }}
+                    >
+                        {formatMoney(price)}
+                    </h3>
+                )}
+
                 <ButtonPrimary
-                    label={isOwned ? "Owned" : "Buy"}
+                    label={isOwned ? "Owned" : isUnarmed ? "Buy" : "Trade"}
                     type={"Half"}
                     border={isOwned ? "None" : "Thin"}
                     isDisabled={!canAfford || isOwned}
