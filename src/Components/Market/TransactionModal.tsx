@@ -40,6 +40,7 @@ export const TransactionModal = ({
     const { price, quantity } = market[cut];
     const stock = mode === "buy" ? quantity : pack[cut];
 
+    const [amount, setAmount] = useState<number | undefined>(undefined);
     const maxAfford = Math.floor(player.funds / price);
     const handleMaxClick = () => {
         if (errorMessage) setErrorMessage(undefined);
@@ -51,7 +52,6 @@ export const TransactionModal = ({
         });
     };
 
-    const [amount, setAmount] = useState<number | undefined>(undefined);
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (errorMessage) setErrorMessage(undefined);
 
