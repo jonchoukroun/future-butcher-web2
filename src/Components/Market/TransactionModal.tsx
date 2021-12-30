@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { KeyboardEvent, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { ButtonPrimary, TextInput } from "../Form";
@@ -40,19 +40,27 @@ export const TransactionModal = ({
     const { price, quantity } = market[cut];
     const stock = mode === "buy" ? quantity : pack[cut];
 
+    const maxAfford = Math.floor(player.funds / price);
     const handleMaxClick = () => {
+        if (errorMessage) setErrorMessage(undefined);
+
         setAmount(() => {
             if (mode === "sell") return pack[cut];
 
-            return Math.min(
-                quantity,
-                Math.floor(player.funds / price),
-                spaceAvailable,
-            );
+            return Math.min(quantity, maxAfford, spaceAvailable);
         });
     };
 
     const [amount, setAmount] = useState<number | undefined>(undefined);
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (errorMessage) setErrorMessage(undefined);
+
+        const value = parseInt(event.target.value);
+        setAmount(value);
+    };
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(
+        undefined,
+    );
 
     const [isLoading, setIsLoading] = useState(false);
     const { handlePushCallback } = useChannel();
@@ -62,8 +70,38 @@ export const TransactionModal = ({
         setIsLoading(true);
 
         if (mode === "buy") {
-            if (price * amount > player.funds) return;
-            if (amount > player.packSpace) return;
+            if (amount > maxAfford) {
+                unstable_batchedUpdates(() => {
+                    setErrorMessage(
+                        `Too expensive. You can only afford ${maxAfford} ${
+                            maxAfford > 1 ? "lbs" : "lb"
+                        } of ${cut}. Use the MAX button.`,
+                    );
+                    setIsLoading(false);
+                });
+                return;
+            }
+            if (amount > spaceAvailable) {
+                unstable_batchedUpdates(() => {
+                    setErrorMessage(
+                        `Not enough room. You can only carry ${spaceAvailable} more lbs.`,
+                    );
+                    setIsLoading(false);
+                });
+                return;
+            }
+            if (amount > stock) {
+                unstable_batchedUpdates(() => {
+                    setErrorMessage(
+                        `Not enough ${cut} in stock. Only ${stock} ${
+                            stock > 1 ? "lbs" : "lb"
+                        } available.`,
+                    );
+                    setIsLoading(false);
+                });
+                return;
+            }
+
             const response = await handlePushCallback(Callback.buyCut, {
                 cut,
                 amount,
@@ -79,7 +117,18 @@ export const TransactionModal = ({
                 onModalClose();
             });
         } else {
-            if (amount > pack[cut]) return;
+            if (amount > pack[cut]) {
+                unstable_batchedUpdates(() => {
+                    setErrorMessage(
+                        `You only have ${stock} ${
+                            stock > 1 ? "lbs" : "lb"
+                        }. Use the MAX button.`,
+                    );
+                    setIsLoading(false);
+                });
+                return;
+            }
+
             const response = await handlePushCallback(Callback.sellCut, {
                 cut,
                 amount,
@@ -178,6 +227,19 @@ export const TransactionModal = ({
                         {mode} {cut}
                     </h2>
                 </div>
+
+                {errorMessage && (
+                    <p
+                        css={{
+                            marginBlockStart: 0,
+                            marginBlockEnd: "5px",
+                            color: Colors.Text.danger,
+                        }}
+                    >
+                        {errorMessage}
+                    </p>
+                )}
+
                 <p>Price: {formatMoney(price)}</p>
                 <p>
                     {mode === "buy" ? "In Stock:" : "In Pack:"} {stock}
@@ -186,10 +248,7 @@ export const TransactionModal = ({
                     placeholder={"How much?"}
                     type={"number"}
                     value={`${amount}`}
-                    changeCB={(e) => {
-                        const value = parseInt(e.target.value);
-                        setAmount(value);
-                    }}
+                    changeCB={handleInputChange}
                     keypressCB={handleKeyPress}
                 />
                 <div

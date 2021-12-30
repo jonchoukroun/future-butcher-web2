@@ -38,9 +38,10 @@ export const PackModal = ({
     const handleBuyClick = async () => {
         if (isLoading) return;
 
-        // TODO: handle validation, error messages
-        if (player.funds < price) return;
-        if (player.packSpace === packSpace) return;
+        if (player.funds < price || player.packSpace === packSpace) {
+            onModalClose();
+            return;
+        }
 
         setIsLoading(true);
         const response = await handlePushCallback(Callback.buyPack, {

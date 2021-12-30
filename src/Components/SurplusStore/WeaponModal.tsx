@@ -40,9 +40,10 @@ export const WeaponModal = ({
     const handleBuyClick = async () => {
         if (isLoading) return;
 
-        // TODO: handle validation, error messages
-        if (player.funds < price) return;
-        if (player.weapon === name) return;
+        if (player.funds < price || player.weapon === name) {
+            onModalClose();
+            return;
+        }
 
         setIsLoading(true);
         const callback = player.weapon
