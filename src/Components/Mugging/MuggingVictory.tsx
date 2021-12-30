@@ -51,8 +51,6 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
         "",
     );
 
-    console.log("!!harvestedCuts", harvestedCuts);
-
     return (
         <div
             css={{

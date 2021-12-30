@@ -6,6 +6,7 @@ import { unstable_batchedUpdates } from "react-dom";
 import { MuggingDefeat } from "./MuggingDefeat";
 import { MuggingVictory } from "./MuggingVictory";
 import { ButtonPrimary } from "../Form/ButtonPrimary";
+import { muggerNames } from "../../Fixtures/mugging";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";
 import * as Colors from "../../Styles/colors";
@@ -27,6 +28,11 @@ export const Mugging = () => {
         "victory" | "defeat" | undefined
     >(undefined);
 
+    const muggerNamesRef = useRef(muggerNames);
+
+    const rndIndx = Math.floor(Math.random() * muggerNamesRef.current.length);
+    const currentMugger = muggerNamesRef.current.slice(rndIndx, rndIndx + 1)[0];
+
     const { handlePushCallback } = useChannel();
     const [isLoading, setIsLoading] = useState(false);
     const handleFightMuggerClick = async () => {
@@ -40,15 +46,13 @@ export const Mugging = () => {
         }
         dispatch({ type: "updateStateData", stateData: response });
         unstable_batchedUpdates(() => {
-            console.log(
-                "!!Intial",
-                initialTurnsLeft.current,
-                response.rules.turns_left,
-            );
             const outcome =
                 initialTurnsLeft.current > response.rules.turns_left
                     ? "defeat"
                     : "victory";
+            if (outcome === "victory") {
+                muggerNamesRef.current.splice(rndIndx, 1);
+            }
             setMuggingState(outcome);
             setIsLoading(false);
         });
@@ -73,7 +77,11 @@ export const Mugging = () => {
                     textAlign: "center",
                 }}
             >
-                You&apos;re under attack!
+                {muggingState === undefined
+                    ? "You're under attack!"
+                    : muggingState === "defeat"
+                    ? "You lost!"
+                    : "You win!"}
             </h2>
             {muggingState === "victory" ? (
                 <MuggingVictory initialPack={initialPack.current} />
@@ -88,7 +96,8 @@ export const Mugging = () => {
                     }}
                 >
                     <p>
-                        One of the city&apos;s relentless muggers follows you
+                        One of the city&apos;s relentless muggers
+                        {currentMugger ? ` ${currentMugger} ` : " "}follows you
                         from the subway.
                     </p>
                     <p>
