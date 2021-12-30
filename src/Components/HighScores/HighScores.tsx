@@ -14,7 +14,12 @@ export const HighScores = () => {
         dispatch,
     } = useGameState();
 
-    const playerName = player?.playerName || localStorage.getItem("playerName");
+    if (highScores === undefined || player === undefined) {
+        throw new Error("State is undefined");
+    }
+
+    const playerName = player.playerName || localStorage.getItem("playerName");
+    const playerScore = parseInt(localStorage.getItem("playerScore") || "0");
 
     const { handleInitGame } = useChannel();
     const handleStartOverClick = () => {
@@ -95,7 +100,8 @@ export const HighScores = () => {
                                 <span
                                     css={{
                                         color:
-                                            playerName === player
+                                            playerName === player &&
+                                            playerScore === score
                                                 ? Colors.Text.inverse
                                                 : Colors.Text.subtle,
                                     }}

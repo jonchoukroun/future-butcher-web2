@@ -44,6 +44,9 @@ export const EndGame = () => {
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
+        if (score > 0) {
+            localStorage.setItem("playerScore", score.toString());
+        }
         unstable_batchedUpdates(() => {
             dispatch({ type: "setHighScores", highScores });
             dispatch({ type: "changeScreen", screen: Screen.HighScores });
