@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/react";
 import { faClock, faHeart } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useState } from "react";
 
 import { EndModal } from "./EndModal";
 import { ButtonPrimary } from "../Form/ButtonPrimary";
