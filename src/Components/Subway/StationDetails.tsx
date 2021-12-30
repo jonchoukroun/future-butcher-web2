@@ -110,11 +110,16 @@ export const StationDetails = ({
                 <div css={{ marginInline: "4px" }}> </div>
                 <ButtonPrimary
                     type={"Block"}
-                    label={"Go"}
+                    label={
+                        !isStationOpen
+                            ? "Closed"
+                            : station.hours > turnsLeft
+                            ? "Too Far"
+                            : "Go"
+                    }
                     border={"Thin"}
-                    scheme={"Inverse"}
                     isLoading={isLoading}
-                    isDisabled={!isStationOpen}
+                    isDisabled={!isStationOpen || station.hours > turnsLeft}
                     clickCB={handleTravel}
                 />
             </div>
