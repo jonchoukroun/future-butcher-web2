@@ -124,10 +124,12 @@ export const StatsScreen = () => {
                             <span css={{ marginInlineEnd: "5px" }}>
                                 <FontAwesomeIcon icon={faClock} />
                             </span>
-                            {turnsLeft && getTimeLeft(turnsLeft)}
+                            {getTimeLeft(turnsLeft)}
                         </p>
                         <p css={{ marginBlock: 0, color: Colors.Text.subtle }}>
-                            {turnsLeft} hours left
+                            {turnsLeft > 0
+                                ? `${turnsLeft} hours left`
+                                : "Time's up"}
                         </p>
                     </div>
                     <ButtonPrimary
