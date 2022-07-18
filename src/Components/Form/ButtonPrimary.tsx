@@ -13,6 +13,7 @@ interface ButtonPrimaryProps {
     type: ButtonType;
     label: string;
     scheme?: SchemeType;
+    blink?: boolean;
     border?: BorderType;
     isDisabled?: boolean;
     isDanger?: boolean;
@@ -24,7 +25,7 @@ export const ButtonPrimary = ({
     type,
     label,
     scheme = "Normal",
-    border = "Full",
+    blink = false,
     isDisabled = false,
     isDanger = false,
     isLoading = false,
@@ -34,7 +35,6 @@ export const ButtonPrimary = ({
     const {
         backgroundColor,
         backgroundColorActive,
-        borderColor,
         fontColor,
         fontColorActive,
     } = getColorScheme(isDisabled, isDanger, scheme);
@@ -44,19 +44,17 @@ export const ButtonPrimary = ({
         to { transform: rotate(359deg); }
     `;
 
+    const blinkAnimation = keyframes`
+        50% { opacity: 0; }
+    `;
+
     return (
         <button
             css={css(buttonTypeStyles, {
                 backgroundColor,
-                borderColor,
-                borderRadius: "2px",
-                borderStyle: border === "None" ? "none" : "outset",
-                borderWidth: border === "Full" ? "2px" : "1px",
-                boxShadow:
-                    isDisabled || scheme === "Normal"
-                        ? "none"
-                        : "2px 2px 8px 2px rgba(0, 0, 0, 0.4)",
+                borderStyle: "none",
                 color: fontColor,
+                animation: blink ? `${blinkAnimation} 1s infinite ease` : "",
                 "&:active": {
                     backgroundColor: backgroundColorActive,
                     color: fontColorActive,
@@ -65,6 +63,7 @@ export const ButtonPrimary = ({
                 "& svg": {
                     animation: `${spinAnimation} 2s infinite ease`,
                 },
+                textAlign: "start",
             })}
             onClick={clickCB}
             disabled={isDisabled}
@@ -77,8 +76,8 @@ export const ButtonPrimary = ({
 function getButtonTypeStyles(type: ButtonType) {
     const baseButtonTypeStyles = css({
         margin: 0,
-        borderRadius: "2px",
-        fontFamily: "Share Tech Mono, monospace",
+        fontFamily: "'Courier New', Courier, monospace",
+        fontWeight: 800,
         lineHeight: "26px",
         textTransform: "uppercase",
     });
@@ -121,7 +120,7 @@ function getButtonTypeStyles(type: ButtonType) {
             return css(
                 {
                     blockSize: "46px",
-                    inlineSize: "90%",
+                    inlineSize: "100%",
                     paddingBlock: "1px",
                     fontSize: "20px",
                     letterSpacing: "2px",
@@ -145,7 +144,6 @@ function getColorScheme(
                 scheme === "Normal"
                     ? Colors.Background.base
                     : Colors.Background.inverse,
-            borderColor: Colors.Border.subtle,
             fontColor:
                 scheme === "Normal" ? Colors.Text.disable : Colors.Text.inverse,
         };
@@ -160,7 +158,6 @@ function getColorScheme(
                 scheme === "Normal"
                     ? Colors.Background.danger
                     : Colors.Background.base,
-            borderColor: Colors.Border.danger,
             fontColor:
                 scheme === "Normal" ? Colors.Text.danger : Colors.Text.inverse,
             fontColorActive:
@@ -176,7 +173,6 @@ function getColorScheme(
             scheme === "Normal"
                 ? Colors.Background.inverse
                 : Colors.Background.base,
-        borderColor: Colors.Border.base,
         fontColor: scheme === "Normal" ? Colors.Text.base : Colors.Text.inverse,
         fontColorActive:
             scheme === "Normal" ? Colors.Text.inverse : Colors.Text.base,
