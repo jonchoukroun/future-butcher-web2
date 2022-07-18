@@ -4,7 +4,7 @@
 // const BASE_RED = "#ff3333";
 
 /** Green-based palette */
-const GREEN = "rgba(51, 255, 51, 0.75)";
+// const GREEN = "rgba(51, 255, 51, 0.75)";
 const MED_GREEN = "rgba(51, 255, 51, 0.65)";
 const LIGHT_GREEN = "rgba(51, 255, 51, 0.3)";
 const AMBER = "#ffb000";
@@ -12,7 +12,7 @@ const RED = "rgba(255, 51, 51, 0.5)";
 const BLACK = "#171717";
 
 export const Text = {
-    base: GREEN,
+    base: AMBER,
     subtle: MED_GREEN,
     disable: LIGHT_GREEN,
     inverse: BLACK,
@@ -21,7 +21,7 @@ export const Text = {
 };
 
 export const Border = {
-    base: GREEN,
+    base: AMBER,
     subtle: LIGHT_GREEN,
     accent: AMBER,
     danger: RED,

@@ -80,8 +80,8 @@ export function useWindowSize() {
 }
 
 function handleSizing() {
-    const innerWidth = window.innerWidth - 8;
-    const innerHeight = window.innerHeight - 8;
+    const innerWidth = window.innerWidth;
+    const innerHeight = window.innerHeight;
 
     return {
         blockSize: Math.min(innerHeight, 812),

@@ -63,22 +63,21 @@ export const Welcome = () => {
                     inlineSize: `${inlineSize}px`,
                     display: "flex",
                     flexDirection: "column",
-                    alignItems: "center",
                     marginBlock: "20px",
+                    paddingInline: "10px",
                 }}
             >
                 <h2
                     css={{
                         marginBlockStart: 0,
                         marginBlockEnd: "5px",
-                        fontVariantCaps: "small-caps",
+                        fontSize: "48px",
+                        textTransform: "uppercase",
                     }}
                 >
                     Los Angeles
                 </h2>
-                <h4 css={{ marginBlock: 0, fontFamily: "Share Tech Mono" }}>
-                    {displayDate}
-                </h4>
+                <h4 css={{ marginBlock: 0 }}>{displayDate}</h4>
             </div>
 
             <div
@@ -131,8 +130,9 @@ export const Welcome = () => {
                 }}
             >
                 <ButtonPrimary
-                    label={"Start Game"}
+                    label={"> Start Game"}
                     type={"Block"}
+                    blink={true}
                     isLoading={isLoading}
                     clickCB={handleStartClick}
                 />
