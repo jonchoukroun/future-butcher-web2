@@ -6,7 +6,6 @@ import { unstable_batchedUpdates } from "react-dom";
 import { MuggingDefeat } from "./MuggingDefeat";
 import { MuggingVictory } from "./MuggingVictory";
 import { ButtonPrimary } from "../Form/ButtonPrimary";
-import { muggerNames } from "../../Fixtures/mugging";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";
 import * as Colors from "../../Styles/colors";
@@ -14,10 +13,15 @@ import * as Colors from "../../Styles/colors";
 export const Mugging = () => {
     const {
         dispatch,
-        state: { pack, player, turnsLeft },
+        state: { muggers, pack, player, turnsLeft },
     } = useGameState();
 
-    if (pack === undefined || player === undefined || turnsLeft === undefined) {
+    if (
+        muggers === undefined ||
+        pack === undefined ||
+        player === undefined ||
+        turnsLeft === undefined
+    ) {
         throw new Error("State is undefined");
     }
 
@@ -28,8 +32,14 @@ export const Mugging = () => {
         "victory" | "defeat" | undefined
     >(undefined);
 
-    const muggerNamesRef = useRef<string[]>(shuffleMuggerNames(muggerNames));
-    const currentMuggerRef = useRef(muggerNamesRef.current.pop());
+    console.log("!!muggers", muggers);
+    const currentMuggerRef = useRef(muggers[0]);
+    // const currentMuggerRef = useRef<string>();
+    // useEffect(() => {
+    //     const [currentMugger] = muggers;
+    //     currentMuggerRef.current = currentMugger;
+    //     console.log("!!currentMuggerRef", currentMuggerRef.current);
+    // }, []);
 
     const { handlePushCallback } = useChannel();
     const [isLoading, setIsLoading] = useState(false);
@@ -48,9 +58,10 @@ export const Mugging = () => {
                 initialTurnsLeft.current > response.rules.turns_left
                     ? "defeat"
                     : "victory";
-            // If the mugger hasn't been wasted, return him to the top of the list
-            if (outcome === "defeat" && currentMuggerRef.current) {
-                muggerNamesRef.current.unshift(currentMuggerRef.current);
+            // If the mugger is defeated, remove him from the list
+            if (outcome === "victory") {
+                dispatch({ type: "killMugger" });
+                console.log("!!", muggers, currentMuggerRef.current);
             }
             setMuggingState(outcome);
             setIsLoading(false);
@@ -95,11 +106,8 @@ export const Mugging = () => {
                     }}
                 >
                     <p>
-                        One of the city&apos;s relentless muggers
-                        {currentMuggerRef.current
-                            ? ` ${currentMuggerRef.current} `
-                            : " "}
-                        follows you from the subway.
+                        One of the city&apos;s relentless muggers,{" "}
+                        {currentMuggerRef.current}, follows you from the subway.
                     </p>
                     <p>
                         Pulling a well-used blade, he charges you. You have a
@@ -130,16 +138,3 @@ export const Mugging = () => {
         </div>
     );
 };
-
-function shuffleMuggerNames(names: string[]) {
-    let currIdx = names.length,
-        rndIdx;
-
-    while (currIdx !== 0) {
-        rndIdx = Math.floor(Math.random() * currIdx);
-        currIdx--;
-        [names[currIdx], names[rndIdx]] = [names[rndIdx], names[currIdx]];
-    }
-
-    return names;
-}

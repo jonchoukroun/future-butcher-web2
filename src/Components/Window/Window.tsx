@@ -43,10 +43,6 @@ export const Window = () => {
                     paddingBlock: "1px",
                     paddingInline: "1px",
                     backgroundColor: Colors.Background.base,
-                    borderColor: Colors.Border.subtle,
-                    borderRadius: "10px",
-                    borderStyle: "solid",
-                    borderWidth: "2px",
                 }}
             >
                 {currentScreen === Screen.Error && <ErrorScreen />}

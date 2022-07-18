@@ -1,7 +1,8 @@
 import * as React from "react";
-
-import { useChannel, Callback } from "../PhoenixChannel/ChannelProvider";
 import { unstable_batchedUpdates } from "react-dom";
+
+import { muggerNames } from "../Fixtures/mugging";
+import { useChannel, Callback } from "../PhoenixChannel/ChannelProvider";
 
 export enum Screen {
     Login = "Login",
@@ -34,22 +35,25 @@ type GameProcess = "initialized" | "in_game" | "mugging" | "game_over";
 type HighScores = { player: string; score: number }[];
 
 type GameState = {
-    currentScreen?: Screen;
     currentProcess?: GameProcess;
+    currentScreen?: Screen;
     currentStation?: string;
-    turnsLeft?: number;
-    player?: Player;
-    pack?: Pack;
-    spaceAvailable?: number;
-    market?: Market;
-    store?: Store;
     highScores?: HighScores;
+    market?: Market;
+    muggers?: string[];
+    pack?: Pack;
+    player?: Player;
+    spaceAvailable?: number;
+    store?: Store;
+    turnsLeft?: number;
 };
 type Action =
     | { type: "updateChannelStatus"; isConnected: boolean }
     | { type: "changeScreen"; screen: Screen }
     | { type: "updateStateData"; stateData: ApiState }
-    | { type: "setHighScores"; highScores: HighScores };
+    | { type: "setHighScores"; highScores: HighScores }
+    | { type: "shuffleMuggers" }
+    | { type: "killMugger" };
 
 const GameStateContext = React.createContext<
     { state: GameState; dispatch: (action: Action) => void } | undefined
@@ -68,6 +72,17 @@ function gameStateReducer(state: GameState, action: Action) {
 
         case "setHighScores":
             return { ...state, highScores: action.highScores };
+
+        case "shuffleMuggers":
+            return { ...state, muggers: shuffleMuggerNames() };
+
+        case "killMugger":
+            if (state.muggers === undefined) {
+                throw new Error("State is undefined");
+            }
+            state.muggers.shift();
+            return state;
+
         default:
             throw new Error("Invalid action type");
     }
@@ -110,6 +125,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
             if (reply === "join crashed") {
                 dispatch({ type: "changeScreen", screen: Screen.Login });
             }
+            dispatch({ type: "shuffleMuggers" });
         };
         if (isConnected) handleJoin();
     }, [isConnected]);
@@ -193,7 +209,7 @@ function handleUpdateState(
     apiState: ApiState,
     currentState: GameState,
 ): GameState {
-    const { currentScreen } = currentState;
+    const { currentScreen, muggers } = currentState;
     const {
         player: { player_name, funds, debt, weapon, pack, pack_space },
         station: { market, station_name, store },
@@ -205,6 +221,7 @@ function handleUpdateState(
         currentScreen,
         currentStation: station_name,
         market: market ? market : undefined,
+        muggers,
         pack,
         player: {
             playerName: player_name,
@@ -224,4 +241,20 @@ function countPackUse(pack: Pack) {
     return Object.entries(pack).reduce((sum, [, amount]) => {
         return sum + amount;
     }, 0);
+}
+
+function shuffleMuggerNames() {
+    let currIdx = muggerNames.length,
+        rndIdx;
+
+    while (currIdx !== 0) {
+        rndIdx = Math.floor(Math.random() * currIdx);
+        currIdx--;
+        [muggerNames[currIdx], muggerNames[rndIdx]] = [
+            muggerNames[rndIdx],
+            muggerNames[currIdx],
+        ];
+    }
+
+    return muggerNames;
 }
