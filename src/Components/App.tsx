@@ -21,8 +21,6 @@ export const App = () => {
 };
 
 const GlobalStyles = css`
-    @import url("https://fonts.googleapis.com/css2?family=Michroma&family=Mr+Dafoe&family=Saira+Stencil+One&family=Share+Tech+Mono&display=swap");
-
     html {
         block-size: 100%;
         inline-size: 100%;
@@ -42,18 +40,18 @@ const GlobalStyles = css`
     h4,
     h5,
     h6 {
-        font-family: Michroma;
+        font-family: Courier New, Courier, monospace;
         color: ${Colors.Text.base};
         word-spacing: 2px;
     }
 
     p {
-        font-family: Share Tech Mono;
+        font-family: Courier New, Courier, monospace;
         color: ${Colors.Text.base};
     }
 
     small {
-        font-family: Share Tech Mono;
+        font-family: Courier New, Courier, monospace;
         color: ${Colors.Text.subtle};
     }
 
