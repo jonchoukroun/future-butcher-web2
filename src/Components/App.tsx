@@ -21,6 +21,7 @@ export const App = () => {
 };
 
 const GlobalStyles = css`
+    @import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Splash&display=swap");
     html {
         block-size: 100%;
         inline-size: 100%;
@@ -31,7 +32,7 @@ const GlobalStyles = css`
         overflow: hidden;
         margin: 0;
         padding: 0;
-        background: black;
+        background: ${Colors.Background.base};
     }
 
     h1,
