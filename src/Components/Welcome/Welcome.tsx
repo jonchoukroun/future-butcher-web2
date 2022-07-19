@@ -95,7 +95,7 @@ export const Welcome = () => {
                 }}
             >
                 <p>
-                    The economy is ruins after the collapse of HypeCoin. The
+                    The economy is in ruins after the collapse of HypeCoin. The
                     rich and famous are nuts for the latest fad -{" "}
                     <em>fresh, human meat</em>.
                 </p>
@@ -131,14 +131,14 @@ export const Welcome = () => {
                     padding: "10px",
                 }}
             >
-                <h4
+                <h2
                     css={{
                         marginInlineEnd: "10px",
                         animation: `${Animations.blink} 1s linear infinite`,
                     }}
                 >
                     {">"}
-                </h4>
+                </h2>
                 <Button
                     label={"Start Game"}
                     size={ButtonSize.Full}
