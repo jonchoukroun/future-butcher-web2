@@ -1,23 +1,12 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { useState } from "react";
 
-import { StationDetails } from "./StationDetails";
 import { Stations } from "./Stations";
 import { useWindowSize } from "../Window/WindowSizeProvider";
-import { StationKey } from "../../Fixtures/subwayStations";
 import * as Colors from "../../Styles/colors";
 
 export const Subway = () => {
     const { heightAdjustment, layout } = useWindowSize();
-
-    const [selectedStation, setSelectedStation] = useState<
-        StationKey | undefined
-    >(undefined);
-    const handleSelectStation = (station: StationKey | undefined) => {
-        setSelectedStation(station);
-    };
-
     return (
         <div
             css={{
@@ -49,14 +38,7 @@ export const Subway = () => {
                     </h2>
                 )}
             </div>
-            {selectedStation ? (
-                <StationDetails
-                    stationKey={selectedStation}
-                    onDeselectStation={() => handleSelectStation(undefined)}
-                />
-            ) : (
-                <Stations handleSelectStation={handleSelectStation} />
-            )}
+            <Stations />
         </div>
     );
 };
