@@ -11,7 +11,7 @@ interface TextInputProps {
     type?: string;
     value?: string;
     changeCB?: (e: ChangeEvent<HTMLInputElement>) => void;
-    keypressCB?: (e: KeyboardEvent<HTMLInputElement>) => void;
+    keyDownCB?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
 
 export const TextInput = ({
@@ -20,7 +20,7 @@ export const TextInput = ({
     type = "text",
     value,
     changeCB,
-    keypressCB,
+    keyDownCB,
 }: TextInputProps) => {
     const { layout } = useWindowSize();
     const handleBlur = () => {
@@ -37,7 +37,6 @@ export const TextInput = ({
             css={css({
                 blockSize: layout === "full" ? "46px" : "32px",
                 inlineSize: "calc(100%)",
-                marginBlockStart: "10px",
                 paddingInline: "8px",
                 backgroundColor: Colors.Background.base,
                 borderColor: Colors.Border.subtle,
@@ -51,7 +50,7 @@ export const TextInput = ({
                 fontSize: "16px",
             })}
             onChange={changeCB}
-            onKeyPress={(e) => keypressCB && keypressCB(e)}
+            onKeyUp={(e) => keyDownCB && keyDownCB(e)}
             onBlur={handleBlur}
         />
     );
