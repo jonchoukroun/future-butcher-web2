@@ -4,11 +4,12 @@ import { useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { useWindowSize } from "../Window/WindowSizeProvider";
-import { ButtonPrimary } from "../Form";
+import { Button, ButtonSize } from "../Form";
 import { formatMoney } from "../Utils/formatMoney";
 import { player } from "../../Fixtures/player";
-import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { Screen, useGameState } from "../../GameData/GameStateProvider";
+import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
+import * as Animations from "../../Styles/animations";
 
 export const Welcome = () => {
     const { getContentSize, layout } = useWindowSize();
@@ -127,12 +128,20 @@ export const Welcome = () => {
                     alignItems: "center",
                     justifyContent: "center",
                     marginBlockStart: layout === "full" ? "40px" : 0,
+                    padding: "10px",
                 }}
             >
-                <ButtonPrimary
-                    label={"> Start Game"}
-                    type={"Block"}
-                    blink={true}
+                <h4
+                    css={{
+                        marginInlineEnd: "10px",
+                        animation: `${Animations.blink} 1s linear infinite`,
+                    }}
+                >
+                    {">"}
+                </h4>
+                <Button
+                    label={"Start Game"}
+                    size={ButtonSize.Full}
                     isLoading={isLoading}
                     clickCB={handleStartClick}
                 />

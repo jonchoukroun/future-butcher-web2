@@ -21,7 +21,7 @@ type ButtonSchemeType = typeof ButtonScheme[keyof typeof ButtonScheme];
 interface ButtonProps {
     label: string;
     size: ButtonSizeType;
-    scheme: ButtonSchemeType;
+    scheme?: ButtonSchemeType;
     blink?: boolean;
     isDisabled?: boolean;
     isDanger?: boolean;
