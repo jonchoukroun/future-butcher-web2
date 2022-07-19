@@ -1,8 +1,9 @@
 /** @jsx jsx */
-import { css, jsx, keyframes } from "@emotion/react";
+import { css, jsx } from "@emotion/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRedo } from "@fortawesome/free-solid-svg-icons";
 
+import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
 
 type ButtonType = "Full" | "Half" | "Sized" | "Block";
@@ -39,31 +40,21 @@ export const ButtonPrimary = ({
         fontColorActive,
     } = getColorScheme(isDisabled, isDanger, scheme);
 
-    const spinAnimation = keyframes`
-        from { transform: rotate(0deg); }
-        to { transform: rotate(359deg); }
-    `;
-
-    const blinkAnimation = keyframes`
-        50% { opacity: 0; }
-    `;
-
     return (
         <button
             css={css(buttonTypeStyles, {
                 backgroundColor,
                 borderStyle: "none",
                 color: fontColor,
-                animation: blink ? `${blinkAnimation} 1s infinite ease` : "",
+                animation: blink ? `${Animations.blink} 1s ease` : "",
                 "&:active": {
                     backgroundColor: backgroundColorActive,
                     color: fontColorActive,
                 },
                 fontStyle: isDisabled ? "italic" : "normal",
                 "& svg": {
-                    animation: `${spinAnimation} 2s infinite ease`,
+                    animation: `${Animations.spin} 2s ease`,
                 },
-                textAlign: "start",
             })}
             onClick={clickCB}
             disabled={isDisabled}
