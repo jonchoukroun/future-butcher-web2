@@ -5,7 +5,7 @@ import { EndGame } from "../EndGame/EndGame";
 import { ErrorScreen } from "../ErrorScreen/ErrorScreen";
 import { HighScores } from "../HighScores/HighScores";
 import { Login } from "../Login/Login";
-import { MainScreen } from "../MainScreen/MainScreen";
+// import { MainScreen } from "../MainScreen/MainScreen";
 import { Market } from "../Market/Market";
 import { Mugging } from "../Mugging/Mugging";
 import { StatsScreen } from "../Stats/StatsScreen";
@@ -51,11 +51,11 @@ export const Window = () => {
 
                 {currentScreen === Screen.Welcome && <Welcome />}
 
-                {currentScreen === Screen.Main && (
+                {/* {currentScreen === Screen.Main && (
                     <GameScreen layout={layout} shouldShowNavBar={false}>
                         <MainScreen />
                     </GameScreen>
-                )}
+                )} */}
 
                 {currentScreen === Screen.Market && (
                     <GameScreen layout={layout} shouldShowNavBar={true}>

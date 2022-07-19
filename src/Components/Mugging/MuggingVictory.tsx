@@ -76,7 +76,10 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
                     type={"Full"}
                     label={"Continue"}
                     clickCB={() =>
-                        dispatch({ type: "changeScreen", screen: Screen.Main })
+                        dispatch({
+                            type: "changeScreen",
+                            screen: Screen.Market,
+                        })
                     }
                 />
             </div>

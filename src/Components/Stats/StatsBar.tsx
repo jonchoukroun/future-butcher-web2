@@ -36,7 +36,6 @@ export const StatsBar = () => {
             <p
                 css={{
                     margin: 0,
-                    fontFamily: "Share Tech Mono",
                     color: Colors.Text.base,
                 }}
             >
@@ -48,7 +47,6 @@ export const StatsBar = () => {
             <p
                 css={{
                     margin: 0,
-                    fontFamily: "Share Tech Mono",
                     color:
                         turnsLeft >= 5 ? Colors.Text.base : Colors.Text.danger,
                 }}
@@ -65,7 +63,6 @@ export const StatsBar = () => {
                     backgroundColor: Colors.Background.base,
                     border: "none",
                     color: Colors.Text.base,
-                    fontFamily: "Share Tech Mono",
                     fontSize: "16px",
                     "& svg": {
                         marginBlockStart: "-10px",

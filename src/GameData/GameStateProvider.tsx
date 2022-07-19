@@ -3,11 +3,12 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import { muggerNames } from "../Fixtures/mugging";
 import { useChannel, Callback } from "../PhoenixChannel/ChannelProvider";
+import { StationKey } from "../Fixtures/subwayStations";
 
 export enum Screen {
     Login = "Login",
     Welcome = "Future Butcher",
-    Main = "Main",
+    // Main = "Main",
     Subway = "Subway",
     Market = "Market",
     SurplusStore = "Gus's Army Surplus",
@@ -30,7 +31,7 @@ type Player = {
     weapon: string | null;
 };
 
-type GameProcess = "initialized" | "in_game" | "mugging" | "game_over";
+export type GameProcess = "initialized" | "in_game" | "mugging" | "game_over";
 
 type HighScores = { player: string; score: number }[];
 
@@ -158,7 +159,14 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                             type: "updateStateData",
                             stateData: lastState,
                         });
-                        dispatch({ type: "changeScreen", screen: Screen.Main });
+                        dispatch({
+                            type: "changeScreen",
+                            screen:
+                                lastState.station.station_name ===
+                                StationKey.bellGardens
+                                    ? Screen.SurplusStore
+                                    : Screen.Market,
+                        });
                     });
                     return;
                 }

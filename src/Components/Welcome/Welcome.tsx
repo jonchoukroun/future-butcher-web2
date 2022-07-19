@@ -44,7 +44,7 @@ export const Welcome = () => {
 
         unstable_batchedUpdates(() => {
             dispatch({ type: "updateStateData", stateData: response });
-            dispatch({ type: "changeScreen", screen: Screen.Main });
+            dispatch({ type: "changeScreen", screen: Screen.Market });
             setIsLoading(false);
         });
     };

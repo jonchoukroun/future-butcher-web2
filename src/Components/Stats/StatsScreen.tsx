@@ -94,7 +94,6 @@ export const StatsScreen = () => {
                     justifyContent: "space-evenly",
                     paddingInline: containerPaddingInline,
                     "& p": {
-                        fontFamily: "Share Tech Mono",
                         wordSpacing: 0,
                     },
                 }}
@@ -276,7 +275,6 @@ export const StatsScreen = () => {
                         css={{
                             marginBlockStart: 0,
                             marginBlockEnd: "15px",
-                            fontFamily: "Michroma",
                             fontVariantCaps: "small-caps",
                             textTransform: "capitalize",
                         }}

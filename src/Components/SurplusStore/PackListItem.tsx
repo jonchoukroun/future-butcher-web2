@@ -88,7 +88,6 @@ export const PackListItem = ({
                     css={{
                         margin: 0,
                         marginInlineEnd: "10px",
-                        fontFamily: "Share Tech Mono",
                         color: canAfford
                             ? Colors.Text.base
                             : Colors.Text.disable,

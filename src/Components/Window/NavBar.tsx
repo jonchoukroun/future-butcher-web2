@@ -3,21 +3,26 @@ import { jsx } from "@emotion/react";
 
 import { useWindowSize } from "./WindowSizeProvider";
 import { ButtonPrimary } from "../Form/ButtonPrimary";
-import { useGameState, Screen } from "../../GameData/GameStateProvider";
+import {
+    GameProcess,
+    Screen,
+    useGameState,
+} from "../../GameData/GameStateProvider";
+import { StationKey } from "../../Fixtures/subwayStations";
 
 export const NavBar = () => {
     const { layout } = useWindowSize();
 
     const {
-        state: { currentProcess, currentScreen },
+        state: { currentProcess, currentScreen, currentStation },
         dispatch,
     } = useGameState();
 
+    if (!currentProcess || !currentScreen || !currentStation) return;
+
     const label = getButtonLabel(currentScreen);
 
-    const defaultScreen =
-        currentProcess === "mugging" ? Screen.Mugging : Screen.Main;
-
+    const screen = getNextScreen(currentProcess, currentScreen, currentStation);
     return (
         <div
             css={{
@@ -33,9 +38,7 @@ export const NavBar = () => {
             <ButtonPrimary
                 type={"Block"}
                 label={label}
-                clickCB={() =>
-                    dispatch({ type: "changeScreen", screen: defaultScreen })
-                }
+                clickCB={() => dispatch({ type: "changeScreen", screen })}
             />
         </div>
     );
@@ -52,4 +55,17 @@ function getButtonLabel(screen: Screen | undefined) {
         default:
             return "Back to the Streets";
     }
+}
+
+function getNextScreen(process: GameProcess, screen: Screen, station: string) {
+    if (process === "mugging") return Screen.Mugging;
+
+    if (station === StationKey.bellGardens) {
+        if (screen === Screen.SurplusStore) return Screen.Subway;
+        else return Screen.SurplusStore;
+    }
+
+    if (screen === Screen.Market) return Screen.Subway;
+
+    return Screen.Market;
 }
