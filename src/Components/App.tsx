@@ -35,6 +35,7 @@ const GlobalStyles = css`
         background: ${Colors.Background.base};
     }
 
+    button,
     h1,
     h2,
     h3,
