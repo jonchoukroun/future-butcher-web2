@@ -249,7 +249,7 @@ export const TransactionModal = ({
                     type={"number"}
                     value={`${amount}`}
                     changeCB={handleInputChange}
-                    keypressCB={handleKeyPress}
+                    keyDownCB={handleKeyPress}
                 />
                 <div
                     css={{

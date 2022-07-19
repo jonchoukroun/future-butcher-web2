@@ -18,8 +18,6 @@ export const NavBar = () => {
         dispatch,
     } = useGameState();
 
-    if (!currentProcess || !currentScreen || !currentStation) return;
-
     const label = getButtonLabel(currentScreen);
 
     const screen = getNextScreen(currentProcess, currentScreen, currentStation);
@@ -57,7 +55,11 @@ function getButtonLabel(screen: Screen | undefined) {
     }
 }
 
-function getNextScreen(process: GameProcess, screen: Screen, station: string) {
+function getNextScreen(
+    process: GameProcess | undefined,
+    screen: Screen | undefined,
+    station: string | undefined,
+) {
     if (process === "mugging") return Screen.Mugging;
 
     if (station === StationKey.bellGardens) {

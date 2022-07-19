@@ -31,7 +31,7 @@ export const MainScreen = () => {
                 screen = Screen.SurplusStore;
                 break;
             default:
-                screen = Screen.Main;
+                screen = Screen.Market;
                 break;
         }
         dispatch({ type: "changeScreen", screen });
