@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/react";
 
 import { useWindowSize } from "./WindowSizeProvider";
-import { ButtonPrimary } from "../Form/ButtonPrimary";
+import { Button, ButtonSize, ButtonScheme } from "../Form";
 import {
     GameProcess,
     Screen,
@@ -18,7 +18,10 @@ export const NavBar = () => {
         dispatch,
     } = useGameState();
 
-    const label = getButtonLabel(currentScreen);
+    const label = getButtonLabel(
+        currentScreen,
+        currentStation === StationKey.bellGardens,
+    );
 
     const screen = getNextScreen(currentProcess, currentScreen, currentStation);
     return (
@@ -31,10 +34,19 @@ export const NavBar = () => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
+                padding: "10px",
             }}
         >
-            <ButtonPrimary
-                type={"Block"}
+            <h2
+                css={{
+                    marginInlineEnd: "10px",
+                }}
+            >
+                {">"}
+            </h2>
+            <Button
+                size={ButtonSize.Full}
+                scheme={ButtonScheme.Inverse}
                 label={label}
                 clickCB={() => dispatch({ type: "changeScreen", screen })}
             />
@@ -42,13 +54,13 @@ export const NavBar = () => {
     );
 };
 
-function getButtonLabel(screen: Screen | undefined) {
+function getButtonLabel(screen: Screen | undefined, isBellGardens: boolean) {
     switch (screen) {
         case Screen.Subway:
-            return "Leave Subway";
+            return isBellGardens ? "Go to the Store" : "Go to the Market";
 
         case Screen.Market:
-            return "Leave Market";
+            return "Go to the Subway";
 
         default:
             return "Back to the Streets";
