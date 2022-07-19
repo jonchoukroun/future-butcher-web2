@@ -101,15 +101,15 @@ export const Login = () => {
                     marginBlockStart: "50px",
                 }}
             >
-                <h4 css={{ margin: 0 }}>{">"} Enter your name</h4>
+                <h2 css={{ margin: 0 }}>{">"} Enter your name</h2>
                 <div
                     css={{
                         display: "flex",
                         alignItems: "center",
-                        marginBlockStart: "8px",
+                        marginBlockStart: "10px",
                     }}
                 >
-                    <h4
+                    <h2
                         css={{
                             marginBlock: 0,
                             marginInlineEnd: "10px",
@@ -119,7 +119,7 @@ export const Login = () => {
                         }}
                     >
                         {">"}
-                    </h4>
+                    </h2>
                     <TextInput
                         placeholder="(3 to 20 characters long)"
                         lengthOptions={[3, 20]}
@@ -133,10 +133,10 @@ export const Login = () => {
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "flex-start",
-                            marginBlockStart: "8px",
+                            marginBlockStart: "17px",
                         }}
                     >
-                        <h4
+                        <h2
                             css={{
                                 marginBlock: 0,
                                 marginInlineEnd: "10px",
@@ -144,7 +144,7 @@ export const Login = () => {
                             }}
                         >
                             {">"}
-                        </h4>
+                        </h2>
                         <Button
                             size={ButtonSize.Full}
                             scheme={ButtonScheme.Normal}
