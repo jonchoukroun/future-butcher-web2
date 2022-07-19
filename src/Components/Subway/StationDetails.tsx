@@ -50,6 +50,8 @@ export const StationDetails = ({
         const screen =
             stateData.rules.state === "mugging"
                 ? Screen.Mugging
+                : stateData.station.station_name === StationKey.bellGardens
+                ? Screen.SurplusStore
                 : Screen.Market;
         unstable_batchedUpdates(() => {
             dispatch({ type: "updateStateData", stateData });
