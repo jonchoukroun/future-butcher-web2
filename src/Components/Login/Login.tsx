@@ -2,10 +2,12 @@
 import { jsx } from "@emotion/react";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 
-import { ButtonPrimary, TextInput } from "../Form";
+import { Button, ButtonScheme, ButtonSize, TextInput } from "../Form";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
+
+import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
 
 export const Login = () => {
@@ -18,10 +20,13 @@ export const Login = () => {
     }, []);
 
     const { getContentSize, windowSize } = useWindowSize();
-    const headingWidth = Math.round(windowSize.inlineSize * 0.2);
+    const headingWidth = Math.round(windowSize.inlineSize * 0.12);
 
-    const [playerName, setPlayerName] = useState("");
-    function handleKeypress(event: KeyboardEvent<HTMLInputElement>) {
+    const [playerName, setPlayerName] = useState<string>();
+    const [nameIsValid, setNameIsValid] = useState(false);
+    function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+        if (playerName) setNameIsValid(isNameValid(playerName));
+
         if (event.key === "Enter") {
             handleSubmit();
         }
@@ -30,8 +35,8 @@ export const Login = () => {
     const { dispatch } = useGameState();
     const [isLoading, setIsLoading] = useState(false);
     async function handleSubmit() {
-        if (isLoading) return;
-        if (playerName.length < 3) return;
+        if (isLoading || !playerName) return;
+        if (!isNameValid(playerName)) return;
 
         setIsLoading(true);
         await handleJoinChannel(playerName);
@@ -58,36 +63,32 @@ export const Login = () => {
                     flexDirection: "column",
                     alignItems: "center",
                     marginBlockStart: "20px",
-                    backgroundColor: "black",
-                    borderColor: Colors.Border.subtle,
-                    borderRadius: "2px",
-                    borderStyle: "inset",
-                    borderWidth: "2px",
                 }}
             >
                 <h1
                     css={{
-                        fontFamily: "Saira Stencil One",
+                        fontFamily: "'Press Start 2P'",
                         fontSize: `${headingWidth}px`,
                         color: Colors.Text.base,
                         margin: 0,
                     }}
                 >
-                    FUTURE
+                    future
                 </h1>
                 <h1
                     css={{
-                        fontFamily: "Mr Dafoe",
+                        fontFamily: "Splash",
                         fontSize: `${headingWidth + 10}px`,
                         color: Colors.Text.danger,
                         margin: 0,
                         marginBlockStart: `-${Math.round(
-                            headingWidth * 0.9,
+                            headingWidth * 0.7,
                         )}px`,
                         transform: "rotate(-10deg)",
+                        textTransform: "uppercase",
                     }}
                 >
-                    Butcher
+                    butcher
                 </h1>
             </div>
             <div
@@ -100,28 +101,66 @@ export const Login = () => {
                     marginBlockStart: "50px",
                 }}
             >
-                <h4 css={{ margin: 0 }}>Enter your name</h4>
-                <TextInput
-                    placeholder="(3 to 20 characters long)"
-                    lengthOptions={[3, 20]}
-                    changeCB={(e) => setPlayerName(e.target.value)}
-                    keypressCB={handleKeypress}
-                />
+                <h4 css={{ margin: 0 }}>{">"} Enter your name</h4>
                 <div
                     css={{
                         display: "flex",
-                        justifyContent: "flex-end",
+                        alignItems: "center",
                         marginBlockStart: "8px",
                     }}
                 >
-                    <ButtonPrimary
-                        type={"Full"}
-                        label={isLoading ? "Joining" : "Start"}
-                        isLoading={isLoading}
-                        clickCB={handleSubmit}
+                    <h4
+                        css={{
+                            marginBlock: 0,
+                            marginInlineEnd: "10px",
+                            animation: nameIsValid
+                                ? ""
+                                : `${Animations.blink} 1s ease infinite`,
+                        }}
+                    >
+                        {">"}
+                    </h4>
+                    <TextInput
+                        placeholder="(3 to 20 characters long)"
+                        lengthOptions={[3, 20]}
+                        changeCB={(e) => setPlayerName(e.target.value)}
+                        keyDownCB={handleKeyDown}
                     />
                 </div>
+                {nameIsValid && (
+                    <div
+                        css={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "flex-start",
+                            marginBlockStart: "8px",
+                        }}
+                    >
+                        <h4
+                            css={{
+                                marginBlock: 0,
+                                marginInlineEnd: "10px",
+                                animation: `${Animations.blink} 1s ease infinite`,
+                            }}
+                        >
+                            {">"}
+                        </h4>
+                        <Button
+                            size={ButtonSize.Full}
+                            scheme={ButtonScheme.Normal}
+                            label={isLoading ? "Joining" : "Start"}
+                            isLoading={isLoading}
+                            clickCB={handleSubmit}
+                        />
+                    </div>
+                )}
             </div>
         </div>
     );
 };
+
+function isNameValid(name: string) {
+    const x = name.length >= 3 && name.length <= 20;
+    console.log("!!isNameValid", x);
+    return x;
+}
