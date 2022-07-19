@@ -3,7 +3,6 @@ import { css, jsx } from "@emotion/react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRedo } from "@fortawesome/free-solid-svg-icons";
 
-import { LayoutType, useWindowSize } from "../Window/WindowSizeProvider";
 import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
 
@@ -38,9 +37,7 @@ export const Button = ({
     isLoading = false,
     clickCB,
 }: ButtonProps) => {
-    const { layout } = useWindowSize();
-
-    const buttonTypeStyles = getButtonTypeStyles(size, layout);
+    const buttonTypeStyles = getButtonTypeStyles(size);
     const {
         backgroundColor,
         backgroundColorActive,
@@ -72,7 +69,7 @@ export const Button = ({
     );
 };
 
-function getButtonTypeStyles(size: ButtonSize, layout: LayoutType) {
+function getButtonTypeStyles(size: ButtonSize) {
     const baseButtonTypeStyles = css({
         margin: 0,
         fontFamily: "'Courier New', Courier, monospace",
@@ -85,7 +82,7 @@ function getButtonTypeStyles(size: ButtonSize, layout: LayoutType) {
         case ButtonSize.Full:
             return css(
                 {
-                    blockSize: layout === "full" ? "46px" : "32px",
+                    blockSize: "46px",
                     inlineSize: "100%",
                     paddingBlock: "1px",
                     fontSize: "20px",

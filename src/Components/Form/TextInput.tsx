@@ -2,7 +2,6 @@
 import { css, jsx } from "@emotion/react";
 import { ChangeEvent, KeyboardEvent } from "react";
 
-import { useWindowSize } from "../Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 
 interface TextInputProps {
@@ -22,7 +21,6 @@ export const TextInput = ({
     changeCB,
     keyDownCB,
 }: TextInputProps) => {
-    const { layout } = useWindowSize();
     const handleBlur = () => {
         document.body.scrollTop = document.documentElement.scrollTop = 0;
     };
@@ -35,7 +33,7 @@ export const TextInput = ({
             minLength={minLength}
             maxLength={maxLength}
             css={css({
-                blockSize: layout === "full" ? "46px" : "32px",
+                blockSize: "46px",
                 inlineSize: "calc(100%)",
                 paddingInline: "8px",
                 backgroundColor: Colors.Background.base,
