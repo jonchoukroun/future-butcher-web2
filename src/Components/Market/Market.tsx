@@ -55,11 +55,11 @@ export const Market = () => {
                             wordSpacing: "4px",
                         }}
                     >
-                        Cuts Market
+                        Meat Market
                     </h2>
                 )}
                 <small css={{ color: Colors.Text.subtle }}>
-                    Buy low, sell high.
+                    Buy low (*), sell high.
                 </small>
             </div>
 
