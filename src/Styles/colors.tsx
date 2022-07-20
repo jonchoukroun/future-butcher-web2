@@ -15,7 +15,7 @@ export const Text = {
 
 export const Border = {
     base: AMBER,
-    subtle: LIGHT_AMBER,
+    subtle: PALE_AMBER,
     accent: AMBER,
     danger: RED,
 };
