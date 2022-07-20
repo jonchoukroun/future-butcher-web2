@@ -115,7 +115,7 @@ export const Login = () => {
                             marginInlineEnd: "10px",
                             animation: nameIsValid
                                 ? ""
-                                : `${Animations.blink} 1s ease infinite`,
+                                : `${Animations.blink} 1s linear infinite`,
                         }}
                     >
                         {">"}

@@ -14,6 +14,7 @@ type ButtonSizeType = typeof ButtonSize[keyof typeof ButtonSize];
 export const enum ButtonScheme {
     Normal = "Normal",
     Inverse = "Inverse",
+    Hidden = "Hidden",
 }
 type ButtonSchemeType = typeof ButtonScheme[keyof typeof ButtonScheme];
 
@@ -60,9 +61,10 @@ export const Button = ({
                 "& svg": {
                     animation: `${Animations.spin} 2s ease`,
                 },
+                opacity: scheme === ButtonScheme.Hidden ? 0 : 1,
             })}
             onClick={clickCB}
-            disabled={isDisabled}
+            disabled={isDisabled || scheme === ButtonScheme.Hidden}
         >
             {isLoading ? <FontAwesomeIcon icon={faRedo} /> : label}
         </button>
