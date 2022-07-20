@@ -80,16 +80,13 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
                 disabled={!canTravel}
                 onClick={handleTravel}
             >
-                <h4
+                <h2
                     css={{
                         marginBlock: 0,
                         color: canTravel
                             ? Colors.Text.base
                             : Colors.Text.disable,
                         fontSize: "20px",
-                        fontVariantCaps: "small-caps",
-                        letterSpacing: "4px",
-                        wordSpacing: "8px",
                         animation: isCurrentStation
                             ? `${Animations.blink} 1s linear infinite`
                             : "",
@@ -106,21 +103,21 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
                         {prompt}
                     </span>{" "}
                     {station.name}
-                </h4>
+                </h2>
                 {canTravel && (
-                    <h4 css={{ marginInlineStart: "auto" }}>
+                    <h2 css={{ marginInlineStart: "auto" }}>
                         ({station.hours} hours)
-                    </h4>
+                    </h2>
                 )}
                 {isClosed && (
-                    <h4
+                    <h2
                         css={{
                             marginInlineStart: "auto",
                             color: Colors.Text.disable,
                         }}
                     >
                         (Closed)
-                    </h4>
+                    </h2>
                 )}
             </button>
         </li>
