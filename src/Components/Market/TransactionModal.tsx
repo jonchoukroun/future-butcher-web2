@@ -1,13 +1,14 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { ChangeEvent, KeyboardEvent, useState } from "react";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
-import { ButtonPrimary, TextInput } from "../Form";
+import { Button, ButtonScheme, ButtonSize, TextInput } from "../Form";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { formatMoney } from "../Utils";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
+import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
 
 export type TransactionMode = "buy" | "sell";
@@ -27,7 +28,6 @@ export const TransactionModal = ({
         dispatch,
         state: { market, pack, player, spaceAvailable },
     } = useGameState();
-
     if (
         pack === undefined ||
         market === undefined ||
@@ -37,71 +37,102 @@ export const TransactionModal = ({
         throw new Error("State is undefined");
     }
 
+    const { handlePushCallback } = useChannel();
+
+    const [showInput, setShowInput] = useState(false);
+    const [inputValue, setInputValue] = useState<number | undefined>();
+    const [isAmountValid, setIsAmountValid] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | undefined>();
+    const [isLoading, setIsLoading] = useState(false);
+
     const { price, quantity } = market[cut];
     const stock = mode === "buy" ? quantity : pack[cut];
 
-    const [amount, setAmount] = useState<number | undefined>(undefined);
     const maxAfford = Math.floor(player.funds / price);
+    const maxTransact =
+        mode === "sell"
+            ? pack[cut]
+            : Math.min(quantity, maxAfford, spaceAvailable);
+
     const handleMaxClick = () => {
-        if (errorMessage) setErrorMessage(undefined);
-
-        setAmount(() => {
-            if (mode === "sell") return pack[cut];
-
-            return Math.min(quantity, maxAfford, spaceAvailable);
+        unstable_batchedUpdates(() => {
+            setErrorMessage(undefined);
+            setInputValue(undefined);
         });
+
+        handleSubmit(maxTransact, true);
     };
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (errorMessage) setErrorMessage(undefined);
 
         const value = parseInt(event.target.value);
-        setAmount(value);
+        setInputValue(value);
     };
-    const [errorMessage, setErrorMessage] = useState<string | undefined>(
-        undefined,
-    );
 
-    const [isLoading, setIsLoading] = useState(false);
-    const { handlePushCallback } = useChannel();
-    const handleSubmit = async () => {
-        if (isLoading) return;
-        if (!amount) return;
-        setIsLoading(true);
+    useEffect(() => {
+        if (!inputValue) {
+            setIsAmountValid(false);
+            return;
+        }
 
         if (mode === "buy") {
-            if (amount > maxAfford) {
+            if (inputValue > maxAfford) {
                 unstable_batchedUpdates(() => {
                     setErrorMessage(
                         `Too expensive. You can only afford ${maxAfford} ${
                             maxAfford > 1 ? "lbs" : "lb"
-                        } of ${cut}. Use the MAX button.`,
+                        } of ${cut}. Try the Max button.`,
                     );
-                    setIsLoading(false);
+                    setIsAmountValid(false);
                 });
                 return;
             }
-            if (amount > spaceAvailable) {
+            if (inputValue > spaceAvailable) {
                 unstable_batchedUpdates(() => {
                     setErrorMessage(
                         `Not enough room. You can only carry ${spaceAvailable} more lbs.`,
                     );
-                    setIsLoading(false);
+                    setIsAmountValid(false);
                 });
                 return;
             }
-            if (amount > stock) {
+            if (inputValue > stock) {
                 unstable_batchedUpdates(() => {
                     setErrorMessage(
                         `Not enough ${cut} in stock. Only ${stock} ${
                             stock > 1 ? "lbs" : "lb"
                         } available.`,
                     );
+                    setIsAmountValid(false);
+                });
+                return;
+            }
+        } else {
+            if (inputValue > pack[cut]) {
+                unstable_batchedUpdates(() => {
+                    setErrorMessage(
+                        `You only have ${stock} ${
+                            stock > 1 ? "lbs" : "lb"
+                        }. Try the Max button.`,
+                    );
                     setIsLoading(false);
                 });
                 return;
             }
+        }
 
+        setIsAmountValid(true);
+    }, [inputValue]);
+
+    const handleSubmit = async (amount: number, isMax: boolean) => {
+        console.log("!!handleSumit", amount, maxTransact, isAmountValid);
+        if (isLoading) return;
+        if (!amount || (!isMax && !isAmountValid)) return;
+
+        setIsLoading(true);
+
+        if (mode === "buy") {
             const response = await handlePushCallback(Callback.buyCut, {
                 cut,
                 amount,
@@ -111,24 +142,12 @@ export const TransactionModal = ({
                 return;
             }
             unstable_batchedUpdates(() => {
-                setAmount(undefined);
+                setInputValue(undefined);
                 setIsLoading(false);
                 dispatch({ type: "updateStateData", stateData: response });
                 onModalClose();
             });
         } else {
-            if (amount > pack[cut]) {
-                unstable_batchedUpdates(() => {
-                    setErrorMessage(
-                        `You only have ${stock} ${
-                            stock > 1 ? "lbs" : "lb"
-                        }. Use the MAX button.`,
-                    );
-                    setIsLoading(false);
-                });
-                return;
-            }
-
             const response = await handlePushCallback(Callback.sellCut, {
                 cut,
                 amount,
@@ -138,7 +157,7 @@ export const TransactionModal = ({
                 return;
             }
             unstable_batchedUpdates(() => {
-                setAmount(undefined);
+                setInputValue(undefined);
                 setIsLoading(false);
                 dispatch({ type: "updateStateData", stateData: response });
                 onModalClose();
@@ -147,13 +166,12 @@ export const TransactionModal = ({
     };
 
     const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === "Enter") handleSubmit();
         switch (event.key) {
             case "Enter":
-                handleSubmit();
+                handleSubmit(inputValue ?? 0, false);
                 return;
             case "Escape":
-                setAmount(undefined);
+                setInputValue(undefined);
                 return;
             default:
                 return;
@@ -184,55 +202,49 @@ export const TransactionModal = ({
                     inlineSize: `${inlineSize - inlineSizeOffset}px`,
                     display: "flex",
                     flexDirection: "column",
-                    padding: "10px",
+                    padding: "20px",
                     backgroundColor: Colors.Background.base,
                     borderColor: Colors.Border.subtle,
-                    borderRadius: "4px",
+                    borderRadius: "1px",
                     borderStyle: "outset",
-                    borderWidth: "2px",
+                    borderWidth: "3px",
                     boxShadow: "2px 2px 12px 4px rgba(0, 0, 0, 0.4)",
                     zIndex: 1001,
                 }}
             >
-                <div css={{ display: "flex", justifyContent: "flex-end" }}>
-                    <ButtonPrimary
-                        type={"Sized"}
-                        label={"Close"}
-                        border={"None"}
-                        clickCB={onModalClose}
-                        isDisabled={isLoading}
-                    />
-                </div>
                 <div
                     css={{
                         display: "flex",
-                        justifyContent: "center",
-                        marginBlock: "20px",
+                        alignItems: "center",
+                        justifyContent: "space-between",
+                        marginBlockEnd: "30px",
                         paddingBlockEnd: "10px",
-                        borderColor: "transparent",
-                        borderBlockEndColor: Colors.Border.subtle,
-                        borderStyle: "solid",
-                        borderWidth: "1px",
+                        borderColor: Colors.Border.subtle,
+                        borderBottomStyle: "dashed",
+                        borderWidth: "2px",
                     }}
                 >
                     <h2
                         css={{
                             marginBlock: 0,
-                            fontVariantCaps: "small-caps",
-                            letterSpacing: "4px",
                             textTransform: "capitalize",
-                            wordSpacing: "8px",
                         }}
                     >
                         {mode} {cut}
                     </h2>
+                    <Button
+                        size={ButtonSize.Compact}
+                        label={"Close"}
+                        clickCB={onModalClose}
+                        isDisabled={isLoading}
+                    />
                 </div>
 
                 {errorMessage && (
                     <p
                         css={{
                             marginBlockStart: 0,
-                            marginBlockEnd: "5px",
+                            marginBlockEnd: "20px",
                             color: Colors.Text.danger,
                         }}
                     >
@@ -240,42 +252,123 @@ export const TransactionModal = ({
                     </p>
                 )}
 
-                <p>Price: {formatMoney(price)}</p>
-                <p>
+                <h4
+                    css={{
+                        marginBlockStart: 0,
+                        marginBlockEnd: "20px",
+                    }}
+                >
+                    Price: {formatMoney(price)}
+                </h4>
+                <h4
+                    css={{
+                        marginBlockStart: 0,
+                        marginBlockEnd: "20px",
+                    }}
+                >
                     {mode === "buy" ? "In Stock:" : "In Pack:"} {stock}
-                </p>
-                <TextInput
-                    placeholder={"How much?"}
-                    type={"number"}
-                    value={`${amount}`}
-                    changeCB={handleInputChange}
-                    keyDownCB={handleKeyPress}
-                />
+                </h4>
                 <div
                     css={{
                         display: "flex",
-                        justifyContent: "flex-end",
-                        marginBlockStart: "30px",
-                        marginBlockEnd: "10px",
+                        alignItems: "center",
                     }}
                 >
-                    <div css={{ marginInlineEnd: "20px" }}>
-                        <ButtonPrimary
-                            type={"Sized"}
-                            border={"None"}
-                            label={"Max"}
-                            isDisabled={isLoading}
-                            clickCB={handleMaxClick}
-                        />
-                    </div>
-                    <ButtonPrimary
-                        type={"Full"}
-                        border={"Thin"}
-                        label={mode}
-                        isLoading={isLoading}
-                        clickCB={handleSubmit}
+                    <h4
+                        css={{
+                            marginBlock: 0,
+                            marginInlineEnd: "20px",
+                            animation: showInput
+                                ? ""
+                                : `${Animations.blink} 1s linear infinite`,
+                        }}
+                    >
+                        {">"}
+                    </h4>
+                    <Button
+                        size={ButtonSize.Compact}
+                        scheme={ButtonScheme.Inverse}
+                        label={`${mode} Max ${maxTransact}`}
+                        isDisabled={isLoading}
+                        clickCB={handleMaxClick}
                     />
+
+                    {!showInput && (
+                        <div css={{ marginInlineStart: "auto" }}>
+                            <Button
+                                size={ButtonSize.Compact}
+                                label={"Custom"}
+                                clickCB={() => setShowInput((curr) => !curr)}
+                                isDisabled={isLoading}
+                            />
+                        </div>
+                    )}
                 </div>
+                {showInput && (
+                    <div
+                        css={{
+                            display: "flex",
+                            flexDirection: "column",
+                        }}
+                    >
+                        <div
+                            css={{
+                                display: "flex",
+                                alignItems: "center",
+                                marginBlockStart: "20px",
+                            }}
+                        >
+                            <h4
+                                css={{
+                                    marginBlock: 0,
+                                    marginInlineEnd: "20px",
+                                    animation: isAmountValid
+                                        ? ""
+                                        : `${Animations.blink} 1s linear infinite`,
+                                }}
+                            >
+                                {">"}
+                            </h4>
+
+                            <TextInput
+                                placeholder={"How many?"}
+                                type={"number"}
+                                value={`${inputValue}`}
+                                changeCB={handleInputChange}
+                                keyDownCB={handleKeyPress}
+                            />
+                        </div>
+
+                        <div
+                            css={{
+                                display: "flex",
+                                alignItems: "center",
+                                marginBlockStart: "20px",
+                                opacity: isAmountValid ? 1 : 0,
+                            }}
+                        >
+                            <h4
+                                css={{
+                                    marginBlock: 0,
+                                    marginInlineEnd: "20px",
+                                    animation: `${Animations.blink} 1s linear infinite`,
+                                }}
+                            >
+                                {">"}
+                            </h4>
+
+                            <Button
+                                scheme={ButtonScheme.Inverse}
+                                size={ButtonSize.Compact}
+                                label={mode}
+                                isLoading={isLoading}
+                                clickCB={() =>
+                                    handleSubmit(inputValue ?? 0, false)
+                                }
+                            />
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );
