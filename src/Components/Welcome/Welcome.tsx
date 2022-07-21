@@ -131,14 +131,14 @@ export const Welcome = () => {
                     padding: "10px",
                 }}
             >
-                <h2
+                <h4
                     css={{
                         marginInlineEnd: "10px",
                         animation: `${Animations.blink} 1s linear infinite`,
                     }}
                 >
                     {">"}
-                </h2>
+                </h4>
                 <Button
                     label={"Start Game"}
                     size={ButtonSize.Full}
