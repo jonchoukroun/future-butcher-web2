@@ -44,7 +44,7 @@ export const Button = ({
         backgroundColorActive,
         fontColor,
         fontColorActive,
-    } = getColorScheme(scheme);
+    } = getColorScheme(scheme, isDisabled);
 
     return (
         <button
@@ -57,7 +57,6 @@ export const Button = ({
                     backgroundColor: backgroundColorActive,
                     color: fontColorActive,
                 },
-                fontStyle: isDisabled ? "italic" : "normal",
                 "& svg": {
                     animation: `${Animations.spin} 2s ease`,
                 },
@@ -99,7 +98,7 @@ function getButtonTypeStyles(size: ButtonSize) {
                     blockSize: "auto",
                     inlineSize: "auto",
                     paddingBlock: "5px",
-                    fontSize: "16px",
+                    fontSize: "20px",
                 },
                 baseButtonTypeStyles,
             );
@@ -109,23 +108,26 @@ function getButtonTypeStyles(size: ButtonSize) {
     }
 }
 
-function getColorScheme(scheme: ButtonScheme) {
+function getColorScheme(scheme: ButtonScheme, isDisabled: boolean) {
     return {
         backgroundColor:
             scheme === ButtonScheme.Normal
                 ? Colors.Background.inverse
                 : Colors.Background.base,
-        backgroundColorActive:
-            scheme === ButtonScheme.Normal
-                ? Colors.Background.base
-                : Colors.Background.inverse,
-        fontColor:
-            scheme === ButtonScheme.Normal
-                ? Colors.Text.inverse
-                : Colors.Text.base,
-        fontColorActive:
-            scheme === ButtonScheme.Normal
-                ? Colors.Text.base
-                : Colors.Text.inverse,
+        backgroundColorActive: isDisabled
+            ? Colors.Background.base
+            : scheme === ButtonScheme.Normal
+            ? Colors.Background.base
+            : Colors.Background.inverse,
+        fontColor: isDisabled
+            ? Colors.Text.disable
+            : scheme === ButtonScheme.Normal
+            ? Colors.Text.inverse
+            : Colors.Text.base,
+        fontColorActive: isDisabled
+            ? Colors.Text.disable
+            : scheme === ButtonScheme.Normal
+            ? Colors.Text.base
+            : Colors.Text.inverse,
     };
 }
