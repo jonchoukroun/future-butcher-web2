@@ -1,13 +1,17 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/react";
+import { jsx, css } from "@emotion/react";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
 
-import { Button, ButtonScheme, ButtonSize, TextInput } from "../../Components";
+import {
+    ButtonPrompt,
+    ButtonPromptSize,
+    PrintLine,
+    TextInput,
+} from "../../Components";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 
-import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
 
 export const Login = () => {
@@ -123,58 +127,26 @@ export const Login = () => {
                         {errorMessage}
                     </p>
                 )}
-                <h2 css={{ margin: 0 }}>{">"} Enter your name</h2>
-                <div
-                    css={{
-                        display: "flex",
-                        alignItems: "center",
-                        marginBlockStart: "10px",
-                    }}
-                >
-                    <h2
-                        css={{
-                            marginBlock: 0,
-                            marginInlineEnd: "10px",
-                            animation: nameIsValid
-                                ? ""
-                                : `${Animations.blink} 1s linear infinite`,
-                        }}
-                    >
-                        {">"}
-                    </h2>
-                    <TextInput
-                        placeholder="(3 to 20 characters long)"
-                        lengthOptions={[3, 20]}
-                        changeCB={(e) => setPlayerName(e.target.value)}
-                        keyDownCB={handleKeyDown}
-                    />
-                </div>
+
+                <PrintLine text={"Enter your name:"} />
+
+                <TextInput
+                    placeholder="(3 to 20 characters long)"
+                    lengthOptions={[3, 20]}
+                    blink={!nameIsValid}
+                    styleOptions={css({ marginBlock: "8px" })}
+                    changeCB={(e) => setPlayerName(e.target.value)}
+                    keyDownCB={handleKeyDown}
+                />
+
                 {nameIsValid && (
-                    <div
-                        css={{
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "flex-start",
-                            marginBlockStart: "17px",
-                        }}
-                    >
-                        <h2
-                            css={{
-                                marginBlock: 0,
-                                marginInlineEnd: "10px",
-                                animation: `${Animations.blink} 1s ease infinite`,
-                            }}
-                        >
-                            {">"}
-                        </h2>
-                        <Button
-                            size={ButtonSize.Full}
-                            scheme={ButtonScheme.Normal}
-                            label={isLoading ? "Joining" : "Start"}
-                            isLoading={isLoading}
-                            clickCB={handleSubmit}
-                        />
-                    </div>
+                    <ButtonPrompt
+                        label={"Start the Game"}
+                        size={ButtonPromptSize.Full}
+                        blink={true}
+                        loading={isLoading}
+                        clickCB={handleSubmit}
+                    />
                 )}
             </div>
         </div>
