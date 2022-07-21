@@ -34,12 +34,23 @@ export const Login = () => {
     const { handleJoinChannel } = useChannel();
     const { dispatch } = useGameState();
     const [isLoading, setIsLoading] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string>();
     async function handleSubmit() {
         if (isLoading || !playerName) return;
         if (!isNameValid(playerName)) return;
 
         setIsLoading(true);
-        await handleJoinChannel(playerName);
+        try {
+            await handleJoinChannel(playerName);
+        } catch {
+            setIsLoading(false);
+            if (errorMessage) {
+                dispatch({ type: "changeScreen", screen: Screen.Error });
+            } else {
+                setErrorMessage("Something went wrong. Try another name.");
+            }
+            return;
+        }
         dispatch({ type: "changeScreen", screen: Screen.Welcome });
         if (isMountedRef.current) {
             setIsLoading(false);
@@ -101,6 +112,17 @@ export const Login = () => {
                     marginBlockStart: "75px",
                 }}
             >
+                {errorMessage && (
+                    <p
+                        css={{
+                            marginBlockStart: 0,
+                            marginBlockEnd: "20px",
+                            color: Colors.Text.danger,
+                        }}
+                    >
+                        {errorMessage}
+                    </p>
+                )}
                 <h2 css={{ margin: 0 }}>{">"} Enter your name</h2>
                 <div
                     css={{
@@ -160,7 +182,5 @@ export const Login = () => {
 };
 
 function isNameValid(name: string) {
-    const x = name.length >= 3 && name.length <= 20;
-    console.log("!!isNameValid", x);
-    return x;
+    return name.length >= 3 && name.length <= 20;
 }
