@@ -1,23 +1,28 @@
 /** @jsx jsx */
-import { css, jsx } from "@emotion/react";
+import { css, jsx, SerializedStyles } from "@emotion/react";
 import { ChangeEvent, KeyboardEvent } from "react";
 
+import * as Animations from "../Styles/animations";
 import * as Colors from "../Styles/colors";
 
 interface TextInputProps {
-    placeholder: string;
-    lengthOptions?: [number, number];
     type?: string;
     value?: string;
+    placeholder: string;
+    lengthOptions?: [number, number];
+    blink?: boolean;
+    styleOptions?: SerializedStyles;
     changeCB?: (e: ChangeEvent<HTMLInputElement>) => void;
     keyDownCB?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
 
 export const TextInput = ({
-    placeholder,
-    lengthOptions: [minLength, maxLength] = [0, 100],
     type = "text",
     value,
+    placeholder,
+    lengthOptions: [minLength, maxLength] = [0, 100],
+    blink,
+    styleOptions,
     changeCB,
     keyDownCB,
 }: TextInputProps) => {
@@ -25,31 +30,53 @@ export const TextInput = ({
         document.body.scrollTop = document.documentElement.scrollTop = 0;
     };
     return (
-        <input
-            type={type}
-            placeholder={placeholder}
-            value={value}
-            required
-            minLength={minLength}
-            maxLength={maxLength}
-            css={css({
-                blockSize: "46px",
-                inlineSize: "calc(100%)",
-                paddingInline: "8px",
-                backgroundColor: Colors.Background.base,
-                borderColor: Colors.Border.subtle,
-                borderRadius: "2px",
-                borderStyle: "solid",
-                borderWidth: "1px",
-                color: Colors.Text.base,
-                "&::placeholder": {
-                    color: Colors.Text.disable,
+        <div
+            css={css(
+                {
+                    display: "flex",
+                    alignItems: "center",
                 },
-                fontSize: "16px",
-            })}
-            onChange={changeCB}
-            onKeyUp={(e) => keyDownCB && keyDownCB(e)}
-            onBlur={handleBlur}
-        />
+                styleOptions,
+            )}
+        >
+            <h4
+                css={{
+                    marginInlineEnd: "18px",
+                    color: Colors.Text.base,
+                    marginBlock: 0,
+                    animation: blink
+                        ? `${Animations.blink} 1s linear infinite`
+                        : 0,
+                }}
+            >
+                {">"}
+            </h4>
+            <input
+                type={type}
+                placeholder={placeholder}
+                value={value}
+                required
+                minLength={minLength}
+                maxLength={maxLength}
+                css={css({
+                    blockSize: "38px",
+                    inlineSize: "calc(100%)",
+                    paddingInline: "8px",
+                    backgroundColor: Colors.Background.base,
+                    borderColor: Colors.Border.subtle,
+                    borderRadius: "2px",
+                    borderStyle: "solid",
+                    borderWidth: "1px",
+                    color: Colors.Text.base,
+                    "&::placeholder": {
+                        color: Colors.Text.disable,
+                    },
+                    fontSize: "16px",
+                })}
+                onChange={changeCB}
+                onKeyUp={(e) => keyDownCB && keyDownCB(e)}
+                onBlur={handleBlur}
+            />
+        </div>
     );
 };
