@@ -55,6 +55,7 @@ export const Login = () => {
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                marginBlockStart: "75px",
             }}
         >
             <div
@@ -62,7 +63,6 @@ export const Login = () => {
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    marginBlockStart: "20px",
                 }}
             >
                 <h1
@@ -70,7 +70,7 @@ export const Login = () => {
                         fontFamily: "'Press Start 2P'",
                         fontSize: `${headingWidth}px`,
                         color: Colors.Text.base,
-                        margin: 0,
+                        marginBlock: "20px",
                     }}
                 >
                     future
@@ -98,7 +98,7 @@ export const Login = () => {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
-                    marginBlockStart: "50px",
+                    marginBlockStart: "75px",
                 }}
             >
                 <h2 css={{ margin: 0 }}>{">"} Enter your name</h2>
