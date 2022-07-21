@@ -14,16 +14,29 @@ export const NavBar = () => {
     const { layout } = useWindowSize();
 
     const {
-        state: { currentProcess, currentScreen, currentStation },
+        state: { currentProcess, currentScreen, currentStation, turnsLeft },
         dispatch,
     } = useGameState();
+    if (
+        currentProcess === undefined ||
+        currentScreen === undefined ||
+        currentStation === undefined ||
+        turnsLeft === undefined
+    ) {
+        throw new Error("State is undefined");
+    }
 
     const label = getButtonLabel(
         currentScreen,
         currentStation === StationKey.bellGardens,
     );
 
-    const screen = getNextScreen(currentProcess, currentScreen, currentStation);
+    const screen = getNextScreen(
+        currentProcess,
+        currentScreen,
+        currentStation,
+        turnsLeft,
+    );
     return (
         <div
             css={{
@@ -68,11 +81,14 @@ function getButtonLabel(screen: Screen | undefined, isBellGardens: boolean) {
 }
 
 function getNextScreen(
-    process: GameProcess | undefined,
-    screen: Screen | undefined,
-    station: string | undefined,
+    process: GameProcess,
+    screen: Screen,
+    station: string,
+    turnsLeft: number,
 ) {
     if (process === "mugging") return Screen.Mugging;
+
+    if (turnsLeft === 1 && screen === Screen.Market) return Screen.EndGame;
 
     if (station === StationKey.bellGardens) {
         if (screen === Screen.SurplusStore) return Screen.Subway;

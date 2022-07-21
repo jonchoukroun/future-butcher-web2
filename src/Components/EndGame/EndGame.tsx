@@ -1,16 +1,27 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
-import { ButtonPrimary } from "../Form";
+import { Button, ButtonScheme, ButtonSize } from "../Form";
 import { useWindowSize } from "../Window/WindowSizeProvider";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import { handleMessage } from "../../Logging/handleMessage";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
+import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
 
 export const EndGame = () => {
+    const {
+        dispatch,
+        state: { player, spaceAvailable },
+    } = useGameState();
+    if (player === undefined || spaceAvailable === undefined)
+        throw new Error("State is undefined");
+
+    const { heightAdjustment, layout } = useWindowSize();
+    const { handleEndGame } = useChannel();
+
     const isMountedRef = useRef(false);
     useEffect(() => {
         isMountedRef.current = true;
@@ -19,15 +30,8 @@ export const EndGame = () => {
         };
     }, []);
 
-    const {
-        dispatch,
-        state: { player, spaceAvailable },
-    } = useGameState();
-    if (player === undefined || spaceAvailable === undefined)
-        throw new Error("State is undefined");
-
-    const { handleEndGame } = useChannel();
     const [isLoading, setIsLoading] = useState(false);
+
     const handleRetireClick = async () => {
         if (isLoading) return;
 
@@ -57,7 +61,8 @@ export const EndGame = () => {
         }
     };
 
-    const { heightAdjustment, layout } = useWindowSize();
+    const canPayDebt = player.debt && player.funds >= player.debt;
+    const hasCuts = spaceAvailable < player.packSpace;
 
     return (
         <div
@@ -71,49 +76,104 @@ export const EndGame = () => {
         >
             <div
                 css={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
                     marginBlockStart: "5px",
                     marginBlockEnd: layout === "full" ? "20px" : "5px",
-                    textAlign: "center",
                 }}
             >
-                <div css={{ marginBlock: "40px" }}>
-                    <h3
+                <div css={{ display: "flex", marginBlock: "40px" }}>
+                    <h4 css={{ marginInlineEnd: "10px", opacity: 0 }}>{">"}</h4>
+                    <h1
                         css={{
                             marginBlock: 0,
+                            marginInlineStart: "6px",
                             color: Colors.Text.base,
-                            textTransform: "uppercase",
-                            letterSpacing: "2px",
-                            wordSpacing: "4px",
                         }}
                     >
-                        Ready to Quit?
-                    </h3>
+                        Ready to Retire?
+                    </h1>
                 </div>
 
                 <div css={{ marginBlockEnd: "20px" }}>
-                    {player.debt > 0 && player.funds > player.debt && (
-                        <Fragment>
-                            <p>You still owe money.</p>
-                            <p>Pay it off in the Info screen</p>
-                        </Fragment>
+                    {canPayDebt && (
+                        <div
+                            css={{
+                                display: "flex",
+                                marginBlockEnd: "10px",
+                            }}
+                        >
+                            <h4
+                                css={{
+                                    marginInlineEnd: "10px",
+                                }}
+                            >
+                                {">"}
+                            </h4>
+                            <h4
+                                css={{
+                                    marginInlineStart: "6px",
+                                    color: Colors.Text.base,
+                                }}
+                            >
+                                You still owe money. Pay it off in the Info
+                                screen.
+                            </h4>
+                        </div>
                     )}
 
-                    {spaceAvailable < player.packSpace && (
-                        <p>
-                            You&apos;re still carrying product. Sell it at the
-                            market.
-                        </p>
+                    {hasCuts && (
+                        <div
+                            css={{
+                                display: "flex",
+                            }}
+                        >
+                            <h4
+                                css={{
+                                    marginInlineEnd: "10px",
+                                }}
+                            >
+                                {">"}
+                            </h4>
+                            <h4
+                                css={{
+                                    marginInlineStart: "6px",
+                                    color: Colors.Text.base,
+                                }}
+                            >
+                                You&apos;re still carrying product. Sell it at
+                                the market.
+                            </h4>
+                        </div>
                     )}
                 </div>
 
-                <ButtonPrimary
-                    type={"Full"}
-                    label={"Retire"}
-                    clickCB={handleRetireClick}
-                />
+                <div
+                    css={{
+                        display: "flex",
+                        alignItems: "center",
+                    }}
+                >
+                    <h4
+                        css={{
+                            marginInlineEnd: "16px",
+                            animation:
+                                !canPayDebt && !hasCuts
+                                    ? `${Animations.blink} 1s linear infinite`
+                                    : "",
+                        }}
+                    >
+                        {">"}
+                    </h4>
+                    <Button
+                        size={ButtonSize.Compact}
+                        scheme={
+                            !canPayDebt && !hasCuts
+                                ? ButtonScheme.Normal
+                                : ButtonScheme.Inverse
+                        }
+                        label={"Retire"}
+                        clickCB={handleRetireClick}
+                    />
+                </div>
             </div>
         </div>
     );
