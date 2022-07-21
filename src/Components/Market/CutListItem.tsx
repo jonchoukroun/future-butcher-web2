@@ -58,10 +58,7 @@ export const CutListItem = ({
                     css={{
                         margin: 0,
                         marginBlockEnd: "5px",
-                        color:
-                            canBuy || owned > 0
-                                ? Colors.Text.base
-                                : Colors.Text.disable,
+                        color: Colors.Text.base,
                         textTransform: "capitalize",
                     }}
                 >
@@ -70,10 +67,7 @@ export const CutListItem = ({
                 <h2
                     css={{
                         margin: 0,
-                        color:
-                            canBuy || owned > 0
-                                ? Colors.Text.base
-                                : Colors.Text.disable,
+                        color: Colors.Text.base,
                     }}
                 >
                     {formatMoney(price)}
@@ -90,29 +84,53 @@ export const CutListItem = ({
                 {owned > 0 && <h4 css={{ margin: 0 }}>Owned: {owned}</h4>}
                 <div
                     css={{
+                        display: "flex",
                         marginInlineStart: "auto",
-                        "& > button:first-of-type": { marginInlineEnd: "32px" },
                     }}
                 >
-                    <Button
-                        scheme={
-                            canBuy ? ButtonScheme.Inverse : ButtonScheme.Hidden
-                        }
-                        size={ButtonSize.Compact}
-                        label={"> Buy"}
-                        clickCB={() => onTransactionSelect("buy", name)}
-                    />
+                    <div
+                        css={{
+                            display: "flex",
+                            alignItems: "center",
+                            marginInlineEnd: "32px",
+                        }}
+                    >
+                        <h4
+                            css={{
+                                marginBlock: 0,
+                                marginInlineEnd: "10px",
+                                opacity: canBuy ? 1 : 0,
+                            }}
+                        >
+                            {">"}
+                        </h4>
+                        <Button
+                            scheme={ButtonScheme.Inverse}
+                            size={ButtonSize.Compact}
+                            label={"Buy"}
+                            isDisabled={!canBuy}
+                            clickCB={() => onTransactionSelect("buy", name)}
+                        />
+                    </div>
 
-                    <Button
-                        scheme={
-                            owned > 0
-                                ? ButtonScheme.Inverse
-                                : ButtonScheme.Hidden
-                        }
-                        size={ButtonSize.Compact}
-                        label={"> Sell"}
-                        clickCB={() => onTransactionSelect("sell", name)}
-                    />
+                    <div css={{ display: "flex", alignItems: "center" }}>
+                        <h4
+                            css={{
+                                marginBlock: 0,
+                                marginInlineEnd: "10px",
+                                opacity: owned > 0 ? 1 : 0,
+                            }}
+                        >
+                            {">"}
+                        </h4>
+                        <Button
+                            scheme={ButtonScheme.Inverse}
+                            size={ButtonSize.Compact}
+                            label={"Sell"}
+                            isDisabled={owned === 0}
+                            clickCB={() => onTransactionSelect("sell", name)}
+                        />
+                    </div>
                 </div>
             </div>
         </li>
