@@ -2,7 +2,7 @@
 import { css, jsx, SerializedStyles } from "@emotion/react";
 import { ChangeEvent, KeyboardEvent } from "react";
 
-import * as Animations from "../Styles/animations";
+import { Prompt } from "./Prompt";
 import * as Colors from "../Styles/colors";
 
 interface TextInputProps {
@@ -39,18 +39,7 @@ export const TextInput = ({
                 styleOptions,
             )}
         >
-            <h4
-                css={{
-                    marginInlineEnd: "18px",
-                    color: Colors.Text.base,
-                    marginBlock: 0,
-                    animation: blink
-                        ? `${Animations.blink} 1s linear infinite`
-                        : 0,
-                }}
-            >
-                {">"}
-            </h4>
+            <Prompt blink={blink} />
             <input
                 type={type}
                 placeholder={placeholder}

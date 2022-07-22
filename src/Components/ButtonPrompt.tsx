@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/react";
 
-import * as Animations from "../Styles/animations";
+import { Prompt } from "./Prompt";
 import * as Colors from "../Styles/colors";
 
 export const enum ButtonPromptSize {
@@ -51,16 +51,8 @@ export function ButtonPrompt({
             disabled={disabled || hidden}
             onClick={clickCB}
         >
-            <span
-                css={{
-                    marginInlineEnd: "18px",
-                    animation: blink
-                        ? `${Animations.blink} 1s linear infinite`
-                        : 0,
-                }}
-            >
-                {">"}
-            </span>
+            <Prompt blink={blink} />
+
             {loading ? "..." : label}
         </button>
     );

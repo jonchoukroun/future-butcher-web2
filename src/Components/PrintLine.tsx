@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
+import { Prompt } from "./Prompt";
 import * as Colors from "../Styles/colors";
 
 interface PrintLineProps {
@@ -17,7 +18,7 @@ export function PrintLine({ text }: PrintLineProps) {
                 "& h4": { color: Colors.Text.base, marginBlock: 0 },
             }}
         >
-            <h4 css={{ marginInlineEnd: "18px" }}>{">"}</h4>
+            <Prompt />
             <h4>{text}</h4>
         </div>
     );
