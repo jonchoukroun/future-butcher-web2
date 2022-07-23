@@ -1,16 +1,16 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
-import { EndGame } from "../EndGame/EndGame";
-import { ErrorScreen } from "../ErrorScreen/ErrorScreen";
-import { HighScores } from "../HighScores/HighScores";
-import { Login } from "../Login/Login";
-import { Market } from "../Market/Market";
-import { Mugging } from "../Mugging/Mugging";
-import { StatsScreen } from "../Stats/StatsScreen";
-import { Subway } from "../Subway/Subway";
-import { SurplusStore } from "../SurplusStore/SurplusStore";
-import { Welcome } from "../Welcome/Welcome";
+import { EndGame } from "../../Screens/EndGame/EndGame";
+import { ErrorScreen } from "../../Screens/ErrorScreen/ErrorScreen";
+import { HighScores } from "../../Screens/HighScores/HighScores";
+import { Login } from "../../Screens/Login/Login";
+import { Market } from "../../Screens/Market/Market";
+import { Mugging } from "../../Screens/Mugging/Mugging";
+import { StatsScreen } from "../../Screens/Stats/StatsScreen";
+import { Subway } from "../../Screens/Subway/Subway";
+import { SurplusStore } from "../../Screens/SurplusStore/SurplusStore";
+import { Welcome } from "../../Screens/Welcome/Welcome";
 import { GameScreen } from "./GameScreen";
 import { useWindowSize } from "./WindowSizeProvider";
 import { Screen, useGameState } from "../../GameData/GameStateProvider";

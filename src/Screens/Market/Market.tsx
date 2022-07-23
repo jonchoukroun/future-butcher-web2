@@ -5,7 +5,7 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import { CutList } from "./CutList";
 import { TransactionModal, TransactionMode } from "./TransactionModal";
-import { useWindowSize } from "../Window/WindowSizeProvider";
+import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 
 export const Market = () => {

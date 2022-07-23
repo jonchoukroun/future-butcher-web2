@@ -2,8 +2,8 @@
 import { jsx } from "@emotion/react";
 
 import { LayoutType } from "./WindowSizeProvider";
-import { StatsBar } from "../Stats/StatsBar";
-import { StatsScreen } from "../Stats/StatsScreen";
+import { StatsBar } from "../../Screens/Stats/StatsBar";
+import { StatsScreen } from "../../Screens/Stats/StatsScreen";
 import { NavBar } from "./NavBar";
 import { Screen, useGameState } from "../../GameData/GameStateProvider";
 

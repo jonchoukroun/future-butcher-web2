@@ -3,7 +3,7 @@ import { jsx } from "@emotion/react";
 import { useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
-import { useWindowSize } from "../Window/WindowSizeProvider";
+import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { Button, ButtonSize } from "../../Components";
 import { formatMoney } from "../../Utils/formatMoney";
 import { player } from "../../Fixtures/player";

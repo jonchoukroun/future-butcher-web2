@@ -7,7 +7,7 @@ import { Fragment, useState } from "react";
 import { EndGameModal } from "./EndGameModal";
 import { ButtonPrimary } from "../../Components/ButtonPrimary";
 import { formatMoney, getTimeLeft } from "../../Utils";
-import { useWindowSize } from "../Window/WindowSizeProvider";
+import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { PackDetails, WeaponDetails } from "../../Fixtures/store";
 import { subwayStations } from "../../Fixtures/subwayStations";
 import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";

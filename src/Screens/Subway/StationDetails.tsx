@@ -7,7 +7,7 @@ import { ButtonPrimary } from "../../Components/ButtonPrimary";
 import { subwayStations, StationKey } from "../../Fixtures/subwayStations";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";
-import { useWindowSize } from "../Window/WindowSizeProvider";
+import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 import { formatMoney } from "../../Utils/formatMoney";
 

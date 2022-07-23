@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/react";
 
 import { useWindowSize } from "./WindowSizeProvider";
-import { Button, ButtonSize, ButtonScheme } from "../../Components";
+import { Button, ButtonSize, ButtonScheme } from "..";
 import {
     GameProcess,
     Screen,

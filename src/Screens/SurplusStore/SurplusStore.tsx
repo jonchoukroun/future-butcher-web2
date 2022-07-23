@@ -7,7 +7,7 @@ import { PacksList } from "./PacksList";
 import { WeaponsList } from "./WeaponsList";
 import { WeaponModal } from "./WeaponModal";
 import { ButtonPrimary } from "../../Components";
-import { useWindowSize } from "../Window/WindowSizeProvider";
+import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 
 export type PackModalState = {

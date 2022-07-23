@@ -4,7 +4,7 @@ import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { Button, ButtonScheme, ButtonSize, TextInput } from "../../Components";
-import { useWindowSize } from "../Window/WindowSizeProvider";
+import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { formatMoney } from "../../Utils";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";

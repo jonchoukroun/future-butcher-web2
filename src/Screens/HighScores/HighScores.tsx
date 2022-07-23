@@ -3,7 +3,7 @@ import { jsx } from "@emotion/react";
 
 import { ButtonPrimary } from "../../Components/ButtonPrimary";
 import { formatMoney } from "../../Utils/formatMoney";
-import { useWindowSize } from "../Window/WindowSizeProvider";
+import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";

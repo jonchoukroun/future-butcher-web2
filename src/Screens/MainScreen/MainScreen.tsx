@@ -9,7 +9,7 @@ import {
     faUmbrellaBeach,
 } from "@fortawesome/free-solid-svg-icons";
 
-import { useWindowSize } from "../Window/WindowSizeProvider";
+import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { subwayStations } from "../../Fixtures/subwayStations";
 import { Screen, useGameState } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";

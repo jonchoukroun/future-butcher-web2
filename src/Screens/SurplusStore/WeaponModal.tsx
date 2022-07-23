@@ -5,7 +5,7 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import { ButtonPrimary } from "../../Components";
 import { formatMoney } from "../../Utils/formatMoney";
-import { useWindowSize } from "../Window/WindowSizeProvider";
+import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { WeaponDetails } from "../../Fixtures/store";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";

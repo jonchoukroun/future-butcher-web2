@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { ButtonPrimary } from "../../Components";
-import { useWindowSize } from "../Window/WindowSizeProvider";
+import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { handleMessage } from "../../Logging/handleMessage";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { Screen, useGameState } from "../../GameData/GameStateProvider";
