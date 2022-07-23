@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/react";
 
 import { useWindowSize } from "./WindowSizeProvider";
-import { Button, ButtonSize, ButtonScheme } from "..";
+import { ButtonPrompt, ButtonPromptSize } from "../ButtonPrompt";
 import {
     GameProcess,
     Screen,
@@ -50,17 +50,10 @@ export const NavBar = () => {
                 padding: "10px",
             }}
         >
-            <h2
-                css={{
-                    marginInlineEnd: "10px",
-                }}
-            >
-                {">"}
-            </h2>
-            <Button
-                size={ButtonSize.Full}
-                scheme={ButtonScheme.Inverse}
+            <ButtonPrompt
+                size={ButtonPromptSize.Full}
                 label={label}
+                blink={true}
                 clickCB={() => dispatch({ type: "changeScreen", screen })}
             />
         </div>
