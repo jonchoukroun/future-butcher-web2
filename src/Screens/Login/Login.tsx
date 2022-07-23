@@ -8,11 +8,12 @@ import {
     PrintLine,
     TextInput,
 } from "../../Components";
-import { useWindowSize } from "../Window/WindowSizeProvider";
+import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 
 import * as Colors from "../../Styles/colors";
+import { LineSize } from "../../Components/PrintLine";
 
 export const Login = () => {
     const isMountedRef = useRef(false);
@@ -128,7 +129,7 @@ export const Login = () => {
                     </p>
                 )}
 
-                <PrintLine text={"Enter your name:"} />
+                <PrintLine text={"Enter your name:"} size={LineSize.Body} />
 
                 <TextInput
                     placeholder="(3 to 20 characters long)"
