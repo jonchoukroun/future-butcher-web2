@@ -7,17 +7,23 @@ import { useWindowSize } from "./Window/WindowSizeProvider";
 
 import * as Colors from "../Styles/colors";
 
-interface ScreenTemplatePrompt {
+interface ScreenTemplateProps {
     title: string;
+    subtitle?: string;
     content: string[];
+    buttonLabel: string;
+    isLoading: boolean;
     clickCB: () => void;
 }
 
 export function ScreenTemplate({
     title,
+    subtitle,
     content,
+    buttonLabel,
+    isLoading,
     clickCB,
-}: ScreenTemplatePrompt) {
+}: ScreenTemplateProps) {
     const { getContentSize } = useWindowSize();
     const { blockSize, inlineSize } = getContentSize();
 
@@ -47,6 +53,13 @@ export function ScreenTemplate({
                     size={LineSize.Title}
                     showPrompt={false}
                 />
+                {subtitle && (
+                    <PrintLine
+                        text={subtitle}
+                        size={LineSize.Body}
+                        showPrompt={false}
+                    />
+                )}
             </div>
 
             <div css={{ marginBlockStart: "auto" }}>
@@ -60,9 +73,10 @@ export function ScreenTemplate({
 
                 <div css={{ inlineSize: "100%", marginBlockStart: "20px" }}>
                     <ButtonPrompt
-                        label={"Try Again"}
+                        label={buttonLabel}
                         size={ButtonPromptSize.Full}
                         blink={true}
+                        loading={isLoading}
                         clickCB={clickCB}
                     />
                 </div>

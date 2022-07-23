@@ -3,6 +3,7 @@ import { css, jsx } from "@emotion/react";
 
 import { Prompt } from "./Prompt";
 import * as Colors from "../Styles/colors";
+import { useEffect, useState } from "react";
 
 export const enum ButtonPromptSize {
     Compact,
@@ -36,6 +37,19 @@ export function ButtonPrompt({
     const color = disabled ? Colors.Text.disable : Colors.Text.base;
     const colorActive = Colors.Text.inverse;
 
+    const [loadingLabel, setLoadingLabel] = useState("Loading");
+    useEffect(() => {
+        if (!loading) return;
+
+        const interval = setInterval(() => {
+            setLoadingLabel((str) => {
+                return str.length > 24 ? "Loading" : str + ".";
+            });
+        }, 500);
+
+        return () => clearInterval(interval);
+    }, [loading]);
+
     return (
         <button
             css={css(stylesForSize, {
@@ -53,7 +67,7 @@ export function ButtonPrompt({
         >
             <Prompt blink={blink} />
 
-            {loading ? "..." : label}
+            {loading ? loadingLabel : label}
         </button>
     );
 }
