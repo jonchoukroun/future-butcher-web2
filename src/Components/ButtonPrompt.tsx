@@ -14,6 +14,7 @@ type ButtonPromptSizeType = typeof ButtonPromptSize[keyof typeof ButtonPromptSiz
 interface ButtonPromptProps {
     label: string;
     size: ButtonPromptSizeType;
+    showPrompt?: boolean;
     blink?: boolean;
     disabled?: boolean;
     hidden?: boolean;
@@ -24,6 +25,7 @@ interface ButtonPromptProps {
 export function ButtonPrompt({
     label,
     size,
+    showPrompt,
     blink,
     disabled,
     hidden,
@@ -65,7 +67,7 @@ export function ButtonPrompt({
             disabled={disabled || hidden}
             onClick={clickCB}
         >
-            <Prompt blink={blink} />
+            <Prompt blink={blink} hidden={!showPrompt} />
 
             {loading ? loadingLabel : label}
         </button>

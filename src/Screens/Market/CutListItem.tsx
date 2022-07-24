@@ -2,9 +2,10 @@
 import { jsx } from "@emotion/react";
 
 import { TransactionMode } from "./TransactionModal";
-import { Button, ButtonScheme, ButtonSize } from "../../Components";
-import { formatMoney } from "../../Utils/formatMoney";
+import { ButtonPrompt, ButtonPromptSize } from "../../Components/ButtonPrompt";
 import { useGameState } from "../../GameData/GameStateProvider";
+import { formatMoney } from "../../Utils/formatMoney";
+
 import * as Colors from "../../Styles/colors";
 
 interface CutListItemProps {
@@ -90,47 +91,25 @@ export const CutListItem = ({
                 >
                     <div
                         css={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginInlineEnd: "32px",
+                            marginInlineEnd: "22px",
                         }}
                     >
-                        <h4
-                            css={{
-                                marginBlock: 0,
-                                marginInlineEnd: "10px",
-                                opacity: canBuy ? 1 : 0,
-                            }}
-                        >
-                            {">"}
-                        </h4>
-                        <Button
-                            scheme={ButtonScheme.Inverse}
-                            size={ButtonSize.Compact}
+                        <ButtonPrompt
+                            size={ButtonPromptSize.Compact}
                             label={"Buy"}
-                            isDisabled={!canBuy}
+                            showPrompt={canBuy}
+                            disabled={!canBuy}
                             clickCB={() => onTransactionSelect("buy", name)}
                         />
                     </div>
 
-                    <div css={{ display: "flex", alignItems: "center" }}>
-                        <h4
-                            css={{
-                                marginBlock: 0,
-                                marginInlineEnd: "10px",
-                                opacity: owned > 0 ? 1 : 0,
-                            }}
-                        >
-                            {">"}
-                        </h4>
-                        <Button
-                            scheme={ButtonScheme.Inverse}
-                            size={ButtonSize.Compact}
-                            label={"Sell"}
-                            isDisabled={owned === 0}
-                            clickCB={() => onTransactionSelect("sell", name)}
-                        />
-                    </div>
+                    <ButtonPrompt
+                        size={ButtonPromptSize.Compact}
+                        label={"Sell"}
+                        showPrompt={owned > 0}
+                        disabled={owned === 0}
+                        clickCB={() => onTransactionSelect("sell", name)}
+                    />
                 </div>
             </div>
         </li>
