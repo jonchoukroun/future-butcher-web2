@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 export const enum ButtonPromptSize {
     Compact,
     Full,
+    Small,
 }
 type ButtonPromptSizeType = typeof ButtonPromptSize[keyof typeof ButtonPromptSize];
 
@@ -55,6 +56,8 @@ export function ButtonPrompt({
     return (
         <button
             css={css(stylesForSize, {
+                display: "flex",
+                alignItems: "center",
                 backgroundColor,
                 color,
                 border: 0,
@@ -67,7 +70,7 @@ export function ButtonPrompt({
             disabled={disabled || hidden}
             onClick={clickCB}
         >
-            <Prompt blink={blink} hidden={!showPrompt} />
+            <Prompt blink={blink} hidden={!showPrompt || disabled} />
 
             {loading ? loadingLabel : label}
         </button>
@@ -102,6 +105,17 @@ function getStyleForSize(size: ButtonPromptSize) {
                     inlineSize: "100%",
                     padding: 0,
                     textAlign: "start",
+                },
+                baseButtonStyles,
+            );
+
+        case ButtonPromptSize.Small:
+            return css(
+                {
+                    blockSize: "auto",
+                    inlineSize: "auto",
+                    paddingBlock: "5px",
+                    fontSize: "16px",
                 },
                 baseButtonStyles,
             );
