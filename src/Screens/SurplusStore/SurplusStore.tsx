@@ -31,7 +31,6 @@ export const SurplusStore = () => {
     const [menuType, setMenuType] = useState<"packs" | "weapons" | undefined>(
         undefined,
     );
-    const handleStoreBackClick = () => setMenuType(undefined);
 
     const buyPackState: PackModalState = {
         name: undefined,
@@ -98,7 +97,7 @@ export const SurplusStore = () => {
                 <Fragment>
                     <PacksList
                         handleModalOpen={handlePackModalOpen}
-                        onStoreBackClick={handleStoreBackClick}
+                        onStoreBackClick={() => setMenuType("weapons")}
                     />
                     {packState.name &&
                         packState.packSpace &&
@@ -115,7 +114,7 @@ export const SurplusStore = () => {
                 <Fragment>
                     <WeaponsList
                         handleModalOpen={handleWeaponModalOpen}
-                        onStoreBackClick={handleStoreBackClick}
+                        onStoreBackClick={() => setMenuType("packs")}
                     />
                     {weaponState.name &&
                         weaponState.cuts !== undefined &&

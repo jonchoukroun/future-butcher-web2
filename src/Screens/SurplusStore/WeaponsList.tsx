@@ -3,8 +3,8 @@ import { jsx } from "@emotion/react";
 
 import { WeaponModalState } from "./SurplusStore";
 import { WeaponListItem } from "./WeaponListItem";
+import { ButtonPrompt, ButtonPromptSize } from "../../Components/ButtonPrompt";
 import { useGameState } from "../../GameData/GameStateProvider";
-import { ButtonPrimary } from "../../Components";
 
 const Weapons = [
     "box_cutter",
@@ -44,10 +44,20 @@ export const WeaponsList = ({
         <div
             css={{
                 blockSize: "100%",
+                inlineSize: "100%",
                 display: "flex",
                 flexDirection: "column",
             }}
         >
+            <div css={{ display: "flex", justifyContent: "flex-end" }}>
+                <ButtonPrompt
+                    label={"Browse Packs"}
+                    size={ButtonPromptSize.Small}
+                    blink={false}
+                    clickCB={onStoreBackClick}
+                />
+            </div>
+
             <ul
                 css={{
                     blockSize: "100%",
@@ -69,15 +79,6 @@ export const WeaponsList = ({
                     />
                 ))}
             </ul>
-            <div css={{ display: "flex", justifyContent: "flex-start" }}>
-                <ButtonPrimary
-                    type={"Sized"}
-                    label={"Back"}
-                    border={"None"}
-                    scheme={"Inverse"}
-                    clickCB={onStoreBackClick}
-                />
-            </div>
         </div>
     );
 };

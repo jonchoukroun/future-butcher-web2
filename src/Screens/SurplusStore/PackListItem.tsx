@@ -2,10 +2,11 @@
 import { jsx } from "@emotion/react";
 
 import { PackModalState } from "./SurplusStore";
-import { ButtonPrimary } from "../../Components";
-import { formatMoney } from "../../Utils/formatMoney";
+import { ButtonPrompt, ButtonPromptSize } from "../../Components/ButtonPrompt";
 import { PackDetails } from "../../Fixtures/store";
 import { useGameState } from "../../GameData/GameStateProvider";
+import { formatMoney } from "../../Utils/formatMoney";
+
 import * as Colors from "../../Styles/colors";
 
 interface PackListItemProps {
@@ -37,6 +38,10 @@ export const PackListItem = ({
                 flex: 1,
                 flexDirection: "column",
                 justifyContent: "center",
+                borderColor: "transparent",
+                borderBlockEndColor: Colors.Border.subtle,
+                borderStyle: "dashed",
+                borderWidth: "2px",
             }}
         >
             <div
@@ -45,63 +50,44 @@ export const PackListItem = ({
                     justifyContent: "space-between",
                     alignItems: "center",
                     marginBlockEnd: "5px",
-                    borderColor: "transparent",
-                    borderBlockEndColor: Colors.Border.subtle,
-                    borderStyle: "solid",
-                    borderWidth: "1px",
                 }}
             >
-                <h3
+                <h2
                     css={{
                         margin: 0,
                         marginBlockEnd: "5px",
                         color: Colors.Text.base,
-                        fontVariantCaps: "small-caps",
                         textTransform: "capitalize",
                     }}
                 >
                     {PackDetails[name].name}
-                </h3>
+                </h2>
 
-                <p
+                <h2
                     css={{
                         marginBlock: 0,
-                        marginInlineEnd: "10px",
                         color: Colors.Text.base,
                     }}
                 >
-                    {packSpace} lbs
-                </p>
+                    {formatMoney(price)}
+                </h2>
             </div>
+
             <div
                 css={{
                     inlineSize: "100%",
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "flex-end",
-                    "& > button": {
-                        marginInlineStart: "8px",
-                    },
+                    justifyContent: "space-between",
                 }}
             >
-                <h3
-                    css={{
-                        margin: 0,
-                        marginInlineEnd: "10px",
-                        color: canAfford
-                            ? Colors.Text.base
-                            : Colors.Text.disable,
-                        fontStyle: canAfford ? "normal" : "italic",
-                    }}
-                >
-                    {formatMoney(price)}
-                </h3>
+                <h4 css={{ margin: 0 }}>Capacity: {packSpace} lbs</h4>
 
-                <ButtonPrimary
+                <ButtonPrompt
                     label={isOwned ? "Owned" : "Buy"}
-                    type={"Half"}
-                    border={isOwned ? "None" : "Thin"}
-                    isDisabled={!canAfford || isOwned}
+                    size={ButtonPromptSize.Compact}
+                    blink={false}
+                    disabled={!canAfford || isOwned}
                     clickCB={() => onModalOpen({ name, packSpace, price })}
                 />
             </div>

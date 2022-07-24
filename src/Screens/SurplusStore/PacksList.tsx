@@ -3,8 +3,8 @@ import { jsx } from "@emotion/react";
 
 import { PackListItem } from "./PackListItem";
 import { PackModalState } from "./SurplusStore";
+import { ButtonPrompt, ButtonPromptSize } from "../../Components/ButtonPrompt";
 import { useGameState } from "../../GameData/GameStateProvider";
-import { ButtonPrimary } from "../../Components";
 
 const Packs = ["mini_fridge", "shopping_cart", "suitcase", "wheelbarrow"];
 
@@ -31,10 +31,20 @@ export const PacksList = ({
         <div
             css={{
                 blockSize: "100%",
+                inlineSize: "100%",
                 display: "flex",
                 flexDirection: "column",
             }}
         >
+            <div css={{ display: "flex", justifyContent: "flex-end" }}>
+                <ButtonPrompt
+                    label={"Browse Weapons"}
+                    size={ButtonPromptSize.Small}
+                    blink={false}
+                    clickCB={onStoreBackClick}
+                />
+            </div>
+
             <ul
                 css={{
                     blockSize: "100%",
@@ -55,15 +65,6 @@ export const PacksList = ({
                     />
                 ))}
             </ul>
-            <div css={{ display: "flex", justifyContent: "flex-start" }}>
-                <ButtonPrimary
-                    type={"Sized"}
-                    label={"Back"}
-                    border={"None"}
-                    scheme={"Inverse"}
-                    clickCB={onStoreBackClick}
-                />
-            </div>
         </div>
     );
 };
