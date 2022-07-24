@@ -4,9 +4,10 @@ import { Fragment, useReducer, useState } from "react";
 
 import { PackModal } from "./PackModal";
 import { PacksList } from "./PacksList";
+import { StoreIntro } from "./StoreIntro";
 import { WeaponsList } from "./WeaponsList";
 import { WeaponModal } from "./WeaponModal";
-import { ButtonPrimary } from "../../Components";
+import { PrintLine, LineSize } from "../../Components/PrintLine";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
 
@@ -24,6 +25,9 @@ export type WeaponModalState = {
 };
 
 export const SurplusStore = () => {
+    const { getContentSize } = useWindowSize();
+    const { blockSize } = getContentSize();
+
     const [menuType, setMenuType] = useState<"packs" | "weapons" | undefined>(
         undefined,
     );
@@ -55,77 +59,41 @@ export const SurplusStore = () => {
     };
     const handleWeaponModalClose = () => weaponDispatch({ type: "close" });
 
-    const { heightAdjustment, layout } = useWindowSize();
     return (
         <div
             css={{
-                blockSize: `calc(100% - ${heightAdjustment}px)`,
-                maxBlockSize: "600px",
+                blockSize: `${blockSize}px`,
+                inlineSize: "100%",
                 display: "flex",
                 flexDirection: "column",
-                paddingInline: "8px",
+                alignItems: "center",
+                paddingInline: "10px",
             }}
         >
-            {layout === "full" && (
-                <h2
+            {menuType === undefined && (
+                <div
                     css={{
-                        marginBlock: 0,
-                        color: Colors.Text.base,
-                        letterSpacing: "2px",
-                        textTransform: "uppercase",
-                        wordSpacing: "4px",
+                        inlineSize: "100%",
+                        marginBlockStart: "30px",
+                        marginBlockEnd: "48px",
+                        borderBottomColor: Colors.Border.subtle,
+                        borderBottomStyle: "dashed",
+                        borderBottomWidth: "2px",
                     }}
                 >
-                    Gus&apos; Army Surplus
-                </h2>
+                    <PrintLine
+                        text={"Gus's Army Surplus"}
+                        size={LineSize.Title}
+                        showPrompt={false}
+                    />
+                </div>
             )}
 
             {menuType === undefined ? (
-                <Fragment>
-                    <p css={{ marginBlock: "40px" }}>
-                        Welcome to the last bastion of freedom in LA! We stock
-                        the best gear to ensure your liberty.
-                    </p>
-
-                    <p>
-                        Ain&apos;t no more 2nd ammendment, but we still have all
-                        your personal defense needs.
-                    </p>
-                    <div
-                        css={{
-                            display: "flex",
-                            justifyContent: "center",
-                            marginBlockStart: "10px",
-                            marginBlockEnd: "40px",
-                        }}
-                    >
-                        <ButtonPrimary
-                            type={"Block"}
-                            label={"See Weapons"}
-                            border={"None"}
-                            scheme={"Inverse"}
-                            clickCB={() => setMenuType("weapons")}
-                        />
-                    </div>
-
-                    <p>You look like you could use more carrying space.</p>
-                    <div
-                        css={{
-                            display: "flex",
-                            justifyContent: "center",
-                            marginBlockStart: "10px",
-                            marginBlockEnd: "40px",
-                        }}
-                    >
-                        <ButtonPrimary
-                            type={"Block"}
-                            label={"See Packs"}
-                            border={"None"}
-                            scheme={"Inverse"}
-                            clickCB={() => setMenuType("packs")}
-                        />
-                    </div>
-                </Fragment>
+                <StoreIntro
+                    onSeeWeaponsClick={() => setMenuType("weapons")}
+                    onSeePacksClick={() => setMenuType("packs")}
+                />
             ) : menuType === "packs" ? (
                 <Fragment>
                     <PacksList
