@@ -98,6 +98,7 @@ export const CutListItem = ({
                             size={ButtonPromptSize.Compact}
                             label={"Buy"}
                             showPrompt={canBuy}
+                            blink={false}
                             disabled={!canBuy}
                             clickCB={() => onTransactionSelect("buy", name)}
                         />
@@ -107,6 +108,7 @@ export const CutListItem = ({
                         size={ButtonPromptSize.Compact}
                         label={"Sell"}
                         showPrompt={owned > 0}
+                        blink={false}
                         disabled={owned === 0}
                         clickCB={() => onTransactionSelect("sell", name)}
                     />
