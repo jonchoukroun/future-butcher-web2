@@ -53,7 +53,7 @@ export const NavBar = () => {
             <ButtonPrompt
                 size={ButtonPromptSize.Full}
                 label={label}
-                blink={true}
+                blink={false}
                 clickCB={() => dispatch({ type: "changeScreen", screen })}
             />
         </div>
