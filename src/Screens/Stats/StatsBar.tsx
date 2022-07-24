@@ -1,10 +1,10 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faSortDown } from "@fortawesome/free-solid-svg-icons";
 
-import { formatMoney, getTimeLeft } from "../../Utils";
+import { ButtonPrompt, ButtonPromptSize } from "../../Components/ButtonPrompt";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
+import { formatMoney, getTimeLeft } from "../../Utils";
+
 import * as Colors from "../../Styles/colors";
 
 export const StatsBar = () => {
@@ -33,7 +33,7 @@ export const StatsBar = () => {
                 borderWidth: "1px",
             }}
         >
-            <p
+            <h4
                 css={{
                     margin: 0,
                     color: Colors.Text.base,
@@ -43,8 +43,8 @@ export const StatsBar = () => {
                 {player.debt > 0 && (
                     <span css={{ color: Colors.Text.danger }}>!</span>
                 )}
-            </p>
-            <p
+            </h4>
+            <h4
                 css={{
                     margin: 0,
                     color:
@@ -52,30 +52,16 @@ export const StatsBar = () => {
                 }}
             >
                 {getTimeLeft(turnsLeft)}
-            </p>
-            <button
-                css={{
-                    inlineSize: "auto",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "2px",
-                    backgroundColor: Colors.Background.base,
-                    border: "none",
-                    color: Colors.Text.base,
-                    fontSize: "16px",
-                    "& svg": {
-                        marginBlockStart: "-10px",
-                        marginInlineStart: "4px",
-                    },
-                }}
-                onClick={() =>
+            </h4>
+            <ButtonPrompt
+                label={"INFO"}
+                size={ButtonPromptSize.Compact}
+                blink={false}
+                showPrompt={false}
+                clickCB={() =>
                     dispatch({ type: "changeScreen", screen: Screen.Stats })
                 }
-            >
-                INFO
-                <FontAwesomeIcon icon={faSortDown} />
-            </button>
+            />
         </div>
     );
 };
