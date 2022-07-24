@@ -39,7 +39,13 @@ function buildNode(size: LineSizeType, text: string) {
     switch (size) {
         case LineSize.Title:
             return (
-                <h1 css={{ color: Colors.Text.base, marginBlock: 0 }}>
+                <h1
+                    css={{
+                        fontSize: "28px",
+                        color: Colors.Text.base,
+                        marginBlock: 0,
+                    }}
+                >
                     {text}
                 </h1>
             );
