@@ -150,7 +150,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                 }
 
                 if (lastState.rules.state === "initialized") {
-                    dispatch({ type: "changeScreen", screen: Screen.Error });
+                    dispatch({ type: "changeScreen", screen: Screen.Welcome });
                     return;
                 }
                 if (lastState.rules.state === "in_game") {
