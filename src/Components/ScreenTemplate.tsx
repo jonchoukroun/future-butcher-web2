@@ -41,8 +41,8 @@ export function ScreenTemplate({
             <div
                 css={{
                     inlineSize: "100%",
-                    marginBlockStart: "50px",
-                    marginBlockEnd: "75px",
+                    marginBlockStart: "30px",
+                    marginBlockEnd: "48px",
                     borderBottomColor: Colors.Border.subtle,
                     borderBottomStyle: "dashed",
                     borderBottomWidth: "2px",
