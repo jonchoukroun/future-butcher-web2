@@ -3,9 +3,11 @@ import { jsx } from "@emotion/react";
 import { useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
+import { Prompt } from "../../Components/Prompt";
 import { StationKey, subwayStations } from "../../Fixtures/subwayStations";
 import { Screen, useGameState } from "../../GameData/GameStateProvider";
 import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
+
 import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
 
@@ -55,13 +57,24 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
     const isInRange = station.hours <= turnsLeft;
     const isClosed = stationKey === StationKey.bellGardens && turnsLeft > 20;
     const canTravel = !isCurrentStation && !isClosed && isInRange;
+
     const prompt = getStationPrompt(isCurrentStation, canTravel);
+
+    const backgroundColor = isCurrentStation
+        ? Colors.Background.subtle
+        : "transparent";
+    const color = isCurrentStation
+        ? Colors.Text.inverse
+        : canTravel
+        ? Colors.Text.base
+        : Colors.Text.disable;
     return (
         <li
             css={{
                 inlineSize: "100%",
                 display: "flex",
                 flex: 1,
+                paddingBlock: "20px",
                 borderColor: "transparent",
             }}
         >
@@ -72,53 +85,46 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "start",
-                    backgroundColor: "transparent",
-                    paddingBlock: 0,
+                    backgroundColor,
                     paddingInline: "20x",
-                    border: "none",
+                    border: 0,
+                    animation: isCurrentStation
+                        ? `${Animations.backgroundBlink} 1s linear infinite`
+                        : 0,
                 }}
                 disabled={!canTravel}
                 onClick={handleTravel}
             >
+                <Prompt symbol={prompt} color={color} hidden={!canTravel} />
+
                 <h2
                     css={{
                         marginBlock: 0,
-                        color: canTravel
-                            ? Colors.Text.base
-                            : Colors.Text.disable,
-                        fontSize: "20px",
-                        animation: isCurrentStation
-                            ? `${Animations.blink} 1s linear infinite`
-                            : "",
+                        fontSize: "24px",
+                        color,
                     }}
                 >
-                    <span
-                        css={{
-                            color:
-                                canTravel || isCurrentStation
-                                    ? "inherit"
-                                    : Colors.Text.inverse,
-                        }}
-                    >
-                        {prompt}
-                    </span>{" "}
                     {station.name}
                 </h2>
-                {canTravel && (
-                    <h2 css={{ marginInlineStart: "auto" }}>
-                        ({station.hours} hours)
-                    </h2>
-                )}
-                {isClosed && (
-                    <h2
-                        css={{
-                            marginInlineStart: "auto",
-                            color: Colors.Text.disable,
-                        }}
-                    >
-                        (Closed)
-                    </h2>
-                )}
+
+                <div css={{ marginInlineStart: "auto" }}>
+                    {canTravel && (
+                        <h4
+                            css={{
+                                marginBlock: 0,
+                                fontSize: "18px",
+                            }}
+                        >
+                            {station.hours} hours
+                        </h4>
+                    )}
+
+                    {isClosed && (
+                        <h4 css={{ marginBlock: 0, fontSize: "18px" }}>
+                            Closed
+                        </h4>
+                    )}
+                </div>
             </button>
         </li>
     );

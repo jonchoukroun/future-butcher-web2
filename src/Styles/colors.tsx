@@ -23,5 +23,6 @@ export const Border = {
 export const Background = {
     base: BLACK,
     inverse: LIGHT_AMBER,
+    subtle: PALE_AMBER,
     danger: RED,
 };

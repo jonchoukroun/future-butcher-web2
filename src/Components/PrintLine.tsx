@@ -27,11 +27,31 @@ export function PrintLine({
                 display: "flex",
                 alignItems: size === LineSize.Title ? "center" : "flex-start",
                 marginBlockEnd: "8px",
-                "& h1, h4": { color: Colors.Text.base, marginBlock: 0 },
             }}
         >
             <Prompt hidden={!showPrompt} />
-            {size === LineSize.Title ? <h1>{text}</h1> : <h4>{text}</h4>}
+            {buildNode(size, text)}
         </div>
     );
+}
+
+function buildNode(size: LineSizeType, text: string) {
+    switch (size) {
+        case LineSize.Title:
+            return (
+                <h1 css={{ color: Colors.Text.base, marginBlock: 0 }}>
+                    {text}
+                </h1>
+            );
+
+        case LineSize.Body:
+            return (
+                <h4 css={{ color: Colors.Text.base, marginBlock: 0 }}>
+                    {text}
+                </h4>
+            );
+
+        default:
+            throw new Error(`Error: Invalid line size: ${size}`);
+    }
 }
