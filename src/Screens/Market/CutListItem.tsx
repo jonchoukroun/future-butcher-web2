@@ -41,6 +41,10 @@ export const CutListItem = ({
                 flex: 1,
                 flexDirection: "column",
                 justifyContent: "center",
+                borderColor: "transparent",
+                borderBlockEndColor: Colors.Border.subtle,
+                borderStyle: "dashed",
+                borderWidth: "2px",
             }}
         >
             <div
@@ -49,10 +53,6 @@ export const CutListItem = ({
                     justifyContent: "space-between",
                     alignItems: "center",
                     marginBlockEnd: "5px",
-                    borderColor: "transparent",
-                    borderBlockEndColor: Colors.Border.subtle,
-                    borderStyle: "dashed",
-                    borderWidth: "2px",
                 }}
             >
                 <h2
