@@ -25,11 +25,11 @@ interface ButtonPromptProps {
 export function ButtonPrompt({
     label,
     size,
-    showPrompt,
-    blink,
-    disabled,
-    hidden,
-    loading,
+    showPrompt = true,
+    blink = true,
+    disabled = false,
+    hidden = false,
+    loading = false,
     clickCB,
 }: ButtonPromptProps) {
     const stylesForSize = getStyleForSize(size);
