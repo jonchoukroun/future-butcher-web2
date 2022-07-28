@@ -6,7 +6,8 @@ type Pack = { [key in CutName]: number };
 
 type PackName = "mini_fridge" | "shopping_cart" | "suitcase" | "wheelbarrow";
 
-type PackListing = [string, { pack_space: number; price: number }][];
+type StorePackType = [PackName, { pack_space: number; price: number }];
+type PackListings = Array<StorePackType>;
 
 type WeaponName =
     | "box_cutter"
@@ -15,13 +16,14 @@ type WeaponName =
     | "hockey_stick"
     | "machete";
 
-type WeaponListing = [
-    string,
+type StoreWeaponType = [
+    WeaponName,
     { cuts: string[]; damage: number; price: number },
-][];
+];
+type WeaponListings = Array<StoreWeaponType>;
 
 type Store = Record<
-    string,
+    PackName | WeaponName,
     | { pack_space: number; price: number }
     | { cuts: string[]; damage: number; price: number }
 >;
