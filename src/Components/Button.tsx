@@ -1,133 +1,76 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faRedo } from "@fortawesome/free-solid-svg-icons";
 
-import * as Animations from "../Styles/animations";
 import * as Colors from "../Styles/colors";
-
-export const enum ButtonSize {
-    Full = "Full",
-    Compact = "Compact",
-}
-type ButtonSizeType = typeof ButtonSize[keyof typeof ButtonSize];
-export const enum ButtonScheme {
-    Normal = "Normal",
-    Inverse = "Inverse",
-    Hidden = "Hidden",
-}
-type ButtonSchemeType = typeof ButtonScheme[keyof typeof ButtonScheme];
 
 interface ButtonProps {
     label: string;
-    size: ButtonSizeType;
-    scheme?: ButtonSchemeType;
-    blink?: boolean;
-    isDisabled?: boolean;
-    isDanger?: boolean;
-    isLoading?: boolean;
+    inverse?: boolean;
+    disabled?: boolean;
     clickCB: () => void;
 }
 
 export const Button = ({
     label,
-    size,
-    scheme = ButtonScheme.Normal,
-    blink = false,
-    isDisabled = false,
-    isLoading = false,
+    inverse = false,
+    disabled = false,
     clickCB,
 }: ButtonProps) => {
-    const buttonTypeStyles = getButtonTypeStyles(size);
+    const buttonLayout = buildButtonLayout();
+
     const {
         backgroundColor,
         backgroundColorActive,
         fontColor,
         fontColorActive,
-    } = getColorScheme(scheme, isDisabled);
+    } = getColorScheme(inverse, disabled);
 
     return (
         <button
-            css={css(buttonTypeStyles, {
+            css={css(buttonLayout, {
                 backgroundColor,
-                borderStyle: "none",
+                borderColor: Colors.Border.subtle,
+                borderStyle: "solid",
+                borderBottomWidth: "2px",
                 color: fontColor,
-                animation: blink ? `${Animations.blink} 1s ease` : "",
                 "&:active": {
                     backgroundColor: backgroundColorActive,
                     color: fontColorActive,
                 },
-                "& svg": {
-                    animation: `${Animations.spin} 2s ease`,
-                },
-                opacity: scheme === ButtonScheme.Hidden ? 0 : 1,
             })}
             onClick={clickCB}
-            disabled={isDisabled || scheme === ButtonScheme.Hidden}
+            disabled={disabled}
         >
-            {isLoading ? <FontAwesomeIcon icon={faRedo} /> : label}
+            {label}
         </button>
     );
 };
 
-function getButtonTypeStyles(size: ButtonSize) {
-    const baseButtonTypeStyles = css({
+function buildButtonLayout() {
+    return css({
+        inlineSize: "140px",
         margin: 0,
+        paddingBlock: "5px",
         fontFamily: "'Courier New', Courier, monospace",
-        fontWeight: 800,
-        lineHeight: "26px",
+        fontSize: "18px",
+        fontWeight: 700,
         textTransform: "uppercase",
     });
-
-    switch (size) {
-        case ButtonSize.Full:
-            return css(
-                {
-                    blockSize: "46px",
-                    inlineSize: "100%",
-                    paddingBlock: "1px",
-                    fontSize: "20px",
-                    letterSpacing: "2px",
-                },
-                baseButtonTypeStyles,
-            );
-
-        case ButtonSize.Compact:
-            return css(
-                {
-                    blockSize: "auto",
-                    inlineSize: "auto",
-                    paddingBlock: "5px",
-                    fontSize: "20px",
-                },
-                baseButtonTypeStyles,
-            );
-
-        default:
-            return baseButtonTypeStyles;
-    }
 }
 
-function getColorScheme(scheme: ButtonScheme, isDisabled: boolean) {
+function getColorScheme(inverse: boolean, disabled: boolean) {
     return {
-        backgroundColor:
-            scheme === ButtonScheme.Normal
-                ? Colors.Background.inverse
-                : Colors.Background.base,
-        backgroundColorActive: isDisabled
-            ? Colors.Background.base
-            : scheme === ButtonScheme.Normal
+        backgroundColor: inverse
+            ? Colors.Background.inverse
+            : Colors.Background.base,
+        backgroundColorActive: inverse
             ? Colors.Background.base
             : Colors.Background.inverse,
-        fontColor: isDisabled
+        fontColor: disabled
             ? Colors.Text.disable
-            : scheme === ButtonScheme.Normal
+            : inverse
             ? Colors.Text.inverse
             : Colors.Text.base,
-        fontColorActive: isDisabled
-            ? Colors.Text.disable
-            : scheme === ButtonScheme.Normal
-            ? Colors.Text.base
-            : Colors.Text.inverse,
+        fontColorActive: inverse ? Colors.Text.base : Colors.Text.inverse,
     };
 }

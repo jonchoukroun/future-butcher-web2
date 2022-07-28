@@ -15,6 +15,7 @@ type ButtonPromptSizeType = typeof ButtonPromptSize[keyof typeof ButtonPromptSiz
 interface ButtonPromptProps {
     label: string;
     size: ButtonPromptSizeType;
+    inverse?: boolean;
     showPrompt?: boolean;
     blink?: boolean;
     disabled?: boolean;
@@ -26,6 +27,7 @@ interface ButtonPromptProps {
 export function ButtonPrompt({
     label,
     size,
+    inverse = false,
     showPrompt = true,
     blink = true,
     disabled = false,
@@ -35,10 +37,18 @@ export function ButtonPrompt({
 }: ButtonPromptProps) {
     const stylesForSize = getStyleForSize(size);
 
-    const backgroundColor = Colors.Background.base;
-    const backgroundColorActive = Colors.Background.inverse;
-    const color = disabled ? Colors.Text.disable : Colors.Text.base;
-    const colorActive = Colors.Text.inverse;
+    const backgroundColor = inverse
+        ? Colors.Background.inverse
+        : Colors.Background.base;
+    const backgroundColorActive = inverse
+        ? Colors.Background.base
+        : Colors.Background.inverse;
+    const color = disabled
+        ? Colors.Text.disable
+        : inverse
+        ? Colors.Text.inverse
+        : Colors.Text.base;
+    const colorActive = inverse ? Colors.Text.base : Colors.Text.inverse;
 
     const [loadingLabel, setLoadingLabel] = useState("Loading");
     useEffect(() => {
@@ -58,6 +68,7 @@ export function ButtonPrompt({
             css={css(stylesForSize, {
                 display: "flex",
                 alignItems: "center",
+                paddingInlineStart: inverse ? "10px" : 0,
                 backgroundColor,
                 color,
                 border: 0,
@@ -70,7 +81,17 @@ export function ButtonPrompt({
             disabled={disabled || hidden}
             onClick={clickCB}
         >
-            <Prompt blink={blink} hidden={!showPrompt || disabled} />
+            <Prompt
+                color={
+                    disabled
+                        ? Colors.Text.disable
+                        : inverse
+                        ? Colors.Text.inverse
+                        : Colors.Text.base
+                }
+                blink={blink}
+                hidden={!showPrompt}
+            />
 
             {loading ? loadingLabel : label}
         </button>
