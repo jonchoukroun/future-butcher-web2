@@ -26,19 +26,19 @@ const {
     useState,
 } = React;
 
-export const enum Callback {
-    newGame,
-    startGame,
-    restoreState,
-    travel,
-    fightMugger,
-    buyCut,
-    sellCut,
-    buyPack,
-    buyWeapon,
-    replaceWeapon,
-    payDebt,
-    endGame,
+export enum Callback {
+    newGame = "newGame",
+    startGame = "startGame",
+    restoreState = "restoreState",
+    travel = "travel",
+    fightMugger = "fightMugger",
+    buyCut = "buyCut",
+    sellCut = "sellCut",
+    buyPack = "buyPack",
+    buyWeapon = "buyWeapon",
+    replaceWeapon = "replaceWeapon",
+    payDebt = "payDebt",
+    endGame = "endGame",
 }
 
 const ChannelContext = createContext<
@@ -130,9 +130,11 @@ export const ChannelProvider = ({
         async (callback: Callback, payload: Record<string, unknown>) => {
             if (channel === undefined) return;
 
+            let response: Promise<ApiState | undefined>;
             switch (callback) {
                 case Callback.startGame:
-                    return await startGame(channel);
+                    response = startGame(channel);
+                    break;
 
                 case Callback.restoreState:
                     const name = localStorage.getItem("playerName");
@@ -140,59 +142,68 @@ export const ChannelProvider = ({
                         setChannel(undefined);
                         return;
                     }
-                    return await restoreState(channel, name);
+                    response = restoreState(channel, name);
+                    break;
 
                 case Callback.travel:
-                    return await travel(
+                    response = travel(
                         channel,
                         payload as { destination: string },
                     );
+                    break;
 
                 case Callback.fightMugger:
-                    return await fightMugger(channel, payload);
+                    response = fightMugger(channel, payload);
+                    break;
 
                 case Callback.buyCut:
-                    return await buyCut(
+                    response = buyCut(
                         channel,
                         payload as {
                             cut: CutName;
                             amount: number;
                         },
                     );
+                    break;
 
                 case Callback.sellCut:
-                    return await sellCut(
+                    response = sellCut(
                         channel,
                         payload as {
                             cut: CutName;
                             amount: number;
                         },
                     );
+                    break;
 
                 case Callback.payDebt:
-                    return await payDebt(channel, payload);
+                    response = payDebt(channel, payload);
+                    break;
 
                 case Callback.buyPack:
-                    return await buyPack(
-                        channel,
-                        payload as { pack: PackName },
-                    );
+                    response = buyPack(channel, payload as { pack: PackName });
+                    break;
 
                 case Callback.buyWeapon:
-                    return await buyWeapon(
+                    response = buyWeapon(
                         channel,
                         payload as { weapon: WeaponName },
                     );
+                    break;
 
                 case Callback.replaceWeapon:
-                    return await replaceWeapon(
+                    response = replaceWeapon(
                         channel,
                         payload as { weapon: WeaponName },
                     );
+                    break;
 
                 default:
                     throw new Error(`Unhandled callback ${callback}`);
             }
+            const x = await response;
+            console.log("!!handleCallback", Callback[callback], x);
+            return x;
         },
         [channel],
     );

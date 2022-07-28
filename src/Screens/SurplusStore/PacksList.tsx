@@ -1,9 +1,11 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
-import { PackListItem } from "./PackListItem";
-import { PackModalState } from "./SurplusStore";
-import { ButtonPrompt, ButtonPromptSize } from "../../Components/ButtonPrompt";
+import {
+    ButtonPrompt,
+    ButtonPromptSize,
+    SingleButtonListItem,
+} from "../../Components";
 import { useGameState } from "../../GameData/GameStateProvider";
 
 const Packs = ["mini_fridge", "shopping_cart", "suitcase", "wheelbarrow"];
@@ -12,7 +14,9 @@ export const PacksList = ({
     handleModalOpen,
     onStoreBackClick,
 }: {
-    handleModalOpen: (modalProps: PackModalState) => void;
+    handleModalOpen: <T extends StorePackType | StoreWeaponType>(
+        modalProps: T,
+    ) => void;
     onStoreBackClick: () => void;
 }) => {
     const {
@@ -23,7 +27,7 @@ export const PacksList = ({
 
     const packs = (Object.entries(store).filter(
         ([item]) => Packs.indexOf(item) >= 0,
-    ) as PackListing).sort(
+    ) as PackListings).sort(
         ([, propsA], [, propsB]) => propsB.pack_space - propsA.pack_space,
     );
 
@@ -55,12 +59,11 @@ export const PacksList = ({
                     listStyleType: "none",
                 }}
             >
-                {packs.map(([name, { pack_space, price }], idx) => (
-                    <PackListItem
-                        key={`${name}-${idx}`}
-                        name={name as PackName}
-                        packSpace={pack_space}
-                        price={price}
+                {packs.map((listing, idx) => (
+                    <SingleButtonListItem
+                        key={`pack-${idx}`}
+                        listing={listing}
+                        isLast={idx === packs.length - 1}
                         onModalOpen={handleModalOpen}
                     />
                 ))}

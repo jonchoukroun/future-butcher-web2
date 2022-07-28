@@ -14,6 +14,12 @@ export const CutList = ({
         state: { market },
     } = useGameState();
 
+    if (market === undefined) {
+        throw new Error("State is undefined");
+    }
+
+    const marketEntries = Object.entries(market);
+
     return (
         <ul
             css={{
@@ -25,18 +31,16 @@ export const CutList = ({
                 listStyleType: "none",
             }}
         >
-            {market &&
-                Object.entries(
-                    market,
-                ).map(([name, { price, quantity }], idx) => (
-                    <CutListItem
-                        key={`${name}-${idx}`}
-                        name={name as CutName}
-                        price={price}
-                        quantity={quantity}
-                        onTransactionSelect={handleTransactionMode}
-                    />
-                ))}
+            {marketEntries.map(([name, { price, quantity }], idx) => (
+                <CutListItem
+                    key={`${name}-${idx}`}
+                    name={name as CutName}
+                    price={price}
+                    quantity={quantity}
+                    isLast={idx === marketEntries.length - 1}
+                    onTransactionSelect={handleTransactionMode}
+                />
+            ))}
         </ul>
     );
 };

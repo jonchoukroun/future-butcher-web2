@@ -1,9 +1,11 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
-import { WeaponModalState } from "./SurplusStore";
-import { WeaponListItem } from "./WeaponListItem";
-import { ButtonPrompt, ButtonPromptSize } from "../../Components/ButtonPrompt";
+import {
+    ButtonPrompt,
+    ButtonPromptSize,
+    SingleButtonListItem,
+} from "../../Components";
 import { useGameState } from "../../GameData/GameStateProvider";
 
 const Weapons = [
@@ -18,27 +20,22 @@ export const WeaponsList = ({
     handleModalOpen,
     onStoreBackClick,
 }: {
-    handleModalOpen: (modalProps: WeaponModalState) => void;
+    handleModalOpen: <T extends StorePackType | StoreWeaponType>(
+        modalProps: T,
+    ) => void;
     onStoreBackClick: () => void;
 }) => {
     const {
-        state: { player, store },
+        state: { store },
     } = useGameState();
 
-    if (player === undefined || store === undefined)
-        throw new Error("State is undefined");
+    if (store === undefined) throw new Error("State is undefined");
 
     const weapons = (Object.entries(store).filter(
         ([item]) => Weapons.indexOf(item) >= 0,
-    ) as WeaponListing).sort(
+    ) as WeaponListings).sort(
         ([, propsA], [, propsB]) => propsB.price - propsA.price,
     );
-
-    const ownedWeapon = player.weapon
-        ? weapons.find(([name]) => name === player.weapon)
-        : undefined;
-
-    const ownedWeaponPrice: number = ownedWeapon ? ownedWeapon[1].price : 0;
 
     return (
         <div
@@ -68,13 +65,11 @@ export const WeaponsList = ({
                     listStyleType: "none",
                 }}
             >
-                {weapons.map(([name, { cuts, damage, price }], idx) => (
-                    <WeaponListItem
-                        key={`${name}-${idx}`}
-                        name={name as WeaponName}
-                        cuts={cuts as CutName[]}
-                        damage={damage}
-                        price={price - ownedWeaponPrice}
+                {weapons.map((listing, idx) => (
+                    <SingleButtonListItem
+                        key={`weapon-${idx}`}
+                        listing={listing}
+                        isLast={idx === weapons.length - 1}
                         onModalOpen={handleModalOpen}
                     />
                 ))}

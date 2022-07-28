@@ -3,13 +3,14 @@ import { jsx } from "@emotion/react";
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
-import { Button, ButtonScheme, ButtonSize, TextInput } from "../../Components";
+import { Button, TextInput, PrintLine } from "../../Components";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { formatMoney } from "../../Utils";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
 import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
+import { LineSize } from "../../Components/PrintLine";
 
 export type TransactionMode = "buy" | "sell";
 
@@ -38,12 +39,8 @@ export const TransactionModal = ({
     }
 
     const { handlePushCallback } = useChannel();
-
-    const [showInput, setShowInput] = useState(false);
-    const [inputValue, setInputValue] = useState<number | undefined>();
-    const [isAmountValid, setIsAmountValid] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string | undefined>();
-    const [isLoading, setIsLoading] = useState(false);
+    const { getContentSize, layout } = useWindowSize();
+    const { inlineSize } = getContentSize();
 
     const { price, quantity } = market[cut];
     const stock = mode === "buy" ? quantity : pack[cut];
@@ -53,6 +50,13 @@ export const TransactionModal = ({
         mode === "sell"
             ? pack[cut]
             : Math.min(quantity, maxAfford, spaceAvailable);
+
+    const [inputValue, setInputValue] = useState<number | undefined>();
+    const [isAmountValid, setIsAmountValid] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | undefined>(
+        "Something went wrong.",
+    );
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleMaxClick = () => {
         unstable_batchedUpdates(() => {
@@ -178,9 +182,9 @@ export const TransactionModal = ({
         }
     };
 
-    const { getContentSize, layout } = useWindowSize();
-    const { inlineSize } = getContentSize();
     const inlineSizeOffset = layout === "full" ? 24 : 15;
+
+    const title = `${mode === "buy" ? "Buy" : "Sell"} ${cut}`;
 
     return (
         <div
@@ -212,62 +216,30 @@ export const TransactionModal = ({
                     zIndex: 1001,
                 }}
             >
-                <div
-                    css={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                        marginBlockEnd: "30px",
-                        paddingBlockEnd: "10px",
-                        borderColor: Colors.Border.subtle,
-                        borderBottomStyle: "dashed",
-                        borderWidth: "2px",
-                    }}
-                >
-                    <h2
-                        css={{
-                            marginBlock: 0,
-                            textTransform: "capitalize",
-                        }}
-                    >
-                        {mode} {cut}
-                    </h2>
-                    <Button
-                        size={ButtonSize.Compact}
-                        label={"Close"}
-                        clickCB={onModalClose}
-                        isDisabled={isLoading}
-                    />
-                </div>
+                <PrintLine
+                    text={title}
+                    size={LineSize.Title}
+                    showPrompt={false}
+                />
 
                 {errorMessage && (
-                    <p
-                        css={{
-                            marginBlockStart: 0,
-                            marginBlockEnd: "20px",
-                            color: Colors.Text.danger,
-                        }}
-                    >
-                        {errorMessage}
-                    </p>
+                    <PrintLine
+                        text={errorMessage}
+                        size={LineSize.Body}
+                        showPrompt={false}
+                    />
                 )}
 
-                <h4
-                    css={{
-                        marginBlockStart: 0,
-                        marginBlockEnd: "20px",
-                    }}
-                >
-                    Price: {formatMoney(price)}
-                </h4>
-                <h4
-                    css={{
-                        marginBlockStart: 0,
-                        marginBlockEnd: "20px",
-                    }}
-                >
-                    {mode === "buy" ? "In Stock:" : "In Pack:"} {stock}
-                </h4>
+                <PrintLine
+                    text={`Price: ${formatMoney(price)}`}
+                    size={LineSize.Body}
+                />
+
+                <PrintLine
+                    text={`${mode === "buy" ? "In Stock:" : "In Pack:"} stock`}
+                    size={LineSize.Body}
+                />
+
                 <div
                     css={{
                         display: "flex",
@@ -278,97 +250,75 @@ export const TransactionModal = ({
                         css={{
                             marginBlock: 0,
                             marginInlineEnd: "20px",
-                            animation: showInput
-                                ? ""
-                                : `${Animations.blink} 1s linear infinite`,
                         }}
                     >
                         {">"}
                     </h4>
                     <Button
-                        size={ButtonSize.Compact}
-                        scheme={ButtonScheme.Inverse}
                         label={`${mode} Max ${maxTransact}`}
-                        isDisabled={isLoading}
+                        disabled={isLoading}
                         clickCB={handleMaxClick}
                     />
-
-                    {!showInput && (
-                        <div css={{ marginInlineStart: "auto" }}>
-                            <Button
-                                size={ButtonSize.Compact}
-                                label={"Custom"}
-                                clickCB={() => setShowInput((curr) => !curr)}
-                                isDisabled={isLoading}
-                            />
-                        </div>
-                    )}
                 </div>
-                {showInput && (
+
+                <div
+                    css={{
+                        display: "flex",
+                        flexDirection: "column",
+                    }}
+                >
                     <div
                         css={{
                             display: "flex",
-                            flexDirection: "column",
+                            alignItems: "center",
+                            marginBlockStart: "20px",
                         }}
                     >
-                        <div
+                        <h4
                             css={{
-                                display: "flex",
-                                alignItems: "center",
-                                marginBlockStart: "20px",
+                                marginBlock: 0,
+                                marginInlineEnd: "20px",
+                                animation: isAmountValid
+                                    ? ""
+                                    : `${Animations.blink} 1s linear infinite`,
                             }}
                         >
-                            <h4
-                                css={{
-                                    marginBlock: 0,
-                                    marginInlineEnd: "20px",
-                                    animation: isAmountValid
-                                        ? ""
-                                        : `${Animations.blink} 1s linear infinite`,
-                                }}
-                            >
-                                {">"}
-                            </h4>
+                            {">"}
+                        </h4>
 
-                            <TextInput
-                                placeholder={"How many?"}
-                                type={"number"}
-                                value={`${inputValue}`}
-                                changeCB={handleInputChange}
-                                keyDownCB={handleKeyPress}
-                            />
-                        </div>
-
-                        <div
-                            css={{
-                                display: "flex",
-                                alignItems: "center",
-                                marginBlockStart: "20px",
-                                opacity: isAmountValid ? 1 : 0,
-                            }}
-                        >
-                            <h4
-                                css={{
-                                    marginBlock: 0,
-                                    marginInlineEnd: "20px",
-                                    animation: `${Animations.blink} 1s linear infinite`,
-                                }}
-                            >
-                                {">"}
-                            </h4>
-
-                            <Button
-                                scheme={ButtonScheme.Inverse}
-                                size={ButtonSize.Compact}
-                                label={mode}
-                                isLoading={isLoading}
-                                clickCB={() =>
-                                    handleSubmit(inputValue ?? 0, false)
-                                }
-                            />
-                        </div>
+                        <TextInput
+                            placeholder={"How many?"}
+                            type={"number"}
+                            value={`${inputValue}`}
+                            changeCB={handleInputChange}
+                            keyDownCB={handleKeyPress}
+                        />
                     </div>
-                )}
+
+                    <div
+                        css={{
+                            display: "flex",
+                            alignItems: "center",
+                            marginBlockStart: "20px",
+                            opacity: isAmountValid ? 1 : 0,
+                        }}
+                    >
+                        <h4
+                            css={{
+                                marginBlock: 0,
+                                marginInlineEnd: "20px",
+                                animation: `${Animations.blink} 1s linear infinite`,
+                            }}
+                        >
+                            {">"}
+                        </h4>
+
+                        <Button
+                            label={mode}
+                            clickCB={() => handleSubmit(inputValue ?? 0, false)}
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     );

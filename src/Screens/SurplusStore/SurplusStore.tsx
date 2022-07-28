@@ -1,28 +1,14 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { Fragment, useReducer, useState } from "react";
+import { Fragment, useState } from "react";
 
-import { PackModal } from "./PackModal";
 import { PacksList } from "./PacksList";
 import { StoreIntro } from "./StoreIntro";
 import { WeaponsList } from "./WeaponsList";
-import { WeaponModal } from "./WeaponModal";
-import { PrintLine, LineSize } from "../../Components/PrintLine";
+import { LineSize, PrintLine } from "../../Components/PrintLine";
+import { TransactionModal } from "../../Components";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import * as Colors from "../../Styles/colors";
-
-export type PackModalState = {
-    name: PackName | undefined;
-    packSpace: number | undefined;
-    price: number | undefined;
-};
-
-export type WeaponModalState = {
-    name: WeaponName | undefined;
-    cuts: CutName[] | undefined;
-    damage: number | undefined;
-    price: number | undefined;
-};
 
 export const SurplusStore = () => {
     const { getContentSize } = useWindowSize();
@@ -32,31 +18,24 @@ export const SurplusStore = () => {
         undefined,
     );
 
-    const buyPackState: PackModalState = {
-        name: undefined,
-        packSpace: undefined,
-        price: undefined,
-    };
-    const [packState, packDispatch] = useReducer(buyPackReducer, buyPackState);
-    const handlePackModalOpen = (modalProps: PackModalState) => {
-        packDispatch({ type: "open", props: modalProps });
-    };
-    const handlePackModalClose = () => packDispatch({ type: "close" });
+    const [packModalState, setPackModalState] = useState<StorePackType>();
+    const handlePackModalClose = () => setPackModalState(undefined);
 
-    const buyWeaponState: WeaponModalState = {
-        name: undefined,
-        cuts: undefined,
-        damage: undefined,
-        price: undefined,
+    const [weaponModalState, setWeaponModalState] = useState<StoreWeaponType>();
+    const handleWeaponModalClose = () => setWeaponModalState(undefined);
+
+    const handleModalOpen = <
+        ModalState extends StorePackType | StoreWeaponType
+    >(
+        state: ModalState,
+    ) => {
+        // TODO validation
+        if ((state as StorePackType)[1].pack_space) {
+            setPackModalState(state as StorePackType);
+        } else {
+            setWeaponModalState(state as StoreWeaponType);
+        }
     };
-    const [weaponState, weaponDispatch] = useReducer(
-        buyWeaponReducer,
-        buyWeaponState,
-    );
-    const handleWeaponModalOpen = (modalProps: WeaponModalState) => {
-        weaponDispatch({ type: "open", props: modalProps });
-    };
-    const handleWeaponModalClose = () => weaponDispatch({ type: "close" });
 
     return (
         <div
@@ -96,72 +75,30 @@ export const SurplusStore = () => {
             ) : menuType === "packs" ? (
                 <Fragment>
                     <PacksList
-                        handleModalOpen={handlePackModalOpen}
+                        handleModalOpen={handleModalOpen}
                         onStoreBackClick={() => setMenuType("weapons")}
                     />
-                    {packState.name &&
-                        packState.packSpace &&
-                        packState.price && (
-                            <PackModal
-                                name={packState.name}
-                                packSpace={packState.packSpace}
-                                price={packState.price}
-                                onModalClose={handlePackModalClose}
-                            />
-                        )}
+                    {packModalState && (
+                        <TransactionModal
+                            listing={packModalState}
+                            onModalClose={handlePackModalClose}
+                        />
+                    )}
                 </Fragment>
             ) : (
                 <Fragment>
                     <WeaponsList
-                        handleModalOpen={handleWeaponModalOpen}
+                        handleModalOpen={handleModalOpen}
                         onStoreBackClick={() => setMenuType("packs")}
                     />
-                    {weaponState.name &&
-                        weaponState.cuts !== undefined &&
-                        weaponState.damage &&
-                        weaponState.price !== undefined && (
-                            <WeaponModal
-                                name={weaponState.name}
-                                cuts={weaponState.cuts}
-                                damage={weaponState.damage}
-                                price={weaponState.price}
-                                onModalClose={handleWeaponModalClose}
-                            />
-                        )}
+                    {weaponModalState && (
+                        <TransactionModal
+                            listing={weaponModalState}
+                            onModalClose={handleWeaponModalClose}
+                        />
+                    )}
                 </Fragment>
             )}
         </div>
     );
 };
-
-type PackAction = { type: "close" } | { type: "open"; props: PackModalState };
-
-function buyPackReducer(_packState: PackModalState, action: PackAction) {
-    if (action.type === "close")
-        return {
-            name: undefined,
-            packSpace: undefined,
-            price: undefined,
-        };
-
-    return action.props;
-}
-
-type WeaponAction =
-    | { type: "close" }
-    | { type: "open"; props: WeaponModalState };
-
-function buyWeaponReducer(
-    _weaponState: WeaponModalState,
-    action: WeaponAction,
-) {
-    if (action.type === "close")
-        return {
-            name: undefined,
-            cuts: undefined,
-            damage: undefined,
-            price: undefined,
-        };
-
-    return action.props;
-}

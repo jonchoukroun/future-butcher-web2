@@ -53,6 +53,7 @@ export const NavBar = () => {
             <ButtonPrompt
                 size={ButtonPromptSize.Full}
                 label={label}
+                inverse
                 blink={false}
                 clickCB={() => dispatch({ type: "changeScreen", screen })}
             />
@@ -63,10 +64,10 @@ export const NavBar = () => {
 function getButtonLabel(screen: Screen | undefined, isBellGardens: boolean) {
     switch (screen) {
         case Screen.Subway:
-            return isBellGardens ? "Go to the Store" : "Go to the Market";
+            return isBellGardens ? "Go to the Store" : "Buy or Sell Cuts";
 
         case Screen.Market:
-            return "Go to the Subway";
+            return "Take the Subway";
 
         default:
             return "Back to the Streets";

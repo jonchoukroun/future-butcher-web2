@@ -3,7 +3,7 @@ import { jsx } from "@emotion/react";
 import { useEffect, useRef, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
-import { Button, ButtonScheme, ButtonSize } from "../../Components";
+import { ButtonPrompt, ButtonPromptSize } from "../../Components";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import { handleMessage } from "../../Logging/handleMessage";
@@ -163,13 +163,8 @@ export const EndGame = () => {
                     >
                         {">"}
                     </h4>
-                    <Button
-                        size={ButtonSize.Compact}
-                        scheme={
-                            !canPayDebt && !hasCuts
-                                ? ButtonScheme.Normal
-                                : ButtonScheme.Inverse
-                        }
+                    <ButtonPrompt
+                        size={ButtonPromptSize.Compact}
                         label={"Retire"}
                         clickCB={handleRetireClick}
                     />

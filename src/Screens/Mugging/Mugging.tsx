@@ -5,7 +5,7 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import { MuggingDefeat } from "./MuggingDefeat";
 import { MuggingVictory } from "./MuggingVictory";
-import { Button, ButtonScheme, ButtonSize } from "../../Components";
+import { ButtonPrompt, ButtonPromptSize } from "../../Components";
 import { useGameState, Screen } from "../../GameData/GameStateProvider";
 import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";
 import * as Animations from "../../Styles/animations";
@@ -148,9 +148,8 @@ export const Mugging = () => {
                         >
                             {">"}
                         </h4>
-                        <Button
-                            size={ButtonSize.Compact}
-                            scheme={ButtonScheme.Inverse}
+                        <ButtonPrompt
+                            size={ButtonPromptSize.Compact}
                             label={"Fight the Mugger"}
                             clickCB={handleFightMuggerClick}
                         />

@@ -22,23 +22,27 @@ export function StoreIntro({
                 size={LineSize.Body}
             />
 
-            <PrintLine
-                text={
-                    "Ain't no more 2nd ammendment, but we still have all your personal defense needs."
-                }
-                size={LineSize.Body}
-            />
-
-            <PrintLine
-                text={"You also look like you could use more carrying space."}
-                size={LineSize.Body}
-            />
-
             <div css={{ marginBlockStart: "40px" }}>
+                <PrintLine
+                    text={
+                        "Ain't no more 2nd ammendment, but we still have all your personal defense needs."
+                    }
+                    size={LineSize.Body}
+                />
+
                 <ButtonPrompt
                     label={"Browse weapons"}
                     size={ButtonPromptSize.Full}
                     clickCB={onSeeWeaponsClick}
+                />
+            </div>
+
+            <div css={{ marginBlockStart: "40px" }}>
+                <PrintLine
+                    text={
+                        "You also look like you could use more carrying space."
+                    }
+                    size={LineSize.Body}
                 />
 
                 <ButtonPrompt
