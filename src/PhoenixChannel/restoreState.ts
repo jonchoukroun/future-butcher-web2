@@ -7,7 +7,7 @@ export async function restoreState(
     return new Promise((resolve, reject) => {
         channel
             // eslint-disable-next-line @typescript-eslint/ban-types
-            .push("restore_game_state", (name as unknown) as object)
+            .push("restore_game_state", name as unknown as object)
             .receive("ok", ({ state_data }: { state_data: ApiState }) => {
                 return resolve(state_data);
             })

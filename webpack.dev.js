@@ -8,8 +8,9 @@ module.exports = merge(common, {
     mode: "development",
     devtool: "inline-source-map",
     devServer: {
-        contentBase: path.join(__dirname, "dist"),
-        compress: true,
+        static: {
+            directory: path.join(__dirname, "dist"),
+        },
         port: 3000,
     },
     plugins: [
