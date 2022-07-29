@@ -10,80 +10,80 @@ export const enum StationKey {
 export type Station = {
     key: StationKey;
     name: string;
-    stationDescription: string;
-    gangName: string;
-    gangDescription: string;
-    gangTax: number;
     hours: number;
-    uniqueBuilding: string;
+    stationDescription: string;
+    // gangName: string;
+    // gangDescription: string;
+    // gangTax: number;
+    // uniqueBuilding: string;
 };
 
 export const subwayStations: Array<Station> = [
     {
         key: StationKey.beverlyHills,
         name: "Beverly Hills",
+        hours: 3,
         stationDescription:
             "High security, expensive cuts, and manicured lawns.",
-        gangName: "Rollin' Spa Girls",
-        gangDescription:
-            "Militarized private security who hunt undesirables for sport.",
-        gangTax: 100000,
-        hours: 3,
-        uniqueBuilding: "TBD",
+        // gangName: "Rollin' Spa Girls",
+        // gangDescription:
+        //     "Militarized private security who hunt undesirables for sport.",
+        // gangTax: 100000,
+        // uniqueBuilding: "TBD",
     },
     {
         key: StationKey.downtown,
         name: "Downtown",
+        hours: 2,
         stationDescription:
             "High rises and high finance, with a taste for fine cuts.",
-        gangName: "Balls Fargaux",
-        gangDescription: "Mega bank turned organized crime franchise.",
-        gangTax: 10000,
-        hours: 2,
-        uniqueBuilding: "Bank",
+        // gangName: "Balls Fargaux",
+        // gangDescription: "Mega bank turned organized crime franchise.",
+        // gangTax: 10000,
+        // uniqueBuilding: "Bank",
     },
     {
         key: StationKey.veniceBeach,
         name: "Venice Beach",
+        hours: 2,
         stationDescription:
             "Heal your body and soul with restorative yoga and free substandard medicine.",
-        gangName: "The 3rd Eye Boys",
-        gangDescription:
-            "Roided-out yogis who'll put you in a downward dog... for good.",
-        gangTax: 2000,
-        hours: 2,
-        uniqueBuilding: "Free Clinic",
+        // gangName: "The 3rd Eye Boys",
+        // gangDescription:
+        //     "Roided-out yogis who'll put you in a downward dog... for good.",
+        // gangTax: 2000,
+        // uniqueBuilding: "Free Clinic",
     },
     {
         key: StationKey.hollywood,
         name: "Hollywood",
-        stationDescription: "Cops are your friend, for a price.",
-        gangName: "Vine Street Raiders",
-        gangDescription:
-            "Rampant street kids who'll rob you and leave you their headshot.",
-        gangTax: 0,
         hours: 1,
-        uniqueBuilding: "Police Station",
+        stationDescription: "Cops can be your friend, for a price.",
+        // gangName: "Vine Street Raiders",
+        // gangDescription:
+        //     "Rampant street kids who'll rob you and leave you their headshot.",
+        // gangTax: 0,
+        // uniqueBuilding: "Police Station",
     },
     {
         key: StationKey.compton,
         name: "Compton",
-        stationDescription: "Cheap cuts and cheap tools for any DIY needs.",
-        gangName: "None",
-        gangDescription: "Disorganized maurauders, raiders, and cutthroats.",
-        gangTax: 0,
         hours: 1,
-        uniqueBuilding: "Hardware Store",
+        stationDescription: "Cheap cuts and cheap tools for any DIY needs.",
+        // gangName: "None",
+        // gangDescription: "Disorganized maurauders, raiders, and cutthroats.",
+        // gangTax: 0,
+        // uniqueBuilding: "Hardware Store",
     },
     {
         key: StationKey.bellGardens,
         name: "Bell Gardens",
-        stationDescription: "The American dream at its seediest.",
-        gangName: "The Chamber of Commerce",
-        gangDescription:
-            "Heavily armed small business owners who encourage shopping.",
-        gangTax: 5000,
         hours: 2,
-        uniqueBuilding: "Gus's Army Surplus",
+        stationDescription: "The American dream at its seediest.",
+        // gangName: "The Chamber of Commerce",
+        // gangDescription:
+        //     "Heavily armed small business owners who encourage shopping.",
+        // gangTax: 5000,
+        // uniqueBuilding: "Gus's Army Surplus",
     },
 ];
