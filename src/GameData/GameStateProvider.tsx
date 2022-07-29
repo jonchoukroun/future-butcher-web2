@@ -1,66 +1,31 @@
 import * as React from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
+import {
+    ApiStateType,
+    GameStateType,
+    HighScoresType,
+    OwnedCutsType,
+    ScreenType,
+} from ".";
+import { serializeMarket, serializeStore } from "./Serializers";
 import { muggerNames } from "../Fixtures/mugging";
-import { useChannel, Callback } from "../PhoenixChannel/ChannelProvider";
 import { StationKey } from "../Fixtures/subwayStations";
+import { useChannel, Callback } from "../PhoenixChannel/ChannelProvider";
 
-export enum Screen {
-    Login = "Login",
-    Welcome = "Future Butcher",
-    // Main = "Main",
-    Subway = "Subway",
-    Market = "Market",
-    SurplusStore = "Gus's Army Surplus",
-    // HardwareStore = "Hardware Store",
-    // Bank = "Bank",
-    // Clinic = "Free Clinic",
-    Stats = "Stats",
-    HighScores = "High Scores",
-    Mugging = "Mugging",
-    EndGame = "End Game",
-    Error = "Error SCreen",
-}
-
-type Player = {
-    playerName: string;
-    health: number;
-    funds: number;
-    debt: number;
-    packSpace: number;
-    weapon: string | null;
-};
-
-export type GameProcess = "initialized" | "in_game" | "mugging" | "game_over";
-
-type HighScores = { player: string; score: number }[];
-
-type GameState = {
-    currentProcess?: GameProcess;
-    currentScreen?: Screen;
-    currentStation?: string;
-    highScores?: HighScores;
-    market?: Market;
-    muggers?: string[];
-    pack?: Pack;
-    player?: Player;
-    spaceAvailable?: number;
-    store?: Store;
-    turnsLeft?: number;
-};
 type Action =
     | { type: "updateChannelStatus"; isConnected: boolean }
-    | { type: "changeScreen"; screen: Screen }
-    | { type: "updateStateData"; stateData: ApiState }
-    | { type: "setHighScores"; highScores: HighScores }
+    | { type: "changeScreen"; screen: ScreenType }
+    | { type: "updateStateData"; stateData: ApiStateType }
+    | { type: "setHighScores"; highScores: HighScoresType }
     | { type: "shuffleMuggers" }
     | { type: "killMugger" };
 
 const GameStateContext = React.createContext<
-    { state: GameState; dispatch: (action: Action) => void } | undefined
+    { state: GameStateType; dispatch: (action: Action) => void } | undefined
 >(undefined);
 
-function gameStateReducer(state: GameState, action: Action) {
+function gameStateReducer(state: GameStateType, action: Action) {
     switch (action.type) {
         case "changeScreen":
             return handleChangeScreen(state, action.screen);
@@ -113,18 +78,18 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
     useEffect(() => {
         if (!isDisconnected) return;
 
-        dispatch({ type: "changeScreen", screen: Screen.Error });
+        dispatch({ type: "changeScreen", screen: "error" });
     }, [isDisconnected]);
 
     useEffect(() => {
         const handleJoin = async () => {
             if (!playerName || !playerHash) {
-                dispatch({ type: "changeScreen", screen: Screen.Login });
+                dispatch({ type: "changeScreen", screen: "login" });
                 return;
             }
             const reply = await handleJoinChannel(playerName, playerHash);
             if (reply === "join crashed") {
-                dispatch({ type: "changeScreen", screen: Screen.Login });
+                dispatch({ type: "changeScreen", screen: "login" });
             }
             dispatch({ type: "shuffleMuggers" });
         };
@@ -135,7 +100,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
         const initGame = async () => {
             const response = await handleInitGame();
             if (response === undefined) {
-                dispatch({ type: "changeScreen", screen: Screen.Error });
+                dispatch({ type: "changeScreen", screen: "error" });
                 return;
             }
 
@@ -145,12 +110,12 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                     {},
                 );
                 if (lastState === undefined) {
-                    dispatch({ type: "changeScreen", screen: Screen.Error });
+                    dispatch({ type: "changeScreen", screen: "error" });
                     return;
                 }
 
                 if (lastState.rules.state === "initialized") {
-                    dispatch({ type: "changeScreen", screen: Screen.Welcome });
+                    dispatch({ type: "changeScreen", screen: "welcome" });
                     return;
                 }
                 if (lastState.rules.state === "in_game") {
@@ -164,8 +129,8 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                             screen:
                                 lastState.station.station_name ===
                                 StationKey.bellGardens
-                                    ? Screen.SurplusStore
-                                    : Screen.Market,
+                                    ? "store"
+                                    : "market",
                         });
                     });
                     return;
@@ -178,12 +143,12 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                         });
                         dispatch({
                             type: "changeScreen",
-                            screen: Screen.Mugging,
+                            screen: "mugging",
                         });
                     });
                 }
             } else {
-                dispatch({ type: "changeScreen", screen: Screen.Welcome });
+                dispatch({ type: "changeScreen", screen: "welcome" });
             }
         };
         if (didJoinChannel) initGame();
@@ -206,7 +171,10 @@ export function useGameState() {
     return context;
 }
 
-function handleChangeScreen(state: GameState, nextScreen: Screen): GameState {
+function handleChangeScreen(
+    state: GameStateType,
+    nextScreen: ScreenType,
+): GameStateType {
     return {
         ...state,
         currentScreen: nextScreen,
@@ -214,9 +182,9 @@ function handleChangeScreen(state: GameState, nextScreen: Screen): GameState {
 }
 
 function handleUpdateState(
-    apiState: ApiState,
-    currentState: GameState,
-): GameState {
+    apiState: ApiStateType,
+    currentState: GameStateType,
+): GameStateType {
     const { currentScreen, muggers } = currentState;
     const {
         player: { player_name, funds, debt, weapon, pack, pack_space },
@@ -228,27 +196,20 @@ function handleUpdateState(
         currentProcess: state,
         currentScreen,
         currentStation: station_name,
-        market: market ? market : undefined,
+        market: market ? serializeMarket(market) : undefined,
         muggers,
-        pack,
         player: {
-            playerName: player_name,
-            health: 100,
-            funds,
             debt,
+            funds,
+            health: 100,
+            playerName: player_name,
+            pack,
+            totalPackSpace: pack_space,
             weapon,
-            packSpace: pack_space,
         },
-        store: store ? store : undefined,
-        spaceAvailable: pack_space - countPackUse(pack),
+        store: store ? serializeStore(store) : undefined,
         turnsLeft: turns_left,
     };
-}
-
-function countPackUse(pack: Pack) {
-    return Object.entries(pack).reduce((sum, [, amount]) => {
-        return sum + amount;
-    }, 0);
 }
 
 function shuffleMuggerNames() {
