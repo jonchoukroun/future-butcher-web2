@@ -9,37 +9,38 @@ import { getScores } from "./getScores";
 import { joinChannel } from "./joinChannel";
 import { newGame } from "./newGame";
 import { payDebt } from "./payDebt";
-import { replaceWeapon } from "./replaceWeapon";
+// import { replaceWeapon } from "./replaceWeapon";
 import { restoreState } from "./restoreState";
 import { startGame } from "./startGame";
 import { travel } from "./travel";
 import { sellCut } from "./sellCut";
 import { handleMessage } from "../Logging/handleMessage";
 import { buyWeapon } from "./buyWeapon";
+import {
+    ApiStateType,
+    CutType,
+    HighScoresType,
+    PackType,
+    WeaponType,
+} from "../GameData";
 
-const {
-    createContext,
-    useCallback,
-    useContext,
-    useMemo,
-    useEffect,
-    useState,
-} = React;
+const { createContext, useCallback, useContext, useMemo, useEffect, useState } =
+    React;
 
-export enum Callback {
-    newGame = "newGame",
-    startGame = "startGame",
-    restoreState = "restoreState",
-    travel = "travel",
-    fightMugger = "fightMugger",
-    buyCut = "buyCut",
-    sellCut = "sellCut",
-    buyPack = "buyPack",
-    buyWeapon = "buyWeapon",
-    replaceWeapon = "replaceWeapon",
-    payDebt = "payDebt",
-    endGame = "endGame",
-}
+// FIXME: create enum for stable lookups
+export type CallbackType =
+    | "newGame"
+    | "startGame"
+    | "restoreState"
+    | "travel"
+    | "fightMugger"
+    | "buyCut"
+    | "sellCut"
+    | "buyPack"
+    | "buyWeapon"
+    | "replaceWeapon"
+    | "payDebt"
+    | "endGame";
 
 const ChannelContext = createContext<
     | {
@@ -50,16 +51,14 @@ const ChannelContext = createContext<
               playerHash?: string,
           ) => Promise<Channel | string | undefined>;
           handlePushCallback: (
-              callback: Callback,
+              callback: CallbackType,
               payload: Record<string, unknown>,
-          ) => Promise<ApiState | undefined>;
+          ) => Promise<ApiStateType | undefined>;
           handleEndGame: (
               hashId: string,
               score: number,
-          ) => Promise<{ player: string; score: number }[] | undefined>;
-          handleGetScores: () => Promise<
-              { player: string; score: number }[] | void
-          >;
+          ) => Promise<HighScoresType | undefined>;
+          handleGetScores: () => Promise<HighScoresType | void>;
           isConnected: boolean;
           isDisconnected: boolean;
       }
@@ -127,16 +126,16 @@ export const ChannelProvider = ({
     }, [channel]);
 
     const handlePushCallback = useCallback(
-        async (callback: Callback, payload: Record<string, unknown>) => {
+        async (callback: CallbackType, payload: Record<string, unknown>) => {
             if (channel === undefined) return;
 
-            let response: Promise<ApiState | undefined>;
+            let response: Promise<ApiStateType | undefined>;
             switch (callback) {
-                case Callback.startGame:
+                case "startGame":
                     response = startGame(channel);
                     break;
 
-                case Callback.restoreState:
+                case "restoreState":
                     const name = localStorage.getItem("playerName");
                     if (!name) {
                         setChannel(undefined);
@@ -145,64 +144,65 @@ export const ChannelProvider = ({
                     response = restoreState(channel, name);
                     break;
 
-                case Callback.travel:
+                case "travel":
                     response = travel(
                         channel,
                         payload as { destination: string },
                     );
                     break;
 
-                case Callback.fightMugger:
+                case "fightMugger":
                     response = fightMugger(channel, payload);
                     break;
 
-                case Callback.buyCut:
+                case "buyCut":
                     response = buyCut(
                         channel,
                         payload as {
-                            cut: CutName;
+                            cut: CutType;
                             amount: number;
                         },
                     );
                     break;
 
-                case Callback.sellCut:
+                case "sellCut":
                     response = sellCut(
                         channel,
                         payload as {
-                            cut: CutName;
+                            cut: CutType;
                             amount: number;
                         },
                     );
                     break;
 
-                case Callback.payDebt:
+                case "payDebt":
                     response = payDebt(channel, payload);
                     break;
 
-                case Callback.buyPack:
-                    response = buyPack(channel, payload as { pack: PackName });
+                case "buyPack":
+                    response = buyPack(channel, payload as { pack: PackType });
                     break;
 
-                case Callback.buyWeapon:
+                case "buyWeapon":
                     response = buyWeapon(
                         channel,
-                        payload as { weapon: WeaponName },
+                        payload as { weapon: WeaponType },
                     );
                     break;
 
-                case Callback.replaceWeapon:
-                    response = replaceWeapon(
-                        channel,
-                        payload as { weapon: WeaponName },
-                    );
-                    break;
+                // TODO: consider for v2
+                // case "replaceWeapon":
+                //     response = replaceWeapon(
+                //         channel,
+                //         payload as { weapon: WeaponType },
+                //     );
+                //     break;
 
                 default:
                     throw new Error(`Unhandled callback ${callback}`);
             }
             const x = await response;
-            console.log("!!handleCallback", Callback[callback], x);
+            console.log("!!handleCallback", callback, x);
             return x;
         },
         [channel],
