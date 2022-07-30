@@ -4,15 +4,15 @@ import { useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { ScreenTemplate } from "../../Components/ScreenTemplate";
-import { Screen, useGameState } from "../../GameData/GameStateProvider";
+import { useGameState } from "../../GameData/GameStateProvider";
 import { player } from "../../Fixtures/player";
-import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
+import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { formatMoney } from "../../Utils/formatMoney";
 
 export const Welcome = () => {
     const date = new Date();
     date.setFullYear(2055, date.getMonth(), date.getDate());
-    const options = {
+    const options: Intl.DateTimeFormatOptions = {
         year: "numeric",
         month: "short",
         day: "numeric",
@@ -26,20 +26,20 @@ export const Welcome = () => {
         if (isLoading) return;
         setIsLoading(true);
 
-        const response = await handlePushCallback(Callback.startGame, {});
+        const response = await handlePushCallback("startGame", {});
         if (response === undefined) {
-            dispatch({ type: "changeScreen", screen: Screen.Error });
+            dispatch({ type: "changeScreen", screen: "error" });
             return;
         }
 
         if (response.rules.state !== "in_game") {
-            dispatch({ type: "changeScreen", screen: Screen.Login });
+            dispatch({ type: "changeScreen", screen: "login" });
             return;
         }
 
         unstable_batchedUpdates(() => {
             dispatch({ type: "updateStateData", stateData: response });
-            dispatch({ type: "changeScreen", screen: Screen.Market });
+            dispatch({ type: "changeScreen", screen: "market" });
             setIsLoading(false);
         });
     };

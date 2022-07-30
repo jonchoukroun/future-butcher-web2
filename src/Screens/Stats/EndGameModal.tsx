@@ -3,11 +3,11 @@ import { jsx } from "@emotion/react";
 import { useEffect, useRef, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
-import { ButtonPrimary } from "../../Components";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { handleMessage } from "../../Logging/handleMessage";
+import { useGameState } from "../../GameData/GameStateProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
-import { Screen, useGameState } from "../../GameData/GameStateProvider";
+
 import * as Colors from "../../Styles/colors";
 
 export const EndGameModal = ({
@@ -34,18 +34,18 @@ export const EndGameModal = ({
         const hashId = localStorage.getItem("playerHash");
         if (!hashId) {
             handleMessage("Cannot end game without a hash ID", "error");
-            dispatch({ type: "changeScreen", screen: Screen.Error });
+            dispatch({ type: "changeScreen", screen: "error" });
             return;
         }
         const highScores = await handleEndGame(hashId, 0);
         if (highScores === undefined) {
-            dispatch({ type: "changeScreen", screen: Screen.Error });
+            dispatch({ type: "changeScreen", screen: "error" });
             return;
         }
 
         unstable_batchedUpdates(() => {
             dispatch({ type: "setHighScores", highScores });
-            dispatch({ type: "changeScreen", screen: Screen.HighScores });
+            dispatch({ type: "changeScreen", screen: "highScores" });
         });
         if (isMountedRef.current) {
             setIsLoading(false);
@@ -99,7 +99,7 @@ export const EndGameModal = ({
                 </div>
 
                 <div css={{ display: "flex", justifyContent: "space-between" }}>
-                    <ButtonPrimary
+                    {/* <ButtonPrimary
                         type={"Half"}
                         label={"Cancel"}
                         border={"None"}
@@ -111,7 +111,7 @@ export const EndGameModal = ({
                         label={"Quit"}
                         isDanger={true}
                         clickCB={handleEndGameClick}
-                    />
+                    /> */}
                 </div>
             </div>
         </div>

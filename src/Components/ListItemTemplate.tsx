@@ -2,13 +2,13 @@
 import { jsx } from "@emotion/react";
 
 import { Button } from "./Button";
-// import { ButtonPrompt, ButtonPromptSize } from "./ButtonPrompt";
+import { CutType, PackType } from "../GameData";
 import { formatMoney } from "../Utils/formatMoney";
 
 import * as Colors from "../Styles/colors";
 
 interface ListItemTemplateProps {
-    itemName: CutName | PackName | string;
+    itemName: CutType | PackType;
     price: number;
     // Hide border under last item
     isLast: boolean;

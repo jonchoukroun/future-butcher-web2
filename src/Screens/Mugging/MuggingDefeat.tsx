@@ -1,8 +1,7 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
-import { ButtonPrimary } from "../../Components";
-import { Screen, useGameState } from "../../GameData/GameStateProvider";
+import { useGameState } from "../../GameData/GameStateProvider";
 
 export const MuggingDefeat = ({
     initialTurnsLeft,
@@ -36,16 +35,16 @@ export const MuggingDefeat = ({
                     marginBlockStart: "20px",
                 }}
             >
-                <ButtonPrimary
+                {/* <ButtonPrimary
                     type={"Full"}
                     label={"Continue"}
                     clickCB={() =>
                         dispatch({
                             type: "changeScreen",
-                            screen: Screen.Market,
+                            screen: "market",
                         })
                     }
-                />
+                /> */}
             </div>
         </div>
     );

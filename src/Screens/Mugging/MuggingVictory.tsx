@@ -2,19 +2,20 @@
 import { jsx } from "@emotion/react";
 
 import { ButtonPrimary } from "../../Components";
-import { Screen, useGameState } from "../../GameData/GameStateProvider";
+import { useGameState } from "../../GameData/GameStateProvider";
 import { handleMessage } from "../../Logging/handleMessage";
+import { OwnedCutsType, CutType } from "../../GameData";
 
 interface MuggingVictoryProps {
-    initialPack: Pack;
+    initialPack: OwnedCutsType;
 }
 
 export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
     const {
         dispatch,
-        state: { pack, player },
+        state: { player },
     } = useGameState();
-    if (pack === undefined || player === undefined) {
+    if (player === undefined) {
         throw new Error("State is undefined");
     }
 
@@ -22,15 +23,17 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
         handleMessage("Player defeats mugger without a weapon", "error");
     }
 
+    const { pack } = player;
+
     // const harvestedCuts: string[] = [];
     // Object.entries(pack).forEach(([cut, amount]) => {
-    //     const harvested = amount - initialPack[cut as CutName];
+    //     const harvested = amount - initialPack[cut as Cuts];
     //     if (harvested > 0) harvestedCuts.push(`${amount} ${cut}`);
     // });
     let cutsCount = 0;
     const harvestedCuts: string = Object.entries(pack).reduce(
         (cutsString, [cut, amount]) => {
-            if (amount === initialPack[cut as CutName]) return cutsString;
+            if (amount === initialPack[cut as CutType]) return cutsString;
 
             // First we just include the cut in case it's a single cut harvested
             if (!cutsString.length) {
@@ -78,7 +81,7 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
                     clickCB={() =>
                         dispatch({
                             type: "changeScreen",
-                            screen: Screen.Market,
+                            screen: "market",
                         })
                     }
                 />

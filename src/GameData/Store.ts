@@ -29,10 +29,10 @@ export type StoreType = {
         : WeaponListingType;
 };
 
-interface PackListing extends PackListingType {
+export interface PackListing extends PackListingType {
     name: PackType;
 }
-interface WeaponListing extends WeaponListingType {
+export interface WeaponListing extends WeaponListingType {
     name: WeaponType;
 }
 export type StoreListing = {

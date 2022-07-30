@@ -8,12 +8,12 @@ import {
     PrintLine,
     TextInput,
 } from "../../Components";
+import { LineSize } from "../../Components/PrintLine";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
+import { useGameState } from "../../GameData/GameStateProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
-import { useGameState, Screen } from "../../GameData/GameStateProvider";
 
 import * as Colors from "../../Styles/colors";
-import { LineSize } from "../../Components/PrintLine";
 
 export const Login = () => {
     const isMountedRef = useRef(false);
@@ -50,13 +50,13 @@ export const Login = () => {
         } catch {
             setIsLoading(false);
             if (errorMessage) {
-                dispatch({ type: "changeScreen", screen: Screen.Error });
+                dispatch({ type: "changeScreen", screen: "error" });
             } else {
                 setErrorMessage("Something went wrong. Try another name.");
             }
             return;
         }
-        dispatch({ type: "changeScreen", screen: Screen.Welcome });
+        dispatch({ type: "changeScreen", screen: "welcome" });
         if (isMountedRef.current) {
             setIsLoading(false);
         }

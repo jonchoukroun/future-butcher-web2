@@ -2,14 +2,18 @@
 import { jsx } from "@emotion/react";
 
 import { CutListItem } from "./CutListItem";
-import { TransactionMode } from "./TransactionModal";
 import { useGameState } from "../../GameData/GameStateProvider";
+import { TransactionType } from "./MarketModal";
+import { CutType } from "../../GameData";
 
-export const CutList = ({
-    handleTransactionMode,
-}: {
-    handleTransactionMode: (mode: TransactionMode, cut?: string) => void;
-}) => {
+interface CutListProps {
+    handleTransactionSelect: (
+        transaction: TransactionType,
+        cut: CutType,
+    ) => void;
+}
+
+export const CutList = ({ handleTransactionSelect }: CutListProps) => {
     const {
         state: { market },
     } = useGameState();
@@ -17,8 +21,6 @@ export const CutList = ({
     if (market === undefined) {
         throw new Error("State is undefined");
     }
-
-    const marketEntries = Object.entries(market);
 
     return (
         <ul
@@ -31,14 +33,12 @@ export const CutList = ({
                 listStyleType: "none",
             }}
         >
-            {marketEntries.map(([name, { price, quantity }], idx) => (
+            {market.map((listing, idx) => (
                 <CutListItem
                     key={`${name}-${idx}`}
-                    name={name as CutName}
-                    price={price}
-                    quantity={quantity}
-                    isLast={idx === marketEntries.length - 1}
-                    onTransactionSelect={handleTransactionMode}
+                    listing={listing}
+                    isLast={idx === market.length - 1}
+                    onTransactionSelect={handleTransactionSelect}
                 />
             ))}
         </ul>

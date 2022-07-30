@@ -3,16 +3,16 @@ import { jsx } from "@emotion/react";
 
 import { Button } from "./Button";
 import { PackDetails, WeaponDetails } from "../Fixtures/store";
+import { PackListing, WeaponListing } from "../GameData";
 import { formatMoney } from "../Utils/formatMoney";
 
 import * as Colors from "../Styles/colors";
+import { isPackListingType, PackType, WeaponType } from "../GameData/Store";
 
 interface SingleButtonListItemProps {
-    listing: StorePackType | StoreWeaponType;
+    listing: PackListing | WeaponListing;
     isLast: boolean;
-    onModalOpen: <T extends StorePackType | StoreWeaponType>(
-        modalProps: T,
-    ) => void;
+    onModalOpen: <T extends PackListing | WeaponListing>(modalProps: T) => void;
 }
 
 export function SingleButtonListItem({
@@ -20,8 +20,9 @@ export function SingleButtonListItem({
     isLast,
     onModalOpen,
 }: SingleButtonListItemProps) {
-    const [, { price }] = listing;
-    const displayName = getDisplayName(listing);
+    const isPack = isPackListingType(listing);
+    const { name, price } = listing;
+    const displayName = getDisplayName(name, isPack);
     return (
         <li
             css={{
@@ -93,9 +94,7 @@ export function SingleButtonListItem({
     );
 }
 
-function getDisplayName<T extends StorePackType | StoreWeaponType>([name]: T) {
-    const pack = PackDetails[name as PackName];
-    return pack === undefined
-        ? WeaponDetails[name as WeaponName].name
-        : pack.name;
+function getDisplayName(name: PackType | WeaponType, isPack: boolean) {
+    if (isPack) return PackDetails[name as PackType].displayName;
+    return WeaponDetails[name as WeaponType].displayName;
 }

@@ -10,7 +10,8 @@ export const enum ButtonPromptSize {
     Full,
     Small,
 }
-type ButtonPromptSizeType = typeof ButtonPromptSize[keyof typeof ButtonPromptSize];
+type ButtonPromptSizeType =
+    typeof ButtonPromptSize[keyof typeof ButtonPromptSize];
 
 interface ButtonPromptProps {
     label: string;

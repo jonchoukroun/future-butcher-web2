@@ -1,30 +1,25 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 import { useState } from "react";
-import { unstable_batchedUpdates } from "react-dom";
 
 import { CutList } from "./CutList";
-import { TransactionModal, TransactionMode } from "./TransactionModal";
+import { MarketModal, TransactionType } from "./MarketModal";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
+
 import * as Colors from "../../Styles/colors";
+import { CutType } from "../../GameData";
 
 export const Market = () => {
-    const [transactionMode, setTransactionMode] = useState<
-        TransactionMode | undefined
-    >(undefined);
+    const [modalState, setModalState] = useState<{
+        cut: CutType;
+        transaction: TransactionType;
+    }>();
 
-    const [transactionCut, setTransactionCut] = useState<string | undefined>(
-        undefined,
-    );
-
-    const handleTransactionMode = (
-        transactionMode: TransactionMode,
-        transactionCut?: string,
+    const handleTransactionSelect = (
+        transaction: TransactionType,
+        cut: CutType,
     ) => {
-        unstable_batchedUpdates(() => {
-            setTransactionMode(transactionMode);
-            setTransactionCut(transactionCut);
-        });
+        setModalState({ cut, transaction });
     };
 
     const { heightAdjustment, layout } = useWindowSize();
@@ -63,13 +58,13 @@ export const Market = () => {
                 </small>
             </div>
 
-            <CutList handleTransactionMode={handleTransactionMode} />
+            <CutList handleTransactionSelect={handleTransactionSelect} />
 
-            {transactionMode && transactionCut && (
-                <TransactionModal
-                    mode={transactionMode}
-                    cut={transactionCut as CutName}
-                    onModalClose={() => setTransactionMode(undefined)}
+            {modalState && (
+                <MarketModal
+                    transaction={modalState.transaction}
+                    cut={modalState.cut}
+                    onModalClose={() => setModalState(undefined)}
                 />
             )}
         </div>

@@ -7,7 +7,7 @@ import { Prompt } from "./Prompt";
 import { ScreenTemplate } from "./ScreenTemplate";
 import { SingleButtonListItem } from "./SingleButtonListItem";
 import { TextInput } from "./TextInput";
-import { TransactionModal } from "./TransactionModal";
+import { StoreModal } from "./StoreModal";
 
 export {
     Button,
@@ -20,5 +20,5 @@ export {
     ScreenTemplate,
     SingleButtonListItem,
     TextInput,
-    TransactionModal,
+    StoreModal,
 };

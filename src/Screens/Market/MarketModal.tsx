@@ -4,37 +4,33 @@ import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { Button, TextInput, PrintLine } from "../../Components";
+import { LineSize } from "../../Components/PrintLine";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
+import { CutType } from "../../GameData";
+import { useGameState } from "../../GameData/GameStateProvider";
+import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { formatMoney } from "../../Utils";
-import { useGameState, Screen } from "../../GameData/GameStateProvider";
-import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
+
 import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
-import { LineSize } from "../../Components/PrintLine";
 
-export type TransactionMode = "buy" | "sell";
-
-interface TransactionModalProps {
-    mode: TransactionMode;
-    cut: CutName;
+export type TransactionType = "buy" | "sell";
+interface MarketModalProps {
+    transaction: TransactionType;
+    cut: CutType;
     onModalClose: () => void;
 }
 
-export const TransactionModal = ({
-    mode,
+export const MarketModal = ({
+    transaction,
     cut,
     onModalClose,
-}: TransactionModalProps) => {
+}: MarketModalProps) => {
     const {
         dispatch,
-        state: { market, pack, player, spaceAvailable },
+        state: { market, player },
     } = useGameState();
-    if (
-        pack === undefined ||
-        market === undefined ||
-        player === undefined ||
-        spaceAvailable === undefined
-    ) {
+    if (market === undefined || player === undefined) {
         throw new Error("State is undefined");
     }
 
@@ -42,20 +38,23 @@ export const TransactionModal = ({
     const { getContentSize, layout } = useWindowSize();
     const { inlineSize } = getContentSize();
 
-    const { price, quantity } = market[cut];
-    const stock = mode === "buy" ? quantity : pack[cut];
+    const { pack } = player;
+
+    // FIXME: compute space available
+    const spaceAvailable = 20;
+
+    const { price, quantity } = market.find((listing) => listing.name === cut)!;
+    const stock = transaction === "buy" ? quantity : pack[cut];
 
     const maxAfford = Math.floor(player.funds / price);
     const maxTransact =
-        mode === "sell"
+        transaction === "sell"
             ? pack[cut]
             : Math.min(quantity, maxAfford, spaceAvailable);
 
-    const [inputValue, setInputValue] = useState<number | undefined>();
+    const [inputValue, setInputValue] = useState<number>();
     const [isAmountValid, setIsAmountValid] = useState(false);
-    const [errorMessage, setErrorMessage] = useState<string | undefined>(
-        "Something went wrong.",
-    );
+    const [errorMessage, setErrorMessage] = useState<string>();
     const [isLoading, setIsLoading] = useState(false);
 
     const handleMaxClick = () => {
@@ -80,7 +79,7 @@ export const TransactionModal = ({
             return;
         }
 
-        if (mode === "buy") {
+        if (transaction === "buy") {
             if (inputValue > maxAfford) {
                 unstable_batchedUpdates(() => {
                     setErrorMessage(
@@ -136,13 +135,13 @@ export const TransactionModal = ({
 
         setIsLoading(true);
 
-        if (mode === "buy") {
-            const response = await handlePushCallback(Callback.buyCut, {
+        if (transaction === "buy") {
+            const response = await handlePushCallback("buyCut", {
                 cut,
                 amount,
             });
             if (response === undefined) {
-                dispatch({ type: "changeScreen", screen: Screen.Error });
+                dispatch({ type: "changeScreen", screen: "error" });
                 return;
             }
             unstable_batchedUpdates(() => {
@@ -152,12 +151,12 @@ export const TransactionModal = ({
                 onModalClose();
             });
         } else {
-            const response = await handlePushCallback(Callback.sellCut, {
+            const response = await handlePushCallback("sellCut", {
                 cut,
                 amount,
             });
             if (response === undefined) {
-                dispatch({ type: "changeScreen", screen: Screen.Error });
+                dispatch({ type: "changeScreen", screen: "error" });
                 return;
             }
             unstable_batchedUpdates(() => {
@@ -184,7 +183,7 @@ export const TransactionModal = ({
 
     const inlineSizeOffset = layout === "full" ? 24 : 15;
 
-    const title = `${mode === "buy" ? "Buy" : "Sell"} ${cut}`;
+    const title = `${transaction === "buy" ? "Buy" : "Sell"} ${cut}`;
 
     return (
         <div
@@ -236,7 +235,9 @@ export const TransactionModal = ({
                 />
 
                 <PrintLine
-                    text={`${mode === "buy" ? "In Stock:" : "In Pack:"} stock`}
+                    text={`${
+                        transaction === "buy" ? "In Stock:" : "In Pack:"
+                    } stock`}
                     size={LineSize.Body}
                 />
 
@@ -255,7 +256,7 @@ export const TransactionModal = ({
                         {">"}
                     </h4>
                     <Button
-                        label={`${mode} Max ${maxTransact}`}
+                        label={`${transaction} Max ${maxTransact}`}
                         disabled={isLoading}
                         clickCB={handleMaxClick}
                     />
@@ -314,7 +315,7 @@ export const TransactionModal = ({
                         </h4>
 
                         <Button
-                            label={mode}
+                            label={transaction}
                             clickCB={() => handleSubmit(inputValue ?? 0, false)}
                         />
                     </div>

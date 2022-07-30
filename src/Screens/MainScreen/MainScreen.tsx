@@ -1,17 +1,11 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-    faDungeon,
-    faHandshake,
-    faHotel,
-    faRoute,
-    faUmbrellaBeach,
-} from "@fortawesome/free-solid-svg-icons";
 
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { subwayStations } from "../../Fixtures/subwayStations";
-import { Screen, useGameState } from "../../GameData/GameStateProvider";
+import { ScreenType } from "../../GameData";
+import { useGameState } from "../../GameData/GameStateProvider";
+
 import * as Colors from "../../Styles/colors";
 
 export const MainScreen = () => {
@@ -25,13 +19,13 @@ export const MainScreen = () => {
     if (station === undefined) throw new Error("Station not found");
 
     const handleUniqueBuildingClick = () => {
-        let screen: Screen;
+        let screen: ScreenType;
         switch (currentStation) {
             case "bell_gardens":
-                screen = Screen.SurplusStore;
+                screen = "store";
                 break;
             default:
-                screen = Screen.Market;
+                screen = "market";
                 break;
         }
         dispatch({ type: "changeScreen", screen });
@@ -123,11 +117,10 @@ export const MainScreen = () => {
                     onClick={() =>
                         dispatch({
                             type: "changeScreen",
-                            screen: Screen.Market,
+                            screen: "market",
                         })
                     }
                 >
-                    <FontAwesomeIcon icon={faHandshake} size={"lg"} />
                     <h3>Market</h3>
                 </button>
                 <button
@@ -136,11 +129,9 @@ export const MainScreen = () => {
                     }
                     onClick={handleUniqueBuildingClick}
                 >
-                    <FontAwesomeIcon icon={faHotel} size={"lg"} />
                     <h3>{station.uniqueBuilding}</h3>
                 </button>
                 <button disabled={true}>
-                    <FontAwesomeIcon icon={faDungeon} size={"lg"} />
                     <h3>Gang Hideout</h3>
                 </button>
                 {turnsLeft > 0 ? (
@@ -148,11 +139,10 @@ export const MainScreen = () => {
                         onClick={() =>
                             dispatch({
                                 type: "changeScreen",
-                                screen: Screen.Subway,
+                                screen: "subway",
                             })
                         }
                     >
-                        <FontAwesomeIcon icon={faRoute} size={"lg"} />
                         <h3>Subway</h3>
                     </button>
                 ) : (
@@ -160,11 +150,10 @@ export const MainScreen = () => {
                         onClick={() =>
                             dispatch({
                                 type: "changeScreen",
-                                screen: Screen.EndGame,
+                                screen: "endGame",
                             })
                         }
                     >
-                        <FontAwesomeIcon icon={faUmbrellaBeach} size={"lg"} />
                         <h3>Retire</h3>
                     </button>
                 )}

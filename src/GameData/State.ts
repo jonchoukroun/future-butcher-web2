@@ -41,6 +41,7 @@ export type GameProcessType =
     | "game_over";
 
 export type StationType =
+    | "bell_gardens"
     | "beverly_hills"
     | "compton"
     | "downtown"
@@ -71,6 +72,7 @@ export type ScreenType =
     | "welcome"
     | "subway"
     | "market"
+    | "stats"
     | "store"
     | "highScores"
     | "mugging"

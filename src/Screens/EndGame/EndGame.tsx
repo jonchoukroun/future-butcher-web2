@@ -5,19 +5,19 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import { ButtonPrompt, ButtonPromptSize } from "../../Components";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
-import { useGameState, Screen } from "../../GameData/GameStateProvider";
+import { useGameState } from "../../GameData/GameStateProvider";
 import { handleMessage } from "../../Logging/handleMessage";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
+
 import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
 
 export const EndGame = () => {
     const {
         dispatch,
-        state: { player, spaceAvailable },
+        state: { player },
     } = useGameState();
-    if (player === undefined || spaceAvailable === undefined)
-        throw new Error("State is undefined");
+    if (player === undefined) throw new Error("State is undefined");
 
     const { heightAdjustment, layout } = useWindowSize();
     const { handleEndGame } = useChannel();
@@ -39,13 +39,13 @@ export const EndGame = () => {
         const hashId = localStorage.getItem("playerHash");
         if (!hashId) {
             handleMessage("Cannot end game without a hash ID", "error");
-            dispatch({ type: "changeScreen", screen: Screen.Error });
+            dispatch({ type: "changeScreen", screen: "error" });
             return;
         }
         const score = player.funds;
         const highScores = await handleEndGame(hashId, score);
         if (highScores === undefined) {
-            dispatch({ type: "changeScreen", screen: Screen.Error });
+            dispatch({ type: "changeScreen", screen: "error" });
             return;
         }
         if (score > 0) {
@@ -53,7 +53,7 @@ export const EndGame = () => {
         }
         unstable_batchedUpdates(() => {
             dispatch({ type: "setHighScores", highScores });
-            dispatch({ type: "changeScreen", screen: Screen.HighScores });
+            dispatch({ type: "changeScreen", screen: "highScores" });
         });
 
         if (isMountedRef.current) {
@@ -62,7 +62,9 @@ export const EndGame = () => {
     };
 
     const canPayDebt = player.debt && player.funds >= player.debt;
-    const hasCuts = spaceAvailable < player.packSpace;
+    // FIXME: compute space available
+    const spaceAvailable = 20;
+    const hasCuts = spaceAvailable < player.totalPackSpace;
 
     return (
         <div

@@ -6,27 +6,28 @@ import { unstable_batchedUpdates } from "react-dom";
 import { MuggingDefeat } from "./MuggingDefeat";
 import { MuggingVictory } from "./MuggingVictory";
 import { ButtonPrompt, ButtonPromptSize } from "../../Components";
-import { useGameState, Screen } from "../../GameData/GameStateProvider";
-import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";
+import { useGameState } from "../../GameData/GameStateProvider";
+import { useChannel } from "../../PhoenixChannel/ChannelProvider";
+
 import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
 
 export const Mugging = () => {
     const {
         dispatch,
-        state: { muggers, pack, player, turnsLeft },
+        state: { muggers, player, turnsLeft },
     } = useGameState();
 
     if (
         muggers === undefined ||
-        pack === undefined ||
         player === undefined ||
         turnsLeft === undefined
     ) {
-        console.log("!!Mugging", muggers, pack, player, turnsLeft);
+        console.log("!!Mugging", muggers, player, turnsLeft);
         throw new Error("State is undefined");
     }
 
+    const { pack } = player;
     const initialTurnsLeft = useRef(turnsLeft);
     const initialPack = useRef(pack);
 
@@ -42,9 +43,9 @@ export const Mugging = () => {
         if (isLoading) return;
         setIsLoading(true);
 
-        const response = await handlePushCallback(Callback.fightMugger, {});
+        const response = await handlePushCallback("fightMugger", {});
         if (response === undefined) {
-            dispatch({ type: "changeScreen", screen: Screen.Error });
+            dispatch({ type: "changeScreen", screen: "error" });
             return;
         }
         dispatch({ type: "updateStateData", stateData: response });

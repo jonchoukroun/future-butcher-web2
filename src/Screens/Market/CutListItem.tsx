@@ -1,36 +1,33 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
-import { TransactionMode } from "./TransactionModal";
+import { TransactionType } from "./MarketModal";
 import { ListItemTemplate } from "../../Components";
+import { MarketListing, CutType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 
 interface CutListItemProps {
-    name: CutName;
-    price: number;
-    quantity: number;
+    listing: MarketListing;
     isLast: boolean;
-    onTransactionSelect: (mode: TransactionMode, cut?: string) => void;
+    onTransactionSelect: (transaction: TransactionType, cut: CutType) => void;
 }
 
 export const CutListItem = ({
-    name,
-    price,
+    listing: { name, price },
     isLast,
     onTransactionSelect,
 }: CutListItemProps) => {
     const {
-        state: { market, pack, player, spaceAvailable },
+        state: { market, player },
     } = useGameState();
-    if (
-        market === undefined ||
-        pack === undefined ||
-        player === undefined ||
-        spaceAvailable === undefined
-    ) {
+    if (market === undefined || player === undefined) {
         throw new Error("State is undefined");
     }
 
+    const { pack } = player;
+
+    // FIXME: compute spaceAvailable
+    const spaceAvailable = 20;
     const canBuy = player.funds >= price && spaceAvailable > 0;
     const owned = pack[name];
 

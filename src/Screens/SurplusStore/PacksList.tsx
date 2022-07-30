@@ -7,14 +7,13 @@ import {
     SingleButtonListItem,
 } from "../../Components";
 import { useGameState } from "../../GameData/GameStateProvider";
-
-const Packs = ["mini_fridge", "shopping_cart", "suitcase", "wheelbarrow"];
+import { PackListing, WeaponListing } from "../../GameData";
 
 export const PacksList = ({
     handleModalOpen,
     onStoreBackClick,
 }: {
-    handleModalOpen: <T extends StorePackType | StoreWeaponType>(
+    handleModalOpen: <T extends PackListing | WeaponListing>(
         modalProps: T,
     ) => void;
     onStoreBackClick: () => void;
@@ -25,11 +24,7 @@ export const PacksList = ({
 
     if (store === undefined) throw new Error("State is undefined");
 
-    const packs = (Object.entries(store).filter(
-        ([item]) => Packs.indexOf(item) >= 0,
-    ) as PackListings).sort(
-        ([, propsA], [, propsB]) => propsB.pack_space - propsA.pack_space,
-    );
+    const { packs } = store;
 
     return (
         <div

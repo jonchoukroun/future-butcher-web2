@@ -3,12 +3,10 @@ import { jsx } from "@emotion/react";
 
 import { useWindowSize } from "./WindowSizeProvider";
 import { ButtonPrompt, ButtonPromptSize } from "../ButtonPrompt";
-import {
-    GameProcess,
-    Screen,
-    useGameState,
-} from "../../GameData/GameStateProvider";
+import { useGameState } from "../../GameData/GameStateProvider";
 import { StationKey } from "../../Fixtures/subwayStations";
+import { ScreenType } from "../../GameData";
+import { GameProcessType } from "../../GameData/State";
 
 export const NavBar = () => {
     const { layout } = useWindowSize();
@@ -61,12 +59,15 @@ export const NavBar = () => {
     );
 };
 
-function getButtonLabel(screen: Screen | undefined, isBellGardens: boolean) {
+function getButtonLabel(
+    screen: ScreenType | undefined,
+    isBellGardens: boolean,
+) {
     switch (screen) {
-        case Screen.Subway:
+        case "subway":
             return isBellGardens ? "Go to the Store" : "Buy or Sell Cuts";
 
-        case Screen.Market:
+        case "market":
             return "Take the Subway";
 
         default:
@@ -75,21 +76,21 @@ function getButtonLabel(screen: Screen | undefined, isBellGardens: boolean) {
 }
 
 function getNextScreen(
-    process: GameProcess,
-    screen: Screen,
+    process: GameProcessType,
+    screen: ScreenType,
     station: string,
     turnsLeft: number,
 ) {
-    if (process === "mugging") return Screen.Mugging;
+    if (process === "mugging") return "mugging";
 
-    if (turnsLeft === 1 && screen === Screen.Market) return Screen.EndGame;
+    if (turnsLeft === 1 && screen === "market") return "endGame";
 
     if (station === StationKey.bellGardens) {
-        if (screen === Screen.SurplusStore) return Screen.Subway;
-        else return Screen.SurplusStore;
+        if (screen === "store") return "subway";
+        else return "store";
     }
 
-    if (screen === Screen.Market) return Screen.Subway;
+    if (screen === "market") return "subway";
 
-    return Screen.Market;
+    return "market";
 }

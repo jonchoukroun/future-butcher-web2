@@ -1,11 +1,10 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
-import { LayoutType } from "./WindowSizeProvider";
-import { StatsBar } from "../../Screens/Stats/StatsBar";
-import { StatsScreen } from "../../Screens/Stats/StatsScreen";
 import { NavBar } from "./NavBar";
-import { Screen, useGameState } from "../../GameData/GameStateProvider";
+import { LayoutType } from "./WindowSizeProvider";
+import { useGameState } from "../../GameData/GameStateProvider";
+import { StatsScreen } from "../../Screens/Stats/StatsScreen";
 
 interface GameScreenProps {
     layout: LayoutType;
@@ -66,7 +65,6 @@ export const GameScreen = ({
                     flexDirection: "column",
                 }}
             >
-                {currentScreen !== Screen.Stats && <StatsBar />}
                 {children}
                 {shouldShowNavBar && <NavBar />}
             </div>

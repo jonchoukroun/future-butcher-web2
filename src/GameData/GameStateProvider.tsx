@@ -1,17 +1,10 @@
 import * as React from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
-import {
-    ApiStateType,
-    GameStateType,
-    HighScoresType,
-    OwnedCutsType,
-    ScreenType,
-} from ".";
+import { ApiStateType, GameStateType, HighScoresType, ScreenType } from ".";
 import { serializeMarket, serializeStore } from "./Serializers";
 import { muggerNames } from "../Fixtures/mugging";
-import { StationKey } from "../Fixtures/subwayStations";
-import { useChannel, Callback } from "../PhoenixChannel/ChannelProvider";
+import { useChannel } from "../PhoenixChannel/ChannelProvider";
 
 type Action =
     | { type: "updateChannelStatus"; isConnected: boolean }
@@ -105,10 +98,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
             }
 
             if (response === "alreadyStarted" && playerName) {
-                const lastState = await handlePushCallback(
-                    Callback.restoreState,
-                    {},
-                );
+                const lastState = await handlePushCallback("restoreState", {});
                 if (lastState === undefined) {
                     dispatch({ type: "changeScreen", screen: "error" });
                     return;
@@ -128,7 +118,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                             type: "changeScreen",
                             screen:
                                 lastState.station.station_name ===
-                                StationKey.bellGardens
+                                "bell_gardens"
                                     ? "store"
                                     : "market",
                         });

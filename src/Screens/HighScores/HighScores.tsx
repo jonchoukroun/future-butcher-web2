@@ -1,11 +1,11 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
-import { ButtonPrimary } from "../../Components/ButtonPrimary";
-import { formatMoney } from "../../Utils/formatMoney";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
-import { useGameState, Screen } from "../../GameData/GameStateProvider";
+import { useGameState } from "../../GameData/GameStateProvider";
+import { formatMoney } from "../../Utils/formatMoney";
+
 import * as Colors from "../../Styles/colors";
 
 export const HighScores = () => {
@@ -24,7 +24,7 @@ export const HighScores = () => {
     const { handleInitGame } = useChannel();
     const handleStartOverClick = () => {
         handleInitGame();
-        dispatch({ type: "changeScreen", screen: Screen.Welcome });
+        dispatch({ type: "changeScreen", screen: "welcome" });
     };
 
     const { getContentSize } = useWindowSize();
@@ -127,11 +127,11 @@ export const HighScores = () => {
                     zIndex: 100,
                 }}
             >
-                <ButtonPrimary
+                {/* <ButtonPrimary
                     type={"Block"}
                     label={"Start Over"}
                     clickCB={handleStartOverClick}
-                />
+                /> */}
             </div>
         </div>
     );

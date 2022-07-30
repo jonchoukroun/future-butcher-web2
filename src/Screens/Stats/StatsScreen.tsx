@@ -1,17 +1,17 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { faClock, faHeart } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Fragment, useState } from "react";
 
 import { EndGameModal } from "./EndGameModal";
 import { ButtonPrimary } from "../../Components/ButtonPrimary";
-import { formatMoney, getTimeLeft } from "../../Utils";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { PackDetails, WeaponDetails } from "../../Fixtures/store";
 import { subwayStations } from "../../Fixtures/subwayStations";
-import { useChannel, Callback } from "../../PhoenixChannel/ChannelProvider";
-import { useGameState, Screen } from "../../GameData/GameStateProvider";
+import { WeaponType } from "../../GameData";
+import { useGameState } from "../../GameData/GameStateProvider";
+import { useChannel } from "../../PhoenixChannel/ChannelProvider";
+import { formatMoney, getTimeLeft } from "../../Utils";
+
 import * as Colors from "../../Styles/colors";
 
 export const StatsScreen = () => {
@@ -19,15 +19,13 @@ export const StatsScreen = () => {
 
     const { layout } = useWindowSize();
     const {
-        state: { currentStation, turnsLeft, pack, player, spaceAvailable },
+        state: { currentStation, turnsLeft, player },
         dispatch,
     } = useGameState();
 
     if (
         currentStation === undefined ||
-        pack === undefined ||
         player === undefined ||
-        spaceAvailable === undefined ||
         turnsLeft === undefined
     ) {
         throw new Error("State is undefined");
@@ -37,18 +35,20 @@ export const StatsScreen = () => {
         (station) => station.key === currentStation,
     );
 
+    const { pack } = player;
+
     const packName = (
         Object.values(PackDetails).find(
-            ({ packSpace }) => packSpace === player.packSpace,
+            ({ packSpace }) => packSpace === player.totalPackSpace,
         ) || { name: "Backpack" }
-    ).name;
+    ).displayName;
 
     const sortedPack = Object.entries(pack).sort(
         ([, amount1], [, amount2]) => amount2 - amount1,
     );
     const packListstring = sortedPack
         .filter(([, amount]) => amount > 0)
-        .map(([cutName, amount]) => `${amount} ${cutName}`)
+        .map(([Cuts, amount]) => `${amount} ${Cuts}`)
         .join(", ");
 
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,9 +69,9 @@ export const StatsScreen = () => {
         if (!canAfford) return;
 
         setIsLoading(true);
-        const response = await handlePushCallback(Callback.payDebt, {});
+        const response = await handlePushCallback("payDebt", {});
         if (response === undefined) {
-            dispatch({ type: "changeScreen", screen: Screen.Error });
+            dispatch({ type: "changeScreen", screen: "error" });
             return;
         }
         dispatch({ type: "updateStateData", stateData: response });
@@ -120,9 +120,7 @@ export const StatsScreen = () => {
                 >
                     <div>
                         <p css={{ marginBlockStart: 0, marginBlockEnd: "5px" }}>
-                            <span css={{ marginInlineEnd: "5px" }}>
-                                <FontAwesomeIcon icon={faClock} />
-                            </span>
+                            <span css={{ marginInlineEnd: "5px" }}></span>
                             {getTimeLeft(turnsLeft)}
                         </p>
                         <p css={{ marginBlock: 0, color: Colors.Text.subtle }}>
@@ -165,9 +163,7 @@ export const StatsScreen = () => {
                         </p>
 
                         <p css={{ marginBlock: 0 }}>
-                            <span css={{ marginInlineEnd: "5px" }}>
-                                <FontAwesomeIcon icon={faHeart} fontSize={16} />
-                            </span>
+                            <span css={{ marginInlineEnd: "5px" }}></span>
                             {player && player.health}
                         </p>
                     </div>
@@ -238,7 +234,7 @@ export const StatsScreen = () => {
                     }}
                 >
                     <p css={{ marginBlockStart: 0, marginBlockEnd: "5px" }}>
-                        Pack: {packName} ({player.packSpace} lbs)
+                        Pack: {packName} ({player.totalPackSpace} lbs)
                     </p>
 
                     <p
@@ -255,10 +251,10 @@ export const StatsScreen = () => {
                         Weapon:{" "}
                         {player.weapon
                             ? `${
-                                  WeaponDetails[player.weapon as WeaponName]
-                                      .name
+                                  WeaponDetails[player.weapon as WeaponType]
+                                      .displayName
                               } (${
-                                  WeaponDetails[player.weapon as WeaponName]
+                                  WeaponDetails[player.weapon as WeaponType]
                                       .damage
                               } damage)`
                             : "Unarmed"}

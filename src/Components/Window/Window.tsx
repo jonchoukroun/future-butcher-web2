@@ -13,7 +13,7 @@ import { SurplusStore } from "../../Screens/SurplusStore/SurplusStore";
 import { Welcome } from "../../Screens/Welcome/Welcome";
 import { GameScreen } from "./GameScreen";
 import { useWindowSize } from "./WindowSizeProvider";
-import { Screen, useGameState } from "../../GameData/GameStateProvider";
+import { useGameState } from "../../GameData/GameStateProvider";
 import * as Colors from "../../Styles/colors";
 
 export const Window = () => {
@@ -44,49 +44,49 @@ export const Window = () => {
                     backgroundColor: Colors.Background.base,
                 }}
             >
-                {currentScreen === Screen.Error && <ErrorScreen />}
+                {currentScreen === "error" && <ErrorScreen />}
 
-                {currentScreen === Screen.Login && <Login />}
+                {currentScreen === "login" && <Login />}
 
-                {currentScreen === Screen.Welcome && <Welcome />}
+                {currentScreen === "welcome" && <Welcome />}
 
-                {currentScreen === Screen.Market && (
+                {currentScreen === "market" && (
                     <GameScreen layout={layout} shouldShowNavBar={true}>
                         <Market />
                     </GameScreen>
                 )}
 
-                {currentScreen === Screen.Subway && (
+                {currentScreen === "subway" && (
                     <GameScreen layout={layout} shouldShowNavBar={true}>
                         <Subway />
                     </GameScreen>
                 )}
 
-                {currentScreen === Screen.SurplusStore && (
+                {currentScreen === "store" && (
                     <GameScreen layout={layout} shouldShowNavBar={true}>
                         <SurplusStore />
                     </GameScreen>
                 )}
 
-                {currentScreen === Screen.Mugging && (
+                {currentScreen === "mugging" && (
                     <GameScreen layout={layout} shouldShowNavBar={false}>
                         <Mugging />
                     </GameScreen>
                 )}
 
-                {currentScreen === Screen.EndGame && (
+                {currentScreen === "endGame" && (
                     <GameScreen layout={layout} shouldShowNavBar={true}>
                         <EndGame />
                     </GameScreen>
                 )}
 
-                {currentScreen === Screen.Stats && (
+                {/* {currentScreen === "stats" && (
                     <GameScreen layout={layout} shouldShowNavBar={true}>
                         <StatsScreen />
                     </GameScreen>
-                )}
+                )} */}
 
-                {currentScreen === Screen.HighScores && <HighScores />}
+                {currentScreen === "highScores" && <HighScores />}
             </div>
         </div>
     );

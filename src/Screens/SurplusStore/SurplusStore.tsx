@@ -6,9 +6,12 @@ import { PacksList } from "./PacksList";
 import { StoreIntro } from "./StoreIntro";
 import { WeaponsList } from "./WeaponsList";
 import { LineSize, PrintLine } from "../../Components/PrintLine";
-import { TransactionModal } from "../../Components";
+import { StoreModal } from "../../Components";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
+import { PackListing, WeaponListing } from "../../GameData";
+
 import * as Colors from "../../Styles/colors";
+import { isPackListingType } from "../../GameData/Store";
 
 export const SurplusStore = () => {
     const { getContentSize } = useWindowSize();
@@ -18,22 +21,21 @@ export const SurplusStore = () => {
         undefined,
     );
 
-    const [packModalState, setPackModalState] = useState<StorePackType>();
+    const [packModalState, setPackModalState] = useState<PackListing>();
     const handlePackModalClose = () => setPackModalState(undefined);
 
-    const [weaponModalState, setWeaponModalState] = useState<StoreWeaponType>();
+    const [weaponModalState, setWeaponModalState] = useState<WeaponListing>();
     const handleWeaponModalClose = () => setWeaponModalState(undefined);
 
-    const handleModalOpen = <
-        ModalState extends StorePackType | StoreWeaponType
-    >(
+    const handleModalOpen = <ModalState extends PackListing | WeaponListing>(
         state: ModalState,
     ) => {
-        // TODO validation
-        if ((state as StorePackType)[1].pack_space) {
-            setPackModalState(state as StorePackType);
+        if (state === undefined) return;
+
+        if (isPackListingType(state)) {
+            setPackModalState(state as PackListing);
         } else {
-            setWeaponModalState(state as StoreWeaponType);
+            setWeaponModalState(state as WeaponListing);
         }
     };
 
@@ -79,7 +81,7 @@ export const SurplusStore = () => {
                         onStoreBackClick={() => setMenuType("weapons")}
                     />
                     {packModalState && (
-                        <TransactionModal
+                        <StoreModal
                             listing={packModalState}
                             onModalClose={handlePackModalClose}
                         />
@@ -92,7 +94,7 @@ export const SurplusStore = () => {
                         onStoreBackClick={() => setMenuType("packs")}
                     />
                     {weaponModalState && (
-                        <TransactionModal
+                        <StoreModal
                             listing={weaponModalState}
                             onModalClose={handleWeaponModalClose}
                         />

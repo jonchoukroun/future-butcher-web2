@@ -3,10 +3,10 @@ import { jsx } from "@emotion/react";
 import { useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
-import { Prompt } from "../../Components/Prompt";
+import { Prompt } from "../../Components";
 import { StationKey, subwayStations } from "../../Fixtures/subwayStations";
-import { Screen, useGameState } from "../../GameData/GameStateProvider";
-import { Callback, useChannel } from "../../PhoenixChannel/ChannelProvider";
+import { useGameState } from "../../GameData/GameStateProvider";
+import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 
 import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
@@ -32,21 +32,21 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
         if (isLoading) return;
 
         setIsLoading(true);
-        const stateData = await handlePushCallback(Callback.travel, {
+        const stateData = await handlePushCallback("travel", {
             destination: stationKey,
         });
 
         if (stateData === undefined) {
-            dispatch({ type: "changeScreen", screen: Screen.Error });
+            dispatch({ type: "changeScreen", screen: "error" });
             return;
         }
 
         const screen =
             stateData.rules.state === "mugging"
-                ? Screen.Mugging
-                : stateData.station.station_name === StationKey.bellGardens
-                ? Screen.SurplusStore
-                : Screen.Market;
+                ? "mugging"
+                : stateData.station.station_name === "bell_gardens"
+                ? "store"
+                : "market";
         unstable_batchedUpdates(() => {
             dispatch({ type: "updateStateData", stateData });
             dispatch({ type: "changeScreen", screen });
