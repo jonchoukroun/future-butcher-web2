@@ -3,7 +3,6 @@ import { jsx } from "@emotion/react";
 import { Fragment, useState } from "react";
 
 import { EndGameModal } from "./EndGameModal";
-import { ButtonPrimary } from "../../Components/ButtonPrimary";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { PackDetails, WeaponDetails } from "../../Fixtures/store";
 import { subwayStations } from "../../Fixtures/subwayStations";
@@ -129,14 +128,6 @@ export const StatsScreen = () => {
                                 : "Time's up"}
                         </p>
                     </div>
-                    <ButtonPrimary
-                        type={"Sized"}
-                        label={"End Game"}
-                        scheme={"Inverse"}
-                        border={"None"}
-                        isDanger={true}
-                        clickCB={handleConfirmEndGame}
-                    />
                 </div>
 
                 <div
@@ -202,14 +193,7 @@ export const StatsScreen = () => {
                                     Paying...
                                 </p>
                             ) : (
-                                <ButtonPrimary
-                                    type={"Sized"}
-                                    label={"Pay Debt"}
-                                    border={"None"}
-                                    scheme={"Inverse"}
-                                    isLoading={isLoading}
-                                    clickCB={handlePayDebtClick}
-                                />
+                                <p>FIXME: add button</p>
                             ))}
                     </div>
                 </div>

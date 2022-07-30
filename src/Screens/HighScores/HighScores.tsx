@@ -126,13 +126,7 @@ export const HighScores = () => {
                     borderRadius: "4px",
                     zIndex: 100,
                 }}
-            >
-                {/* <ButtonPrimary
-                    type={"Block"}
-                    label={"Start Over"}
-                    clickCB={handleStartOverClick}
-                /> */}
-            </div>
+            ></div>
         </div>
     );
 };

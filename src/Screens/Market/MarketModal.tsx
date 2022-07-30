@@ -43,7 +43,10 @@ export const MarketModal = ({
     // FIXME: compute space available
     const spaceAvailable = 20;
 
-    const { price, quantity } = market.find((listing) => listing.name === cut)!;
+    const listing = market.find((item) => item.name === cut);
+    if (listing === undefined) throw new Error("Invalid listing");
+
+    const { price, quantity } = listing;
     const stock = transaction === "buy" ? quantity : pack[cut];
 
     const maxAfford = Math.floor(player.funds / price);

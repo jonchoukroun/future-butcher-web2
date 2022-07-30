@@ -34,18 +34,7 @@ export const MuggingDefeat = ({
                     justifyContent: "center",
                     marginBlockStart: "20px",
                 }}
-            >
-                {/* <ButtonPrimary
-                    type={"Full"}
-                    label={"Continue"}
-                    clickCB={() =>
-                        dispatch({
-                            type: "changeScreen",
-                            screen: "market",
-                        })
-                    }
-                /> */}
-            </div>
+            ></div>
         </div>
     );
 };

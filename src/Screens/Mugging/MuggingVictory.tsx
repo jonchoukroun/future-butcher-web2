@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
-import { ButtonPrimary } from "../../Components";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { handleMessage } from "../../Logging/handleMessage";
 import { OwnedCutsType, CutType } from "../../GameData";
@@ -75,16 +74,7 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
                     marginBlockStart: "20px",
                 }}
             >
-                <ButtonPrimary
-                    type={"Full"}
-                    label={"Continue"}
-                    clickCB={() =>
-                        dispatch({
-                            type: "changeScreen",
-                            screen: "market",
-                        })
-                    }
-                />
+                <p>FIXME: add button</p>
             </div>
         </div>
     );

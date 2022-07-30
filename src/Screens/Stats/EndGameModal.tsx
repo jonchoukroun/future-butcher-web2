@@ -98,21 +98,9 @@ export const EndGameModal = ({
                     </p>
                 </div>
 
-                <div css={{ display: "flex", justifyContent: "space-between" }}>
-                    {/* <ButtonPrimary
-                        type={"Half"}
-                        label={"Cancel"}
-                        border={"None"}
-                        clickCB={onCloseModal}
-                    />
-
-                    <ButtonPrimary
-                        type={"Full"}
-                        label={"Quit"}
-                        isDanger={true}
-                        clickCB={handleEndGameClick}
-                    /> */}
-                </div>
+                <div
+                    css={{ display: "flex", justifyContent: "space-between" }}
+                ></div>
             </div>
         </div>
     );
