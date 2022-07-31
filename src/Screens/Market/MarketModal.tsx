@@ -13,6 +13,7 @@ import { formatMoney } from "../../Utils";
 
 import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
+import { getSpaceAvailable } from "../../Utils/spaceAvailable";
 
 export type TransactionType = "buy" | "sell";
 interface MarketModalProps {
@@ -38,10 +39,9 @@ export const MarketModal = ({
     const { getContentSize, layout } = useWindowSize();
     const { inlineSize } = getContentSize();
 
-    const { pack } = player;
+    const { pack, totalPackSpace } = player;
 
-    // FIXME: compute space available
-    const spaceAvailable = 20;
+    const spaceAvailable = getSpaceAvailable({ pack, totalPackSpace });
 
     const listing = market.find((item) => item.name === cut);
     if (listing === undefined) throw new Error("Invalid listing");

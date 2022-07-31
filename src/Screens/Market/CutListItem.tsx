@@ -5,6 +5,7 @@ import { TransactionType } from "./MarketModal";
 import { ListItemTemplate } from "../../Components";
 import { MarketListing, CutType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
+import { getSpaceAvailable } from "../../Utils/spaceAvailable";
 
 interface CutListItemProps {
     listing: MarketListing;
@@ -24,10 +25,9 @@ export const CutListItem = ({
         throw new Error("State is undefined");
     }
 
-    const { pack } = player;
+    const { pack, totalPackSpace } = player;
 
-    // FIXME: compute spaceAvailable
-    const spaceAvailable = 20;
+    const spaceAvailable = getSpaceAvailable({ pack, totalPackSpace });
     const canBuy = player.funds >= listing.price && spaceAvailable > 0;
     const owned = pack[listing.name];
 

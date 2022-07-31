@@ -8,6 +8,7 @@ import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { handleMessage } from "../../Logging/handleMessage";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
+import { getSpaceAvailable } from "../../Utils/spaceAvailable";
 
 import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
@@ -61,10 +62,11 @@ export const EndGame = () => {
         }
     };
 
-    const canPayDebt = player.debt && player.funds >= player.debt;
-    // FIXME: compute space available
-    const spaceAvailable = 20;
-    const hasCuts = spaceAvailable < player.totalPackSpace;
+    const { debt, funds, pack, totalPackSpace } = player;
+
+    const canPayDebt = debt && funds >= debt;
+    const spaceAvailable = getSpaceAvailable({ pack, totalPackSpace });
+    const hasCuts = spaceAvailable < totalPackSpace;
 
     return (
         <div
