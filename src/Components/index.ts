@@ -1,4 +1,4 @@
-import { Button, ButtonSize } from "./Button";
+import { Button, ButtonScheme, ButtonSize } from "./Button";
 import { ButtonPrompt, ButtonPromptSize } from "./ButtonPrompt";
 import { ListItemTemplate } from "./ListItemTemplate";
 import { PrintLine } from "./PrintLine";
@@ -9,6 +9,7 @@ import { StoreModal } from "./StoreModal";
 
 export {
     Button,
+    ButtonScheme,
     ButtonSize,
     ButtonPrompt,
     ButtonPromptSize,

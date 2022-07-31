@@ -5,9 +5,8 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import {
     Button,
+    ButtonScheme,
     ButtonSize,
-    ButtonPrompt,
-    ButtonPromptSize,
     PrintLine,
     Prompt,
     TextInput,
@@ -286,7 +285,11 @@ export const MarketModal = ({
                     <Button
                         label={buttonLabel}
                         size={ButtonSize.Full}
-                        hidden={!inputValue}
+                        scheme={
+                            inputValue === undefined
+                                ? ButtonScheme.Hidden
+                                : ButtonScheme.Base
+                        }
                         disabled={!isAmountValid}
                         clickCB={() => handleSubmit(inputValue ?? 0, false)}
                     />

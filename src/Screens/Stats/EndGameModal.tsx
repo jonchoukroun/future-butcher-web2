@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
-import { handleMessage } from "../../Logging/handleMessage";
+import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 
 import * as Colors from "../../Styles/colors";
-import { Button } from "../../Components";
+import { Button, ButtonScheme } from "../../Components";
 
 export const EndGameModal = ({
     onCloseModal,
@@ -34,7 +34,10 @@ export const EndGameModal = ({
         setIsLoading(true);
         const hashId = localStorage.getItem("playerHash");
         if (!hashId) {
-            handleMessage("Cannot end game without a hash ID", "error");
+            handleMessage(
+                "Cannot end game without a hash ID",
+                MessageLevel.Error,
+            );
             dispatch({ type: "changeScreen", screen: "error" });
             return;
         }
@@ -100,7 +103,12 @@ export const EndGameModal = ({
                 </div>
 
                 <div css={{ display: "flex", justifyContent: "space-between" }}>
-                    <Button label={"Yes, Quit!"} clickCB={handleEndGameClick} />
+                    <Button
+                        label={"Yes, Quit!"}
+                        scheme={ButtonScheme.Danger}
+                        clickCB={handleEndGameClick}
+                    />
+                    <Button label={"Cancel"} clickCB={onCloseModal} />
                 </div>
             </div>
         </div>
