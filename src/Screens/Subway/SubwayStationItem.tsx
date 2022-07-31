@@ -7,6 +7,7 @@ import { Prompt } from "../../Components";
 import { StationKey, subwayStations } from "../../Fixtures/subwayStations";
 import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
+import { isApiError } from "../../GameData/State";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 
 import * as Animations from "../../Styles/animations";
@@ -37,7 +38,8 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
             destination: stationKey,
         });
 
-        if (stateData === undefined) {
+        // TODO: API error handling
+        if (stateData === undefined || isApiError(stateData)) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }

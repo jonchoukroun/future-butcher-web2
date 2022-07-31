@@ -33,6 +33,8 @@ export type ApiStateType = {
     };
 };
 
+export type ApiErrorType = { error: string };
+
 // FIXME: develop enum for stable dev-time lookups
 export type GameProcessType =
     | "initialized"
@@ -81,3 +83,9 @@ export const enum Screen {
 export type ScreenType = `${Screen}`;
 
 export type HighScoresType = { player: string; score: number }[];
+
+export function isApiError(
+    response: ApiStateType | ApiErrorType,
+): response is ApiErrorType {
+    return (response as ApiErrorType).error !== undefined;
+}

@@ -9,6 +9,7 @@ import { PackDetails, WeaponDetails } from "../../Fixtures/store";
 import { subwayStations } from "../../Fixtures/subwayStations";
 import { Screen, WeaponType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
+import { isApiError } from "../../GameData/State";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { formatMoney } from "../../Utils/formatMoney";
 import { getTimeLeft } from "../../Utils/getTimeLeft";
@@ -71,7 +72,8 @@ export const StatsScreen = () => {
 
         setIsLoading(true);
         const response = await handlePushCallback("payDebt", {});
-        if (response === undefined) {
+        // TODO: API error handling
+        if (response === undefined || isApiError(response)) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }

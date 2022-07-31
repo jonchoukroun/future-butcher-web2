@@ -9,7 +9,6 @@ import { getScores } from "./getScores";
 import { joinChannel } from "./joinChannel";
 import { newGame } from "./newGame";
 import { payDebt } from "./payDebt";
-// import { replaceWeapon } from "./replaceWeapon";
 import { restoreState } from "./restoreState";
 import { startGame } from "./startGame";
 import { travel } from "./travel";
@@ -17,6 +16,7 @@ import { sellCut } from "./sellCut";
 import { handleMessage, MessageLevel } from "../Logging/handleMessage";
 import { buyWeapon } from "./buyWeapon";
 import {
+    ApiErrorType,
     ApiStateType,
     CutType,
     HighScoresType,
@@ -52,7 +52,7 @@ const ChannelContext = createContext<
           handlePushCallback: (
               callback: CallbackType,
               payload: Record<string, unknown>,
-          ) => Promise<ApiStateType | undefined>;
+          ) => Promise<ApiStateType | ApiErrorType | undefined>;
           handleEndGame: (
               hashId: string,
               score: number,
@@ -128,7 +128,7 @@ export const ChannelProvider = ({
         async (callback: CallbackType, payload: Record<string, unknown>) => {
             if (channel === undefined) return;
 
-            let response: Promise<ApiStateType | undefined>;
+            let response: Promise<ApiStateType | ApiErrorType | undefined>;
             switch (callback) {
                 case "startGame":
                     response = startGame(channel);
@@ -189,13 +189,7 @@ export const ChannelProvider = ({
                     );
                     break;
 
-                // TODO: consider for v2
-                // case "replaceWeapon":
-                //     response = replaceWeapon(
-                //         channel,
-                //         payload as { weapon: WeaponType },
-                //     );
-                //     break;
+                // TODO: consider "replaceWeapon" for v2
 
                 default:
                     throw new Error(`Unhandled callback ${callback}`);

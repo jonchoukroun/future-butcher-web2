@@ -1,6 +1,7 @@
 import { CutListingType, CutType, MarketListing, MarketType } from "./Cuts";
 import { OwnedCutsType, PlayerType } from "./Player";
 import {
+    ApiErrorType,
     ApiStateType,
     GameStateType,
     HighScoresType,
@@ -20,6 +21,7 @@ import {
 } from "./Store";
 
 export {
+    ApiErrorType,
     ApiStateType,
     CutListingType,
     CutType,

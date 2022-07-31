@@ -9,6 +9,7 @@ import {
     ScreenType,
 } from ".";
 import { serializeMarket, serializeStore } from "./Serializers";
+import { isApiError } from "./State";
 import { muggerNames } from "../Fixtures/mugging";
 import { useChannel } from "../PhoenixChannel/ChannelProvider";
 
@@ -108,6 +109,11 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                 if (lastState === undefined) {
                     dispatch({ type: "changeScreen", screen: Screen.Error });
                     return;
+                }
+
+                // TODO: API error handling
+                if (isApiError(lastState)) {
+                    return lastState;
                 }
 
                 if (lastState.rules.state === "initialized") {

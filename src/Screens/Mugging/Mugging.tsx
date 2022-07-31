@@ -8,6 +8,7 @@ import { MuggingVictory } from "./MuggingVictory";
 import { ButtonPrompt, ButtonPromptSize } from "../../Components";
 import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
+import { isApiError } from "../../GameData/State";
 import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 
@@ -48,7 +49,8 @@ export const Mugging = () => {
         setIsLoading(true);
 
         const response = await handlePushCallback("fightMugger", {});
-        if (response === undefined) {
+        // TODO: API error handling
+        if (response === undefined || isApiError(response)) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }

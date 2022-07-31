@@ -6,6 +6,7 @@ import { unstable_batchedUpdates } from "react-dom";
 import { ScreenTemplate } from "../../Components/ScreenTemplate";
 import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
+import { isApiError } from "../../GameData/State";
 import { player } from "../../Fixtures/player";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { formatMoney } from "../../Utils/formatMoney";
@@ -28,7 +29,8 @@ export const Welcome = () => {
         setIsLoading(true);
 
         const response = await handlePushCallback("startGame", {});
-        if (response === undefined) {
+        // TODO: API error handling
+        if (response === undefined || isApiError(response)) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
