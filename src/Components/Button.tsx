@@ -3,7 +3,7 @@ import { css, jsx } from "@emotion/react";
 
 import * as Colors from "../Styles/colors";
 
-interface ButtonProps {
+export interface ButtonProps {
     label: string;
     inverse?: boolean;
     disabled?: boolean;
@@ -29,7 +29,9 @@ export const Button = ({
         <button
             css={css(buttonLayout, {
                 backgroundColor,
-                borderColor: Colors.Border.subtle,
+                borderColor: disabled
+                    ? Colors.Border.subtle
+                    : Colors.Border.base,
                 borderStyle: "solid",
                 borderBottomWidth: "2px",
                 color: fontColor,

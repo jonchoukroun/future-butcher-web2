@@ -4,7 +4,7 @@ import { jsx } from "@emotion/react";
 import {
     ButtonPrompt,
     ButtonPromptSize,
-    SingleButtonListItem,
+    ListItemTemplate,
 } from "../../Components";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { PackListing, WeaponListing } from "../../GameData";
@@ -55,11 +55,14 @@ export const WeaponsList = ({
                 }}
             >
                 {weapons.map((listing, idx) => (
-                    <SingleButtonListItem
+                    <ListItemTemplate
                         key={`weapon-${idx}`}
                         listing={listing}
                         isLast={idx === weapons.length - 1}
-                        onModalOpen={handleModalOpen}
+                        primaryButtonProps={{
+                            label: "Details",
+                            clickCB: () => handleModalOpen(listing),
+                        }}
                     />
                 ))}
             </ul>

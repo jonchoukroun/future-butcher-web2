@@ -13,7 +13,7 @@ interface CutListItemProps {
 }
 
 export const CutListItem = ({
-    listing: { name, price },
+    listing,
     isLast,
     onTransactionSelect,
 }: CutListItemProps) => {
@@ -28,20 +28,23 @@ export const CutListItem = ({
 
     // FIXME: compute spaceAvailable
     const spaceAvailable = 20;
-    const canBuy = player.funds >= price && spaceAvailable > 0;
-    const owned = pack[name];
+    const canBuy = player.funds >= listing.price && spaceAvailable > 0;
+    const owned = pack[listing.name];
 
     return (
         <ListItemTemplate
-            itemName={name}
-            price={price}
+            listing={listing}
             isLast={isLast}
-            rightButtonLabel={"Buy"}
-            isRightButtonDisabled={!canBuy}
-            rightButtonCB={() => onTransactionSelect("buy", name)}
-            leftButtonLabel={"Sell"}
-            isLeftButtonDisabled={owned === 0}
-            leftButtonCB={() => onTransactionSelect("sell", name)}
+            primaryButtonProps={{
+                label: "Buy",
+                disabled: !canBuy,
+                clickCB: () => onTransactionSelect("buy", listing.name),
+            }}
+            secondaryButtonProps={{
+                label: "Sell",
+                disabled: owned === 0,
+                clickCB: () => onTransactionSelect("sell", listing.name),
+            }}
         />
     );
 };

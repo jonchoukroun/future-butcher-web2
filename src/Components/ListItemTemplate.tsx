@@ -1,38 +1,33 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
-import { Button } from "./Button";
-import { CutType, PackType } from "../GameData";
+import { Button, ButtonProps } from "./Button";
+import { MarketListing, PackListing, WeaponListing } from "../GameData";
 import { formatMoney } from "../Utils/formatMoney";
 
 import * as Colors from "../Styles/colors";
+import { isPackListingType, PackType, WeaponType } from "../GameData/Store";
+import { PackDetails, WeaponDetails } from "../Fixtures/store";
 
 interface ListItemTemplateProps {
-    itemName: CutType | PackType;
-    price: number;
+    listing: MarketListing | PackListing | WeaponListing;
     // Hide border under last item
     isLast: boolean;
-    // Right button is required (Buy in Cuts Market)
-    rightButtonLabel: string;
-    isRightButtonDisabled: boolean;
-    rightButtonCB: () => void;
-    // Left button is optional (Sell in Cuts Market)
-    leftButtonLabel?: string;
-    isLeftButtonDisabled?: boolean;
-    leftButtonCB?: () => void;
+    // Primary button is required and aligned to the right
+    primaryButtonProps: ButtonProps;
+    // Secondary button is optional and aligned left
+    secondaryButtonProps?: ButtonProps;
 }
 
 export function ListItemTemplate({
-    itemName,
-    price,
+    listing,
     isLast,
-    rightButtonLabel,
-    isRightButtonDisabled,
-    rightButtonCB,
-    leftButtonLabel,
-    isLeftButtonDisabled,
-    leftButtonCB,
+    primaryButtonProps,
+    secondaryButtonProps,
 }: ListItemTemplateProps) {
+    const displayName = getDisplayName(listing);
+    const { price } = listing;
+
     return (
         <li
             css={{
@@ -40,96 +35,88 @@ export function ListItemTemplate({
                 flex: 1,
                 flexDirection: "column",
                 justifyContent: "center",
+                paddingInline: "10px",
                 borderColor: "transparent",
                 borderBlockEndColor: isLast
                     ? "transparent"
                     : Colors.Border.subtle,
                 borderStyle: "dashed",
-                borderWidth: "2px",
+                borderWidth: "1px",
             }}
         >
-            <div
-                css={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "flex-start",
-                    marginBlockEnd: "5px",
-                    paddingInline: "10px",
-                }}
-            >
-                <div css={{ inlineSize: "100px" }}>
-                    <h2
-                        css={{
-                            margin: 0,
-                            color: Colors.Text.base,
-                            textTransform: "capitalize",
-                        }}
-                    >
-                        {itemName}
-                    </h2>
-                </div>
-
+            <div css={{ display: "flex" }}>
                 <div
                     css={{
-                        inlineSize: "120px",
+                        inlineSize: "140px",
                         display: "flex",
-                        justifyContent: "flex-end",
+                        flexDirection: "column",
+                        justifyContent: secondaryButtonProps
+                            ? "flex-start"
+                            : "center",
                     }}
                 >
                     <h2
                         css={{
                             margin: 0,
                             color: Colors.Text.base,
+                            textTransform: "capitalize",
+                            marginBlockEnd: secondaryButtonProps ? "5px" : 0,
                         }}
                     >
-                        {formatMoney(price)}
+                        {displayName}
                     </h2>
+
+                    {secondaryButtonProps && (
+                        <Button
+                            label={secondaryButtonProps.label}
+                            disabled={secondaryButtonProps.disabled}
+                            clickCB={secondaryButtonProps.clickCB}
+                        />
+                    )}
                 </div>
-            </div>
-            <div
-                css={{
-                    inlineSize: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    paddingInline: "10px",
-                }}
-            >
-                {leftButtonLabel && leftButtonCB ? (
+
+                <div
+                    css={{
+                        inlineSize: "100%",
+                        display: "flex",
+                        justifyContent: "flex-end",
+                    }}
+                >
                     <div
                         css={{
-                            inlineSize: "100%",
                             display: "flex",
-                            justifyContent: "space-between",
+                            flexDirection: "column",
+                            alignItems: "center",
                         }}
                     >
-                        <Button
-                            label={leftButtonLabel}
-                            disabled={isLeftButtonDisabled}
-                            clickCB={leftButtonCB}
-                        />
+                        <h2
+                            css={{
+                                margin: 0,
+                                marginBlockEnd: "5px",
+                                color: Colors.Text.base,
+                                textTransform: "capitalize",
+                            }}
+                        >
+                            {formatMoney(price)}
+                        </h2>
 
                         <Button
-                            label={rightButtonLabel}
-                            disabled={isRightButtonDisabled}
-                            clickCB={rightButtonCB}
+                            label={primaryButtonProps.label}
+                            disabled={primaryButtonProps.disabled}
+                            clickCB={primaryButtonProps.clickCB}
                         />
                     </div>
-                ) : (
-                    <div
-                        css={{
-                            inlineSize: "100%",
-                            display: "flex",
-                            justifyContent: "flex-end",
-                        }}
-                    >
-                        <Button
-                            label={rightButtonLabel}
-                            disabled={isRightButtonDisabled}
-                            clickCB={rightButtonCB}
-                        />
-                    </div>
-                )}
+                </div>
             </div>
         </li>
     );
+}
+
+function getDisplayName(item: MarketListing | PackListing | WeaponListing) {
+    if ("quantity" in item) return item.name;
+    if (isPackListingType(item)) {
+        return PackDetails[item.name as PackType].displayName;
+    } else {
+        return WeaponDetails[item.name as WeaponType].displayName;
+    }
 }
