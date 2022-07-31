@@ -1,4 +1,3 @@
-// FIXME: consider enum for stable dev-time lookups
 export type CutType = "brains" | "flank" | "heart" | "ribs" | "liver";
 
 export type CutListingType = { price: number; quantity: number };

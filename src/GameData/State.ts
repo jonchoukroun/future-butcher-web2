@@ -66,7 +66,7 @@ export type GameStateType = {
     turnsLeft?: number;
 };
 
-export enum Screen {
+export const enum Screen {
     Login = "login",
     Welcome = "welcome",
     Subway = "subway",

@@ -27,7 +27,6 @@ import {
 const { createContext, useCallback, useContext, useMemo, useEffect, useState } =
     React;
 
-// FIXME: create enum for stable lookups
 export type CallbackType =
     | "newGame"
     | "startGame"
