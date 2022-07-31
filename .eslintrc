@@ -1,24 +1,22 @@
 {
-    "parser": "@typescript-eslint/parser",
-    "parserOptions": {
-        "ecmaVersion": 2020,
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "lib": ["es2018", "DOM"],
-        "project": "./tsconfig.json"
+    "env": {
+        "browser": true,
+        "es2021": true
     },
     "extends": [
         "plugin:react/recommended",
         "plugin:@typescript-eslint/recommended",
-        "plugin:prettier/recommended",
-        "plugin:jest-dom/recommended"
+        "plugin:prettier/recommended"
     ],
-    "env": {
-        "browser": true,
-        "es2021": true,
-        "jest": true
+    "parser": "@typescript-eslint/parser",
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "ecmaVersion": 2020,
+        "project": "./tsconfig.json"
     },
+    "plugins": ["react", "@typescript-eslint"],
     "rules": {
         "@typescript-eslint/explicit-module-boundary-types": ["off"]
     },
