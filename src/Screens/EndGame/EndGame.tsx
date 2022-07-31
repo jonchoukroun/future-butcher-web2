@@ -5,6 +5,7 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import { ButtonPrompt, ButtonPromptSize } from "../../Components";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
+import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
@@ -43,13 +44,13 @@ export const EndGame = () => {
                 "Cannot end game without a hash ID",
                 MessageLevel.Error,
             );
-            dispatch({ type: "changeScreen", screen: "error" });
+            dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
         const score = player.funds;
         const highScores = await handleEndGame(hashId, score);
         if (highScores === undefined) {
-            dispatch({ type: "changeScreen", screen: "error" });
+            dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
         if (score > 0) {
@@ -57,7 +58,7 @@ export const EndGame = () => {
         }
         unstable_batchedUpdates(() => {
             dispatch({ type: "setHighScores", highScores });
-            dispatch({ type: "changeScreen", screen: "highScores" });
+            dispatch({ type: "changeScreen", screen: Screen.HighScores });
         });
 
         if (isMountedRef.current) {

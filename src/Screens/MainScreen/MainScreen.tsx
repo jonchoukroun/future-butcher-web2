@@ -3,7 +3,7 @@ import { jsx } from "@emotion/react";
 
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { subwayStations } from "../../Fixtures/subwayStations";
-import { ScreenType } from "../../GameData";
+import { Screen, ScreenType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 
 import * as Colors from "../../Styles/colors";
@@ -22,10 +22,10 @@ export const MainScreen = () => {
         let screen: ScreenType;
         switch (currentStation) {
             case "bell_gardens":
-                screen = "store";
+                screen = Screen.Store;
                 break;
             default:
-                screen = "market";
+                screen = Screen.Market;
                 break;
         }
         dispatch({ type: "changeScreen", screen });
@@ -117,7 +117,7 @@ export const MainScreen = () => {
                     onClick={() =>
                         dispatch({
                             type: "changeScreen",
-                            screen: "market",
+                            screen: Screen.Market,
                         })
                     }
                 >
@@ -139,7 +139,7 @@ export const MainScreen = () => {
                         onClick={() =>
                             dispatch({
                                 type: "changeScreen",
-                                screen: "subway",
+                                screen: Screen.Subway,
                             })
                         }
                     >
@@ -150,7 +150,7 @@ export const MainScreen = () => {
                         onClick={() =>
                             dispatch({
                                 type: "changeScreen",
-                                screen: "endGame",
+                                screen: Screen.EndGame,
                             })
                         }
                     >

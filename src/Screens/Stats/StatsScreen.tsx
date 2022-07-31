@@ -7,7 +7,7 @@ import { Button } from "../../Components/";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { PackDetails, WeaponDetails } from "../../Fixtures/store";
 import { subwayStations } from "../../Fixtures/subwayStations";
-import { WeaponType } from "../../GameData";
+import { Screen, WeaponType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { formatMoney } from "../../Utils/formatMoney";
@@ -72,7 +72,7 @@ export const StatsScreen = () => {
         setIsLoading(true);
         const response = await handlePushCallback("payDebt", {});
         if (response === undefined) {
-            dispatch({ type: "changeScreen", screen: "error" });
+            dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
         dispatch({ type: "updateStateData", stateData: response });

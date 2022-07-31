@@ -6,6 +6,7 @@ import { unstable_batchedUpdates } from "react-dom";
 import { MuggingDefeat } from "./MuggingDefeat";
 import { MuggingVictory } from "./MuggingVictory";
 import { ButtonPrompt, ButtonPromptSize } from "../../Components";
+import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
@@ -48,7 +49,7 @@ export const Mugging = () => {
 
         const response = await handlePushCallback("fightMugger", {});
         if (response === undefined) {
-            dispatch({ type: "changeScreen", screen: "error" });
+            dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
         dispatch({ type: "updateStateData", stateData: response });

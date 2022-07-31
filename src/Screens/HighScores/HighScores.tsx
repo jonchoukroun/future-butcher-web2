@@ -3,6 +3,7 @@ import { jsx } from "@emotion/react";
 
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
+import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { formatMoney } from "../../Utils/formatMoney";
 
@@ -24,7 +25,7 @@ export const HighScores = () => {
     const { handleInitGame } = useChannel();
     const handleStartOverClick = () => {
         handleInitGame();
-        dispatch({ type: "changeScreen", screen: "welcome" });
+        dispatch({ type: "changeScreen", screen: Screen.Welcome });
     };
 
     const { getContentSize } = useWindowSize();

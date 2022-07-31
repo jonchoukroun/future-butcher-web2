@@ -4,6 +4,7 @@ import { useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { ScreenTemplate } from "../../Components/ScreenTemplate";
+import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { player } from "../../Fixtures/player";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
@@ -28,18 +29,18 @@ export const Welcome = () => {
 
         const response = await handlePushCallback("startGame", {});
         if (response === undefined) {
-            dispatch({ type: "changeScreen", screen: "error" });
+            dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
 
         if (response.rules.state !== "in_game") {
-            dispatch({ type: "changeScreen", screen: "login" });
+            dispatch({ type: "changeScreen", screen: Screen.Login });
             return;
         }
 
         unstable_batchedUpdates(() => {
             dispatch({ type: "updateStateData", stateData: response });
-            dispatch({ type: "changeScreen", screen: "market" });
+            dispatch({ type: "changeScreen", screen: Screen.Market });
             setIsLoading(false);
         });
     };

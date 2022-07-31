@@ -13,7 +13,7 @@ import {
 } from "../../Components";
 import { LineSize } from "../../Components/PrintLine";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
-import { CutType } from "../../GameData";
+import { CutType, Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { formatMoney } from "../../Utils/formatMoney";
@@ -152,7 +152,7 @@ export const MarketModal = ({
                 amount,
             });
             if (response === undefined) {
-                dispatch({ type: "changeScreen", screen: "error" });
+                dispatch({ type: "changeScreen", screen: Screen.Error });
                 return;
             }
             unstable_batchedUpdates(() => {
@@ -167,7 +167,7 @@ export const MarketModal = ({
                 amount,
             });
             if (response === undefined) {
-                dispatch({ type: "changeScreen", screen: "error" });
+                dispatch({ type: "changeScreen", screen: Screen.Error });
                 return;
             }
             unstable_batchedUpdates(() => {

@@ -5,6 +5,7 @@ import { unstable_batchedUpdates } from "react-dom";
 
 import { Prompt } from "../../Components";
 import { StationKey, subwayStations } from "../../Fixtures/subwayStations";
+import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 
@@ -37,16 +38,16 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
         });
 
         if (stateData === undefined) {
-            dispatch({ type: "changeScreen", screen: "error" });
+            dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
 
         const screen =
             stateData.rules.state === "mugging"
-                ? "mugging"
+                ? Screen.Mugging
                 : stateData.station.station_name === "bell_gardens"
-                ? "store"
-                : "market";
+                ? Screen.Store
+                : Screen.Market;
         unstable_batchedUpdates(() => {
             dispatch({ type: "updateStateData", stateData });
             dispatch({ type: "changeScreen", screen });

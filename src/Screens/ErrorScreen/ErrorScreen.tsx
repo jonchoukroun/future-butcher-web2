@@ -2,6 +2,7 @@
 import { jsx } from "@emotion/react";
 
 import { ScreenTemplate } from "../../Components/ScreenTemplate";
+import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 
 export const ErrorScreen = () => {
@@ -13,7 +14,7 @@ export const ErrorScreen = () => {
 
         dispatch({
             type: "changeScreen",
-            screen: !playerName || !playerHash ? "login" : "welcome",
+            screen: !playerName || !playerHash ? Screen.Login : Screen.Welcome,
         });
     };
 

@@ -2,6 +2,7 @@
 import { jsx } from "@emotion/react";
 
 import { ButtonPrompt, ButtonPromptSize } from "../../Components/ButtonPrompt";
+import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { formatMoney } from "../../Utils/formatMoney";
 import { getTimeLeft } from "../../Utils/getTimeLeft";
@@ -60,7 +61,7 @@ export const StatsBar = () => {
                 blink={false}
                 showPrompt={false}
                 clickCB={() =>
-                    dispatch({ type: "changeScreen", screen: "stats" })
+                    dispatch({ type: "changeScreen", screen: Screen.Stats })
                 }
             />
         </div>

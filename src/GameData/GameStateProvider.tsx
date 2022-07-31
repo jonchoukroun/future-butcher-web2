@@ -1,7 +1,13 @@
 import * as React from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
-import { ApiStateType, GameStateType, HighScoresType, ScreenType } from ".";
+import {
+    ApiStateType,
+    GameStateType,
+    HighScoresType,
+    Screen,
+    ScreenType,
+} from ".";
 import { serializeMarket, serializeStore } from "./Serializers";
 import { muggerNames } from "../Fixtures/mugging";
 import { useChannel } from "../PhoenixChannel/ChannelProvider";
@@ -71,18 +77,18 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
     useEffect(() => {
         if (!isDisconnected) return;
 
-        dispatch({ type: "changeScreen", screen: "error" });
+        dispatch({ type: "changeScreen", screen: Screen.Error });
     }, [isDisconnected]);
 
     useEffect(() => {
         const handleJoin = async () => {
             if (!playerName || !playerHash) {
-                dispatch({ type: "changeScreen", screen: "login" });
+                dispatch({ type: "changeScreen", screen: Screen.Login });
                 return;
             }
             const reply = await handleJoinChannel(playerName, playerHash);
             if (reply === "join crashed") {
-                dispatch({ type: "changeScreen", screen: "login" });
+                dispatch({ type: "changeScreen", screen: Screen.Login });
             }
             dispatch({ type: "shuffleMuggers" });
         };
@@ -93,19 +99,19 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
         const initGame = async () => {
             const response = await handleInitGame();
             if (response === undefined) {
-                dispatch({ type: "changeScreen", screen: "error" });
+                dispatch({ type: "changeScreen", screen: Screen.Error });
                 return;
             }
 
             if (response === "alreadyStarted" && playerName) {
                 const lastState = await handlePushCallback("restoreState", {});
                 if (lastState === undefined) {
-                    dispatch({ type: "changeScreen", screen: "error" });
+                    dispatch({ type: "changeScreen", screen: Screen.Error });
                     return;
                 }
 
                 if (lastState.rules.state === "initialized") {
-                    dispatch({ type: "changeScreen", screen: "welcome" });
+                    dispatch({ type: "changeScreen", screen: Screen.Welcome });
                     return;
                 }
                 if (lastState.rules.state === "in_game") {
@@ -119,8 +125,8 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                             screen:
                                 lastState.station.station_name ===
                                 "bell_gardens"
-                                    ? "store"
-                                    : "market",
+                                    ? Screen.Store
+                                    : Screen.Market,
                         });
                     });
                     return;
@@ -133,12 +139,12 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                         });
                         dispatch({
                             type: "changeScreen",
-                            screen: "mugging",
+                            screen: Screen.Mugging,
                         });
                     });
                 }
             } else {
-                dispatch({ type: "changeScreen", screen: "welcome" });
+                dispatch({ type: "changeScreen", screen: Screen.Welcome });
             }
         };
         if (didJoinChannel) initGame();

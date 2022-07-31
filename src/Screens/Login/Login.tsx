@@ -10,6 +10,7 @@ import {
 } from "../../Components";
 import { LineSize } from "../../Components/PrintLine";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
+import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 
@@ -50,13 +51,13 @@ export const Login = () => {
         } catch {
             setIsLoading(false);
             if (errorMessage) {
-                dispatch({ type: "changeScreen", screen: "error" });
+                dispatch({ type: "changeScreen", screen: Screen.Error });
             } else {
                 setErrorMessage("Something went wrong. Try another name.");
             }
             return;
         }
-        dispatch({ type: "changeScreen", screen: "welcome" });
+        dispatch({ type: "changeScreen", screen: Screen.Welcome });
         if (isMountedRef.current) {
             setIsLoading(false);
         }

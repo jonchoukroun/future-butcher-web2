@@ -5,8 +5,8 @@ import { useWindowSize } from "./WindowSizeProvider";
 import { ButtonPrompt, ButtonPromptSize } from "../ButtonPrompt";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { StationKey } from "../../Fixtures/subwayStations";
-import { ScreenType } from "../../GameData";
-import { GameProcessType } from "../../GameData/State";
+import { Screen } from "../../GameData";
+import { GameProcessType, ScreenType } from "../../GameData/State";
 
 export const NavBar = () => {
     const { layout } = useWindowSize();
@@ -81,16 +81,16 @@ function getNextScreen(
     station: string,
     turnsLeft: number,
 ) {
-    if (process === "mugging") return "mugging";
+    if (process === "mugging") return Screen.Mugging;
 
-    if (turnsLeft === 1 && screen === "market") return "endGame";
+    if (turnsLeft === 1 && screen === "market") return Screen.EndGame;
 
     if (station === StationKey.bellGardens) {
-        if (screen === "store") return "subway";
-        else return "store";
+        if (screen === "store") return Screen.Subway;
+        else return Screen.Store;
     }
 
-    if (screen === "market") return "subway";
+    if (screen === "market") return Screen.Subway;
 
-    return "market";
+    return Screen.Market;
 }

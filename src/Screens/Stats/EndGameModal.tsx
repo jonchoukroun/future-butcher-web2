@@ -4,8 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
-import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
+import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
+import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 
 import * as Colors from "../../Styles/colors";
@@ -38,18 +39,18 @@ export const EndGameModal = ({
                 "Cannot end game without a hash ID",
                 MessageLevel.Error,
             );
-            dispatch({ type: "changeScreen", screen: "error" });
+            dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
         const highScores = await handleEndGame(hashId, 0);
         if (highScores === undefined) {
-            dispatch({ type: "changeScreen", screen: "error" });
+            dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
 
         unstable_batchedUpdates(() => {
             dispatch({ type: "setHighScores", highScores });
-            dispatch({ type: "changeScreen", screen: "highScores" });
+            dispatch({ type: "changeScreen", screen: Screen.HighScores });
         });
         if (isMountedRef.current) {
             setIsLoading(false);

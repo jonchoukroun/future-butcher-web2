@@ -66,17 +66,18 @@ export type GameStateType = {
     turnsLeft?: number;
 };
 
-// FIXME: develop enum for stable dev-time lookups
-export type ScreenType =
-    | "login"
-    | "welcome"
-    | "subway"
-    | "market"
-    | "stats"
-    | "store"
-    | "highScores"
-    | "mugging"
-    | "endGame"
-    | "error";
+export enum Screen {
+    Login = "login",
+    Welcome = "welcome",
+    Subway = "subway",
+    Market = "market",
+    Stats = "stats",
+    Store = "store",
+    HighScores = "highScores",
+    Mugging = "mugging",
+    EndGame = "endGame",
+    Error = "error",
+}
+export type ScreenType = `${Screen}`;
 
 export type HighScoresType = { player: string; score: number }[];
