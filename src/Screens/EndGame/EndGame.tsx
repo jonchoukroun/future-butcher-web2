@@ -6,7 +6,7 @@ import { unstable_batchedUpdates } from "react-dom";
 import { ButtonPrompt, ButtonPromptSize } from "../../Components";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { useGameState } from "../../GameData/GameStateProvider";
-import { handleMessage } from "../../Logging/handleMessage";
+import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { getSpaceAvailable } from "../../Utils/spaceAvailable";
 
@@ -39,7 +39,10 @@ export const EndGame = () => {
         setIsLoading(true);
         const hashId = localStorage.getItem("playerHash");
         if (!hashId) {
-            handleMessage("Cannot end game without a hash ID", "error");
+            handleMessage(
+                "Cannot end game without a hash ID",
+                MessageLevel.Error,
+            );
             dispatch({ type: "changeScreen", screen: "error" });
             return;
         }

@@ -1,6 +1,6 @@
 import { Channel, Socket } from "phoenix";
 
-import { handleMessage } from "../Logging/handleMessage";
+import { handleMessage, MessageLevel } from "../Logging/handleMessage";
 
 export async function joinChannel({
     playerName,
@@ -23,13 +23,19 @@ export async function joinChannel({
             .receive("ok", ({ hash_id }) => {
                 localStorage.setItem("playerName", playerName);
                 localStorage.setItem("playerHash", hash_id);
-                handleMessage("Channel joined successfully", "success");
+                handleMessage(
+                    "Channel joined successfully",
+                    MessageLevel.Success,
+                );
                 return resolve(channel);
             })
             .receive("error", ({ reason }) => {
                 if (reason === "join crashed") return resolve(reason);
 
-                handleMessage(`Failed to join channel: ${reason}`, "error");
+                handleMessage(
+                    `Failed to join channel: ${reason}`,
+                    MessageLevel.Error,
+                );
                 return reject(undefined);
             });
     });

@@ -1,5 +1,5 @@
 import { Channel } from "phoenix";
-import { handleMessage } from "../Logging/handleMessage";
+import { handleMessage, MessageLevel } from "../Logging/handleMessage";
 
 export async function newGame(
     channel: Channel,
@@ -11,7 +11,7 @@ export async function newGame(
                 if (state_data !== "ok") {
                     handleMessage(
                         "Invalid state data response to push: 'new_game'",
-                        "error",
+                        MessageLevel.Error,
                     );
                 }
                 resolve(state_data);
