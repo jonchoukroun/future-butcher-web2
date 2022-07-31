@@ -65,7 +65,7 @@ export const Button = ({
                 backgroundColor,
                 borderColor,
                 borderStyle: "solid",
-                borderBottomWidth: "2px",
+                borderWidth: "2px",
                 color: fontColor,
                 "&:active": {
                     backgroundColor: backgroundColorActive,
