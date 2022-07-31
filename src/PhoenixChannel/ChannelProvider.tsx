@@ -9,6 +9,7 @@ import { getScores } from "./getScores";
 import { joinChannel } from "./joinChannel";
 import { newGame } from "./newGame";
 import { payDebt } from "./payDebt";
+import { replaceWeapon } from "./replaceWeapon";
 import { restoreState } from "./restoreState";
 import { startGame } from "./startGame";
 import { travel } from "./travel";
@@ -189,7 +190,12 @@ export const ChannelProvider = ({
                     );
                     break;
 
-                // TODO: consider "replaceWeapon" for v2
+                case "replaceWeapon":
+                    response = replaceWeapon(
+                        channel,
+                        payload as { weapon: WeaponType },
+                    );
+                    break;
 
                 default:
                     throw new Error(`Unhandled callback ${callback}`);

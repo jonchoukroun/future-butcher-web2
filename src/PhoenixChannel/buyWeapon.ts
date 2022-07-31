@@ -1,10 +1,10 @@
 import { Channel } from "phoenix";
-import { ApiStateType, WeaponType } from "../GameData";
+import { ApiErrorType, ApiStateType, WeaponType } from "../GameData";
 
 export async function buyWeapon(
     channel: Channel,
     payload: { weapon: WeaponType },
-): Promise<ApiStateType | undefined> {
+): Promise<ApiStateType | ApiErrorType | undefined> {
     return new Promise((resolve, reject) => {
         channel
             .push("buy_weapon", payload)
@@ -12,6 +12,14 @@ export async function buyWeapon(
                 return resolve(state_data);
             })
             .receive("error", ({ reason }) => {
+                const handledErrors = [
+                    ":insufficient_funds",
+                    ":already_owns_weapon",
+                ];
+                if (handledErrors.includes(reason)) {
+                    return resolve({ error: reason });
+                }
+
                 return reject(reason);
             });
     });

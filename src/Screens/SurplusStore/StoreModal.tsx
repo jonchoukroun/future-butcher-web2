@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 
 import {
     Button,
@@ -9,10 +9,8 @@ import {
     ButtonScheme,
     ButtonSize,
     PrintLine,
-    Prompt,
-    TextInput,
 } from "../../Components";
-import { LineSize } from "../../Components/PrintLine";
+import { LineSize, PromptScheme } from "../../Components/PrintLine";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import {
     PackDetails,
@@ -20,10 +18,15 @@ import {
     WeaponDetails,
     WeaponDetailsType,
 } from "../../Fixtures/store";
-import { PackListing, WeaponListing } from "../../GameData";
+import { PackListing, PlayerType, Screen, WeaponListing } from "../../GameData";
+import { useGameState } from "../../GameData/GameStateProvider";
+import { CallbackType, useChannel } from "../../PhoenixChannel/ChannelProvider";
+import { formatMoney } from "../../Utils/formatMoney";
 
 import * as Colors from "../../Styles/colors";
-import { formatMoney } from "../../Utils/formatMoney";
+import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
+import { ApiErrorType, ApiStateType, isApiError } from "../../GameData/State";
+import { unstable_batchedUpdates } from "react-dom";
 
 interface StoreModalProps {
     listing: PackListing | WeaponListing;
@@ -31,12 +34,123 @@ interface StoreModalProps {
 }
 
 export function StoreModal({ listing, onModalClose }: StoreModalProps) {
+    const {
+        dispatch,
+        state: { player },
+    } = useGameState();
+    if (player === undefined) {
+        throw new Error("State is undefined");
+    }
+
+    const { handlePushCallback } = useChannel();
     const { getContentSize, layout } = useWindowSize();
     const { inlineSize } = getContentSize();
 
-    const itemDetails = getItemDetails(listing);
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState<string>();
 
-    const harvestableCuts = `Can harvest: ${getHarvestableCuts(listing)}.`;
+    const isPackListing = isPack(listing);
+    const isOwned = alreadyOwned(listing, player);
+    const canAfford = player.funds >= listing.price;
+    const isPackSoldOut = isPackListing
+        ? isOwned || player.totalPackSpace > listing.pack_space
+        : false;
+
+    const handleBuyClick = async () => {
+        if (isLoading) return;
+        if (isOwned) {
+            setError("You already own this item.");
+            return;
+        }
+        if (!canAfford) {
+            setError("You can't afford this item.");
+            return;
+        }
+        if (isPackSoldOut) {
+            setError("We're all out of this item.");
+            return;
+        }
+
+        setError(undefined);
+        setIsLoading(true);
+
+        let response: ApiStateType | ApiErrorType | undefined;
+        if (isPackListing) {
+            response = await handlePushCallback("buyPack", {
+                pack: listing.name,
+            });
+        } else {
+            const callback: CallbackType = player.weapon
+                ? "replaceWeapon"
+                : "buyWeapon";
+            response = await handlePushCallback(callback, {
+                weapon: listing.name,
+            });
+        }
+
+        setIsLoading(false);
+
+        // TODO: API error handling
+        if (isApiError(response)) {
+            switch (response.error) {
+                case ":insufficient_funds":
+                    handleMessage(
+                        "Pricing validation failed",
+                        MessageLevel.Error,
+                    );
+                    break;
+
+                case ":already_owns_weapon":
+                    handleMessage(
+                        "Already owned weapon validation failed",
+                        MessageLevel.Error,
+                    );
+                    break;
+
+                case ":same_weapon_type":
+                    handleMessage(
+                        "Same weapon validation failed",
+                        MessageLevel.Error,
+                    );
+                    break;
+
+                case ":must_upgrade_pack":
+                    handleMessage(
+                        "Pack upgrade validation failed",
+                        MessageLevel.Error,
+                    );
+                    break;
+
+                default:
+                    handleMessage(
+                        `Unhandled API error: ${response.error}`,
+                        MessageLevel.Error,
+                    );
+            }
+            setError("Something went wrong. Try again later.");
+        } else if (response === undefined) {
+            dispatch({ type: "changeScreen", screen: Screen.Error });
+        } else {
+            unstable_batchedUpdates(() => {
+                dispatch({
+                    type: "updateStateData",
+                    stateData: response as ApiStateType,
+                });
+                onModalClose();
+            });
+        }
+    };
+
+    const itemDetails = getItemDetails(listing);
+    const harvestableCuts = getHarvestableCuts(listing);
+    const harvestDescription = harvestableCuts
+        ? `Can harvest: ${harvestableCuts}.`
+        : "This weapon can't harvest any cuts. Try a bladed weapon.";
+
+    const buttonLabel =
+        player.weapon && !isPackListing
+            ? "Replace current weapon"
+            : `Buy ${itemDetails.displayName}`;
 
     const inlineSizeOffset = layout === "full" ? 24 : 15;
 
@@ -70,34 +184,56 @@ export function StoreModal({ listing, onModalClose }: StoreModalProps) {
                     zIndex: 1001,
                 }}
             >
-                <PrintLine
-                    text={itemDetails.displayName}
-                    size={LineSize.Title}
-                    prompt={"hidden"}
-                    marginBlockEnd={"20px"}
-                />
+                <div css={{ display: "flex", justifyContent: "space-between" }}>
+                    <PrintLine
+                        text={itemDetails.displayName}
+                        size={LineSize.Title}
+                        promptScheme={PromptScheme.Hidden}
+                        marginBlockEnd={"20px"}
+                    />
+                    <Button
+                        label={"X"}
+                        scheme={ButtonScheme.Inverse}
+                        size={ButtonSize.Small}
+                        clickCB={onModalClose}
+                    />
+                </div>
 
-                {isPack(listing) && (
+                {error && (
+                    <PrintLine
+                        text={error}
+                        size={LineSize.Body}
+                        promptScheme={PromptScheme.Hidden}
+                        danger
+                        marginBlockEnd={"12px"}
+                    />
+                )}
+
+                {isPackListing && (
                     <PrintLine
                         text={(itemDetails as PackDetailsType).description}
                         size={LineSize.Body}
-                        prompt={"passed"}
+                        promptScheme={PromptScheme.Past}
                     />
                 )}
 
                 <PrintLine
-                    text={`Price: ${formatMoney(listing.price)}`}
+                    text={`Price: ${formatMoney(listing.price)}${
+                        !isPackListing && player.weapon
+                            ? " - current wepon value"
+                            : ""
+                    }`}
                     size={LineSize.Body}
-                    prompt={"passed"}
+                    promptScheme={PromptScheme.Past}
                 />
 
-                {isPack(listing) ? (
+                {isPackListing ? (
                     <PrintLine
                         text={`Carrying capacity: ${
                             (itemDetails as PackDetailsType).packSpace
                         } lbs`}
                         size={LineSize.Body}
-                        prompt={"passed"}
+                        promptScheme={PromptScheme.Past}
                     />
                 ) : (
                     <Fragment>
@@ -106,28 +242,69 @@ export function StoreModal({ listing, onModalClose }: StoreModalProps) {
                                 (itemDetails as WeaponDetailsType).damage
                             }0%`}
                             size={LineSize.Body}
-                            prompt={"passed"}
+                            promptScheme={PromptScheme.Past}
                         />
 
-                        {harvestableCuts && (
-                            <PrintLine
-                                text={harvestableCuts}
-                                size={LineSize.Body}
-                                prompt={"passed"}
-                            />
-                        )}
+                        <PrintLine
+                            text={harvestDescription}
+                            size={LineSize.Body}
+                            promptScheme={PromptScheme.Past}
+                        />
                     </Fragment>
                 )}
 
-                <ButtonPrompt
-                    label={"Close"}
-                    size={ButtonPromptSize.Small}
-                    blink={false}
-                    clickCB={onModalClose}
-                />
+                {isOwned && (
+                    <PrintLine
+                        text={"You already own this item."}
+                        size={LineSize.Body}
+                        promptScheme={PromptScheme.Past}
+                    />
+                )}
+
+                {!isOwned && !canAfford && (
+                    <PrintLine
+                        text={"You can't afford this item."}
+                        size={LineSize.Body}
+                        promptScheme={PromptScheme.Past}
+                    />
+                )}
+
+                {!isOwned && isPackSoldOut && (
+                    <PrintLine
+                        text={"We're all sold out!"}
+                        size={LineSize.Body}
+                        promptScheme={PromptScheme.Past}
+                    />
+                )}
+
+                {!isOwned && canAfford && !isPackSoldOut ? (
+                    <ButtonPrompt
+                        label={buttonLabel}
+                        size={ButtonPromptSize.Small}
+                        loading={isLoading}
+                        clickCB={handleBuyClick}
+                    />
+                ) : (
+                    <ButtonPrompt
+                        label={`Back to ${isPackListing ? "packs" : "weapons"}`}
+                        size={ButtonPromptSize.Full}
+                        clickCB={onModalClose}
+                    />
+                )}
             </div>
         </div>
     );
+}
+
+function alreadyOwned<T extends PackListing | WeaponListing>(
+    item: T,
+    player: PlayerType,
+): boolean {
+    if (isPack(item)) {
+        return player.totalPackSpace === item.pack_space;
+    } else {
+        return player.weapon === item.name;
+    }
 }
 
 function getItemDetails<T extends PackListing | WeaponListing>(

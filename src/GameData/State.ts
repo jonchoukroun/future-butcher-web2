@@ -85,7 +85,7 @@ export type ScreenType = `${Screen}`;
 export type HighScoresType = { player: string; score: number }[];
 
 export function isApiError(
-    response: ApiStateType | ApiErrorType,
+    response: ApiStateType | ApiErrorType | undefined,
 ): response is ApiErrorType {
     return (response as ApiErrorType).error !== undefined;
 }

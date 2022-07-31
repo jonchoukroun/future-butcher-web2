@@ -1,10 +1,10 @@
 import { Channel } from "phoenix";
-import { PackType, ApiStateType } from "../GameData";
+import { PackType, ApiStateType, ApiErrorType } from "../GameData";
 
 export async function buyPack(
     channel: Channel,
     payload: { pack: PackType },
-): Promise<ApiStateType | undefined> {
+): Promise<ApiStateType | ApiErrorType | undefined> {
     return new Promise((resolve, reject) => {
         channel
             .push("buy_pack", payload)
@@ -12,6 +12,14 @@ export async function buyPack(
                 return resolve(state_data);
             })
             .receive("error", ({ reason }) => {
+                const handledErrors = [
+                    ":insufficient_funds",
+                    ":must_upgrade_pack",
+                ];
+                if (handledErrors.includes(reason)) {
+                    return resolve({ error: reason });
+                }
+
                 return reject(reason);
             });
     });
