@@ -11,7 +11,7 @@ import {
     Prompt,
     TextInput,
 } from "../../Components";
-import { LineSize } from "../../Components/PrintLine";
+import { LineSize, PromptScheme } from "../../Components/PrintLine";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { CutType, Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
@@ -65,7 +65,7 @@ export const MarketModal = ({
     const [inputValue, setInputValue] = useState<number>();
     const [isAmountValid, setIsAmountValid] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>();
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState<"custom" | "max">();
 
     const handleMaxClick = () => {
         unstable_batchedUpdates(() => {
@@ -131,7 +131,7 @@ export const MarketModal = ({
                             stock,
                         )}. Try the Max button.`,
                     );
-                    setIsLoading(false);
+                    setIsAmountValid(false);
                 });
                 return;
             }
@@ -141,11 +141,10 @@ export const MarketModal = ({
     }, [inputValue]);
 
     const handleSubmit = async (amount: number, isMax: boolean) => {
-        console.log("!!handleSumit", amount, maxTransact, isAmountValid);
         if (isLoading) return;
         if (!amount || (!isMax && !isAmountValid)) return;
 
-        setIsLoading(true);
+        setIsLoading(isMax ? "max" : "custom");
 
         if (transaction === "buy") {
             const response = await handlePushCallback("buyCut", {
@@ -159,7 +158,7 @@ export const MarketModal = ({
             }
             unstable_batchedUpdates(() => {
                 setInputValue(undefined);
-                setIsLoading(false);
+                setIsLoading(undefined);
                 dispatch({ type: "updateStateData", stateData: response });
                 onModalClose();
             });
@@ -175,7 +174,7 @@ export const MarketModal = ({
             }
             unstable_batchedUpdates(() => {
                 setInputValue(undefined);
-                setIsLoading(false);
+                setIsLoading(undefined);
                 dispatch({ type: "updateStateData", stateData: response });
                 onModalClose();
             });
@@ -197,7 +196,7 @@ export const MarketModal = ({
 
     const inlineSizeOffset = layout === "full" ? 24 : 15;
 
-    const title = `${transaction === "buy" ? "Buy" : "Sell"} ${cut}`;
+    const title = `${transaction} ${cut}`;
 
     const buttonLabel =
         isAmountValid && inputValue
@@ -236,18 +235,26 @@ export const MarketModal = ({
                     zIndex: 1001,
                 }}
             >
-                <PrintLine
-                    text={title}
-                    size={LineSize.Title}
-                    prompt={"hidden"}
-                    marginBlockEnd={"20px"}
-                />
+                <div css={{ display: "flex", justifyContent: "space-between" }}>
+                    <PrintLine
+                        text={title}
+                        size={LineSize.Title}
+                        promptScheme={PromptScheme.Hidden}
+                        marginBlockEnd={"20px"}
+                    />
+                    <Button
+                        label={"X"}
+                        scheme={ButtonScheme.Inverse}
+                        size={ButtonSize.Small}
+                        clickCB={onModalClose}
+                    />
+                </div>
 
                 {errorMessage && (
                     <PrintLine
                         text={errorMessage}
                         size={LineSize.Body}
-                        prompt={"hidden"}
+                        promptScheme={PromptScheme.Hidden}
                         danger
                         marginBlockEnd={"12px"}
                     />
@@ -256,7 +263,7 @@ export const MarketModal = ({
                 <PrintLine
                     text={`Price: ${formatMoney(price)}`}
                     size={LineSize.Body}
-                    prompt={"passed"}
+                    promptScheme={PromptScheme.Past}
                 />
 
                 <PrintLine
@@ -264,12 +271,12 @@ export const MarketModal = ({
                         transaction === "buy" ? "In Stock:" : "In Pack:"
                     } ${stock}`}
                     size={LineSize.Body}
-                    prompt={"passed"}
+                    promptScheme={PromptScheme.Past}
                 />
 
                 <PrintLine
                     text={`Enter an amount to ${transaction}`}
-                    prompt={"passed"}
+                    promptScheme={PromptScheme.Past}
                     size={LineSize.Body}
                 />
 
@@ -283,7 +290,13 @@ export const MarketModal = ({
                     keyDownCB={handleKeyPress}
                 />
 
-                <div css={{ display: "flex", marginBlock: "10px" }}>
+                <div
+                    css={{
+                        display: "flex",
+                        marginBlock: "10px",
+                        "& button": { flex: 1 },
+                    }}
+                >
                     <Prompt hidden={true} />
                     <Button
                         label={buttonLabel}
@@ -293,24 +306,27 @@ export const MarketModal = ({
                                 ? ButtonScheme.Hidden
                                 : ButtonScheme.Base
                         }
-                        disabled={!isAmountValid}
+                        disabled={!isAmountValid || isLoading === "max"}
+                        loading={isLoading === "custom"}
                         clickCB={() => handleSubmit(inputValue ?? 0, false)}
                     />
                 </div>
 
                 <PrintLine
                     text={`Or, ${transaction} the max`}
-                    prompt={"passed"}
+                    promptScheme={PromptScheme.Past}
                     size={LineSize.Body}
                 />
 
-                <div css={{ display: "flex" }}>
+                <div css={{ display: "flex", "& button": { flex: 1 } }}>
                     <Prompt hidden={true} />
                     <Button
                         label={`${transaction} max (${maxTransact} ${pluralize(
                             maxTransact,
                         )})`}
                         size={ButtonSize.Full}
+                        disabled={isLoading === "custom"}
+                        loading={isLoading === "max"}
                         clickCB={handleMaxClick}
                     />
                 </div>
