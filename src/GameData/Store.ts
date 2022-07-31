@@ -1,6 +1,5 @@
 import { CutType } from ".";
 
-// FIXME: consider enum for stable dev-time lookups
 export type PackType =
     | "mini_fridge"
     | "shopping_cart"
@@ -9,7 +8,6 @@ export type PackType =
 
 export type PackListingType = { pack_space: number; price: number };
 
-// FIXME: consider enum for stable dev-time lookups
 export type WeaponType =
     | "box_cutter"
     | "brass_knuckles"
