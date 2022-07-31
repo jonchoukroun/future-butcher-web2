@@ -9,6 +9,7 @@ import { useGameState } from "../../GameData/GameStateProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 
 import * as Colors from "../../Styles/colors";
+import { Button } from "../../Components";
 
 export const EndGameModal = ({
     onCloseModal,
@@ -98,9 +99,9 @@ export const EndGameModal = ({
                     </p>
                 </div>
 
-                <div
-                    css={{ display: "flex", justifyContent: "space-between" }}
-                ></div>
+                <div css={{ display: "flex", justifyContent: "space-between" }}>
+                    <Button label={"Yes, Quit!"} clickCB={handleEndGameClick} />
+                </div>
             </div>
         </div>
     );

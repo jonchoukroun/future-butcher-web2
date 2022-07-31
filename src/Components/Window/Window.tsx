@@ -80,11 +80,11 @@ export const Window = () => {
                     </GameScreen>
                 )}
 
-                {/* {currentScreen === "stats" && (
+                {currentScreen === "stats" && (
                     <GameScreen layout={layout} shouldShowNavBar={true}>
                         <StatsScreen />
                     </GameScreen>
-                )} */}
+                )}
 
                 {currentScreen === "highScores" && <HighScores />}
             </div>

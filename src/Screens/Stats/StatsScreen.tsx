@@ -3,6 +3,7 @@ import { jsx } from "@emotion/react";
 import { Fragment, useState } from "react";
 
 import { EndGameModal } from "./EndGameModal";
+import { Button } from "../../Components/";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { PackDetails, WeaponDetails } from "../../Fixtures/store";
 import { subwayStations } from "../../Fixtures/subwayStations";
@@ -128,6 +129,11 @@ export const StatsScreen = () => {
                                 : "Time's up"}
                         </p>
                     </div>
+
+                    <Button
+                        label={"Quit Game"}
+                        clickCB={handleConfirmEndGame}
+                    />
                 </div>
 
                 <div

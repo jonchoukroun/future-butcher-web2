@@ -5,6 +5,7 @@ import { NavBar } from "./NavBar";
 import { LayoutType } from "./WindowSizeProvider";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { StatsScreen } from "../../Screens/Stats/StatsScreen";
+import { StatsBar } from "../../Screens/Stats/StatsBar";
 
 interface GameScreenProps {
     layout: LayoutType;
@@ -65,6 +66,7 @@ export const GameScreen = ({
                     flexDirection: "column",
                 }}
             >
+                {currentScreen !== "stats" && <StatsBar />}
                 {children}
                 {shouldShowNavBar && <NavBar />}
             </div>
