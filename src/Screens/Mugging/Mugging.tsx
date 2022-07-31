@@ -7,6 +7,7 @@ import { MuggingDefeat } from "./MuggingDefeat";
 import { MuggingVictory } from "./MuggingVictory";
 import { ButtonPrompt, ButtonPromptSize } from "../../Components";
 import { useGameState } from "../../GameData/GameStateProvider";
+import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 
 import * as Animations from "../../Styles/animations";
@@ -18,13 +19,13 @@ export const Mugging = () => {
         state: { muggers, player, turnsLeft },
     } = useGameState();
 
-    if (
-        muggers === undefined ||
-        player === undefined ||
-        turnsLeft === undefined
-    ) {
+    if (player === undefined || turnsLeft === undefined) {
         console.log("!!Mugging", muggers, player, turnsLeft);
         throw new Error("State is undefined");
+    }
+
+    if (muggers === undefined) {
+        handleMessage("Muggers is undefined", MessageLevel.Error);
     }
 
     const { pack } = player;
@@ -35,7 +36,9 @@ export const Mugging = () => {
         "victory" | "defeat" | undefined
     >(undefined);
 
-    const currentMuggerRef = useRef(muggers[0]);
+    const currentMuggerRef = useRef(
+        muggers === undefined ? "Fred Savage" : muggers[0],
+    );
 
     const { handlePushCallback } = useChannel();
     const [isLoading, setIsLoading] = useState(false);

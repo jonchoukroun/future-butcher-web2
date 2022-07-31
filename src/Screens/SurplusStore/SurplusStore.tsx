@@ -4,9 +4,9 @@ import { Fragment, useState } from "react";
 
 import { PacksList } from "./PacksList";
 import { StoreIntro } from "./StoreIntro";
+import { StoreModal } from "./StoreModal";
 import { WeaponsList } from "./WeaponsList";
 import { LineSize, PrintLine } from "../../Components/PrintLine";
-import { StoreModal } from "../../Components";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { PackListing, WeaponListing } from "../../GameData";
 
@@ -64,7 +64,7 @@ export const SurplusStore = () => {
                     <PrintLine
                         text={"Gus's Army Surplus"}
                         size={LineSize.Title}
-                        showPrompt={false}
+                        prompt={"hidden"}
                     />
                 </div>
             )}

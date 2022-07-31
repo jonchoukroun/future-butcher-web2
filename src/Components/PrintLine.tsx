@@ -10,6 +10,7 @@ export const enum LineSize {
 }
 type LineSizeType = typeof LineSize[keyof typeof LineSize];
 
+// FIXME: use template string and enum for typed access
 type PromptType = "base" | "passed" | "hidden";
 
 interface PrintLineProps {

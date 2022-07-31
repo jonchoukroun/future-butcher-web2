@@ -14,7 +14,7 @@ import { restoreState } from "./restoreState";
 import { startGame } from "./startGame";
 import { travel } from "./travel";
 import { sellCut } from "./sellCut";
-import { handleMessage } from "../Logging/handleMessage";
+import { handleMessage, MessageLevel } from "../Logging/handleMessage";
 import { buyWeapon } from "./buyWeapon";
 import {
     ApiStateType,
@@ -81,16 +81,16 @@ export const ChannelProvider = ({
         if (socket.isConnected()) return;
 
         socket.onOpen(() => {
-            handleMessage("Successfully opened socket", "success");
+            handleMessage("Successfully opened socket", MessageLevel.Success);
             setIsConnected(true);
         });
         socket.onError(() => {
-            handleMessage("Failed to open socket", "error");
+            handleMessage("Failed to open socket", MessageLevel.Error);
             setIsConnected(false);
             setIsDisconnected(true);
         });
         socket.onClose(() => {
-            handleMessage("Closed socket", "info");
+            handleMessage("Closed socket", MessageLevel.Info);
             setIsConnected(false);
             setIsDisconnected(true);
         });

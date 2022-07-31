@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/react";
 
 import { useGameState } from "../../GameData/GameStateProvider";
-import { handleMessage } from "../../Logging/handleMessage";
+import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
 import { OwnedCutsType, CutType } from "../../GameData";
 
 interface MuggingVictoryProps {
@@ -19,7 +19,10 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
     }
 
     if (player.weapon === undefined) {
-        handleMessage("Player defeats mugger without a weapon", "error");
+        handleMessage(
+            "Player defeats mugger without a weapon",
+            MessageLevel.Error,
+        );
     }
 
     const { pack } = player;

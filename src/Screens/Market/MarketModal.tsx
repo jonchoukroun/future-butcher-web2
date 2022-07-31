@@ -253,7 +253,7 @@ export const MarketModal = ({
                 <PrintLine
                     text={`Price: ${formatMoney(price)}`}
                     size={LineSize.Body}
-                    prompt={"hidden"}
+                    prompt={"passed"}
                 />
 
                 <PrintLine
@@ -261,7 +261,7 @@ export const MarketModal = ({
                         transaction === "buy" ? "In Stock:" : "In Pack:"
                     } ${stock}`}
                     size={LineSize.Body}
-                    prompt={"hidden"}
+                    prompt={"passed"}
                 />
 
                 <PrintLine

@@ -51,13 +51,13 @@ export function ScreenTemplate({
                 <PrintLine
                     text={title}
                     size={LineSize.Title}
-                    showPrompt={false}
+                    prompt={"hidden"}
                 />
                 {subtitle && (
                     <PrintLine
                         text={subtitle}
                         size={LineSize.Body}
-                        showPrompt={false}
+                        prompt={"hidden"}
                     />
                 )}
             </div>
@@ -66,6 +66,7 @@ export function ScreenTemplate({
                 {content.map((line, idx) => (
                     <PrintLine
                         key={`content-line-${idx}`}
+                        prompt={"passed"}
                         text={line}
                         size={LineSize.Body}
                     />
