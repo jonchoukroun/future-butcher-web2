@@ -11,6 +11,7 @@ interface TextInputProps {
     placeholder: string;
     lengthOptions?: [number, number];
     blink?: boolean;
+    showPrompt?: boolean;
     styleOptions?: SerializedStyles;
     changeCB?: (e: ChangeEvent<HTMLInputElement>) => void;
     keyDownCB?: (e: KeyboardEvent<HTMLInputElement>) => void;
@@ -22,6 +23,7 @@ export const TextInput = ({
     placeholder,
     lengthOptions: [minLength, maxLength] = [0, 100],
     blink,
+    showPrompt = false,
     styleOptions,
     changeCB,
     keyDownCB,
@@ -39,7 +41,7 @@ export const TextInput = ({
                 styleOptions,
             )}
         >
-            <Prompt blink={blink} />
+            <Prompt blink={blink} hidden={!showPrompt} />
             <input
                 type={type}
                 placeholder={placeholder}

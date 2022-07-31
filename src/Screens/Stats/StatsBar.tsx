@@ -3,7 +3,8 @@ import { jsx } from "@emotion/react";
 
 import { ButtonPrompt, ButtonPromptSize } from "../../Components/ButtonPrompt";
 import { useGameState } from "../../GameData/GameStateProvider";
-import { formatMoney, getTimeLeft } from "../../Utils";
+import { formatMoney } from "../../Utils/formatMoney";
+import { getTimeLeft } from "../../Utils/getTimeLeft";
 
 import * as Colors from "../../Styles/colors";
 

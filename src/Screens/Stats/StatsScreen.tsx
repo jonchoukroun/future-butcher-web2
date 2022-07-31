@@ -10,7 +10,8 @@ import { subwayStations } from "../../Fixtures/subwayStations";
 import { WeaponType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
-import { formatMoney, getTimeLeft } from "../../Utils";
+import { formatMoney } from "../../Utils/formatMoney";
+import { getTimeLeft } from "../../Utils/getTimeLeft";
 
 import * as Colors from "../../Styles/colors";
 

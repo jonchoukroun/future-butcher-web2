@@ -3,17 +3,24 @@ import { jsx } from "@emotion/react";
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
-import { Button, TextInput, PrintLine } from "../../Components";
+import {
+    Button,
+    ButtonSize,
+    ButtonPrompt,
+    ButtonPromptSize,
+    PrintLine,
+    Prompt,
+    TextInput,
+} from "../../Components";
 import { LineSize } from "../../Components/PrintLine";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { CutType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
-import { formatMoney } from "../../Utils";
-
-import * as Animations from "../../Styles/animations";
-import * as Colors from "../../Styles/colors";
+import { formatMoney } from "../../Utils/formatMoney";
 import { getSpaceAvailable } from "../../Utils/spaceAvailable";
+
+import * as Colors from "../../Styles/colors";
 
 export type TransactionType = "buy" | "sell";
 interface MarketModalProps {
@@ -86,9 +93,9 @@ export const MarketModal = ({
             if (inputValue > maxAfford) {
                 unstable_batchedUpdates(() => {
                     setErrorMessage(
-                        `Too expensive. You can only afford ${maxAfford} ${
-                            maxAfford > 1 ? "lbs" : "lb"
-                        } of ${cut}. Try the Max button.`,
+                        `Too expensive. You can only afford ${maxAfford} ${pluralize(
+                            maxAfford,
+                        )} of ${cut}. Try the Max button.`,
                     );
                     setIsAmountValid(false);
                 });
@@ -97,7 +104,9 @@ export const MarketModal = ({
             if (inputValue > spaceAvailable) {
                 unstable_batchedUpdates(() => {
                     setErrorMessage(
-                        `Not enough room. You can only carry ${spaceAvailable} more lbs.`,
+                        `Not enough room. You can only carry ${spaceAvailable} more ${pluralize(
+                            spaceAvailable,
+                        )}.`,
                     );
                     setIsAmountValid(false);
                 });
@@ -106,9 +115,9 @@ export const MarketModal = ({
             if (inputValue > stock) {
                 unstable_batchedUpdates(() => {
                     setErrorMessage(
-                        `Not enough ${cut} in stock. Only ${stock} ${
-                            stock > 1 ? "lbs" : "lb"
-                        } available.`,
+                        `Not enough ${cut} in stock. Only ${stock} ${pluralize(
+                            stock,
+                        )} available.`,
                     );
                     setIsAmountValid(false);
                 });
@@ -118,9 +127,9 @@ export const MarketModal = ({
             if (inputValue > pack[cut]) {
                 unstable_batchedUpdates(() => {
                     setErrorMessage(
-                        `You only have ${stock} ${
-                            stock > 1 ? "lbs" : "lb"
-                        }. Try the Max button.`,
+                        `You only have ${stock} ${pluralize(
+                            stock,
+                        )}. Try the Max button.`,
                     );
                     setIsLoading(false);
                 });
@@ -188,6 +197,13 @@ export const MarketModal = ({
 
     const title = `${transaction === "buy" ? "Buy" : "Sell"} ${cut}`;
 
+    const buttonLabel =
+        isAmountValid && inputValue
+            ? `${transaction} ${inputValue} ${
+                  inputValue > 1 ? "lbs" : "lb"
+              } ${cut}`
+            : transaction;
+
     return (
         <div
             css={{
@@ -221,109 +237,83 @@ export const MarketModal = ({
                 <PrintLine
                     text={title}
                     size={LineSize.Title}
-                    showPrompt={false}
+                    prompt={"hidden"}
+                    marginBlockEnd={"20px"}
                 />
 
                 {errorMessage && (
                     <PrintLine
                         text={errorMessage}
                         size={LineSize.Body}
-                        showPrompt={false}
+                        prompt={"hidden"}
+                        danger
+                        marginBlockEnd={"12px"}
                     />
                 )}
 
                 <PrintLine
                     text={`Price: ${formatMoney(price)}`}
                     size={LineSize.Body}
+                    prompt={"hidden"}
                 />
 
                 <PrintLine
                     text={`${
                         transaction === "buy" ? "In Stock:" : "In Pack:"
-                    } stock`}
+                    } ${stock}`}
+                    size={LineSize.Body}
+                    prompt={"hidden"}
+                />
+
+                <PrintLine
+                    text={`Enter an amount to ${transaction}`}
+                    prompt={"passed"}
                     size={LineSize.Body}
                 />
 
-                <div
-                    css={{
-                        display: "flex",
-                        alignItems: "center",
-                    }}
-                >
-                    <h4
-                        css={{
-                            marginBlock: 0,
-                            marginInlineEnd: "20px",
-                        }}
-                    >
-                        {">"}
-                    </h4>
+                <TextInput
+                    placeholder={"How many?"}
+                    type={"number"}
+                    value={`${inputValue}`}
+                    blink={!isAmountValid}
+                    showPrompt={!isAmountValid}
+                    changeCB={handleInputChange}
+                    keyDownCB={handleKeyPress}
+                />
+
+                <div css={{ display: "flex", marginBlock: "10px" }}>
+                    <Prompt hidden={true} />
                     <Button
-                        label={`${transaction} Max ${maxTransact}`}
-                        disabled={isLoading}
-                        clickCB={handleMaxClick}
+                        label={buttonLabel}
+                        size={ButtonSize.Full}
+                        hidden={!inputValue}
+                        disabled={!isAmountValid}
+                        clickCB={() => handleSubmit(inputValue ?? 0, false)}
                     />
                 </div>
 
-                <div
-                    css={{
-                        display: "flex",
-                        flexDirection: "column",
-                    }}
-                >
-                    <div
-                        css={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginBlockStart: "20px",
-                        }}
-                    >
-                        <h4
-                            css={{
-                                marginBlock: 0,
-                                marginInlineEnd: "20px",
-                                animation: isAmountValid
-                                    ? ""
-                                    : `${Animations.blink} 1s linear infinite`,
-                            }}
-                        >
-                            {">"}
-                        </h4>
+                <PrintLine
+                    text={`Or, ${transaction} the max`}
+                    prompt={"passed"}
+                    size={LineSize.Body}
+                />
 
-                        <TextInput
-                            placeholder={"How many?"}
-                            type={"number"}
-                            value={`${inputValue}`}
-                            changeCB={handleInputChange}
-                            keyDownCB={handleKeyPress}
-                        />
-                    </div>
-
-                    <div
-                        css={{
-                            display: "flex",
-                            alignItems: "center",
-                            marginBlockStart: "20px",
-                            opacity: isAmountValid ? 1 : 0,
-                        }}
-                    >
-                        <h4
-                            css={{
-                                marginBlock: 0,
-                                marginInlineEnd: "20px",
-                                animation: `${Animations.blink} 1s linear infinite`,
-                            }}
-                        >
-                            {">"}
-                        </h4>
-
-                        <Button
-                            label={transaction}
-                            clickCB={() => handleSubmit(inputValue ?? 0, false)}
-                        />
-                    </div>
+                <div css={{ display: "flex" }}>
+                    <Prompt hidden={true} />
+                    <Button
+                        label={`${transaction} max (${maxTransact} ${pluralize(
+                            maxTransact,
+                        )})`}
+                        size={ButtonSize.Full}
+                        clickCB={handleMaxClick}
+                    />
                 </div>
             </div>
         </div>
     );
 };
+
+function pluralize(quantity: number): "lb" | "lbs" {
+    if (quantity === 1) return "lb";
+    return "lbs";
+}

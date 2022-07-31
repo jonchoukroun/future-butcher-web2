@@ -10,39 +10,48 @@ export const enum LineSize {
 }
 type LineSizeType = typeof LineSize[keyof typeof LineSize];
 
+type PromptType = "base" | "passed" | "hidden";
+
 interface PrintLineProps {
     text: string;
     size: LineSizeType;
-    showPrompt?: boolean;
+    danger?: boolean;
+    prompt?: PromptType;
+    marginBlockEnd?: string;
 }
 
 export function PrintLine({
     text,
     size = LineSize.Body,
-    showPrompt = true,
+    danger = false,
+    prompt = "base",
+    marginBlockEnd = "8px",
 }: PrintLineProps) {
+    const color = danger ? Colors.Text.danger : Colors.Text.base;
+    const promptColor =
+        prompt === "passed" ? Colors.Text.disable : Colors.Text.base;
     return (
         <div
             css={{
                 display: "flex",
                 alignItems: size === LineSize.Title ? "center" : "flex-start",
-                marginBlockEnd: "8px",
+                marginBlockEnd,
             }}
         >
-            <Prompt hidden={!showPrompt} />
-            {buildNode(size, text)}
+            <Prompt color={promptColor} hidden={prompt === "hidden"} />
+            {buildNode(size, text, color)}
         </div>
     );
 }
 
-function buildNode(size: LineSizeType, text: string) {
+function buildNode(size: LineSizeType, text: string, color: string) {
     switch (size) {
         case LineSize.Title:
             return (
                 <h1
                     css={{
                         fontSize: "28px",
-                        color: Colors.Text.base,
+                        color,
                         marginBlock: 0,
                     }}
                 >
@@ -51,11 +60,7 @@ function buildNode(size: LineSizeType, text: string) {
             );
 
         case LineSize.Body:
-            return (
-                <h4 css={{ color: Colors.Text.base, marginBlock: 0 }}>
-                    {text}
-                </h4>
-            );
+            return <h4 css={{ color, marginBlock: 0 }}>{text}</h4>;
 
         default:
             throw new Error(`Error: Invalid line size: ${size}`);

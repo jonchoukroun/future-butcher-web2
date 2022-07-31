@@ -3,8 +3,17 @@ import { css, jsx } from "@emotion/react";
 
 import * as Colors from "../Styles/colors";
 
+export const enum ButtonSize {
+    Set,
+    Full,
+}
+
+type ButtonSizeType = typeof ButtonSize[keyof typeof ButtonSize];
+
 export interface ButtonProps {
     label: string;
+    size?: ButtonSizeType;
+    hidden?: boolean;
     inverse?: boolean;
     disabled?: boolean;
     clickCB: () => void;
@@ -12,11 +21,13 @@ export interface ButtonProps {
 
 export const Button = ({
     label,
+    size = ButtonSize.Set,
+    hidden,
     inverse = false,
     disabled = false,
     clickCB,
 }: ButtonProps) => {
-    const buttonLayout = buildButtonLayout();
+    const buttonLayout = buildButtonLayout(size);
 
     const {
         backgroundColor,
@@ -28,13 +39,17 @@ export const Button = ({
     return (
         <button
             css={css(buttonLayout, {
-                backgroundColor,
-                borderColor: disabled
+                backgroundColor: hidden
+                    ? Colors.Background.base
+                    : backgroundColor,
+                borderColor: hidden
+                    ? "transparent"
+                    : disabled
                     ? Colors.Border.subtle
                     : Colors.Border.base,
                 borderStyle: "solid",
                 borderBottomWidth: "2px",
-                color: fontColor,
+                color: hidden ? Colors.Text.inverse : fontColor,
                 "&:active": {
                     backgroundColor: backgroundColorActive,
                     color: fontColorActive,
@@ -48,9 +63,9 @@ export const Button = ({
     );
 };
 
-function buildButtonLayout() {
+function buildButtonLayout(size: ButtonSizeType) {
     return css({
-        inlineSize: "140px",
+        inlineSize: size === ButtonSize.Set ? "140px" : "100%",
         margin: 0,
         paddingBlock: "5px",
         fontFamily: "'Courier New', Courier, monospace",
