@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/react";
 
 import { ButtonPrompt, ButtonPromptSize } from "./ButtonPrompt";
-import { PrintLine, LineSize } from "./PrintLine";
+import { LineSize, PromptScheme, PrintLine } from "./PrintLine";
 import { useWindowSize } from "./Window/WindowSizeProvider";
 
 import * as Colors from "../Styles/colors";
@@ -51,13 +51,13 @@ export function ScreenTemplate({
                 <PrintLine
                     text={title}
                     size={LineSize.Title}
-                    prompt={"hidden"}
+                    promptScheme={PromptScheme.Hidden}
                 />
                 {subtitle && (
                     <PrintLine
                         text={subtitle}
                         size={LineSize.Body}
-                        prompt={"hidden"}
+                        promptScheme={PromptScheme.Hidden}
                     />
                 )}
             </div>
@@ -66,7 +66,7 @@ export function ScreenTemplate({
                 {content.map((line, idx) => (
                     <PrintLine
                         key={`content-line-${idx}`}
-                        prompt={"passed"}
+                        promptScheme={PromptScheme.Past}
                         text={line}
                         size={LineSize.Body}
                     />

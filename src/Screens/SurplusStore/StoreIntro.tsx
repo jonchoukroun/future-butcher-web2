@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/react";
 
 import { ButtonPrompt, ButtonPromptSize } from "../../Components/ButtonPrompt";
-import { LineSize, PrintLine } from "../../Components/PrintLine";
+import { LineSize, PrintLine, PromptScheme } from "../../Components/PrintLine";
 
 interface StoreIntroProps {
     onSeeWeaponsClick: () => void;
@@ -19,7 +19,7 @@ export function StoreIntro({
                 text={
                     "Welcome to the last bastion of freedom in LA! We stock the best gear to secure your liberty."
                 }
-                prompt={"passed"}
+                promptScheme={PromptScheme.Past}
                 size={LineSize.Body}
             />
 
@@ -27,7 +27,7 @@ export function StoreIntro({
                 text={
                     "Ain't no more 2nd ammendment, but we still have all your personal defense needs."
                 }
-                prompt={"passed"}
+                promptScheme={PromptScheme.Past}
                 size={LineSize.Body}
             />
 
@@ -41,7 +41,7 @@ export function StoreIntro({
 
             <PrintLine
                 text={"You also look like you could use more carrying space."}
-                prompt={"passed"}
+                promptScheme={PromptScheme.Past}
                 size={LineSize.Body}
             />
 

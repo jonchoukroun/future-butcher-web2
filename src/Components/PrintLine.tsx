@@ -11,13 +11,18 @@ export const enum LineSize {
 type LineSizeType = typeof LineSize[keyof typeof LineSize];
 
 // FIXME: use template string and enum for typed access
-type PromptType = "base" | "passed" | "hidden";
+export const enum PromptScheme {
+    Base = "base",
+    Past = "past",
+    Hidden = "hidden",
+}
+type PromptSchemeType = `${PromptScheme}`;
 
 interface PrintLineProps {
     text: string;
     size: LineSizeType;
     danger?: boolean;
-    prompt?: PromptType;
+    promptScheme?: PromptSchemeType;
     marginBlockEnd?: string;
 }
 
@@ -25,12 +30,14 @@ export function PrintLine({
     text,
     size = LineSize.Body,
     danger = false,
-    prompt = "base",
+    promptScheme = PromptScheme.Base,
     marginBlockEnd = "8px",
 }: PrintLineProps) {
     const color = danger ? Colors.Text.danger : Colors.Text.base;
     const promptColor =
-        prompt === "passed" ? Colors.Text.disable : Colors.Text.base;
+        promptScheme === PromptScheme.Past
+            ? Colors.Text.disable
+            : Colors.Text.base;
     return (
         <div
             css={{
@@ -39,7 +46,10 @@ export function PrintLine({
                 marginBlockEnd,
             }}
         >
-            <Prompt color={promptColor} hidden={prompt === "hidden"} />
+            <Prompt
+                color={promptColor}
+                hidden={promptScheme === PromptScheme.Hidden}
+            />
             {buildNode(size, text, color)}
         </div>
     );
@@ -52,8 +62,10 @@ function buildNode(size: LineSizeType, text: string, color: string) {
                 <h1
                     css={{
                         fontSize: "28px",
-                        color,
                         marginBlock: 0,
+                        color,
+                        textTransform:
+                            size === LineSize.Title ? "capitalize" : "none",
                     }}
                 >
                     {text}
