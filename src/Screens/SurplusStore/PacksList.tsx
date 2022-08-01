@@ -26,6 +26,7 @@ export const PacksList = ({
     if (store === undefined) throw new Error("State is undefined");
 
     const { packs } = store;
+    const sortedPacks = packs.sort((a, b) => a.pack_space - b.pack_space);
 
     return (
         <div
@@ -62,7 +63,7 @@ export const PacksList = ({
                     listStyleType: "none",
                 }}
             >
-                {packs.map((listing, idx) => (
+                {sortedPacks.map((listing, idx) => (
                     <ListItemTemplate
                         key={`pack-${idx}`}
                         listing={listing}

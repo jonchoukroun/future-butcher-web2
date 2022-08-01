@@ -26,6 +26,7 @@ export const WeaponsList = ({
     if (store === undefined) throw new Error("State is undefined");
 
     const { weapons } = store;
+    const sortedWeapons = weapons.sort((a, b) => a.price - b.price);
 
     return (
         <div
@@ -62,7 +63,7 @@ export const WeaponsList = ({
                     listStyleType: "none",
                 }}
             >
-                {weapons.map((listing, idx) => (
+                {sortedWeapons.map((listing, idx) => (
                     <ListItemTemplate
                         key={`weapon-${idx}`}
                         listing={listing}
