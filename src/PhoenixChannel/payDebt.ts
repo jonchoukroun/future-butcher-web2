@@ -1,10 +1,10 @@
 import { Channel } from "phoenix";
-import { ApiStateType } from "../GameData";
+import { ApiStateType, ApiErrorType } from "../GameData";
 
 export async function payDebt(
     channel: Channel,
     payload: Record<string, unknown>,
-): Promise<ApiStateType | undefined> {
+): Promise<ApiStateType | ApiErrorType | undefined> {
     return new Promise((resolve, reject) => {
         channel
             .push("pay_debt", payload)
