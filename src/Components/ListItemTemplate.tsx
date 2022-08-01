@@ -35,7 +35,7 @@ export function ListItemTemplate({
                 flex: 1,
                 flexDirection: "column",
                 justifyContent: "center",
-                paddingInline: "10px",
+                marginInline: "10px",
                 borderColor: "transparent",
                 borderBlockEndColor: isLast
                     ? "transparent"

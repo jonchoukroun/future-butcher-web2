@@ -2,8 +2,9 @@
 import { jsx } from "@emotion/react";
 
 import {
-    ButtonPrompt,
-    ButtonPromptSize,
+    Button,
+    ButtonScheme,
+    ButtonSize,
     ListItemTemplate,
 } from "../../Components";
 import { useGameState } from "../../GameData/GameStateProvider";
@@ -35,11 +36,18 @@ export const WeaponsList = ({
                 flexDirection: "column",
             }}
         >
-            <div css={{ display: "flex", justifyContent: "flex-end" }}>
-                <ButtonPrompt
+            <div
+                css={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginBlockStart: "10px",
+                    marginBlockEnd: "5px",
+                }}
+            >
+                <Button
                     label={"Browse Packs"}
-                    size={ButtonPromptSize.Small}
-                    blink={false}
+                    size={ButtonSize.Full}
+                    scheme={ButtonScheme.Inverse}
                     clickCB={onStoreBackClick}
                 />
             </div>
