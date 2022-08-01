@@ -1,6 +1,12 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/react";
-import { Fragment, useState } from "react";
+import { css, jsx } from "@emotion/react";
+import {
+    BaseSyntheticEvent,
+    Fragment,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 
 import {
     Button,
@@ -48,6 +54,26 @@ export function StoreModal({ listing, onModalClose }: StoreModalProps) {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string>();
+    const [successMessage, setSuccessMessage] = useState<string>();
+
+    const modalRef = useRef<HTMLDivElement>(null);
+    useEffect(() => {
+        if (!successMessage) return;
+
+        const autoClose = setInterval(() => {
+            if (modalRef.current) onModalClose();
+
+            return () => {
+                clearInterval(autoClose);
+            };
+        }, 1200);
+    }, [successMessage]);
+
+    const handleModalBackgroundClick = (e: BaseSyntheticEvent) => {
+        if (e.target && modalRef.current && e.target === modalRef.current) {
+            onModalClose();
+        }
+    };
 
     const isPackListing = isPack(listing);
     const isOwned = alreadyOwned(listing, player);
@@ -132,11 +158,15 @@ export function StoreModal({ listing, onModalClose }: StoreModalProps) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
         } else {
             unstable_batchedUpdates(() => {
+                setSuccessMessage(
+                    `Successfully ${
+                        !isPackListing && player.weapon ? "replaced" : "bought"
+                    } the ${itemDetails.displayName}.`,
+                );
                 dispatch({
                     type: "updateStateData",
                     stateData: response as ApiStateType,
                 });
-                onModalClose();
             });
         }
     };
@@ -154,6 +184,23 @@ export function StoreModal({ listing, onModalClose }: StoreModalProps) {
 
     const inlineSizeOffset = layout === "full" ? 24 : 15;
 
+    const modalStyle = css({
+        position: "absolute",
+        insetBlockStart: layout === "full" ? "70px" : "30px",
+        insetInlineEnd: layout === "full" ? "23px" : "15px",
+        inlineSize: `${inlineSize - inlineSizeOffset}px`,
+        display: "flex",
+        flexDirection: "column",
+        padding: "20px",
+        backgroundColor: Colors.Background.base,
+        borderColor: Colors.Border.subtle,
+        borderRadius: "1px",
+        borderStyle: "outset",
+        borderWidth: "3px",
+        boxShadow: "2px 2px 12px 4px rgba(0, 0, 0, 0.4)",
+        zIndex: 1001,
+    });
+
     return (
         <div
             css={{
@@ -165,133 +212,134 @@ export function StoreModal({ listing, onModalClose }: StoreModalProps) {
                 backgroundColor: "rgba(0, 0, 0, 0.4)",
                 zIndex: 1000,
             }}
+            ref={modalRef}
+            onClick={handleModalBackgroundClick}
         >
-            <div
-                css={{
-                    position: "absolute",
-                    insetBlockStart: layout === "full" ? "70px" : "30px",
-                    insetInlineEnd: layout === "full" ? "23px" : "15px",
-                    inlineSize: `${inlineSize - inlineSizeOffset}px`,
-                    display: "flex",
-                    flexDirection: "column",
-                    padding: "20px",
-                    backgroundColor: Colors.Background.base,
-                    borderColor: Colors.Border.subtle,
-                    borderRadius: "1px",
-                    borderStyle: "outset",
-                    borderWidth: "3px",
-                    boxShadow: "2px 2px 12px 4px rgba(0, 0, 0, 0.4)",
-                    zIndex: 1001,
-                }}
-            >
-                <div css={{ display: "flex", justifyContent: "space-between" }}>
+            {successMessage ? (
+                <div css={modalStyle}>
                     <PrintLine
-                        text={itemDetails.displayName}
-                        size={LineSize.Title}
-                        promptScheme={PromptScheme.Hidden}
-                        marginBlockEnd={"20px"}
-                    />
-                    <Button
-                        label={"X"}
-                        scheme={ButtonScheme.Inverse}
-                        size={ButtonSize.Small}
-                        clickCB={onModalClose}
+                        text={successMessage}
+                        size={LineSize.Notification}
                     />
                 </div>
-
-                {error && (
-                    <PrintLine
-                        text={error}
-                        size={LineSize.Body}
-                        promptScheme={PromptScheme.Hidden}
-                        danger
-                        marginBlockEnd={"12px"}
-                    />
-                )}
-
-                {isPackListing && (
-                    <PrintLine
-                        text={(itemDetails as PackDetailsType).description}
-                        size={LineSize.Body}
-                        promptScheme={PromptScheme.Past}
-                    />
-                )}
-
-                <PrintLine
-                    text={`Price: ${formatMoney(listing.price)}${
-                        !isPackListing && player.weapon
-                            ? " - current wepon value"
-                            : ""
-                    }`}
-                    size={LineSize.Body}
-                    promptScheme={PromptScheme.Past}
-                />
-
-                {isPackListing ? (
-                    <PrintLine
-                        text={`Carrying capacity: ${
-                            (itemDetails as PackDetailsType).packSpace
-                        } lbs`}
-                        size={LineSize.Body}
-                        promptScheme={PromptScheme.Past}
-                    />
-                ) : (
-                    <Fragment>
+            ) : (
+                <div css={modalStyle}>
+                    <div
+                        css={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                        }}
+                    >
                         <PrintLine
-                            text={`Damage: ${
-                                (itemDetails as WeaponDetailsType).damage
-                            }0%`}
+                            text={itemDetails.displayName}
+                            size={LineSize.Title}
+                            promptScheme={PromptScheme.Hidden}
+                            marginBlockEnd={"20px"}
+                        />
+                        <Button
+                            label={"X"}
+                            scheme={ButtonScheme.Inverse}
+                            size={ButtonSize.Small}
+                            clickCB={onModalClose}
+                        />
+                    </div>
+
+                    {error && (
+                        <PrintLine
+                            text={error}
+                            size={LineSize.Body}
+                            promptScheme={PromptScheme.Hidden}
+                            danger
+                            marginBlockEnd={"12px"}
+                        />
+                    )}
+
+                    {isPackListing && (
+                        <PrintLine
+                            text={(itemDetails as PackDetailsType).description}
                             size={LineSize.Body}
                             promptScheme={PromptScheme.Past}
                         />
+                    )}
 
+                    <PrintLine
+                        text={`Price: ${formatMoney(listing.price)}${
+                            !isPackListing && player.weapon
+                                ? " - current wepon value"
+                                : ""
+                        }`}
+                        size={LineSize.Body}
+                        promptScheme={PromptScheme.Past}
+                    />
+
+                    {isPackListing ? (
                         <PrintLine
-                            text={harvestDescription}
+                            text={`Carrying capacity: ${
+                                (itemDetails as PackDetailsType).packSpace
+                            } lbs`}
                             size={LineSize.Body}
                             promptScheme={PromptScheme.Past}
                         />
-                    </Fragment>
-                )}
+                    ) : (
+                        <Fragment>
+                            <PrintLine
+                                text={`Damage: ${
+                                    (itemDetails as WeaponDetailsType).damage
+                                }0%`}
+                                size={LineSize.Body}
+                                promptScheme={PromptScheme.Past}
+                            />
 
-                {isOwned && (
-                    <PrintLine
-                        text={"You already own this item."}
-                        size={LineSize.Body}
-                        promptScheme={PromptScheme.Past}
-                    />
-                )}
+                            <PrintLine
+                                text={harvestDescription}
+                                size={LineSize.Body}
+                                promptScheme={PromptScheme.Past}
+                            />
+                        </Fragment>
+                    )}
 
-                {!isOwned && !canAfford && (
-                    <PrintLine
-                        text={"You can't afford this item."}
-                        size={LineSize.Body}
-                        promptScheme={PromptScheme.Past}
-                    />
-                )}
+                    {isOwned && (
+                        <PrintLine
+                            text={"You already own this item."}
+                            size={LineSize.Body}
+                            promptScheme={PromptScheme.Past}
+                        />
+                    )}
 
-                {!isOwned && isPackSoldOut && (
-                    <PrintLine
-                        text={"We're all sold out!"}
-                        size={LineSize.Body}
-                        promptScheme={PromptScheme.Past}
-                    />
-                )}
+                    {!isOwned && !canAfford && (
+                        <PrintLine
+                            text={"You can't afford this item."}
+                            size={LineSize.Body}
+                            promptScheme={PromptScheme.Past}
+                        />
+                    )}
 
-                {!isOwned && canAfford && !isPackSoldOut ? (
-                    <ButtonPrompt
-                        label={buttonLabel}
-                        size={ButtonPromptSize.Small}
-                        loading={isLoading}
-                        clickCB={handleBuyClick}
-                    />
-                ) : (
-                    <ButtonPrompt
-                        label={`Back to ${isPackListing ? "packs" : "weapons"}`}
-                        size={ButtonPromptSize.Full}
-                        clickCB={onModalClose}
-                    />
-                )}
-            </div>
+                    {!isOwned && isPackSoldOut && (
+                        <PrintLine
+                            text={"We're all sold out!"}
+                            size={LineSize.Body}
+                            promptScheme={PromptScheme.Past}
+                        />
+                    )}
+
+                    {!isOwned && canAfford && !isPackSoldOut ? (
+                        <ButtonPrompt
+                            label={buttonLabel}
+                            size={ButtonPromptSize.Small}
+                            loading={isLoading}
+                            clickCB={handleBuyClick}
+                        />
+                    ) : (
+                        <ButtonPrompt
+                            label={`Back to ${
+                                isPackListing ? "packs" : "weapons"
+                            }`}
+                            size={ButtonPromptSize.Full}
+                            clickCB={onModalClose}
+                        />
+                    )}
+                </div>
+            )}
         </div>
     );
 }
