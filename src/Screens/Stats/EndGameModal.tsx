@@ -98,9 +98,7 @@ export const EndGameModal = ({
                         paddingInline: "20px",
                     }}
                 >
-                    <p css={{ marginBlockEnd: "40px" }}>
-                        Are you sure you want to quit?
-                    </p>
+                    <h3>Are you sure you want to quit?</h3>
                 </div>
 
                 <div css={{ display: "flex", justifyContent: "space-between" }}>

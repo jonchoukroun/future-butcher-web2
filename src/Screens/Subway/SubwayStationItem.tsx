@@ -4,8 +4,8 @@ import { useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { Prompt } from "../../Components";
-import { StationKey, subwayStations } from "../../Fixtures/subwayStations";
-import { Screen } from "../../GameData";
+import { StationDetails } from "../../Fixtures/subwayStations";
+import { Screen, StationType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { isApiError } from "../../GameData/State";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
@@ -14,7 +14,7 @@ import * as Animations from "../../Styles/animations";
 import * as Colors from "../../Styles/colors";
 
 interface SubwayStationItemProps {
-    stationKey: StationKey;
+    stationKey: StationType;
 }
 
 export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
@@ -24,7 +24,7 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
     } = useGameState();
     if (turnsLeft === undefined) throw new Error("State is undefined");
 
-    const station = subwayStations.find(({ key }) => key === stationKey);
+    const station = StationDetails[stationKey];
     if (station === undefined) throw new Error("Cannot find station");
 
     const { handlePushCallback } = useChannel();
@@ -56,9 +56,9 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
             setIsLoading(false);
         });
     };
-    const isCurrentStation = station.key === currentStation;
+    const isCurrentStation = stationKey === currentStation;
     const isInRange = station.hours <= turnsLeft;
-    const isClosed = stationKey === StationKey.bellGardens && turnsLeft > 20;
+    const isClosed = stationKey === "bell_gardens" && turnsLeft > 20;
     const canTravel = !isCurrentStation && !isClosed && isInRange;
 
     const prompt = getStationPrompt(isCurrentStation, canTravel);
@@ -107,7 +107,7 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
                         color,
                     }}
                 >
-                    {station.name}
+                    {station.displayName}
                 </h2>
 
                 <div css={{ marginInlineStart: "auto" }}>

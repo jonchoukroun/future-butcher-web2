@@ -21,6 +21,7 @@ interface ButtonPromptProps {
     blink?: boolean;
     disabled?: boolean;
     hidden?: boolean;
+    danger?: boolean;
     loading?: boolean;
     clickCB: () => void;
 }
@@ -33,6 +34,7 @@ export function ButtonPrompt({
     blink = true,
     disabled = false,
     hidden = false,
+    danger = false,
     loading = false,
     clickCB,
 }: ButtonPromptProps) {
@@ -48,6 +50,8 @@ export function ButtonPrompt({
         ? Colors.Text.disable
         : inverse
         ? Colors.Text.inverse
+        : danger
+        ? Colors.Text.danger
         : Colors.Text.base;
     const colorActive = inverse ? Colors.Text.base : Colors.Text.inverse;
 
@@ -88,6 +92,8 @@ export function ButtonPrompt({
                         ? Colors.Text.disable
                         : inverse
                         ? Colors.Text.inverse
+                        : danger
+                        ? Colors.Text.danger
                         : Colors.Text.base
                 }
                 blink={blink}

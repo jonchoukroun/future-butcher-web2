@@ -4,7 +4,6 @@ import { jsx } from "@emotion/react";
 import { useWindowSize } from "./WindowSizeProvider";
 import { ButtonPrompt, ButtonPromptSize } from "../ButtonPrompt";
 import { useGameState } from "../../GameData/GameStateProvider";
-import { StationKey } from "../../Fixtures/subwayStations";
 import { Screen } from "../../GameData";
 import { GameProcessType, ScreenType } from "../../GameData/State";
 
@@ -26,7 +25,7 @@ export const NavBar = () => {
 
     const label = getButtonLabel(
         currentScreen,
-        currentStation === StationKey.bellGardens,
+        currentStation === "bell_gardens",
     );
 
     const screen = getNextScreen(
@@ -85,7 +84,7 @@ function getNextScreen(
 
     if (turnsLeft === 0 && screen === "market") return Screen.EndGame;
 
-    if (station === StationKey.bellGardens) {
+    if (station === "bell_gardens") {
         if (screen === "store") return Screen.Subway;
         else return Screen.Store;
     }

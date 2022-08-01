@@ -57,8 +57,8 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
     if (cutsCount > 0) {
         content.push(
             ...[
-                `You pull out your trust ${player.weapon} and get slicing.`,
-                `Nice! You just scored some ${harvestedCuts}`,
+                `You pull out your trusty ${player.weapon} and get slicing.`,
+                `Nice! You just scored some ${harvestedCuts}...`,
             ],
         );
     }

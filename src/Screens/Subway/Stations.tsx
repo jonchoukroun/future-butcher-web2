@@ -2,7 +2,9 @@
 import { jsx } from "@emotion/react";
 
 import { SubwayStationItem } from "./SubwayStationItem";
-import { subwayStations } from "../../Fixtures/subwayStations";
+import { StationDetails } from "../../Fixtures/subwayStations";
+import { StationType } from "../../GameData";
+
 import * as Colors from "../../Styles/colors";
 
 export const Stations = () => {
@@ -25,8 +27,11 @@ export const Stations = () => {
             >
                 Select an open neighborhood to travel there.
             </small>
-            {subwayStations.map(({ key }, idx) => (
-                <SubwayStationItem key={`${key}-${idx}`} stationKey={key} />
+            {Object.keys(StationDetails).map((key, idx) => (
+                <SubwayStationItem
+                    key={`${key}-${idx}`}
+                    stationKey={key as StationType}
+                />
             ))}
         </ul>
     );
