@@ -32,7 +32,7 @@ export const MuggingDefeat = ({
 
     return (
         <ScreenTemplate
-            title={"You lose"}
+            title={"You lose!"}
             danger={true}
             content={muggingContent}
             isLoading={false}

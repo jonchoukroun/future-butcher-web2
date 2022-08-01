@@ -37,7 +37,7 @@ export const Mugging = () => {
     );
     const [muggingState, setMuggingState] = useState<
         "victory" | "defeat" | undefined
-    >(undefined);
+    >("victory");
     const [isLoading, setIsLoading] = useState(false);
 
     const handleFightMuggerClick = async () => {

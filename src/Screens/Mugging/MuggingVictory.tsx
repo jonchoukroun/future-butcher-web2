@@ -1,9 +1,10 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
+import { ScreenTemplate } from "../../Components";
+import { OwnedCutsType, CutType, Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
-import { OwnedCutsType, CutType } from "../../GameData";
 
 interface MuggingVictoryProps {
     initialPack: OwnedCutsType;
@@ -27,11 +28,6 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
 
     const { pack } = player;
 
-    // const harvestedCuts: string[] = [];
-    // Object.entries(pack).forEach(([cut, amount]) => {
-    //     const harvested = amount - initialPack[cut as Cuts];
-    //     if (harvested > 0) harvestedCuts.push(`${amount} ${cut}`);
-    // });
     let cutsCount = 0;
     const harvestedCuts: string = Object.entries(pack).reduce(
         (cutsString, [cut, amount]) => {
@@ -56,29 +52,28 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
         "",
     );
 
+    // TODO: add additional responses and randomize
+    const content = ["Neighborhood kids cheer as you kick the mugger's ass."];
+    if (cutsCount > 0) {
+        content.push(
+            ...[
+                `You pull out your trust ${player.weapon} and get slicing.`,
+                `Nice! You just scored some ${harvestedCuts}`,
+            ],
+        );
+    }
+
+    const handleClick = () => {
+        dispatch({ type: "changeScreen", screen: Screen.Market });
+    };
+
     return (
-        <div
-            css={{
-                display: "flex",
-                flexDirection: "column",
-                paddingInline: "10px",
-            }}
-        >
-            <p>Local street kids cheer as you take out the mugger.</p>
-
-            {harvestedCuts.length > 0 && (
-                <p>{`With your ${player.weapon}, you harvest his ${harvestedCuts}.`}</p>
-            )}
-
-            <div
-                css={{
-                    display: "flex",
-                    justifyContent: "center",
-                    marginBlockStart: "20px",
-                }}
-            >
-                <p>FIXME: add button</p>
-            </div>
-        </div>
+        <ScreenTemplate
+            title={"You win!"}
+            content={content}
+            isLoading={false}
+            buttonLabel={"Get back to work"}
+            clickCB={handleClick}
+        />
     );
 };
