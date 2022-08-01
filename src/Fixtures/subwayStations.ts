@@ -16,7 +16,7 @@ export const StationDetails: { [Station in StationType]: StationDetailsType } =
             displayName: "Beverly Hills",
             hours: 3,
             stationDescription:
-                "High security, expensive cuts, and manicured lawns.",
+                "High security, expensive meat, and manicured lawns.",
             gangdisplayName: "Rollin' Spa Girls",
             gangDescription:
                 "Militarized private security who hunt undesirables for sport.",

@@ -185,6 +185,12 @@ export const StatsScreen = () => {
                         size={LineSize.Body}
                         promptScheme={PromptScheme.Past}
                     />
+
+                    <PrintLine
+                        text={`...${station.stationDescription}`}
+                        size={LineSize.Body}
+                        promptScheme={PromptScheme.Past}
+                    />
                 </div>
 
                 <div
@@ -218,13 +224,7 @@ export const StatsScreen = () => {
                     )}
 
                     <PrintLine
-                        text={`Pack: ${packName}`}
-                        size={LineSize.Body}
-                        promptScheme={PromptScheme.Past}
-                    />
-
-                    <PrintLine
-                        text={`Capacity: ${totalPackSpace} lbs`}
+                        text={`Pack: ${packName} (${totalPackSpace} lbs)`}
                         size={LineSize.Body}
                         promptScheme={PromptScheme.Past}
                     />
