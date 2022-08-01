@@ -67,7 +67,7 @@ export function StoreModal({ listing, onModalClose }: StoreModalProps) {
                 clearInterval(autoClose);
             };
         }, 1200);
-    }, [successMessage]);
+    }, [onModalClose, successMessage]);
 
     const handleModalBackgroundClick = (e: BaseSyntheticEvent) => {
         if (e.target && modalRef.current && e.target === modalRef.current) {

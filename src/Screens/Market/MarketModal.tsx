@@ -86,7 +86,7 @@ export const MarketModal = ({
                 clearInterval(autoClose);
             };
         }, 1200);
-    }, [successMessage]);
+    }, [onModalClose, successMessage]);
 
     const handleModlalBackgroundClick = (e: BaseSyntheticEvent) => {
         if (e.target && modalRef.current && e.target === modalRef.current) {
@@ -165,7 +165,7 @@ export const MarketModal = ({
         }
 
         setIsAmountValid(true);
-    }, [inputValue]);
+    }, [cut, inputValue, maxAfford, pack, spaceAvailable, stock, transaction]);
 
     const handleSubmit = async (amount: number, isMax: boolean) => {
         if (isLoading) return;

@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { unstable_batchedUpdates } from "react-dom";
 
 import { ScreenTemplate } from "../../Components";
@@ -33,6 +33,69 @@ export const EndGame = () => {
     );
     const [isLoading, setIsLoading] = useState(false);
 
+    const handleVisitMarketClick = useCallback(() => {
+        dispatch({ type: "changeScreen", screen: Screen.Market });
+    }, [dispatch]);
+
+    const handlePayDebtClick = useCallback(async () => {
+        if (isLoading) return;
+
+        if (!debt) {
+            handleMessage(
+                "Tried to pay non-existent debt from EndGame",
+                MessageLevel.Error,
+            );
+            return;
+        }
+
+        if (debt > funds) {
+            handleMessage("Failed debt payment validation", MessageLevel.Error);
+            return;
+        }
+
+        setIsLoading(true);
+
+        const response = await handlePushCallback("payDebt", {});
+        // TODO: API error handling
+        if (response === undefined || isApiError(response)) {
+            dispatch({ type: "changeScreen", screen: Screen.Error });
+            return;
+        }
+
+        unstable_batchedUpdates(() => {
+            dispatch({ type: "updateStateData", stateData: response });
+            setIsLoading(false);
+        });
+    }, [debt, dispatch, funds, handlePushCallback, isLoading]);
+
+    const handleRetireClick = useCallback(async () => {
+        if (isLoading) return;
+
+        setIsLoading(true);
+        const hashId = localStorage.getItem("playerHash");
+        if (!hashId) {
+            handleMessage(
+                "Cannot end game without a hash ID",
+                MessageLevel.Error,
+            );
+            dispatch({ type: "changeScreen", screen: Screen.Error });
+            return;
+        }
+        const score = player.funds;
+        const highScores = await handleEndGame(hashId, score);
+        if (highScores === undefined) {
+            dispatch({ type: "changeScreen", screen: Screen.Error });
+            return;
+        }
+        if (score > 0) {
+            localStorage.setItem("playerScore", score.toString());
+        }
+        unstable_batchedUpdates(() => {
+            dispatch({ type: "setHighScores", highScores });
+            dispatch({ type: "changeScreen", screen: Screen.HighScores });
+        });
+    }, [dispatch, handleEndGame, isLoading, player.funds]);
+
     useEffect(() => {
         if (!contentRef.current) return;
 
@@ -64,70 +127,14 @@ export const EndGame = () => {
                 setButtonCB(() => handleRetireClick);
             });
         }
-    }, [debt, funds, hasCuts]);
-
-    const handleVisitMarketClick = () => {
-        dispatch({ type: "changeScreen", screen: Screen.Market });
-    };
-
-    const handlePayDebtClick = async () => {
-        if (isLoading) return;
-
-        if (!debt) {
-            handleMessage(
-                "Tried to pay non-existent debt from EndGame",
-                MessageLevel.Error,
-            );
-            return;
-        }
-
-        if (debt > funds) {
-            handleMessage("Failed debt payment validation", MessageLevel.Error);
-            return;
-        }
-
-        setIsLoading(true);
-
-        const response = await handlePushCallback("payDebt", {});
-        // TODO: API error handling
-        if (response === undefined || isApiError(response)) {
-            dispatch({ type: "changeScreen", screen: Screen.Error });
-            return;
-        }
-
-        unstable_batchedUpdates(() => {
-            dispatch({ type: "updateStateData", stateData: response });
-            setIsLoading(false);
-        });
-    };
-
-    const handleRetireClick = async () => {
-        if (isLoading) return;
-
-        setIsLoading(true);
-        const hashId = localStorage.getItem("playerHash");
-        if (!hashId) {
-            handleMessage(
-                "Cannot end game without a hash ID",
-                MessageLevel.Error,
-            );
-            dispatch({ type: "changeScreen", screen: Screen.Error });
-            return;
-        }
-        const score = player.funds;
-        const highScores = await handleEndGame(hashId, score);
-        if (highScores === undefined) {
-            dispatch({ type: "changeScreen", screen: Screen.Error });
-            return;
-        }
-        if (score > 0) {
-            localStorage.setItem("playerScore", score.toString());
-        }
-        unstable_batchedUpdates(() => {
-            dispatch({ type: "setHighScores", highScores });
-            dispatch({ type: "changeScreen", screen: Screen.HighScores });
-        });
-    };
+    }, [
+        debt,
+        funds,
+        handlePayDebtClick,
+        handleRetireClick,
+        handleVisitMarketClick,
+        hasCuts,
+    ]);
 
     return (
         <ScreenTemplate

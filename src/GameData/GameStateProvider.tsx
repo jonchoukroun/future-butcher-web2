@@ -94,7 +94,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
             dispatch({ type: "shuffleMuggers" });
         };
         if (isConnected) handleJoin();
-    }, [isConnected]);
+    }, [handleJoinChannel, isConnected, playerHash, playerName]);
 
     useEffect(() => {
         const initGame = async () => {
@@ -154,7 +154,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
             }
         };
         if (didJoinChannel) initGame();
-    }, [didJoinChannel]);
+    }, [didJoinChannel, handleInitGame, handlePushCallback, playerName]);
 
     const value = { state, dispatch };
 
