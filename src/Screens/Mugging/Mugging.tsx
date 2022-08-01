@@ -35,9 +35,7 @@ export const Mugging = () => {
     const currentMuggerRef = useRef(
         muggers === undefined ? "Fred Savage" : muggers[0],
     );
-    const [muggingState, setMuggingState] = useState<
-        "victory" | "defeat" | undefined
-    >("victory");
+    const [muggingState, setMuggingState] = useState<"victory" | "defeat">();
     const [isLoading, setIsLoading] = useState(false);
 
     const handleFightMuggerClick = async () => {
