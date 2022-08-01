@@ -10,6 +10,7 @@ import * as Colors from "../Styles/colors";
 interface ScreenTemplateProps {
     title: string;
     subtitle?: string;
+    danger?: boolean;
     content: string[];
     buttonLabel: string;
     isLoading: boolean;
@@ -19,9 +20,10 @@ interface ScreenTemplateProps {
 export function ScreenTemplate({
     title,
     subtitle,
+    danger = false,
     content,
     buttonLabel,
-    isLoading,
+    isLoading = false,
     clickCB,
 }: ScreenTemplateProps) {
     const { getContentSize } = useWindowSize();
@@ -43,7 +45,9 @@ export function ScreenTemplate({
                     inlineSize: "100%",
                     marginBlockStart: "30px",
                     marginBlockEnd: "48px",
-                    borderBottomColor: Colors.Border.subtle,
+                    borderBottomColor: danger
+                        ? Colors.Border.danger
+                        : Colors.Border.subtle,
                     borderBottomStyle: "dashed",
                     borderBottomWidth: "2px",
                 }}
@@ -51,6 +55,7 @@ export function ScreenTemplate({
                 <PrintLine
                     text={title}
                     size={LineSize.Title}
+                    danger={danger}
                     promptScheme={PromptScheme.Hidden}
                 />
                 {subtitle && (
