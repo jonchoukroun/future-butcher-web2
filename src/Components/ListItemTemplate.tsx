@@ -13,6 +13,8 @@ interface ListItemTemplateProps {
     listing: MarketListing | PackListing | WeaponListing;
     // Hide border under last item
     isLast: boolean;
+    // Indicate cut price surges with Accent color
+    isSurge?: boolean;
     // Primary button is required and aligned to the right
     primaryButtonProps: ButtonProps;
     // Secondary button is optional and aligned left
@@ -22,6 +24,7 @@ interface ListItemTemplateProps {
 export function ListItemTemplate({
     listing,
     isLast,
+    isSurge = false,
     primaryButtonProps,
     secondaryButtonProps,
 }: ListItemTemplateProps) {
@@ -58,7 +61,9 @@ export function ListItemTemplate({
                     <h2
                         css={{
                             margin: 0,
-                            color: Colors.Text.base,
+                            color: isSurge
+                                ? Colors.Text.accent
+                                : Colors.Text.base,
                             textTransform: "capitalize",
                             marginBlockEnd: secondaryButtonProps ? "5px" : 0,
                         }}
@@ -93,7 +98,9 @@ export function ListItemTemplate({
                             css={{
                                 margin: 0,
                                 marginBlockEnd: "5px",
-                                color: Colors.Text.base,
+                                color: isSurge
+                                    ? Colors.Text.accent
+                                    : Colors.Text.base,
                                 textTransform: "capitalize",
                             }}
                         >

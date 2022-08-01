@@ -1,9 +1,10 @@
 /** Amber-based palette */
-const AMBER = "#ffb000";
+const AMBER = "rgba(255, 176, 0, 1)";
 const LIGHT_AMBER = "rgba(255, 176, 0, 0.75)";
 const PALE_AMBER = "rgba(255, 176, 0, 0.3)";
+const GREEN = "rgba(102, 255, 102)";
 const RED = "rgba(255, 51, 51, 1)";
-const BLACK = "#171717";
+const BLACK = "#282828";
 
 export const Text = {
     base: AMBER,
@@ -11,12 +12,13 @@ export const Text = {
     disable: PALE_AMBER,
     inverse: BLACK,
     danger: RED,
+    accent: GREEN,
 };
 
 export const Border = {
     base: AMBER,
     subtle: PALE_AMBER,
-    accent: AMBER,
+    accent: GREEN,
     danger: RED,
 };
 

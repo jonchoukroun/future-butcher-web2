@@ -1,4 +1,12 @@
-import { PackType, WeaponType } from "../GameData";
+import { CutType, PackType, WeaponType } from "../GameData";
+
+export const SurgeMinimums: { [Cut in CutType]: number } = {
+    brains: 150000,
+    heart: 50000,
+    flank: 20000,
+    ribs: 8000,
+    liver: 8000,
+};
 
 export type PackDetailsType = {
     description: string;

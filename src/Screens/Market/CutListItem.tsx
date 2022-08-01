@@ -6,6 +6,7 @@ import { ListItemTemplate } from "../../Components";
 import { MarketListing, CutType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { getSpaceAvailable } from "../../Utils/spaceAvailable";
+import { SurgeMinimums } from "../../Fixtures/store";
 
 interface CutListItemProps {
     listing: MarketListing;
@@ -35,6 +36,7 @@ export const CutListItem = ({
         <ListItemTemplate
             listing={listing}
             isLast={isLast}
+            isSurge={listing.price >= SurgeMinimums[listing.name]}
             primaryButtonProps={{
                 label: "Buy",
                 disabled: !canBuy,
