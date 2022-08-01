@@ -75,7 +75,7 @@ export const Window = () => {
                 )}
 
                 {currentScreen === "endGame" && (
-                    <GameScreen layout={layout} shouldShowNavBar={true}>
+                    <GameScreen layout={layout} shouldShowNavBar={false}>
                         <EndGame />
                     </GameScreen>
                 )}

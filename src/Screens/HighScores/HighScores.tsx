@@ -1,133 +1,66 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
+import { useState } from "react";
+import { unstable_batchedUpdates } from "react-dom";
 
-import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
-import { useChannel } from "../../PhoenixChannel/ChannelProvider";
+import { ScreenTemplate } from "../../Components";
 import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
-import { formatMoney } from "../../Utils/formatMoney";
-
-import * as Colors from "../../Styles/colors";
+import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 
 export const HighScores = () => {
     const {
-        state: { highScores, player },
+        state: { player },
         dispatch,
     } = useGameState();
 
-    if (highScores === undefined || player === undefined) {
+    if (player === undefined) {
         throw new Error("State is undefined");
     }
+
+    const { handleInitGame } = useChannel();
+
+    const [isLoading, setIsLoading] = useState(false);
 
     const playerName = player.playerName || localStorage.getItem("playerName");
     const playerScore = parseInt(localStorage.getItem("playerScore") || "0");
 
-    const { handleInitGame } = useChannel();
-    const handleStartOverClick = () => {
-        handleInitGame();
-        dispatch({ type: "changeScreen", screen: Screen.Welcome });
+    const handleStartOverClick = async () => {
+        setIsLoading(true);
+        await handleInitGame();
+
+        unstable_batchedUpdates(() => {
+            dispatch({ type: "changeScreen", screen: Screen.Welcome });
+            setIsLoading(false);
+        });
     };
 
-    const { getContentSize } = useWindowSize();
-    const { blockSize, inlineSize } = getContentSize();
+    const deadbeatContent = [
+        "You get a few miles south of Tijuana and the van pulls over.",
+        "The back doors open and you see a couple no-nonsense dudes wearing butcher aprons.",
+        "As they drag you from the van, kicking and screaming, you think to yourself...",
+        '"I should have paid off that damn debt"',
+    ];
+
+    const winnerContent = [
+        "The trip into Mexico is long but uneventful.",
+        "You feel generous and tip the coyote well, but he doesn't crack a smile.",
+        "You spend your cash on a house by the beach and settle down.",
+        "But the pull of the meat game is strong and you keep thinking of LA...",
+    ];
 
     return (
-        <div
-            css={{
-                blockSize: "100%",
-                inlineSize: "100%",
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-            }}
-        >
-            <div
-                css={{
-                    blockSize: "70px",
-                    inlineSize: `${inlineSize}px`,
-                    backgroundColor: Colors.Background.base,
-                    borderRadius: "4px",
-                    zIndex: 100,
-                }}
-            >
-                <h2
-                    css={{
-                        marginBlockStart: "5px",
-                        marginBlockEnd: "20px",
-                        color: Colors.Text.base,
-                        textTransform: "uppercase",
-                        letterSpacing: "2px",
-                        wordSpacing: "4px",
-                        textAlign: "center",
-                    }}
-                >
-                    Game Over
-                </h2>
-            </div>
-
-            <div
-                css={{
-                    blockSize: `${blockSize}px`,
-                    inlineSize: `${inlineSize}px`,
-                    marginBlock: "15px",
-                    paddingInline: "8px",
-                    zIndex: 0,
-                }}
-            >
-                {highScores &&
-                    highScores.slice(0, 15).map(({ player, score }, idx) => (
-                        <div
-                            key={`${idx}-${player}`}
-                            css={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                paddingBlock: playerName === player ? "4px" : 0,
-                                paddingInline: "8px",
-                                backgroundColor:
-                                    playerName === player
-                                        ? Colors.Background.inverse
-                                        : Colors.Background.base,
-                                borderRadius: "2px",
-                                "& p": {
-                                    marginBlock: "4px",
-                                    color:
-                                        playerName === player
-                                            ? Colors.Text.inverse
-                                            : Colors.Text.base,
-                                },
-                            }}
-                        >
-                            <p>
-                                <span
-                                    css={{
-                                        color:
-                                            playerName === player &&
-                                            playerScore === score
-                                                ? Colors.Text.inverse
-                                                : Colors.Text.subtle,
-                                    }}
-                                >
-                                    {idx + 1}
-                                </span>
-                                . {player}
-                            </p>
-                            <p>{formatMoney(score)}</p>
-                        </div>
-                    ))}
-            </div>
-
-            <div
-                css={{
-                    blockSize: "70px",
-                    inlineSize: `${inlineSize}px`,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: Colors.Background.base,
-                    borderRadius: "4px",
-                    zIndex: 100,
-                }}
-            ></div>
-        </div>
+        <ScreenTemplate
+            title={"Game Over"}
+            subtitle={
+                playerScore > 0
+                    ? `Well played, ${playerName}`
+                    : "Terrible, just terrible"
+            }
+            content={playerScore > 0 ? winnerContent : deadbeatContent}
+            buttonLabel={"Start Over"}
+            isLoading={isLoading}
+            clickCB={handleStartOverClick}
+        />
     );
 };
