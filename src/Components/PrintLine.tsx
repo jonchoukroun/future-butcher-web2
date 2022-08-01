@@ -6,6 +6,7 @@ import * as Colors from "../Styles/colors";
 
 export const enum LineSize {
     Body,
+    Notification,
     Title,
 }
 type LineSizeType = typeof LineSize[keyof typeof LineSize];
@@ -42,11 +43,12 @@ export function PrintLine({
         <div
             css={{
                 display: "flex",
-                alignItems: size === LineSize.Title ? "center" : "flex-start",
+                alignItems: size === LineSize.Body ? "flex-start" : "center",
                 marginBlockEnd,
             }}
         >
             <Prompt
+                symbol={size === LineSize.Notification ? "<!>" : ">"}
                 color={promptColor}
                 hidden={promptScheme === PromptScheme.Hidden}
             />
@@ -71,6 +73,9 @@ function buildNode(size: LineSizeType, text: string, color: string) {
                     {text}
                 </h1>
             );
+
+        case LineSize.Notification:
+            return <h3 css={{ color, marginBlock: 0 }}>{text}</h3>;
 
         case LineSize.Body:
             return <h4 css={{ color, marginBlock: 0 }}>{text}</h4>;
