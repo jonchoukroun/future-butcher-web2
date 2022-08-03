@@ -3,6 +3,7 @@ import * as React from "react";
 
 import { buyCut } from "./buyCut";
 import { buyPack } from "./buyPack";
+import { buyWeapon } from "./buyWeapon";
 import { endGame } from "./endGame";
 import { fightMugger } from "./fightMugger";
 import { getScores } from "./getScores";
@@ -11,11 +12,10 @@ import { newGame } from "./newGame";
 import { payDebt } from "./payDebt";
 import { replaceWeapon } from "./replaceWeapon";
 import { restoreState } from "./restoreState";
+import { sellCut } from "./sellCut";
 import { startGame } from "./startGame";
 import { travel } from "./travel";
-import { sellCut } from "./sellCut";
-import { handleMessage, MessageLevel } from "../Logging/handleMessage";
-import { buyWeapon } from "./buyWeapon";
+import { useAlertService } from "../AlertService/AlertServiceProvider";
 import {
     ApiErrorType,
     ApiStateType,
@@ -24,6 +24,7 @@ import {
     PackType,
     WeaponType,
 } from "../GameData";
+import { handleMessage, MessageLevel } from "../Logging/handleMessage";
 
 const { createContext, useCallback, useContext, useMemo, useEffect, useState } =
     React;
@@ -72,6 +73,8 @@ export const ChannelProvider = ({
 }) => {
     const apiUrl = process.env.API_URL;
     if (!apiUrl) throw new Error("API URL is not defined");
+
+    const { pushAlert } = useAlertService();
 
     const [socket] = useState<Socket>(new Socket(apiUrl, {}));
     const [isConnected, setIsConnected] = useState(false);
@@ -133,6 +136,14 @@ export const ChannelProvider = ({
             switch (callback) {
                 case "startGame":
                     response = startGame(channel);
+                    pushAlert({
+                        text: START_GAME_ALERT_1,
+                        isPersistent: true,
+                    });
+                    pushAlert({
+                        text: START_GAME_ALERT_2,
+                        isPersistent: true,
+                    });
                     break;
 
                 case "restoreState":
@@ -204,7 +215,7 @@ export const ChannelProvider = ({
             console.log("!!handleCallback", callback, x);
             return x;
         },
-        [channel],
+        [channel, pushAlert],
     );
 
     const handleEndGame = useCallback(
@@ -259,3 +270,9 @@ export function useChannel() {
 
     return context;
 }
+
+const START_GAME_ALERT_1 =
+    "You hit the Meat Market in Compton. Prices are usually lower here, especially for Ribs.";
+
+const START_GAME_ALERT_2 =
+    "Keep an eye on the clock up top. It's 5:00am now, and you only have 24 hours.";

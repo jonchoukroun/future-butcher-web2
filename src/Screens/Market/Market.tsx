@@ -1,15 +1,38 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { CutList } from "./CutList";
 import { MarketModal, TransactionType } from "./MarketModal";
+import { useAlertService } from "../../AlertService/AlertServiceProvider";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
+import { SurgeMinimums } from "../../Fixtures/store";
+import { CutType } from "../../GameData";
+import { useGameState } from "../../GameData/GameStateProvider";
 
 import * as Colors from "../../Styles/colors";
-import { CutType } from "../../GameData";
 
 export const Market = () => {
+    const {
+        state: { market },
+    } = useGameState();
+    if (market === undefined) {
+        throw new Error("State is undefined");
+    }
+
+    const { pushAlert } = useAlertService();
+    // FIXME: this should only run once, per turn
+    useEffect(() => {
+        market.forEach((cut) => {
+            if (cut.price > SurgeMinimums[cut.name]) {
+                pushAlert({
+                    text: `${cut.name} prices are through the roof! Hope you have some to sell.`,
+                    isPersistent: true,
+                });
+            }
+        });
+    }, []);
+
     const [modalState, setModalState] = useState<{
         cut: CutType;
         transaction: TransactionType;
