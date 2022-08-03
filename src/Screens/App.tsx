@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { Global, css, jsx } from "@emotion/react";
 
+import { AlertServiceProvider } from "../AlertService/AlertServiceProvider";
 import { Window } from "../Components/Window/Window";
 import { WindowSizeProvider } from "../Components/Window/WindowSizeProvider";
 import { ChannelProvider } from "../PhoenixChannel/ChannelProvider";
@@ -10,12 +11,14 @@ import * as Colors from "../Styles/colors";
 export const App = () => {
     return (
         <WindowSizeProvider>
-            <ChannelProvider>
-                <GameStateProvider>
-                    <Global styles={GlobalStyles} />
-                    <Window />
-                </GameStateProvider>
-            </ChannelProvider>
+            <AlertServiceProvider>
+                <ChannelProvider>
+                    <GameStateProvider>
+                        <Global styles={GlobalStyles} />
+                        <Window />
+                    </GameStateProvider>
+                </ChannelProvider>
+            </AlertServiceProvider>
         </WindowSizeProvider>
     );
 };

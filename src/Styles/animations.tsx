@@ -14,3 +14,8 @@ export const blink = keyframes`
 export const backgroundBlink = keyframes`
     50% { background-color: ${Colors.Background.base}}
 `;
+
+export const fadeOut = keyframes`
+    from {opacity: 1; }
+    to { opacity: 0; }
+`;
