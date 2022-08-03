@@ -3,10 +3,12 @@ import { jsx } from "@emotion/react";
 
 import { Stations } from "./Stations";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
+
 import * as Colors from "../../Styles/colors";
 
 export const Subway = () => {
     const { heightAdjustment, layout } = useWindowSize();
+
     return (
         <div
             css={{

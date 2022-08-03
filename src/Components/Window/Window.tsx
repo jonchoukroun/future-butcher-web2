@@ -1,6 +1,9 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
+import { GameScreen } from "./GameScreen";
+import { useWindowSize } from "./WindowSizeProvider";
+import { useGameState } from "../../GameData/GameStateProvider";
 import { EndGame } from "../../Screens/EndGame/EndGame";
 import { ErrorScreen } from "../../Screens/ErrorScreen/ErrorScreen";
 import { HighScores } from "../../Screens/HighScores/HighScores";
@@ -11,9 +14,7 @@ import { StatsScreen } from "../../Screens/Stats/StatsScreen";
 import { Subway } from "../../Screens/Subway/Subway";
 import { SurplusStore } from "../../Screens/SurplusStore/SurplusStore";
 import { Welcome } from "../../Screens/Welcome/Welcome";
-import { GameScreen } from "./GameScreen";
-import { useWindowSize } from "./WindowSizeProvider";
-import { useGameState } from "../../GameData/GameStateProvider";
+
 import * as Colors from "../../Styles/colors";
 
 export const Window = () => {
