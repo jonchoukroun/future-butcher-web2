@@ -58,7 +58,7 @@ export function Alert({ queueKey, alert }: AlertProps) {
             }}
             onClick={handleClick}
         >
-            <PrintLine text={alert.text} size={LineSize.Notification} />
+            <PrintLine text={alert.text} size={LineSize.Body} />
 
             {alert.isPersistent && (
                 <div
