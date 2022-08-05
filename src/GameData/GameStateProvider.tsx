@@ -104,6 +104,8 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
             }
 
             if (response === "alreadyStarted" && playerName) {
+                if (state && state.currentProcess === "in_game") return;
+
                 const lastState = await handlePushCallback("restoreState", {});
                 if (lastState === undefined) {
                     dispatch({ type: "changeScreen", screen: Screen.Error });
@@ -142,7 +144,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
             }
         };
         if (didJoinChannel) initGame();
-    }, [didJoinChannel, handleInitGame, handlePushCallback, playerName]);
+    }, [didJoinChannel, handleInitGame, handlePushCallback, playerName, state]);
 
     const value = { state, dispatch };
 
