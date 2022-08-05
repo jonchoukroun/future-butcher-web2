@@ -22,7 +22,7 @@ export const HighScores = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const playerName = player.playerName || localStorage.getItem("playerName");
-    const playerScore = parseInt(localStorage.getItem("playerScore") || "0");
+    const playerScore = Math.max(player.funds - player.debt, 0);
 
     const handleStartOverClick = async () => {
         setIsLoading(true);
@@ -52,7 +52,7 @@ export const HighScores = () => {
             subtitle={
                 playerScore > 0
                     ? `Well played, ${playerName}`
-                    : "Terrible, just terrible"
+                    : "That was pathetic"
             }
             content={playerScore > 0 ? winnerContent : deadbeatContent}
             buttonLabel={"Start Over"}
