@@ -1,5 +1,4 @@
 import * as React from "react";
-import { unstable_batchedUpdates } from "react-dom";
 
 import {
     ApiStateType,
@@ -7,7 +6,7 @@ import {
     HighScoresType,
     Screen,
     ScreenType,
-} from ".";
+} from "./";
 import { serializeMarket, serializeStore } from "./Serializers";
 import { isApiError } from "./State";
 import { muggerNames } from "../Fixtures/mugging";
@@ -105,6 +104,8 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
             }
 
             if (response === "alreadyStarted" && playerName) {
+                if (state && state.currentProcess === "in_game") return;
+
                 const lastState = await handlePushCallback("restoreState", {});
                 if (lastState === undefined) {
                     dispatch({ type: "changeScreen", screen: Screen.Error });
@@ -116,37 +117,26 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                     return lastState;
                 }
 
+                dispatch({ type: "updateStateData", stateData: lastState });
+
                 if (lastState.rules.state === "initialized") {
                     dispatch({ type: "changeScreen", screen: Screen.Welcome });
                     return;
                 }
                 if (lastState.rules.state === "in_game") {
-                    unstable_batchedUpdates(() => {
-                        dispatch({
-                            type: "updateStateData",
-                            stateData: lastState,
-                        });
-                        dispatch({
-                            type: "changeScreen",
-                            screen:
-                                lastState.station.station_name ===
-                                "bell_gardens"
-                                    ? Screen.Store
-                                    : Screen.Market,
-                        });
+                    dispatch({
+                        type: "changeScreen",
+                        screen:
+                            lastState.station.station_name === "bell_gardens"
+                                ? Screen.Store
+                                : Screen.Market,
                     });
                     return;
                 }
                 if (lastState.rules.state === "mugging") {
-                    unstable_batchedUpdates(() => {
-                        dispatch({
-                            type: "updateStateData",
-                            stateData: lastState,
-                        });
-                        dispatch({
-                            type: "changeScreen",
-                            screen: Screen.Mugging,
-                        });
+                    dispatch({
+                        type: "changeScreen",
+                        screen: Screen.Mugging,
                     });
                 }
             } else {
@@ -154,7 +144,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
             }
         };
         if (didJoinChannel) initGame();
-    }, [didJoinChannel, handleInitGame, handlePushCallback, playerName]);
+    }, [didJoinChannel, handleInitGame, handlePushCallback, playerName, state]);
 
     const value = { state, dispatch };
 

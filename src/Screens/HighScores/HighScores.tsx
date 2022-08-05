@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 import { useState } from "react";
-import { unstable_batchedUpdates } from "react-dom";
 
 import { ScreenTemplate } from "../../Components";
 import { Screen } from "../../GameData";
@@ -29,10 +28,8 @@ export const HighScores = () => {
         setIsLoading(true);
         await handleInitGame();
 
-        unstable_batchedUpdates(() => {
-            dispatch({ type: "changeScreen", screen: Screen.Welcome });
-            setIsLoading(false);
-        });
+        dispatch({ type: "changeScreen", screen: Screen.Welcome });
+        setIsLoading(false);
     };
 
     const deadbeatContent = [

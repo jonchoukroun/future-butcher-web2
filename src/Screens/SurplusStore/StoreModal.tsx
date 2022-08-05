@@ -32,7 +32,6 @@ import { formatMoney } from "../../Utils/formatMoney";
 import * as Colors from "../../Styles/colors";
 import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
 import { ApiErrorType, ApiStateType, isApiError } from "../../GameData/State";
-import { unstable_batchedUpdates } from "react-dom";
 
 interface StoreModalProps {
     listing: PackListing | WeaponListing;
@@ -157,16 +156,14 @@ export function StoreModal({ listing, onModalClose }: StoreModalProps) {
         } else if (response === undefined) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
         } else {
-            unstable_batchedUpdates(() => {
-                setSuccessMessage(
-                    `Successfully ${
-                        !isPackListing && player.weapon ? "replaced" : "bought"
-                    } the ${itemDetails.displayName}.`,
-                );
-                dispatch({
-                    type: "updateStateData",
-                    stateData: response as ApiStateType,
-                });
+            setSuccessMessage(
+                `Successfully ${
+                    !isPackListing && player.weapon ? "replaced" : "bought"
+                } the ${itemDetails.displayName}.`,
+            );
+            dispatch({
+                type: "updateStateData",
+                stateData: response as ApiStateType,
             });
         }
     };

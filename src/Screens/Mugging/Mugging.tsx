@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 import { useRef, useState } from "react";
-import { unstable_batchedUpdates } from "react-dom";
 
 import { MuggingDefeat } from "./MuggingDefeat";
 import { MuggingVictory } from "./MuggingVictory";
@@ -49,19 +48,17 @@ export const Mugging = () => {
             return;
         }
         dispatch({ type: "updateStateData", stateData: response });
-        unstable_batchedUpdates(() => {
-            const outcome =
-                initialTurnsLeft.current > response.rules.turns_left
-                    ? "defeat"
-                    : "victory";
+        const outcome =
+            initialTurnsLeft.current > response.rules.turns_left
+                ? "defeat"
+                : "victory";
 
-            // If the mugger is defeated, remove him from the list
-            if (outcome === "victory") {
-                dispatch({ type: "killMugger" });
-            }
-            setMuggingState(outcome);
-            setIsLoading(false);
-        });
+        // If the mugger is defeated, remove him from the list
+        if (outcome === "victory") {
+            dispatch({ type: "killMugger" });
+        }
+        setMuggingState(outcome);
+        setIsLoading(false);
     };
 
     if (muggingState === "defeat") {

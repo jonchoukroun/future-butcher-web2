@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 import { useState } from "react";
-import { unstable_batchedUpdates } from "react-dom";
 
 import { ScreenTemplate } from "../../Components/ScreenTemplate";
 import { Screen } from "../../GameData";
@@ -40,11 +39,9 @@ export const Welcome = () => {
             return;
         }
 
-        unstable_batchedUpdates(() => {
-            dispatch({ type: "updateStateData", stateData: response });
-            dispatch({ type: "changeScreen", screen: Screen.Market });
-            setIsLoading(false);
-        });
+        dispatch({ type: "updateStateData", stateData: response });
+        dispatch({ type: "changeScreen", screen: Screen.Market });
+        setIsLoading(false);
     };
 
     return (
