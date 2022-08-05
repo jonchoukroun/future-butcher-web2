@@ -66,6 +66,7 @@ export type GameStateType = {
     player?: PlayerType;
     store?: StoreListing;
     turnsLeft?: number;
+    hasUnseenAlerts?: boolean;
 };
 
 export const enum Screen {

@@ -1,12 +1,12 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 import { CutList } from "./CutList";
 import { MarketModal, TransactionType } from "./MarketModal";
 import { useAlertService } from "../../AlertService/AlertServiceProvider";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
-import { SurgeMinimums } from "../../Fixtures/store";
+import { CutSurge } from "../../Fixtures/store";
 import { CutType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 
@@ -14,24 +14,35 @@ import * as Colors from "../../Styles/colors";
 
 export const Market = () => {
     const {
-        state: { market },
+        dispatch,
+        state: { market, hasUnseenAlerts },
     } = useGameState();
     if (market === undefined) {
         throw new Error("State is undefined");
     }
 
     const { pushAlert } = useAlertService();
-    // FIXME: this should only run once, per turn
-    useEffect(() => {
+
+    const didRenderAlertsRef = useRef(false);
+
+    useLayoutEffect(() => {
+        if (!hasUnseenAlerts || didRenderAlertsRef.current) return;
+
         market.forEach((cut) => {
-            if (cut.price > SurgeMinimums[cut.name]) {
+            const surge = CutSurge[cut.name];
+            if (cut.price > surge.price) {
                 pushAlert({
-                    text: `${cut.name} prices are through the roof! Hope you have some to sell.`,
+                    text: surge.messages[
+                        Math.floor(Math.random() * surge.messages.length)
+                    ],
                     isPersistent: true,
                 });
+                dispatch({ type: "setUnseenAlerts" });
+                didRenderAlertsRef.current = true;
             }
         });
-    }, []);
+        dispatch({ type: "clearAlerts" });
+    }, [dispatch, hasUnseenAlerts, market, pushAlert]);
 
     const [modalState, setModalState] = useState<{
         cut: CutType;

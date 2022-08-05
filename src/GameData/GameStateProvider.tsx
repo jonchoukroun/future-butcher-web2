@@ -18,7 +18,9 @@ type Action =
     | { type: "updateStateData"; stateData: ApiStateType }
     | { type: "setHighScores"; highScores: HighScoresType }
     | { type: "shuffleMuggers" }
-    | { type: "killMugger" };
+    | { type: "killMugger" }
+    | { type: "setUnseenAlerts" }
+    | { type: "clearAlerts" };
 
 const GameStateContext = React.createContext<
     { state: GameStateType; dispatch: (action: Action) => void } | undefined
@@ -47,6 +49,12 @@ function gameStateReducer(state: GameStateType, action: Action) {
             }
             state.muggers.shift();
             return state;
+
+        case "setUnseenAlerts":
+            return { ...state, hasUnseenAlerts: true };
+
+        case "clearAlerts":
+            return { ...state, hasUnseenAlerts: false };
 
         default:
             throw new Error("Invalid action type");
@@ -203,6 +211,7 @@ function handleUpdateState(
         },
         store: store ? serializeStore(store) : undefined,
         turnsLeft: turns_left,
+        hasUnseenAlerts: true,
     };
 }
 
