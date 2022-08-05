@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 import { useState } from "react";
-import { unstable_batchedUpdates } from "react-dom";
 
 import { Prompt } from "../../Components";
 import { StationDetails } from "../../Fixtures/subwayStations";
@@ -38,8 +37,6 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
             destination: stationKey,
         });
 
-        dispatch({ type: "clearSurgeAlertsShown" });
-
         // TODO: API error handling
         if (stateData === undefined || isApiError(stateData)) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
@@ -52,11 +49,9 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
                 : stateData.station.station_name === "bell_gardens"
                 ? Screen.Store
                 : Screen.Market;
-        unstable_batchedUpdates(() => {
-            dispatch({ type: "updateStateData", stateData });
-            dispatch({ type: "changeScreen", screen });
-            setIsLoading(false);
-        });
+        dispatch({ type: "updateStateData", stateData });
+        dispatch({ type: "changeScreen", screen });
+        setIsLoading(false);
     };
     const isCurrentStation = stationKey === currentStation;
     const isInRange = station.hours <= turnsLeft;

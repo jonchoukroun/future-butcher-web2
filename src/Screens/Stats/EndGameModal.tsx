@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 import { useEffect, useRef, useState } from "react";
-import { unstable_batchedUpdates } from "react-dom";
 
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { Screen } from "../../GameData";
@@ -48,10 +47,8 @@ export const EndGameModal = ({
             return;
         }
 
-        unstable_batchedUpdates(() => {
-            dispatch({ type: "setHighScores", highScores });
-            dispatch({ type: "changeScreen", screen: Screen.HighScores });
-        });
+        dispatch({ type: "setHighScores", highScores });
+        dispatch({ type: "changeScreen", screen: Screen.HighScores });
         if (isMountedRef.current) {
             setIsLoading(false);
         }

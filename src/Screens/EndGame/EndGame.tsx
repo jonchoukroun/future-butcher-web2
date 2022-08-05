@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { unstable_batchedUpdates } from "react-dom";
 
 import { ScreenTemplate } from "../../Components";
 import { Screen } from "../../GameData";
@@ -62,10 +61,8 @@ export const EndGame = () => {
             return;
         }
 
-        unstable_batchedUpdates(() => {
-            dispatch({ type: "updateStateData", stateData: response });
-            setIsLoading(false);
-        });
+        dispatch({ type: "updateStateData", stateData: response });
+        setIsLoading(false);
     }, [debt, dispatch, funds, handlePushCallback, isLoading]);
 
     const handleRetireClick = useCallback(async () => {
@@ -90,42 +87,33 @@ export const EndGame = () => {
         if (score > 0) {
             localStorage.setItem("playerScore", score.toString());
         }
-        unstable_batchedUpdates(() => {
-            dispatch({ type: "setHighScores", highScores });
-            dispatch({ type: "changeScreen", screen: Screen.HighScores });
-        });
+        dispatch({ type: "setHighScores", highScores });
+        dispatch({ type: "changeScreen", screen: Screen.HighScores });
     }, [dispatch, handleEndGame, isLoading, player.funds]);
 
     useEffect(() => {
         if (!contentRef.current) return;
 
         if (hasCuts) {
-            unstable_batchedUpdates(() => {
-                contentRef.current.push(...HAS_CUTS_CONTENT);
-                setButtonLabel(HAS_CUTS_BUTTON_LABEL);
-                setButtonCB(() => handleVisitMarketClick);
-            });
+            contentRef.current.push(...HAS_CUTS_CONTENT);
+            setButtonLabel(HAS_CUTS_BUTTON_LABEL);
+            setButtonCB(() => handleVisitMarketClick);
         } else if (debt && debt > 0) {
-            unstable_batchedUpdates(() => {
-                contentRef.current.push(
-                    ...HAS_DEBT_CONTENT,
-                    ...(funds >= debt ? CAN_PAY_DEBT_CONTENT : []),
-                );
-                setButtonLabel(
-                    funds >= debt
-                        ? CAN_PAY_DEBT_BUTTON_LABEL
-                        : HAS_UNPAYABL_DEBT_BUTTON_LABEL,
-                );
-                const cb =
-                    funds >= debt ? handlePayDebtClick : handleRetireClick;
-                setButtonCB(() => cb);
-            });
+            contentRef.current.push(
+                ...HAS_DEBT_CONTENT,
+                ...(funds >= debt ? CAN_PAY_DEBT_CONTENT : []),
+            );
+            setButtonLabel(
+                funds >= debt
+                    ? CAN_PAY_DEBT_BUTTON_LABEL
+                    : HAS_UNPAYABL_DEBT_BUTTON_LABEL,
+            );
+            const cb = funds >= debt ? handlePayDebtClick : handleRetireClick;
+            setButtonCB(() => cb);
         } else {
-            unstable_batchedUpdates(() => {
-                contentRef.current.push(...NO_LOOSE_ENDS_CONTENT);
-                setButtonLabel(DEFAULT_BUTTON_LABEL);
-                setButtonCB(() => handleRetireClick);
-            });
+            contentRef.current.push(...NO_LOOSE_ENDS_CONTENT);
+            setButtonLabel(DEFAULT_BUTTON_LABEL);
+            setButtonCB(() => handleRetireClick);
         }
     }, [
         debt,

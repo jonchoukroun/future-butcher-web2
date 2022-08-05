@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/react";
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
-import { unstable_batchedUpdates } from "react-dom";
 
 import { useAlertService } from "../../AlertService/AlertServiceProvider";
 import {
@@ -70,10 +69,8 @@ export const MarketModal = ({
     const [isLoading, setIsLoading] = useState<"custom" | "max">();
 
     const handleMaxClick = () => {
-        unstable_batchedUpdates(() => {
-            setErrorMessage(undefined);
-            setInputValue(undefined);
-        });
+        setErrorMessage(undefined);
+        setInputValue(undefined);
 
         handleSubmit(maxTransact, true);
     };
@@ -93,48 +90,40 @@ export const MarketModal = ({
 
         if (transaction === "buy") {
             if (inputValue > maxAfford) {
-                unstable_batchedUpdates(() => {
-                    setErrorMessage(
-                        `Too expensive. You can only afford ${maxAfford} ${pluralize(
-                            maxAfford,
-                        )} of ${cut}. Try the Max button.`,
-                    );
-                    setIsAmountValid(false);
-                });
+                setErrorMessage(
+                    `Too expensive. You can only afford ${maxAfford} ${pluralize(
+                        maxAfford,
+                    )} of ${cut}. Try the Max button.`,
+                );
+                setIsAmountValid(false);
                 return;
             }
             if (inputValue > spaceAvailable) {
-                unstable_batchedUpdates(() => {
-                    setErrorMessage(
-                        `Not enough room. You can only carry ${spaceAvailable} more ${pluralize(
-                            spaceAvailable,
-                        )}.`,
-                    );
-                    setIsAmountValid(false);
-                });
+                setErrorMessage(
+                    `Not enough room. You can only carry ${spaceAvailable} more ${pluralize(
+                        spaceAvailable,
+                    )}.`,
+                );
+                setIsAmountValid(false);
                 return;
             }
             if (inputValue > stock) {
-                unstable_batchedUpdates(() => {
-                    setErrorMessage(
-                        `Not enough ${cut} in stock. Only ${stock} ${pluralize(
-                            stock,
-                        )} available.`,
-                    );
-                    setIsAmountValid(false);
-                });
+                setErrorMessage(
+                    `Not enough ${cut} in stock. Only ${stock} ${pluralize(
+                        stock,
+                    )} available.`,
+                );
+                setIsAmountValid(false);
                 return;
             }
         } else {
             if (inputValue > pack[cut]) {
-                unstable_batchedUpdates(() => {
-                    setErrorMessage(
-                        `You only have ${stock} ${pluralize(
-                            stock,
-                        )}. Try the Max button.`,
-                    );
-                    setIsAmountValid(false);
-                });
+                setErrorMessage(
+                    `You only have ${stock} ${pluralize(
+                        stock,
+                    )}. Try the Max button.`,
+                );
+                setIsAmountValid(false);
                 return;
             }
         }
@@ -158,18 +147,16 @@ export const MarketModal = ({
                 dispatch({ type: "changeScreen", screen: Screen.Error });
                 return;
             }
-            unstable_batchedUpdates(() => {
-                setInputValue(undefined);
-                setIsLoading(undefined);
-                pushAlert({
-                    text: `Successfully bought ${amount} ${pluralize(
-                        amount,
-                    )} of ${cut}.`,
-                    isPersistent: false,
-                });
-                dispatch({ type: "updateStateData", stateData: response });
-                onModalClose();
+            setInputValue(undefined);
+            setIsLoading(undefined);
+            pushAlert({
+                text: `Successfully bought ${amount} ${pluralize(
+                    amount,
+                )} of ${cut}.`,
+                isPersistent: false,
             });
+            dispatch({ type: "updateStateData", stateData: response });
+            onModalClose();
         } else {
             const response = await handlePushCallback("sellCut", {
                 cut,
@@ -180,18 +167,16 @@ export const MarketModal = ({
                 dispatch({ type: "changeScreen", screen: Screen.Error });
                 return;
             }
-            unstable_batchedUpdates(() => {
-                setInputValue(undefined);
-                setIsLoading(undefined);
-                pushAlert({
-                    text: `Successfully sold ${amount} ${pluralize(
-                        amount,
-                    )} of ${cut}.`,
-                    isPersistent: false,
-                });
-                dispatch({ type: "updateStateData", stateData: response });
-                onModalClose();
+            setInputValue(undefined);
+            setIsLoading(undefined);
+            pushAlert({
+                text: `Successfully sold ${amount} ${pluralize(
+                    amount,
+                )} of ${cut}.`,
+                isPersistent: false,
             });
+            dispatch({ type: "updateStateData", stateData: response });
+            onModalClose();
         }
     };
 
