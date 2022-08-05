@@ -38,6 +38,8 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
             destination: stationKey,
         });
 
+        dispatch({ type: "clearSurgeAlertsShown" });
+
         // TODO: API error handling
         if (stateData === undefined || isApiError(stateData)) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
