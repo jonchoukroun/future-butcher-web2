@@ -33,7 +33,6 @@ export function Alert({ queueKey, alert }: AlertProps) {
         }, ALERT_DURATION + FADE_OUT_DURATION - 100);
 
         return () => {
-            console.log("!!clear intervals");
             clearInterval(fadeInterval);
             clearInterval(closeInterval);
         };
