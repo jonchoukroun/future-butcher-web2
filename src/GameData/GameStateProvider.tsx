@@ -95,7 +95,10 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
         if (isConnected) handleJoin();
     }, [handleJoinChannel, isConnected, playerHash, playerName]);
 
+    const isInGameRef = React.useRef(false);
     useEffect(() => {
+        if (isInGameRef.current) return;
+
         const initGame = async () => {
             const response = await handleInitGame();
             if (response === undefined) {
@@ -104,8 +107,6 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
             }
 
             if (response === "alreadyStarted" && playerName) {
-                if (state && state.currentProcess === "in_game") return;
-
                 const lastState = await handlePushCallback("restoreState", {});
                 if (lastState === undefined) {
                     dispatch({ type: "changeScreen", screen: Screen.Error });
@@ -117,13 +118,13 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                     return lastState;
                 }
 
-                dispatch({ type: "updateStateData", stateData: lastState });
-
                 if (lastState.rules.state === "initialized") {
                     dispatch({ type: "changeScreen", screen: Screen.Welcome });
                     return;
                 }
                 if (lastState.rules.state === "in_game") {
+                    isInGameRef.current = true;
+                    dispatch({ type: "updateStateData", stateData: lastState });
                     dispatch({
                         type: "changeScreen",
                         screen:
@@ -134,6 +135,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                     return;
                 }
                 if (lastState.rules.state === "mugging") {
+                    dispatch({ type: "updateStateData", stateData: lastState });
                     dispatch({
                         type: "changeScreen",
                         screen: Screen.Mugging,
@@ -144,7 +146,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
             }
         };
         if (didJoinChannel) initGame();
-    }, [didJoinChannel, handleInitGame, handlePushCallback, playerName, state]);
+    }, [didJoinChannel, handleInitGame, handlePushCallback, playerName]);
 
     const value = { state, dispatch };
 
