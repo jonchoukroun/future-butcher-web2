@@ -9,41 +9,41 @@ import {
     ScreenTemplate,
 } from "../../Components";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
-import { HighScoresType, PlayerType, Screen } from "../../GameData";
+import { HighScoresType, Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { formatMoney } from "../../Utils/formatMoney";
 
 import * as Colors from "../../Styles/colors";
 import { LineSize, PromptScheme } from "../../Components/PrintLine";
-import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
+
+type DisplayScoreType = {
+    rank: number;
+    name: string;
+    score: number;
+};
 
 export const GameResult = () => {
-    const { dispatch } = useGameState();
+    const {
+        dispatch,
+        state: { player },
+    } = useGameState();
 
-    const player: PlayerType = {
-        debt: 0,
-        // debt: 1000,
-        // funds: 97485,
-        funds: 73600,
-        // funds: 1000,
-        health: 100,
-        playerName: "Boris",
-        pack: { brains: 0, flank: 0, liver: 0, ribs: 0, heart: 0 },
-        totalPackSpace: 20,
-        weapon: null,
-    };
-
-    // if (player === undefined) {
-    //     throw new Error("State is undefined");
-    // }
+    if (player === undefined) {
+        throw new Error("State is undefined");
+    }
 
     const { handleGetScores, handleInitGame } = useChannel();
 
-    const [topScores, setTopScores] = useState<HighScoresType>();
+    const [topScores, setTopScores] = useState<DisplayScoreType[]>();
     const [isLoading, setIsLoading] = useState(false);
 
     const didRequestScoresRef = useRef(false);
+    const lowestScoreRef = useRef<number>();
+
+    const playerName = localStorage.getItem("playerName") ?? "Blondie";
+
+    const { debt, funds } = player;
 
     useEffect(() => {
         if (topScores || didRequestScoresRef.current) return;
@@ -58,16 +58,56 @@ export const GameResult = () => {
                 });
             }
 
-            setTopScores(response as HighScoresType);
+            const highScores = response as HighScoresType;
+            lowestScoreRef.current = Math.min(highScores.length - 1, 99);
+            let displayScores: DisplayScoreType[];
+
+            const playerIndex = highScores.findIndex(
+                ({ player, score }) => player === playerName && score === funds,
+            );
+            if (playerIndex < 5) {
+                displayScores = highScores
+                    .slice(0, 5)
+                    .map(({ player, score }, idx) => ({
+                        rank: idx + 1,
+                        name: player,
+                        score,
+                    }));
+            } else {
+                const startingIndex = playerIndex - 1;
+                displayScores = highScores
+                    .slice(startingIndex, startingIndex + 4)
+                    .map(({ player, score }, idx) => ({
+                        rank: idx + startingIndex + 1,
+                        name: player,
+                        score,
+                    }));
+                if (playerIndex === lowestScoreRef.current) {
+                    const offset = lowestScoreRef.current - 2;
+                    displayScores.unshift({
+                        rank: offset + 1,
+                        name: highScores[offset].player,
+                        score: highScores[offset].score,
+                    });
+                }
+                displayScores.unshift({
+                    rank: 1,
+                    name: highScores[0].player,
+                    score: highScores[0].score,
+                });
+            }
+            setTopScores(displayScores);
         };
         getScores();
-    }, [dispatch, handleGetScores, topScores]);
-
-    const lowestScore = topScores
-        ? topScores[Math.min(topScores.length - 1, 99)].score
-        : undefined;
-
-    const { debt, funds } = player;
+    }, [
+        dispatch,
+        funds,
+        handleGetScores,
+        player.funds,
+        player.playerName,
+        playerName,
+        topScores,
+    ]);
 
     const handleStartOverClick = async () => {
         setIsLoading(true);
@@ -93,12 +133,12 @@ export const GameResult = () => {
         '"Don\'t waste my time, pendejo.," he says.',
         "You won't be escaping LA today. Better try again. This time, do better.",
     ];
-
+    console.log("!!", topScores, lowestScoreRef.current);
     return (
         <Fragment>
-            {topScores && lowestScore ? (
+            {topScores && lowestScoreRef.current ? (
                 <Fragment>
-                    {lowestScore >= funds ? (
+                    {lowestScoreRef.current >= funds ? (
                         <ScreenTemplate
                             title={loserTitle}
                             subtitle={loserSubtitle}
@@ -120,8 +160,11 @@ export const GameResult = () => {
                                 />
                             ) : (
                                 <WinnerScreen
-                                    topScores={topScores}
-                                    playerScore={funds}
+                                    displayScores={topScores}
+                                    playerScore={{
+                                        player: playerName,
+                                        score: funds,
+                                    }}
                                     isLoading={isLoading}
                                     onStartOverClick={handleStartOverClick}
                                 />
@@ -135,14 +178,14 @@ export const GameResult = () => {
 };
 
 interface WinnerScreenProps {
-    topScores: HighScoresType;
-    playerScore: number;
+    displayScores: DisplayScoreType[];
+    playerScore: { player: string; score: number };
     isLoading: boolean;
     onStartOverClick: () => void;
 }
 
 function WinnerScreen({
-    topScores,
+    displayScores,
     playerScore,
     isLoading,
     onStartOverClick,
@@ -150,29 +193,22 @@ function WinnerScreen({
     const { getContentSize } = useWindowSize();
     const { blockSize, inlineSize } = getContentSize();
 
-    const playerName = localStorage.getItem("playerName") || "Blondie";
-
-    console.log("!!topScores", topScores);
-    const playerScoreIndex = topScores.findIndex(
-        ({ score }) => score === playerScore,
+    const playerIndex = displayScores.findIndex(
+        ({ name, score }) =>
+            name === playerScore.player && score === playerScore.score,
     );
-    if (topScores[playerScoreIndex].player !== playerName) {
-        handleMessage(
-            "Player score index does not match player",
-            MessageLevel.Info,
-        );
-    }
-    const startingIndex = Math.max(0, playerScoreIndex - 2);
-    const displayScores = Array.from(
-        topScores.slice(startingIndex, startingIndex + 3),
-    );
-
-    const winnerTitle = playerScoreIndex === 0 ? "You Win!" : "Well Done";
-
-    const winnerContent = [
-        "The trip into Mexico is long but uneventful. You spend your cash on a beach casita and settle down.",
-        "But the pull of the meat game is strong...",
-    ];
+    const title = playerIndex === 0 ? "You Win!" : "Well Done";
+    const content =
+        playerIndex === 0
+            ? [
+                  "You arrive in Mexico a legend!",
+                  "Other meat hustlers who made it out line up to buy you cervezas, but you get bored quick.",
+                  "Despite the easy life, you feel the lure of the meat markets...",
+              ]
+            : [
+                  "The trip into Mexico is long but uneventful. You spend your cash on a beach casita and settle down.",
+                  "But the pull of the meat game is strong...",
+              ];
 
     return (
         <div
@@ -196,23 +232,79 @@ function WinnerScreen({
                 }}
             >
                 <PrintLine
-                    text={winnerTitle}
+                    text={title}
                     size={LineSize.Title}
                     promptScheme={PromptScheme.Hidden}
                 />
             </div>
 
             <div css={{ inlineSize: "100%", marginBlockStart: "auto" }}>
-                {displayScores.map(({ player, score }, idx) => (
-                    <div key={`displayScore-${idx}`} css={{ display: "flex" }}>
-                        <h4>
-                            {idx + 1}. {player}
-                        </h4>
-                        <h4 css={{ marginInlineStart: "auto" }}>
-                            {formatMoney(score)}
-                        </h4>
-                    </div>
+                {content.map((line, idx) => (
+                    <PrintLine
+                        key={`winner-content-${idx}`}
+                        text={line}
+                        size={LineSize.Body}
+                        promptScheme={PromptScheme.Past}
+                    />
                 ))}
+                {playerIndex !== 0 && (
+                    <PrintLine
+                        text={"How do you compare?"}
+                        size={LineSize.Body}
+                    />
+                )}
+
+                <ul
+                    css={{
+                        marginBlockStart: "50px",
+                        padding: 0,
+                        listStyleType: "none",
+                    }}
+                >
+                    {displayScores.map(({ rank, name, score }, idx) => (
+                        <Fragment key={`displayScore-${idx}`}>
+                            {idx > 0 && rank - displayScores[idx - 1].rank > 1 && (
+                                <li
+                                    css={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                    }}
+                                >
+                                    <h4 css={{ marginBlock: 0 }}>...</h4>
+                                </li>
+                            )}
+                            <li
+                                css={{
+                                    display: "flex",
+                                    paddingInline: "5px",
+                                    backgroundColor:
+                                        playerIndex === idx
+                                            ? Colors.Background.inverse
+                                            : Colors.Background.base,
+                                    "& h4": {
+                                        marginBlock: 0,
+                                        paddingBlock: "10px",
+                                        color:
+                                            playerIndex === idx
+                                                ? Colors.Text.inverse
+                                                : Colors.Text.base,
+                                    },
+                                }}
+                            >
+                                <h4>
+                                    {rank}. {name}
+                                </h4>
+                                <h4
+                                    css={{
+                                        marginInlineStart: "auto",
+                                    }}
+                                >
+                                    {formatMoney(score)}
+                                </h4>
+                            </li>
+                        </Fragment>
+                    ))}
+                </ul>
                 <div css={{ inlineSize: "100%", marginBlockStart: "20px" }}>
                     <ButtonPrompt
                         label={"Start Over"}
