@@ -23,10 +23,10 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
     } = useGameState();
     if (turnsLeft === undefined) throw new Error("State is undefined");
 
+    const { handlePushCallback } = useChannel();
+
     const station = StationDetails[stationKey];
     if (station === undefined) throw new Error("Cannot find station");
-
-    const { handlePushCallback } = useChannel();
 
     const [isLoading, setIsLoading] = useState(false);
     const handleTravel = async () => {

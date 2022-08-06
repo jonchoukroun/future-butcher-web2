@@ -133,7 +133,6 @@ export const GameResult = () => {
         '"Don\'t waste my time, pendejo.," he says.',
         "You won't be escaping LA today. Better try again. This time, do better.",
     ];
-    console.log("!!", topScores, lowestScoreRef.current);
     return (
         <Fragment>
             {topScores && lowestScoreRef.current ? (
