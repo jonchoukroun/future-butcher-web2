@@ -12,7 +12,7 @@ import { formatMoney } from "../../Utils/formatMoney";
 const WELCOME_TITLE = "Los Angeles";
 
 const INTRO_CONTENT = [
-    "The economy is in ruins after the completely unpredictable collapse of HypeCoin. It's time to leave town, but first you'll need cash.",
+    "The economy is in ruins after the totally unforseen collapse of HypeCoin. It's time to leave town, but first you'll need cash.",
     "Fortunately the rich and famous are nuts for the latest fad - fresh cuts of human meat!",
     "Two-bit hustlers like you have only one option: get rich off this new addiction before becoming the product.",
 ];
