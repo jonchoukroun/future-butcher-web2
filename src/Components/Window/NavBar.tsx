@@ -82,7 +82,7 @@ function getNextScreen(
 ) {
     if (process === "mugging") return Screen.Mugging;
 
-    if (turnsLeft === 0 && screen === "market") return Screen.EndGame;
+    if (turnsLeft === 0 && screen === "market") return Screen.LastTurn;
 
     if (station === "bell_gardens") {
         if (screen === "store") return Screen.Subway;

@@ -11,7 +11,7 @@ import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import * as Colors from "../../Styles/colors";
 import { Button, ButtonScheme } from "../../Components";
 
-export const EndGameModal = ({
+export const QuitGameModal = ({
     onCloseModal,
 }: {
     onCloseModal: () => void;
@@ -48,7 +48,7 @@ export const EndGameModal = ({
         }
 
         dispatch({ type: "setHighScores", highScores });
-        dispatch({ type: "changeScreen", screen: Screen.HighScores });
+        dispatch({ type: "changeScreen", screen: Screen.GameResult });
         if (isMountedRef.current) {
             setIsLoading(false);
         }

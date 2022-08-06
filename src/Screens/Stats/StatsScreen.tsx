@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/react";
 import { Fragment, useState } from "react";
 
-import { EndGameModal } from "./EndGameModal";
+import { QuitGameModal } from "./QuitGameModal";
 import { ButtonPrompt, ButtonPromptSize } from "../../Components/";
 import { LineSize, PrintLine, PromptScheme } from "../../Components/PrintLine";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
@@ -68,7 +68,7 @@ export const StatsScreen = () => {
         if (isLoading) return;
         if (!debt) {
             handleMessage(
-                "Tried to pay non-existent debt from EndGame",
+                "Tried to pay non-existent debt from StatsScreen",
                 MessageLevel.Error,
             );
             return;
@@ -248,7 +248,9 @@ export const StatsScreen = () => {
                     }}
                 />
             </div>
-            {isModalOpen && <EndGameModal onCloseModal={handleCancelEndGame} />}
+            {isModalOpen && (
+                <QuitGameModal onCloseModal={handleCancelEndGame} />
+            )}
         </div>
     );
 };

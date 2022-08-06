@@ -10,7 +10,7 @@ import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 import { getSpaceAvailable } from "../../Utils/spaceAvailable";
 
-export const EndGame = () => {
+export const LastTurn = () => {
     const {
         dispatch,
         state: { player },
@@ -19,18 +19,18 @@ export const EndGame = () => {
 
     const { handleEndGame, handlePushCallback } = useChannel();
 
-    const { debt, funds, pack, totalPackSpace } = player;
-
-    const spaceAvailable = getSpaceAvailable({ pack, totalPackSpace });
-    const hasCuts = spaceAvailable < totalPackSpace;
-
-    const contentRef = useRef(DEFAULT_CONTENT);
     const [buttonLabel, setButtonLabel] = useState(DEFAULT_BUTTON_LABEL);
-
     const [buttonCB, setButtonCB] = useState<() => void>(
         () => handleRetireClick,
     );
     const [isLoading, setIsLoading] = useState(false);
+
+    const contentRef = useRef(DEFAULT_CONTENT);
+
+    const { debt, funds, pack, totalPackSpace } = player;
+
+    const spaceAvailable = getSpaceAvailable({ pack, totalPackSpace });
+    const hasCuts = spaceAvailable < totalPackSpace;
 
     const handleVisitMarketClick = useCallback(() => {
         dispatch({ type: "changeScreen", screen: Screen.Market });
@@ -41,7 +41,7 @@ export const EndGame = () => {
 
         if (!debt) {
             handleMessage(
-                "Tried to pay non-existent debt from EndGame",
+                "Tried to pay non-existent debt from LastTurn screen",
                 MessageLevel.Error,
             );
             return;
@@ -84,11 +84,8 @@ export const EndGame = () => {
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
-        if (score > 0) {
-            localStorage.setItem("playerScore", score.toString());
-        }
         dispatch({ type: "setHighScores", highScores });
-        dispatch({ type: "changeScreen", screen: Screen.HighScores });
+        dispatch({ type: "changeScreen", screen: Screen.GameResult });
     }, [dispatch, handleEndGame, isLoading, player.funds]);
 
     useEffect(() => {

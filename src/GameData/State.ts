@@ -76,9 +76,9 @@ export const enum Screen {
     Market = "market",
     Stats = "stats",
     Store = "store",
-    HighScores = "highScores",
+    GameResult = "gameResult",
     Mugging = "mugging",
-    EndGame = "endGame",
+    LastTurn = "lastTurn",
     Error = "error",
 }
 export type ScreenType = `${Screen}`;

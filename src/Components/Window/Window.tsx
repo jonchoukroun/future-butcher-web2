@@ -4,9 +4,9 @@ import { jsx } from "@emotion/react";
 import { GameScreen } from "./GameScreen";
 import { useWindowSize } from "./WindowSizeProvider";
 import { useGameState } from "../../GameData/GameStateProvider";
-import { EndGame } from "../../Screens/EndGame/EndGame";
 import { ErrorScreen } from "../../Screens/ErrorScreen/ErrorScreen";
-import { HighScores } from "../../Screens/HighScores/HighScores";
+import { GameResult } from "../../Screens/GameResult/GameResult";
+import { LastTurn } from "../../Screens/LastTurn/LastTurn";
 import { Login } from "../../Screens/Login/Login";
 import { Market } from "../../Screens/Market/Market";
 import { Mugging } from "../../Screens/Mugging/Mugging";
@@ -75,9 +75,9 @@ export const Window = () => {
                     </GameScreen>
                 )}
 
-                {currentScreen === "endGame" && (
+                {currentScreen === "lastTurn" && (
                     <GameScreen layout={layout} shouldShowNavBar={false}>
-                        <EndGame />
+                        <LastTurn />
                     </GameScreen>
                 )}
 
@@ -87,7 +87,7 @@ export const Window = () => {
                     </GameScreen>
                 )}
 
-                {currentScreen === "highScores" && <HighScores />}
+                {currentScreen === "gameResult" && <GameResult />}
             </div>
         </div>
     );
