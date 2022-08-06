@@ -3,7 +3,7 @@ import { jsx } from "@emotion/react";
 import { useEffect, useState } from "react";
 
 import { AlertType, useAlertService } from "./AlertServiceProvider";
-import { Button, PrintLine } from "../Components";
+import { Button, ButtonScheme, ButtonSize, PrintLine } from "../Components";
 import { LineSize } from "../Components/PrintLine";
 
 import * as Animations from "../Styles/animations";
@@ -55,7 +55,9 @@ export function Alert({ queueKey, alert }: AlertProps) {
                     ? `${Animations.fadeOut} ${FADE_OUT_DURATION}ms ease`
                     : 0,
             }}
-            onClick={handleClick}
+            onClick={() => {
+                if (!alert.isPersistent) handleClick();
+            }}
         >
             <PrintLine text={alert.text} size={LineSize.Body} />
 
@@ -67,7 +69,12 @@ export function Alert({ queueKey, alert }: AlertProps) {
                         marginBlockStart: "10px",
                     }}
                 >
-                    <Button label={"Close"} clickCB={handleClick} />
+                    <Button
+                        label={"Close"}
+                        size={ButtonSize.Small}
+                        scheme={ButtonScheme.Inverse}
+                        clickCB={handleClick}
+                    />
                 </div>
             )}
         </div>
