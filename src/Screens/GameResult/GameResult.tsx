@@ -128,7 +128,7 @@ export const GameResult = () => {
     const loserTitle = "You Lose";
     const loserSubtitle = "Not quite there";
     const loserContent = [
-        `You try to pay the coyote your measley ${formatMoney(player.funds)}.`,
+        `You try to pay the coyote your measley ${formatMoney(funds)}.`,
         "He glares at you and brandishes a jewel encrusted meat cleaver.",
         '"Don\'t waste my time, pendejo.," he says.',
         "You won't be escaping LA today. Better try again. This time, do better.",
