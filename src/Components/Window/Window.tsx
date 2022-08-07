@@ -1,8 +1,10 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
+import { useEffect, useRef } from "react";
 
 import { GameScreen } from "./GameScreen";
 import { useWindowSize } from "./WindowSizeProvider";
+import { useAlertService } from "../../AlertService/AlertServiceProvider";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { ErrorScreen } from "../../Screens/ErrorScreen/ErrorScreen";
 import { GameResult } from "../../Screens/GameResult/GameResult";
@@ -16,13 +18,39 @@ import { SurplusStore } from "../../Screens/SurplusStore/SurplusStore";
 import { Welcome } from "../../Screens/Welcome/Welcome";
 
 import * as Colors from "../../Styles/colors";
+import { getTimeLeft } from "../../Utils/getTimeLeft";
 
 export const Window = () => {
     const { layout, windowSize } = useWindowSize();
 
+    const { pushAlert } = useAlertService();
+
     const {
-        state: { currentScreen },
+        state: { currentScreen, turnsLeft },
     } = useGameState();
+
+    const turnRef = useRef<number>();
+    const hasShownTravelAlertRef = useRef(false);
+    useEffect(() => {
+        if (turnRef.current && turnRef.current === turnsLeft) {
+            return;
+        }
+
+        turnRef.current = turnsLeft;
+        if (turnRef.current === undefined) return;
+        if (turnRef.current === 24) {
+            pushAlert({
+                text: MEAT_MARKET_ALERT,
+                isPersistent: true,
+            });
+        } else if (turnRef.current > 20 && !hasShownTravelAlertRef.current) {
+            pushAlert({
+                text: getTravelAlert(turnRef.current),
+                isPersistent: true,
+            });
+            hasShownTravelAlertRef.current = true;
+        }
+    }, [pushAlert, turnsLeft]);
 
     return (
         <div
@@ -92,3 +120,12 @@ export const Window = () => {
         </div>
     );
 };
+
+const MEAT_MARKET_ALERT =
+    "You hit the Meat Market in Compton. Prices are usually lower here, especially for Ribs.";
+
+function getTravelAlert(turnsLeft: number) {
+    return `Keep an eye on the clock up top. It's ${getTimeLeft(
+        turnsLeft,
+    )} now, and you only have 24 hours. And remember to pay off your debt. You can see it in the "INFO" screen.`;
+}
