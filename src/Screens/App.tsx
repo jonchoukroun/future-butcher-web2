@@ -10,16 +10,16 @@ import * as Colors from "../Styles/colors";
 
 export const App = () => {
     return (
-        <WindowSizeProvider>
-            <AlertServiceProvider>
-                <ChannelProvider>
+        <ChannelProvider>
+            <WindowSizeProvider>
+                <AlertServiceProvider>
                     <GameStateProvider>
                         <Global styles={GlobalStyles} />
                         <Window />
                     </GameStateProvider>
-                </ChannelProvider>
-            </AlertServiceProvider>
-        </WindowSizeProvider>
+                </AlertServiceProvider>
+            </WindowSizeProvider>
+        </ChannelProvider>
     );
 };
 

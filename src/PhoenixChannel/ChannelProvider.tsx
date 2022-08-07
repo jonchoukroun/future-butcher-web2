@@ -15,7 +15,6 @@ import { restoreState } from "./restoreState";
 import { sellCut } from "./sellCut";
 import { startGame } from "./startGame";
 import { travel } from "./travel";
-import { useAlertService } from "../AlertService/AlertServiceProvider";
 import {
     ApiErrorType,
     ApiStateType,
@@ -26,7 +25,7 @@ import {
 } from "../GameData";
 import { handleMessage, MessageLevel } from "../Logging/handleMessage";
 
-const { createContext, useCallback, useContext, useMemo, useEffect, useState } =
+const { createContext, useCallback, useContext, useEffect, useMemo, useState } =
     React;
 
 export type CallbackType =
@@ -61,7 +60,6 @@ const ChannelContext = createContext<
           ) => Promise<HighScoresType | undefined>;
           handleGetScores: () => Promise<HighScoresType | void>;
           isConnected: boolean;
-          isDisconnected: boolean;
       }
     | undefined
 >(undefined);
@@ -71,41 +69,46 @@ export const ChannelProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
+    console.log("!!ChannelProvider");
     const apiUrl = process.env.API_URL;
     if (!apiUrl) throw new Error("API URL is not defined");
 
-    const { pushAlert } = useAlertService();
-
     const [socket] = useState<Socket>(new Socket(apiUrl, {}));
-    const [isConnected, setIsConnected] = useState(false);
-    const [isDisconnected, setIsDisconnected] = useState(false);
+    const [isConnected, setIsConnected] = useState(socket.isConnected());
+    socket.onOpen(() => {
+        handleMessage("Successfully opened socket", MessageLevel.Success);
+        setIsConnected(socket.isConnected());
+    });
+    socket.onError(() => {
+        handleMessage("Failed to open socket", MessageLevel.Error);
+        setIsConnected(socket.isConnected());
+    });
+    socket.onClose(() => {
+        handleMessage("Closed socket", MessageLevel.Info);
+        setIsConnected(socket.isConnected());
+    });
 
     useEffect(() => {
-        if (socket.isConnected()) return;
+        if (socket.isConnected() || socket.connectionState() === "connecting")
+            return;
 
-        socket.onOpen(() => {
-            handleMessage("Successfully opened socket", MessageLevel.Success);
-            setIsConnected(true);
-        });
-        socket.onError(() => {
-            handleMessage("Failed to open socket", MessageLevel.Error);
-            setIsConnected(false);
-            setIsDisconnected(true);
-        });
-        socket.onClose(() => {
-            handleMessage("Closed socket", MessageLevel.Info);
-            setIsConnected(false);
-            setIsDisconnected(true);
-        });
         socket.connect();
-    }, [socket]);
+    }, [isConnected, socket]);
 
     const [channel, setChannel] = useState<Channel | undefined>(undefined);
 
-    const [didJoinChannel, setDidJoinChannel] = useState(false);
+    const [didJoinChannel, setDidJoinChannel] = useState(
+        channel === undefined ? false : channel.state === "joined",
+    );
     const handleJoinChannel = useCallback(
         async (playerName: string, playerHash?: string) => {
             if (socket === undefined || !socket.isConnected()) return;
+            if (
+                channel !== undefined &&
+                (channel.state === "joined" || channel.state === "joining")
+            ) {
+                return;
+            }
 
             const response = await joinChannel({
                 playerName,
@@ -120,7 +123,7 @@ export const ChannelProvider = ({
             if (response !== undefined) setDidJoinChannel(true);
             return response;
         },
-        [socket],
+        [channel, socket],
     );
 
     const handleInitGame = useCallback(async () => {
@@ -136,14 +139,6 @@ export const ChannelProvider = ({
             switch (callback) {
                 case "startGame":
                     response = startGame(channel);
-                    pushAlert({
-                        text: START_GAME_ALERT_1,
-                        isPersistent: true,
-                    });
-                    pushAlert({
-                        text: START_GAME_ALERT_2,
-                        isPersistent: true,
-                    });
                     break;
 
                 case "restoreState":
@@ -215,7 +210,7 @@ export const ChannelProvider = ({
             console.log("!!handleCallback", callback, x);
             return x;
         },
-        [channel, pushAlert],
+        [channel],
     );
 
     const handleEndGame = useCallback(
@@ -242,7 +237,6 @@ export const ChannelProvider = ({
             handleEndGame,
             handleGetScores,
             isConnected,
-            isDisconnected,
         }),
         [
             didJoinChannel,
@@ -252,7 +246,6 @@ export const ChannelProvider = ({
             handleEndGame,
             handleGetScores,
             isConnected,
-            isDisconnected,
         ],
     );
 
@@ -270,9 +263,3 @@ export function useChannel() {
 
     return context;
 }
-
-const START_GAME_ALERT_1 =
-    "You hit the Meat Market in Compton. Prices are usually lower here, especially for Ribs.";
-
-const START_GAME_ALERT_2 =
-    "Keep an eye on the clock up top. It's 5:00am now, and you only have 24 hours.";
