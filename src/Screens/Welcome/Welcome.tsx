@@ -122,7 +122,7 @@ export const Welcome = () => {
             {screen === WelcomeScreen.Instructions && (
                 <ScreenTemplate
                     title={WELCOME_TITLE}
-                    subtitle={"Compton, 5am"}
+                    subtitle={"Compton, 5:00 am"}
                     content={INSTRUCTIONS_CONTENT}
                     buttonLabel={"Next"}
                     isLoading={isLoading}
