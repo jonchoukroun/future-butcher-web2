@@ -89,8 +89,9 @@ export const ChannelProvider = ({
     });
 
     useEffect(() => {
-        if (socket.isConnected() || socket.connectionState() === "connecting")
+        if (socket.isConnected() || socket.connectionState() === "connecting") {
             return;
+        }
 
         socket.connect();
     }, [isConnected, socket]);
