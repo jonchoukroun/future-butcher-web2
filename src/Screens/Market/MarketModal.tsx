@@ -287,7 +287,7 @@ export const MarketModal = ({
                 <TextInput
                     placeholder={"How many?"}
                     type={"number"}
-                    value={`${inputValue}`}
+                    value={`${inputValue || ""}`}
                     blink={!isAmountValid}
                     showPrompt={!isAmountValid}
                     changeCB={handleInputChange}
