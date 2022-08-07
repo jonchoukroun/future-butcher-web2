@@ -24,7 +24,6 @@ export function AlertServiceProvider({
 }: {
     children: React.ReactNode;
 }) {
-    console.log("!!AlertServiceProvider");
     const [queue, updateQueue] = useState<Map<number, AlertType>>(new Map());
 
     const pushAlert = (alert: AlertType) => {
@@ -83,9 +82,3 @@ export function useAlertService() {
 
     return context;
 }
-
-// const START_GAME_ALERT_1 =
-//     "You hit the Meat Market in Compton. Prices are usually lower here, especially for Ribs.";
-
-// const START_GAME_ALERT_2 =
-//     "Keep an eye on the clock up top. It's 5:00am now, and you only have 24 hours.";

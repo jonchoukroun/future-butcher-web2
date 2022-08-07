@@ -69,7 +69,6 @@ export const ChannelProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    console.log("!!ChannelProvider");
     const apiUrl = process.env.API_URL;
     if (!apiUrl) throw new Error("API URL is not defined");
 

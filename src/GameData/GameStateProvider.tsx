@@ -74,7 +74,6 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
         handleJoinChannel,
         handlePushCallback,
         isConnected,
-        isDisconnected,
     } = useChannel();
 
     const playerName = localStorage.getItem("playerName");
@@ -83,10 +82,10 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
     const [state, dispatch] = React.useReducer(gameStateReducer, {});
 
     useEffect(() => {
-        if (!isDisconnected) return;
+        if (isConnected) return;
 
         dispatch({ type: "changeScreen", screen: Screen.Error });
-    }, [isDisconnected]);
+    }, [isConnected]);
 
     useEffect(() => {
         const handleJoin = async () => {
