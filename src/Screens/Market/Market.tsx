@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 
 import { CutList } from "./CutList";
 import { MarketModal, TransactionType } from "./MarketModal";
@@ -23,7 +23,20 @@ export const Market = () => {
 
     const { pushAlert } = useAlertService();
 
+    const [transactedCut, setTransactedCut] = useState<CutType>();
+
     const didRenderAlertsRef = useRef(false);
+
+    const handleTransactionSuccess = (cut: CutType) => setTransactedCut(cut);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (transactedCut) {
+                setTransactedCut(undefined);
+            }
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [transactedCut]);
 
     useLayoutEffect(() => {
         if (!hasUnseenAlerts || didRenderAlertsRef.current) return;
@@ -92,12 +105,16 @@ export const Market = () => {
                 </small>
             </div>
 
-            <CutList handleTransactionSelect={handleTransactionSelect} />
+            <CutList
+                transactedCut={transactedCut}
+                handleTransactionSelect={handleTransactionSelect}
+            />
 
             {modalState && (
                 <MarketModal
                     transaction={modalState.transaction}
                     cut={modalState.cut}
+                    onTransactionSuccess={handleTransactionSuccess}
                     onModalClose={() => setModalState(undefined)}
                 />
             )}

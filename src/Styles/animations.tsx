@@ -19,3 +19,12 @@ export const fadeOut = keyframes`
     from {opacity: 1; }
     to { opacity: 0; }
 `;
+
+export const colorFlash = keyframes`
+    50% { color: ${Colors.Text.accent}; }
+`;
+
+export const bounce = keyframes`
+    50% { transform: translateY(-8px); }
+    80% { transform: translateY(4px); }
+`;

@@ -7,18 +7,27 @@ import {
     ButtonSize,
     ListItemTemplate,
 } from "../../Components";
+import {
+    PackListing,
+    PackType,
+    WeaponListing,
+    WeaponType,
+} from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
-import { PackListing, WeaponListing } from "../../GameData";
 
-export const WeaponsList = ({
-    handleModalOpen,
-    onStoreBackClick,
-}: {
+interface WeaponsListProps {
+    transactedItem: PackType | WeaponType | undefined;
     handleModalOpen: <T extends PackListing | WeaponListing>(
         modalProps: T,
     ) => void;
     onStoreBackClick: () => void;
-}) => {
+}
+
+export const WeaponsList = ({
+    transactedItem,
+    handleModalOpen,
+    onStoreBackClick,
+}: WeaponsListProps) => {
     const {
         state: { store },
     } = useGameState();
@@ -67,6 +76,7 @@ export const WeaponsList = ({
                     <ListItemTemplate
                         key={`weapon-${idx}`}
                         listing={listing}
+                        transactedItem={transactedItem}
                         isLast={idx === weapons.length - 1}
                         primaryButtonProps={{
                             label: "Details",

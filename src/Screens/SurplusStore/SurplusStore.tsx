@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 
 import { PacksList } from "./PacksList";
 import { StoreIntro } from "./StoreIntro";
@@ -11,7 +11,7 @@ import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { PackListing, WeaponListing } from "../../GameData";
 
 import * as Colors from "../../Styles/colors";
-import { isPackListingType } from "../../GameData/Store";
+import { isPackListingType, PackType, WeaponType } from "../../GameData/Store";
 
 export const SurplusStore = () => {
     const { getContentSize } = useWindowSize();
@@ -26,6 +26,19 @@ export const SurplusStore = () => {
 
     const [weaponModalState, setWeaponModalState] = useState<WeaponListing>();
     const handleWeaponModalClose = () => setWeaponModalState(undefined);
+
+    const [transactedItem, setTransactedItem] = useState<
+        PackType | WeaponType
+    >();
+    const handleTransactionSuccess = (item: PackType | WeaponType) =>
+        setTransactedItem(item);
+    useEffect(() => {
+        const interval = setInterval(() => {
+            if (transactedItem) setTransactedItem(undefined);
+        }, 1000);
+
+        return () => clearInterval(interval);
+    }, [transactedItem]);
 
     const handleModalOpen = <ModalState extends PackListing | WeaponListing>(
         state: ModalState,
@@ -77,6 +90,7 @@ export const SurplusStore = () => {
             ) : menuType === "packs" ? (
                 <Fragment>
                     <PacksList
+                        transactedItem={transactedItem}
                         handleModalOpen={handleModalOpen}
                         onStoreBackClick={() => setMenuType("weapons")}
                     />
@@ -84,12 +98,14 @@ export const SurplusStore = () => {
                         <StoreModal
                             listing={packModalState}
                             onModalClose={handlePackModalClose}
+                            onTransactionSuccess={handleTransactionSuccess}
                         />
                     )}
                 </Fragment>
             ) : (
                 <Fragment>
                     <WeaponsList
+                        transactedItem={transactedItem}
                         handleModalOpen={handleModalOpen}
                         onStoreBackClick={() => setMenuType("packs")}
                     />
@@ -97,6 +113,7 @@ export const SurplusStore = () => {
                         <StoreModal
                             listing={weaponModalState}
                             onModalClose={handleWeaponModalClose}
+                            onTransactionSuccess={handleTransactionSuccess}
                         />
                     )}
                 </Fragment>

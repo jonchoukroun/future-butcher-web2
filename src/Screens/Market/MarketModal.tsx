@@ -2,7 +2,6 @@
 import { css, jsx } from "@emotion/react";
 import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 
-import { useAlertService } from "../../AlertService/AlertServiceProvider";
 import {
     Button,
     ButtonScheme,
@@ -27,12 +26,14 @@ interface MarketModalProps {
     transaction: TransactionType;
     cut: CutType;
     onModalClose: () => void;
+    onTransactionSuccess: (cut: CutType) => void;
 }
 
 export const MarketModal = ({
     transaction,
     cut,
     onModalClose,
+    onTransactionSuccess,
 }: MarketModalProps) => {
     const {
         dispatch,
@@ -45,7 +46,6 @@ export const MarketModal = ({
     const { handlePushCallback } = useChannel();
     const { getContentSize, layout } = useWindowSize();
     const { inlineSize } = getContentSize();
-    const { pushAlert } = useAlertService();
 
     const { pack, totalPackSpace } = player;
 
@@ -149,12 +149,8 @@ export const MarketModal = ({
             }
             setInputValue(undefined);
             setIsLoading(undefined);
-            pushAlert({
-                text: `Successfully bought ${amount} ${pluralize(
-                    amount,
-                )} of ${cut}.`,
-                isPersistent: false,
-            });
+            onTransactionSuccess(cut);
+
             dispatch({ type: "updateStateData", stateData: response });
             onModalClose();
         } else {
@@ -169,12 +165,8 @@ export const MarketModal = ({
             }
             setInputValue(undefined);
             setIsLoading(undefined);
-            pushAlert({
-                text: `Successfully sold ${amount} ${pluralize(
-                    amount,
-                )} of ${cut}.`,
-                isPersistent: false,
-            });
+            onTransactionSuccess(cut);
+
             dispatch({ type: "updateStateData", stateData: response });
             onModalClose();
         }

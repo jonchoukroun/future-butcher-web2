@@ -7,13 +7,17 @@ import { TransactionType } from "./MarketModal";
 import { CutType } from "../../GameData";
 
 interface CutListProps {
+    transactedCut: CutType | undefined;
     handleTransactionSelect: (
         transaction: TransactionType,
         cut: CutType,
     ) => void;
 }
 
-export const CutList = ({ handleTransactionSelect }: CutListProps) => {
+export const CutList = ({
+    transactedCut,
+    handleTransactionSelect,
+}: CutListProps) => {
     const {
         state: { market },
     } = useGameState();
@@ -37,6 +41,7 @@ export const CutList = ({ handleTransactionSelect }: CutListProps) => {
                 <CutListItem
                     key={`${name}-${idx}`}
                     listing={listing}
+                    transactedCut={transactedCut}
                     isLast={idx === market.length - 1}
                     onTransactionSelect={handleTransactionSelect}
                 />

@@ -2,19 +2,25 @@
 import { jsx } from "@emotion/react";
 
 import { Button, ButtonProps } from "./Button";
-import { MarketListing, PackListing, WeaponListing } from "../GameData";
+import { PackDetails, WeaponDetails } from "../Fixtures/store";
+import {
+    CutType,
+    MarketListing,
+    PackListing,
+    WeaponListing,
+} from "../GameData";
+import { isPackListingType, PackType, WeaponType } from "../GameData/Store";
 import { formatMoney } from "../Utils/formatMoney";
 
+import * as Animations from "../Styles/animations";
 import * as Colors from "../Styles/colors";
-import { isPackListingType, PackType, WeaponType } from "../GameData/Store";
-import { PackDetails, WeaponDetails } from "../Fixtures/store";
 
 interface ListItemTemplateProps {
     listing: MarketListing | PackListing | WeaponListing;
     // Hide border under last item
     isLast: boolean;
-    // Indicate cut price surges with Accent color
-    isSurge?: boolean;
+    // Indicator that a transaction succeeded
+    transactedItem: CutType | PackType | WeaponType | undefined;
     // Primary button is required and aligned to the right
     primaryButtonProps: ButtonProps;
     // Secondary button is optional and aligned left
@@ -24,7 +30,7 @@ interface ListItemTemplateProps {
 export function ListItemTemplate({
     listing,
     isLast,
-    isSurge = false,
+    transactedItem,
     primaryButtonProps,
     secondaryButtonProps,
 }: ListItemTemplateProps) {
@@ -61,11 +67,24 @@ export function ListItemTemplate({
                     <h2
                         css={{
                             margin: 0,
-                            color: isSurge
-                                ? Colors.Text.accent
-                                : Colors.Text.base,
                             textTransform: "capitalize",
                             marginBlockEnd: secondaryButtonProps ? "5px" : 0,
+                            animationName:
+                                transactedItem === listing.name
+                                    ? `${Animations.colorFlash}, ${Animations.bounce}`
+                                    : undefined,
+                            animationDuration:
+                                transactedItem === listing.name
+                                    ? "500ms"
+                                    : undefined,
+                            animationIterationCount:
+                                transactedItem === listing.name
+                                    ? "500ms"
+                                    : undefined,
+                            animationTimingFunction:
+                                transactedItem === listing.name
+                                    ? "ease-out"
+                                    : undefined,
                         }}
                     >
                         {displayName}
@@ -98,9 +117,7 @@ export function ListItemTemplate({
                             css={{
                                 margin: 0,
                                 marginBlockEnd: "5px",
-                                color: isSurge
-                                    ? Colors.Text.accent
-                                    : Colors.Text.base,
+                                color: Colors.Text.base,
                                 textTransform: "capitalize",
                             }}
                         >
