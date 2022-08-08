@@ -3,6 +3,7 @@ import { jsx } from "@emotion/react";
 import { createContext, useContext, useMemo, useState } from "react";
 
 import { Alert } from "./Alert";
+import { useWindowSize } from "../Components/Window/WindowSizeProvider";
 
 export type AlertType = {
     text: string;
@@ -24,6 +25,9 @@ export function AlertServiceProvider({
 }: {
     children: React.ReactNode;
 }) {
+    const { getContentSize, layout } = useWindowSize();
+    const { inlineSize } = getContentSize();
+
     const [queue, updateQueue] = useState<Map<number, AlertType>>(new Map());
 
     const pushAlert = (alert: AlertType) => {
@@ -61,12 +65,25 @@ export function AlertServiceProvider({
                     insetInlineStart: "5%",
                     inlineSize: "90%",
                     display: "flex",
-                    flexDirection: "column",
+                    justifyContent: "center",
                 }}
             >
-                {Array.from(queue.entries()).map(([key, alert]) => (
-                    <Alert key={`alert-${key}`} queueKey={key} alert={alert} />
-                ))}
+                <div
+                    css={{
+                        inlineSize:
+                            layout === "full" ? `${inlineSize}px` : "100%",
+                        display: "flex",
+                        flexDirection: "column",
+                    }}
+                >
+                    {Array.from(queue.entries()).map(([key, alert]) => (
+                        <Alert
+                            key={`alert-${key}`}
+                            queueKey={key}
+                            alert={alert}
+                        />
+                    ))}
+                </div>
             </div>
         </AlertServiceContext.Provider>
     );

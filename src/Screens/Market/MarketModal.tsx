@@ -44,7 +44,7 @@ export const MarketModal = ({
     }
 
     const { handlePushCallback } = useChannel();
-    const { getContentSize, layout } = useWindowSize();
+    const { getContentSize, layout, windowSize } = useWindowSize();
     const { inlineSize } = getContentSize();
 
     const { pack, totalPackSpace } = player;
@@ -196,10 +196,7 @@ export const MarketModal = ({
               } ${cut}`
             : transaction;
 
-    const modalStyle = css({
-        position: "absolute",
-        insetBlockStart: layout === "full" ? "70px" : "30px",
-        insetInlineEnd: layout === "full" ? "23px" : "15px",
+    const baseModalStyle = css({
         inlineSize: `${inlineSize - inlineSizeOffset}px`,
         display: "flex",
         flexDirection: "column",
@@ -212,6 +209,14 @@ export const MarketModal = ({
         boxShadow: "2px 2px 12px 4px rgba(0, 0, 0, 0.4)",
         zIndex: 1001,
     });
+    const fullLayoutModal = css(baseModalStyle, {
+        position: "relative",
+    });
+    const compactLayoutModal = css(baseModalStyle, {
+        position: "absolute",
+        insetBlockStart: layout === "full" ? "70px" : "30px",
+        insetInlineEnd: layout === "full" ? "23px" : "15px",
+    });
 
     return (
         <div
@@ -221,110 +226,125 @@ export const MarketModal = ({
                 insetBlockEnd: 0,
                 insetInlineStart: 0,
                 insetInlineEnd: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 backgroundColor: "rgba(0, 0, 0, 0.8)",
                 zIndex: 1000,
             }}
         >
-            <div css={modalStyle}>
+            <div
+                css={{
+                    inlineSize: windowSize.inlineSize,
+                    display: "flex",
+                    justifyContent: "center",
+                }}
+            >
                 <div
-                    css={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                    }}
+                    css={
+                        layout === "full" ? fullLayoutModal : compactLayoutModal
+                    }
                 >
-                    <PrintLine
-                        text={title}
-                        size={LineSize.Title}
-                        promptScheme={PromptScheme.Hidden}
-                        marginBlockEnd={"20px"}
-                    />
-                    <Button
-                        label={"X"}
-                        scheme={ButtonScheme.Inverse}
-                        size={ButtonSize.Small}
-                        clickCB={onModalClose}
-                    />
-                </div>
+                    <div
+                        css={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <PrintLine
+                            text={title}
+                            size={LineSize.Title}
+                            promptScheme={PromptScheme.Hidden}
+                            marginBlockEnd={"20px"}
+                        />
+                        <Button
+                            label={"X"}
+                            scheme={ButtonScheme.Inverse}
+                            size={ButtonSize.Small}
+                            clickCB={onModalClose}
+                        />
+                    </div>
 
-                {errorMessage && (
+                    {errorMessage && (
+                        <PrintLine
+                            text={errorMessage}
+                            size={LineSize.Body}
+                            promptScheme={PromptScheme.Hidden}
+                            danger
+                            marginBlockEnd={"12px"}
+                        />
+                    )}
+
                     <PrintLine
-                        text={errorMessage}
+                        text={`Price: ${formatMoney(price)}`}
                         size={LineSize.Body}
-                        promptScheme={PromptScheme.Hidden}
-                        danger
-                        marginBlockEnd={"12px"}
+                        promptScheme={PromptScheme.Past}
                     />
-                )}
 
-                <PrintLine
-                    text={`Price: ${formatMoney(price)}`}
-                    size={LineSize.Body}
-                    promptScheme={PromptScheme.Past}
-                />
-
-                <PrintLine
-                    text={`${
-                        transaction === "buy" ? "In Stock:" : "In Pack:"
-                    } ${stock > 0 ? stock : "Out of stock"}`}
-                    size={LineSize.Body}
-                    promptScheme={PromptScheme.Past}
-                />
-
-                <PrintLine
-                    text={`Enter an amount to ${transaction}`}
-                    promptScheme={PromptScheme.Past}
-                    size={LineSize.Body}
-                />
-
-                <TextInput
-                    placeholder={"How many?"}
-                    type={"number"}
-                    value={`${inputValue || ""}`}
-                    blink={!isAmountValid}
-                    showPrompt={!isAmountValid}
-                    changeCB={handleInputChange}
-                    keyDownCB={handleKeyPress}
-                />
-
-                <div
-                    css={{
-                        display: "flex",
-                        marginBlock: "10px",
-                        "& button": { flex: 1 },
-                    }}
-                >
-                    <Prompt hidden={true} />
-                    <Button
-                        label={buttonLabel}
-                        size={ButtonSize.Full}
-                        scheme={
-                            inputValue === undefined
-                                ? ButtonScheme.Hidden
-                                : ButtonScheme.Base
-                        }
-                        disabled={!isAmountValid || isLoading === "max"}
-                        loading={isLoading === "custom"}
-                        clickCB={() => handleSubmit(inputValue ?? 0, false)}
+                    <PrintLine
+                        text={`${
+                            transaction === "buy" ? "In Stock:" : "In Pack:"
+                        } ${stock > 0 ? stock : "Out of stock"}`}
+                        size={LineSize.Body}
+                        promptScheme={PromptScheme.Past}
                     />
-                </div>
 
-                <PrintLine
-                    text={`Or, ${transaction} the max`}
-                    promptScheme={PromptScheme.Past}
-                    size={LineSize.Body}
-                />
-
-                <div css={{ display: "flex", "& button": { flex: 1 } }}>
-                    <Prompt hidden={true} />
-                    <Button
-                        label={`${transaction} max (${maxTransact} ${pluralize(
-                            maxTransact,
-                        )})`}
-                        size={ButtonSize.Full}
-                        disabled={isLoading === "custom" || stock === 0}
-                        loading={isLoading === "max"}
-                        clickCB={handleMaxClick}
+                    <PrintLine
+                        text={`Enter an amount to ${transaction}`}
+                        promptScheme={PromptScheme.Past}
+                        size={LineSize.Body}
                     />
+
+                    <TextInput
+                        placeholder={"How many?"}
+                        type={"number"}
+                        value={`${inputValue || ""}`}
+                        blink={!isAmountValid}
+                        showPrompt={!isAmountValid}
+                        changeCB={handleInputChange}
+                        keyDownCB={handleKeyPress}
+                    />
+
+                    <div
+                        css={{
+                            display: "flex",
+                            marginBlock: "10px",
+                            "& button": { flex: 1 },
+                        }}
+                    >
+                        <Prompt hidden={true} />
+                        <Button
+                            label={buttonLabel}
+                            size={ButtonSize.Full}
+                            scheme={
+                                inputValue === undefined
+                                    ? ButtonScheme.Hidden
+                                    : ButtonScheme.Base
+                            }
+                            disabled={!isAmountValid || isLoading === "max"}
+                            loading={isLoading === "custom"}
+                            clickCB={() => handleSubmit(inputValue ?? 0, false)}
+                        />
+                    </div>
+
+                    <PrintLine
+                        text={`Or, ${transaction} the max`}
+                        promptScheme={PromptScheme.Past}
+                        size={LineSize.Body}
+                    />
+
+                    <div css={{ display: "flex", "& button": { flex: 1 } }}>
+                        <Prompt hidden={true} />
+                        <Button
+                            label={`${transaction} max (${maxTransact} ${pluralize(
+                                maxTransact,
+                            )})`}
+                            size={ButtonSize.Full}
+                            disabled={isLoading === "custom" || stock === 0}
+                            loading={isLoading === "max"}
+                            clickCB={handleMaxClick}
+                        />
+                    </div>
                 </div>
             </div>
         </div>
