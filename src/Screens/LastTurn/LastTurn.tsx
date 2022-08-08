@@ -147,7 +147,7 @@ const HAS_CUTS_BUTTON_LABEL = "Visit the market";
 const HAS_DEBT_CONTENT = [
     " ",
     "But you still owe the bank money.",
-    "If you try to leave without paying, the bank's Community Outreach squad will track you down.",
+    "If you try to leave without paying, the bank's Community Relations squad will track you down.",
 ];
 const CAN_PAY_DEBT_CONTENT = [
     "Fortunately you have enough cash to pay your debt.",
