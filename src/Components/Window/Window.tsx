@@ -125,7 +125,7 @@ const MEAT_MARKET_ALERT =
     "You hit the Meat Market in Compton. Prices are usually lower here, especially for Ribs.";
 
 function getTravelAlert(turnsLeft: number) {
-    return `Keep an eye on the clock up top. It's ${getTimeLeft(
+    return `Keep an eye on the clock. It's ${getTimeLeft(
         turnsLeft,
-    )} now, and you only have 24 hours. And remember to pay off your debt. You can see it in the "INFO" screen.`;
+    )} now, and you only have ${turnsLeft} hours left. And remember to pay off your debt on the "INFO" screen.`;
 }
