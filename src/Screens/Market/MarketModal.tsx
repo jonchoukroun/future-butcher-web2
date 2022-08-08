@@ -4,10 +4,11 @@ import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
 
 import {
     Button,
+    ButtonPrompt,
+    ButtonPromptSize,
     ButtonScheme,
     ButtonSize,
     PrintLine,
-    Prompt,
     TextInput,
 } from "../../Components";
 import { LineSize, PromptScheme } from "../../Components/PrintLine";
@@ -63,17 +64,12 @@ export const MarketModal = ({
             ? pack[cut]
             : Math.min(quantity, maxAfford, spaceAvailable);
 
-    const [inputValue, setInputValue] = useState<number>();
+    const [inputValue, setInputValue] = useState<number | undefined>(
+        maxTransact,
+    );
     const [isAmountValid, setIsAmountValid] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>();
-    const [isLoading, setIsLoading] = useState<"custom" | "max">();
-
-    const handleMaxClick = () => {
-        setErrorMessage(undefined);
-        setInputValue(undefined);
-
-        handleSubmit(maxTransact, true);
-    };
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         if (errorMessage) setErrorMessage(undefined);
@@ -131,16 +127,16 @@ export const MarketModal = ({
         setIsAmountValid(true);
     }, [cut, inputValue, maxAfford, pack, spaceAvailable, stock, transaction]);
 
-    const handleSubmit = async (amount: number, isMax: boolean) => {
+    const handleSubmit = async () => {
         if (isLoading) return;
-        if (!amount || (!isMax && !isAmountValid)) return;
+        if (!isAmountValid) return;
 
-        setIsLoading(isMax ? "max" : "custom");
+        setIsLoading(true);
 
         if (transaction === "buy") {
             const response = await handlePushCallback("buyCut", {
                 cut,
-                amount,
+                amount: inputValue,
             });
             // TODO: API error handling
             if (response === undefined || isApiError(response)) {
@@ -148,7 +144,7 @@ export const MarketModal = ({
                 return;
             }
             setInputValue(undefined);
-            setIsLoading(undefined);
+            setIsLoading(false);
             onTransactionSuccess(cut);
 
             dispatch({ type: "updateStateData", stateData: response });
@@ -156,7 +152,7 @@ export const MarketModal = ({
         } else {
             const response = await handlePushCallback("sellCut", {
                 cut,
-                amount,
+                amount: inputValue,
             });
             // TODO: API error handling
             if (response === undefined || isApiError(response)) {
@@ -164,7 +160,7 @@ export const MarketModal = ({
                 return;
             }
             setInputValue(undefined);
-            setIsLoading(undefined);
+            setIsLoading(false);
             onTransactionSuccess(cut);
 
             dispatch({ type: "updateStateData", stateData: response });
@@ -175,7 +171,7 @@ export const MarketModal = ({
     const handleKeyPress = (event: KeyboardEvent<HTMLInputElement>) => {
         switch (event.key) {
             case "Enter":
-                handleSubmit(inputValue ?? 0, false);
+                handleSubmit();
                 return;
             case "Escape":
                 setInputValue(undefined);
@@ -190,10 +186,10 @@ export const MarketModal = ({
     const title = `${transaction} ${cut}`;
 
     const buttonLabel =
-        isAmountValid && inputValue
-            ? `${transaction} ${inputValue} ${
-                  inputValue > 1 ? "lbs" : "lb"
-              } ${cut}`
+        inputValue === maxTransact
+            ? `${transaction} max (${inputValue} ${pluralize(inputValue)})`
+            : isAmountValid && inputValue
+            ? `${transaction} ${inputValue} ${pluralize(inputValue)} ${cut}`
             : transaction;
 
     const baseModalStyle = css({
@@ -300,49 +296,18 @@ export const MarketModal = ({
                         type={"number"}
                         value={`${inputValue || ""}`}
                         blink={!isAmountValid}
-                        showPrompt={!isAmountValid}
+                        showPrompt={true}
                         changeCB={handleInputChange}
                         keyDownCB={handleKeyPress}
                     />
 
-                    <div
-                        css={{
-                            display: "flex",
-                            marginBlock: "10px",
-                            "& button": { flex: 1 },
-                        }}
-                    >
-                        <Prompt hidden={true} />
-                        <Button
+                    <div css={{ marginBlockStart: "10px" }}>
+                        <ButtonPrompt
                             label={buttonLabel}
-                            size={ButtonSize.Full}
-                            scheme={
-                                inputValue === undefined
-                                    ? ButtonScheme.Hidden
-                                    : ButtonScheme.Base
-                            }
-                            disabled={!isAmountValid || isLoading === "max"}
-                            loading={isLoading === "custom"}
-                            clickCB={() => handleSubmit(inputValue ?? 0, false)}
-                        />
-                    </div>
-
-                    <PrintLine
-                        text={`Or, ${transaction} the max`}
-                        promptScheme={PromptScheme.Past}
-                        size={LineSize.Body}
-                    />
-
-                    <div css={{ display: "flex", "& button": { flex: 1 } }}>
-                        <Prompt hidden={true} />
-                        <Button
-                            label={`${transaction} max (${maxTransact} ${pluralize(
-                                maxTransact,
-                            )})`}
-                            size={ButtonSize.Full}
-                            disabled={isLoading === "custom" || stock === 0}
-                            loading={isLoading === "max"}
-                            clickCB={handleMaxClick}
+                            size={ButtonPromptSize.Full}
+                            blink={isAmountValid}
+                            disabled={!isAmountValid}
+                            clickCB={handleSubmit}
                         />
                     </div>
                 </div>
