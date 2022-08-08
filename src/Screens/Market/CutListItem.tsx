@@ -20,17 +20,17 @@ export const CutListItem = ({
     onTransactionSelect,
 }: CutListItemProps) => {
     const {
-        state: { market, player },
+        state: { player },
     } = useGameState();
-    if (market === undefined || player === undefined) {
+    if (player === undefined) {
         throw new Error("State is undefined");
     }
 
-    const { pack, totalPackSpace } = player;
-
+    const { funds, pack, totalPackSpace } = player;
     const spaceAvailable = getSpaceAvailable({ pack, totalPackSpace });
-    const canBuy = player.funds >= listing.price && spaceAvailable > 0;
+    const canBuy = funds >= listing.price && spaceAvailable > 0;
     const owned = pack[listing.name];
+    const inStock = listing.quantity > 0;
 
     return (
         <ListItemTemplate
@@ -39,7 +39,7 @@ export const CutListItem = ({
             isSurge={listing.price >= CutSurge[listing.name].price}
             primaryButtonProps={{
                 label: "Buy",
-                disabled: !canBuy,
+                disabled: !canBuy || !inStock,
                 clickCB: () => onTransactionSelect("buy", listing.name),
             }}
             secondaryButtonProps={{

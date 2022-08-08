@@ -273,7 +273,7 @@ export const MarketModal = ({
                 <PrintLine
                     text={`${
                         transaction === "buy" ? "In Stock:" : "In Pack:"
-                    } ${stock}`}
+                    } ${stock > 0 ? stock : "Out of stock"}`}
                     size={LineSize.Body}
                     promptScheme={PromptScheme.Past}
                 />
@@ -329,7 +329,7 @@ export const MarketModal = ({
                             maxTransact,
                         )})`}
                         size={ButtonSize.Full}
-                        disabled={isLoading === "custom"}
+                        disabled={isLoading === "custom" || stock === 0}
                         loading={isLoading === "max"}
                         clickCB={handleMaxClick}
                     />
