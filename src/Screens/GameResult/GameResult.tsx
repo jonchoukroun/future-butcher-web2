@@ -39,7 +39,8 @@ export const GameResult = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const didRequestScoresRef = useRef(false);
-    const lowestScoreRef = useRef<number>();
+    const lowestScoreIndexRef = useRef<number>();
+    const playerIndexRef = useRef<number>();
 
     const playerName = localStorage.getItem("playerName") ?? "Blondie";
 
@@ -59,13 +60,15 @@ export const GameResult = () => {
             }
 
             const highScores = response as HighScoresType;
-            lowestScoreRef.current = Math.min(highScores.length - 1, 99);
+            lowestScoreIndexRef.current = Math.min(highScores.length - 1, 99);
             let displayScores: DisplayScoreType[];
 
-            const playerIndex = highScores.findIndex(
+            // If a player has an existing score higher than what they earned this round,
+            // they will be a loser
+            playerIndexRef.current = highScores.findIndex(
                 ({ player, score }) => player === playerName && score === funds,
             );
-            if (playerIndex < 5) {
+            if (playerIndexRef.current < 5 && playerIndexRef.current >= 0) {
                 displayScores = highScores
                     .slice(0, 5)
                     .map(({ player, score }, idx) => ({
@@ -74,16 +77,16 @@ export const GameResult = () => {
                         score,
                     }));
             } else {
-                const startingIndex = playerIndex - 1;
+                const startingIndex = playerIndexRef.current - 1;
                 displayScores = highScores
-                    .slice(startingIndex, startingIndex + 4)
+                    .slice(startingIndex, startingIndex + 3)
                     .map(({ player, score }, idx) => ({
                         rank: idx + startingIndex + 1,
                         name: player,
                         score,
                     }));
-                if (playerIndex === lowestScoreRef.current) {
-                    const offset = lowestScoreRef.current - 2;
+                if (playerIndexRef.current === lowestScoreIndexRef.current) {
+                    const offset = lowestScoreIndexRef.current - 2;
                     displayScores.unshift({
                         rank: offset + 1,
                         name: highScores[offset].player,
@@ -133,46 +136,53 @@ export const GameResult = () => {
         '"Don\'t waste my time, pendejo.," he says.',
         "You won't be escaping LA today. Better try again. This time, do better.",
     ];
+
+    // Worst ending - player gets butchered
+    if (debt > 0) {
+        return (
+            <ScreenTemplate
+                title={loserTitle}
+                subtitle={deadbeatSubtitle}
+                content={deadbeatContent}
+                buttonLabel={"Start Over"}
+                isLoading={isLoading}
+                clickCB={handleStartOverClick}
+            />
+        );
+    }
+
+    // Prevent empty scores screen
+    if (!topScores) return null;
+
+    // Player loses - doesn't make it into top scores
+    if (
+        lowestScoreIndexRef.current &&
+        playerIndexRef.current &&
+        lowestScoreIndexRef.current < playerIndexRef.current
+    ) {
+        return (
+            <ScreenTemplate
+                title={loserTitle}
+                subtitle={loserSubtitle}
+                content={loserContent}
+                buttonLabel={"Start Over"}
+                isLoading={isLoading}
+                clickCB={handleStartOverClick}
+            />
+        );
+    }
+
+    // Player wins
     return (
-        <Fragment>
-            {topScores && lowestScoreRef.current ? (
-                <Fragment>
-                    {lowestScoreRef.current >= funds ? (
-                        <ScreenTemplate
-                            title={loserTitle}
-                            subtitle={loserSubtitle}
-                            content={loserContent}
-                            buttonLabel={"Start Over"}
-                            isLoading={isLoading}
-                            clickCB={handleStartOverClick}
-                        />
-                    ) : (
-                        <Fragment>
-                            {debt > 0 ? (
-                                <ScreenTemplate
-                                    title={loserTitle}
-                                    subtitle={deadbeatSubtitle}
-                                    content={deadbeatContent}
-                                    buttonLabel={"Start Over"}
-                                    isLoading={isLoading}
-                                    clickCB={handleStartOverClick}
-                                />
-                            ) : (
-                                <WinnerScreen
-                                    displayScores={topScores}
-                                    playerScore={{
-                                        player: playerName,
-                                        score: funds,
-                                    }}
-                                    isLoading={isLoading}
-                                    onStartOverClick={handleStartOverClick}
-                                />
-                            )}
-                        </Fragment>
-                    )}
-                </Fragment>
-            ) : null}
-        </Fragment>
+        <WinnerScreen
+            displayScores={topScores}
+            playerScore={{
+                player: playerName,
+                score: funds,
+            }}
+            isLoading={isLoading}
+            onStartOverClick={handleStartOverClick}
+        />
     );
 };
 
