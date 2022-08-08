@@ -56,6 +56,8 @@ export const Mugging = () => {
         // If the mugger is defeated, remove him from the list
         if (outcome === "victory") {
             dispatch({ type: "killMugger" });
+        } else {
+            dispatch({ type: "shuffleMuggers" });
         }
         setMuggingState(outcome);
         setIsLoading(false);
