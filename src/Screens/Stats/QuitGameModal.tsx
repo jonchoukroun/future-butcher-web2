@@ -100,7 +100,7 @@ export const QuitGameModal = ({
 
                 <div css={{ display: "flex", justifyContent: "space-between" }}>
                     <Button
-                        label={"Yes, Quit!"}
+                        label={"Quit!"}
                         scheme={ButtonScheme.Danger}
                         clickCB={handleEndGameClick}
                     />
