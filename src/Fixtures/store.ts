@@ -14,24 +14,24 @@ export const CutSurge: {
     heart: {
         price: 50000,
         messages: [
-            "Cops busted a local plastic surgeon selling heart on the black market and you're the only butcher carrying.",
-            "A tech trillionaire ordered all the heart in town. Only you can get these rich scumbags the heart they crave.",
-            "A Temple of Doom remake has fans scurrying for heart - looks like you’re in luck.",
+            "Cops busted a local plastic surgeon selling heart on the black market and people are hungry!",
+            "A tech trillionaire ordered all the heart in town. Can you get these rich scumbags the heart they crave?",
+            "A Temple of Doom remake has fans scurrying for heart.",
         ],
     },
     flank: {
         price: 20000,
         messages: [
-            "The doomsday cult supplying the neighborhood with flank just drank the koolaid! You're the only butcher with flank, looks like you can clean up here.",
-            "A virus has made all flank in the neighborhood inedible. Celebrities are offering everything they have for your flank.",
-            "The New Vegan Church crucified all flank providers in town - you’re the only one left!",
+            "The doomsday cult supplying the neighborhood with flank just drank the koolaid! Will you clean up here?",
+            "A virus has made all flank in the neighborhood inedible. Celebrities are offering everything they have for a taste.",
+            "The New Vegan Church crucified all flank providers in town - can you save the day?",
         ],
     },
     ribs: {
         price: 8000,
         messages: [
-            "A new study shows eating ribs eliminates crows feet. Middle-aged actors are scrambling for your ribs.",
-            "Local gangs are at war and stopped supplying ribs. Looks like you're the only butcher who can handle the demand!",
+            "A new study shows eating ribs eliminates crows feet. Middle-aged actors are scrambling for ribs.",
+            "Local gangs are at war and stopped supplying ribs. Can you handle the demand?",
             "The annual Boyle Heights BBQ Competition is heating up! They’ll buy all the ribs you have.",
         ],
     },
