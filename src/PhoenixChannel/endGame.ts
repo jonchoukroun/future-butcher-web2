@@ -6,7 +6,7 @@ export async function endGame(
 ): Promise<{ player: string; score: number }[]> {
     return new Promise((resolve, reject) => {
         channel
-            .push("end_game", payload)
+            .push("end_game", { hash_id: payload.hashId, score: payload.score })
             .receive("ok", ({ state_data }) => {
                 resolve(state_data);
             })
