@@ -261,7 +261,9 @@ export function StoreModal({ listing, onModalClose }: StoreModalProps) {
 
                     <PrintLine
                         text={`Price: ${formatMoney(listing.price)}${
-                            !isPackListing && player.weapon
+                            !isPackListing &&
+                            player.weapon &&
+                            listing.name !== player.weapon
                                 ? " - current wepon value"
                                 : ""
                         }`}
