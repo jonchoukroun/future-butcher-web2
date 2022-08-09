@@ -10,6 +10,7 @@ import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 
 import * as Colors from "../../Styles/colors";
 import { Button, ButtonScheme } from "../../Components";
+import { WelcomeScreen } from "../Welcome/Welcome";
 
 export const QuitGameModal = ({
     onCloseModal,
@@ -41,14 +42,17 @@ export const QuitGameModal = ({
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
-        const highScores = await handleEndGame(hashId, 0);
-        if (highScores === undefined) {
+        const response = await handleEndGame(hashId, 0);
+        if (response === undefined) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
 
-        dispatch({ type: "setHighScores", highScores });
-        dispatch({ type: "changeScreen", screen: Screen.GameResult });
+        dispatch({
+            type: "changeScreen",
+            screen: Screen.Welcome,
+            screenProps: WelcomeScreen.StartOver,
+        });
         if (isMountedRef.current) {
             setIsLoading(false);
         }

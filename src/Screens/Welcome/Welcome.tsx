@@ -29,7 +29,19 @@ const START_CONTENT_BASE = [
     "Yeah, it's steep. Welcome to the People's Republic of Los Angeles...",
 ];
 
-export const Welcome = () => {
+const START_OVER_CONTENT = [
+    "You know the drill, you have $5,000 and 24 hours.",
+    "Are you ready to give it another shot?",
+];
+
+export enum WelcomeScreen {
+    Intro,
+    Instructions,
+    Start,
+    StartOver,
+}
+
+export const Welcome = ({ startScreen }: { startScreen?: WelcomeScreen }) => {
     const date = new Date();
     date.setFullYear(2055, date.getMonth(), date.getDate());
     const options: Intl.DateTimeFormatOptions = {
@@ -42,12 +54,9 @@ export const Welcome = () => {
     const { handleGetScores, handlePushCallback } = useChannel();
     const { dispatch } = useGameState();
 
-    const enum WelcomeScreen {
-        Intro,
-        Instructions,
-        Start,
-    }
-    const [screen, setScreen] = useState<WelcomeScreen>(WelcomeScreen.Intro);
+    const [screen, setScreen] = useState<WelcomeScreen>(
+        startScreen ? startScreen : WelcomeScreen.Intro,
+    );
     const [lowestScore, setLowestScore] = useState<number>();
     const [isLoading, setIsLoading] = useState(false);
 
@@ -130,11 +139,21 @@ export const Welcome = () => {
                 />
             )}
 
-            {/* TODO: provide Tutorial on/off button */}
             {screen === WelcomeScreen.Start && (
                 <ScreenTemplate
                     title={WELCOME_TITLE}
                     content={startContent}
+                    buttonLabel={"Start Game"}
+                    isLoading={isLoading}
+                    clickCB={handleStartClick}
+                />
+            )}
+
+            {/* TODO: provide Tutorial on/off button */}
+            {screen === WelcomeScreen.StartOver && (
+                <ScreenTemplate
+                    title={WELCOME_TITLE}
+                    content={START_OVER_CONTENT}
                     buttonLabel={"Start Game"}
                     isLoading={isLoading}
                     clickCB={handleStartClick}

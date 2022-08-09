@@ -26,7 +26,7 @@ export const Window = () => {
     const { pushAlert } = useAlertService();
 
     const {
-        state: { currentScreen, turnsLeft },
+        state: { currentScreen, screenProps, turnsLeft },
     } = useGameState();
 
     const turnRef = useRef<number>();
@@ -77,7 +77,9 @@ export const Window = () => {
 
                 {currentScreen === "login" && <Login />}
 
-                {currentScreen === "welcome" && <Welcome />}
+                {currentScreen === "welcome" && (
+                    <Welcome startScreen={screenProps} />
+                )}
 
                 {currentScreen === "market" && (
                     <GameScreen layout={layout} shouldShowNavBar={true}>

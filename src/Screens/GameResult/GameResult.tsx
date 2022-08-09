@@ -3,6 +3,7 @@ import { jsx } from "@emotion/react";
 import { useEffect, useRef, useState } from "react";
 
 import { WinnerScreen } from "./WinnerScreen";
+import { WelcomeScreen } from "../Welcome/Welcome";
 import { ScreenTemplate } from "../../Components";
 import { HighScoresType, Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
@@ -59,7 +60,11 @@ export const GameResult = () => {
         setIsLoading(true);
         await handleInitGame();
 
-        dispatch({ type: "changeScreen", screen: Screen.Welcome });
+        dispatch({
+            type: "changeScreen",
+            screen: Screen.Welcome,
+            screenProps: WelcomeScreen.StartOver,
+        });
         setIsLoading(false);
     };
 

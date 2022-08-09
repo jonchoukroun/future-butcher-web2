@@ -11,10 +11,11 @@ import { serializeMarket, serializeStore } from "./Serializers";
 import { isApiError } from "./State";
 import { muggerNames } from "../Fixtures/mugging";
 import { useChannel } from "../PhoenixChannel/ChannelProvider";
+import { WelcomeScreen } from "../Screens/Welcome/Welcome";
 
 type Action =
     | { type: "updateChannelStatus"; isConnected: boolean }
-    | { type: "changeScreen"; screen: ScreenType }
+    | { type: "changeScreen"; screen: ScreenType; screenProps?: WelcomeScreen }
     | { type: "updateStateData"; stateData: ApiStateType }
     | { type: "setHighScores"; highScores: HighScoresType }
     | { type: "shuffleMuggers" }
@@ -29,7 +30,7 @@ const GameStateContext = React.createContext<
 function gameStateReducer(state: GameStateType, action: Action) {
     switch (action.type) {
         case "changeScreen":
-            return handleChangeScreen(state, action.screen);
+            return handleChangeScreen(state, action.screen, action.screenProps);
 
         case "updateChannelStatus":
             return { ...state, isConnected: action.isConnected };
@@ -175,10 +176,12 @@ export function useGameState() {
 function handleChangeScreen(
     state: GameStateType,
     nextScreen: ScreenType,
+    screenProps?: WelcomeScreen,
 ): GameStateType {
     return {
         ...state,
         currentScreen: nextScreen,
+        screenProps,
     };
 }
 

@@ -7,6 +7,7 @@ import {
     StoreType,
     WeaponType,
 } from ".";
+import { WelcomeScreen } from "../Screens/Welcome/Welcome";
 
 /**
  * This is the shaped of state as defined by the API.
@@ -67,6 +68,7 @@ export type GameStateType = {
     store?: StoreListing;
     turnsLeft?: number;
     hasUnseenAlerts?: boolean;
+    screenProps?: WelcomeScreen;
 };
 
 export const enum Screen {
