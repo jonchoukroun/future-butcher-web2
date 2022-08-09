@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/react";
+import { css, jsx } from "@emotion/react";
 import { useEffect, useRef, useState } from "react";
 
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
@@ -58,9 +58,31 @@ export const QuitGameModal = ({
         }
     };
 
-    const { getContentSize, layout } = useWindowSize();
+    const { getContentSize, layout, windowSize } = useWindowSize();
     const { inlineSize } = getContentSize();
     const inlineSizeOffset = layout === "full" ? 24 : 15;
+
+    const baseModalStyle = css({
+        inlineSize: `${inlineSize - inlineSizeOffset}px`,
+        display: "flex",
+        flexDirection: "column",
+        padding: "10px",
+        backgroundColor: Colors.Background.base,
+        borderColor: Colors.Border.subtle,
+        borderRadius: "4px",
+        borderStyle: "outset",
+        borderWidth: "2px",
+        boxShadow: "2px 2px 12px 4px rgba(0, 0, 0, 0.4)",
+        zIndex: 1001,
+    });
+    const fullLayoutModal = css(baseModalStyle, {
+        position: "relative",
+    });
+    const compactLayoutModal = css(baseModalStyle, {
+        position: "absolute",
+        insetBlockStart: layout === "full" ? "70px" : "30px",
+        insetInlineEnd: layout === "full" ? "23px" : "15px",
+    });
 
     return (
         <div
@@ -70,45 +92,48 @@ export const QuitGameModal = ({
                 insetBlockEnd: 0,
                 insetInlineStart: 0,
                 insetInlineEnd: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
                 backgroundColor: "rgba(0, 0, 0, 0.4)",
                 zIndex: 1000,
             }}
         >
             <div
                 css={{
-                    position: "absolute",
-                    insetBlockStart: layout === "full" ? "70px" : "30px",
-                    insetInlineEnd: layout === "full" ? "23px" : "15px",
-                    inlineSize: `${inlineSize - inlineSizeOffset}px`,
+                    inlineSize: windowSize.inlineSize,
                     display: "flex",
-                    flexDirection: "column",
-                    padding: "10px",
-                    backgroundColor: Colors.Background.base,
-                    borderColor: Colors.Border.subtle,
-                    borderRadius: "4px",
-                    borderStyle: "outset",
-                    borderWidth: "2px",
-                    boxShadow: "2px 2px 12px 4px rgba(0, 0, 0, 0.4)",
-                    zIndex: 1001,
+                    justifyContent: "center",
                 }}
             >
                 <div
-                    css={{
-                        display: "flex",
-                        justifyContent: "center",
-                        paddingInline: "20px",
-                    }}
+                    css={
+                        layout === "full" ? fullLayoutModal : compactLayoutModal
+                    }
                 >
-                    <h3>Are you sure you want to quit?</h3>
-                </div>
+                    <div
+                        css={{
+                            display: "flex",
+                            justifyContent: "center",
+                            paddingInline: "20px",
+                        }}
+                    >
+                        <h3>Are you sure you want to quit?</h3>
+                    </div>
 
-                <div css={{ display: "flex", justifyContent: "space-between" }}>
-                    <Button
-                        label={"Quit!"}
-                        scheme={ButtonScheme.Danger}
-                        clickCB={handleEndGameClick}
-                    />
-                    <Button label={"Cancel"} clickCB={onCloseModal} />
+                    <div
+                        css={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <Button
+                            label={"Quit!"}
+                            scheme={ButtonScheme.Danger}
+                            clickCB={handleEndGameClick}
+                        />
+                        <Button label={"Cancel"} clickCB={onCloseModal} />
+                    </div>
                 </div>
             </div>
         </div>
