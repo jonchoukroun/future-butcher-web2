@@ -206,9 +206,7 @@ export const ChannelProvider = ({
                 default:
                     throw new Error(`Unhandled callback ${callback}`);
             }
-            const x = await response;
-            console.log("!!handleCallback", callback, x);
-            return x;
+            return await response;
         },
         [channel],
     );
