@@ -15,12 +15,19 @@ import { formatMoney } from "../Utils/formatMoney";
 import * as Animations from "../Styles/animations";
 import * as Colors from "../Styles/colors";
 
+export type TransactionRecordType =
+    | {
+          item: CutType | PackType | WeaponType | undefined;
+          isSale?: boolean;
+      }
+    | undefined;
+
 interface ListItemTemplateProps {
     listing: MarketListing | PackListing | WeaponListing;
     // Hide border under last item
     isLast: boolean;
     // Indicator that a transaction succeeded
-    transactedItem: CutType | PackType | WeaponType | undefined;
+    transactionRecord: TransactionRecordType;
     // Primary button is required and aligned to the right
     primaryButtonProps: ButtonProps;
     // Secondary button is optional and aligned left
@@ -30,12 +37,17 @@ interface ListItemTemplateProps {
 export function ListItemTemplate({
     listing,
     isLast,
-    transactedItem,
+    transactionRecord,
     primaryButtonProps,
     secondaryButtonProps,
 }: ListItemTemplateProps) {
     const displayName = getDisplayName(listing);
     const { price } = listing;
+
+    const showAnimation = !!(transactionRecord?.item === listing.name);
+    const animationName = !!transactionRecord?.isSale
+        ? `${Animations.sellColorFlash}, ${Animations.bounceUp}`
+        : `${Animations.buyColorFlash}, ${Animations.bounceDown}`;
 
     return (
         <li
@@ -69,22 +81,18 @@ export function ListItemTemplate({
                             margin: 0,
                             textTransform: "capitalize",
                             marginBlockEnd: secondaryButtonProps ? "5px" : 0,
-                            animationName:
-                                transactedItem === listing.name
-                                    ? `${Animations.colorFlash}, ${Animations.bounce}`
-                                    : undefined,
-                            animationDuration:
-                                transactedItem === listing.name
-                                    ? "500ms"
-                                    : undefined,
-                            animationIterationCount:
-                                transactedItem === listing.name
-                                    ? "500ms"
-                                    : undefined,
-                            animationTimingFunction:
-                                transactedItem === listing.name
-                                    ? "ease-out"
-                                    : undefined,
+                            animationName: showAnimation
+                                ? animationName
+                                : undefined,
+                            animationDuration: showAnimation
+                                ? "500ms"
+                                : undefined,
+                            animationIterationCount: showAnimation
+                                ? "500ms"
+                                : undefined,
+                            animationTimingFunction: showAnimation
+                                ? "ease-out"
+                                : undefined,
                         }}
                     >
                         {displayName}

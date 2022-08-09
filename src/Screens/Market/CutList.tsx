@@ -2,12 +2,13 @@
 import { jsx } from "@emotion/react";
 
 import { CutListItem } from "./CutListItem";
-import { useGameState } from "../../GameData/GameStateProvider";
 import { TransactionType } from "./MarketModal";
+import { TransactionRecordType } from "../../Components/ListItemTemplate";
+import { useGameState } from "../../GameData/GameStateProvider";
 import { CutType } from "../../GameData";
 
 interface CutListProps {
-    transactedCut: CutType | undefined;
+    transactionRecord: TransactionRecordType;
     handleTransactionSelect: (
         transaction: TransactionType,
         cut: CutType,
@@ -15,7 +16,7 @@ interface CutListProps {
 }
 
 export const CutList = ({
-    transactedCut,
+    transactionRecord,
     handleTransactionSelect,
 }: CutListProps) => {
     const {
@@ -41,7 +42,7 @@ export const CutList = ({
                 <CutListItem
                     key={`${name}-${idx}`}
                     listing={listing}
-                    transactedCut={transactedCut}
+                    transactionRecord={transactionRecord}
                     isLast={idx === market.length - 1}
                     onTransactionSelect={handleTransactionSelect}
                 />

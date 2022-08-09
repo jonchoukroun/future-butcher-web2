@@ -20,11 +20,20 @@ export const fadeOut = keyframes`
     to { opacity: 0; }
 `;
 
-export const colorFlash = keyframes`
+export const buyColorFlash = keyframes`
+    50% { color: ${Colors.Text.danger}; }
+`;
+
+export const sellColorFlash = keyframes`
     50% { color: ${Colors.Text.accent}; }
 `;
 
-export const bounce = keyframes`
+export const bounceUp = keyframes`
     50% { transform: translateY(-8px); }
     80% { transform: translateY(4px); }
+`;
+
+export const bounceDown = keyframes`
+    50% { transform: translateY(8px); }
+    80% { transform: translateY(-8px); }
 `;

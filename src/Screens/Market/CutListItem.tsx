@@ -3,6 +3,7 @@ import { jsx } from "@emotion/react";
 
 import { TransactionType } from "./MarketModal";
 import { ListItemTemplate } from "../../Components";
+import { TransactionRecordType } from "../../Components/ListItemTemplate";
 import { MarketListing, CutType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { getSpaceAvailable } from "../../Utils/spaceAvailable";
@@ -10,14 +11,14 @@ import { getSpaceAvailable } from "../../Utils/spaceAvailable";
 interface CutListItemProps {
     listing: MarketListing;
     isLast: boolean;
-    transactedCut: CutType | undefined;
+    transactionRecord: TransactionRecordType;
     onTransactionSelect: (transaction: TransactionType, cut: CutType) => void;
 }
 
 export const CutListItem = ({
     listing,
     isLast,
-    transactedCut,
+    transactionRecord,
     onTransactionSelect,
 }: CutListItemProps) => {
     const {
@@ -37,7 +38,7 @@ export const CutListItem = ({
         <ListItemTemplate
             listing={listing}
             isLast={isLast}
-            transactedItem={transactedCut}
+            transactionRecord={transactionRecord}
             primaryButtonProps={{
                 label: "Buy",
                 disabled: !canBuy || !inStock,

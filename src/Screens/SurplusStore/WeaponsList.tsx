@@ -7,16 +7,12 @@ import {
     ButtonSize,
     ListItemTemplate,
 } from "../../Components";
-import {
-    PackListing,
-    PackType,
-    WeaponListing,
-    WeaponType,
-} from "../../GameData";
+import { TransactionRecordType } from "../../Components/ListItemTemplate";
+import { PackListing, WeaponListing } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 
 interface WeaponsListProps {
-    transactedItem: PackType | WeaponType | undefined;
+    transactionRecord: TransactionRecordType;
     handleModalOpen: <T extends PackListing | WeaponListing>(
         modalProps: T,
     ) => void;
@@ -24,7 +20,7 @@ interface WeaponsListProps {
 }
 
 export const WeaponsList = ({
-    transactedItem,
+    transactionRecord,
     handleModalOpen,
     onStoreBackClick,
 }: WeaponsListProps) => {
@@ -76,7 +72,7 @@ export const WeaponsList = ({
                     <ListItemTemplate
                         key={`weapon-${idx}`}
                         listing={listing}
-                        transactedItem={transactedItem}
+                        transactionRecord={transactionRecord}
                         isLast={idx === weapons.length - 1}
                         primaryButtonProps={{
                             label: "Details",

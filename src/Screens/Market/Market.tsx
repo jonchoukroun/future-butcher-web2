@@ -11,6 +11,7 @@ import { CutType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 
 import * as Colors from "../../Styles/colors";
+import { TransactionRecordType } from "../../Components/ListItemTemplate";
 
 export const Market = () => {
     const {
@@ -23,20 +24,24 @@ export const Market = () => {
 
     const { pushAlert } = useAlertService();
 
-    const [transactedCut, setTransactedCut] = useState<CutType>();
+    const [transactionRecord, setTransactionRecord] =
+        useState<TransactionRecordType>();
 
     const didRenderAlertsRef = useRef(false);
 
-    const handleTransactionSuccess = (cut: CutType) => setTransactedCut(cut);
+    const handleTransactionSuccess = (
+        cut: CutType,
+        transaction: TransactionType,
+    ) => setTransactionRecord({ item: cut, isSale: transaction === "sell" });
     useEffect(() => {
         const interval = setInterval(() => {
-            if (transactedCut) {
-                setTransactedCut(undefined);
+            if (transactionRecord) {
+                setTransactionRecord(undefined);
             }
         }, 1000);
 
         return () => clearInterval(interval);
-    }, [transactedCut]);
+    }, [transactionRecord]);
 
     useLayoutEffect(() => {
         if (!hasUnseenAlerts || didRenderAlertsRef.current) return;
@@ -106,7 +111,7 @@ export const Market = () => {
             </div>
 
             <CutList
-                transactedCut={transactedCut}
+                transactionRecord={transactionRecord}
                 handleTransactionSelect={handleTransactionSelect}
             />
 

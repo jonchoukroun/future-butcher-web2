@@ -90,7 +90,10 @@ export const SurplusStore = () => {
             ) : menuType === "packs" ? (
                 <Fragment>
                     <PacksList
-                        transactedItem={transactedItem}
+                        transactionRecord={{
+                            item: transactedItem,
+                            isSale: false,
+                        }}
                         handleModalOpen={handleModalOpen}
                         onStoreBackClick={() => setMenuType("weapons")}
                     />
@@ -105,7 +108,10 @@ export const SurplusStore = () => {
             ) : (
                 <Fragment>
                     <WeaponsList
-                        transactedItem={transactedItem}
+                        transactionRecord={{
+                            item: transactedItem,
+                            isSale: false,
+                        }}
                         handleModalOpen={handleModalOpen}
                         onStoreBackClick={() => setMenuType("packs")}
                     />

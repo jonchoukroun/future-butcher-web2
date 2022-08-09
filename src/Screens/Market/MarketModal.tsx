@@ -27,7 +27,7 @@ interface MarketModalProps {
     transaction: TransactionType;
     cut: CutType;
     onModalClose: () => void;
-    onTransactionSuccess: (cut: CutType) => void;
+    onTransactionSuccess: (cut: CutType, transaction: TransactionType) => void;
 }
 
 export const MarketModal = ({
@@ -145,7 +145,7 @@ export const MarketModal = ({
             }
             setInputValue(undefined);
             setIsLoading(false);
-            onTransactionSuccess(cut);
+            onTransactionSuccess(cut, transaction);
 
             dispatch({ type: "updateStateData", stateData: response });
             onModalClose();
@@ -161,7 +161,7 @@ export const MarketModal = ({
             }
             setInputValue(undefined);
             setIsLoading(false);
-            onTransactionSuccess(cut);
+            onTransactionSuccess(cut, transaction);
 
             dispatch({ type: "updateStateData", stateData: response });
             onModalClose();
