@@ -107,14 +107,14 @@ export function WinnerScreen({
                                     display: "flex",
                                     paddingInline: "5px",
                                     backgroundColor:
-                                        playerIndex === idx
+                                        playerIndex === rank - 1
                                             ? Colors.Background.inverse
                                             : Colors.Background.base,
                                     "& h4": {
                                         marginBlock: 0,
                                         paddingBlock: "10px",
                                         color:
-                                            playerIndex === idx
+                                            playerIndex === rank - 1
                                                 ? Colors.Text.inverse
                                                 : Colors.Text.base,
                                     },
