@@ -82,6 +82,7 @@ export const enum Screen {
     Mugging = "mugging",
     LastTurn = "lastTurn",
     Error = "error",
+    Credits = "credits",
 }
 export type ScreenType = `${Screen}`;
 

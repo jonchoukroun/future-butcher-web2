@@ -3,7 +3,13 @@ import { jsx } from "@emotion/react";
 import { Fragment, useState } from "react";
 
 import { QuitGameModal } from "./QuitGameModal";
-import { ButtonPrompt, ButtonPromptSize } from "../../Components/";
+import {
+    Button,
+    ButtonPrompt,
+    ButtonPromptSize,
+    ButtonScheme,
+    ButtonSize,
+} from "../../Components/";
 import { LineSize, PrintLine, PromptScheme } from "../../Components/PrintLine";
 import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { PackDetails, WeaponDetails } from "../../Fixtures/store";
@@ -22,8 +28,8 @@ export const StatsScreen = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     const {
-        state: { currentStation, turnsLeft, player },
         dispatch,
+        state: { currentStation, turnsLeft, player },
     } = useGameState();
 
     if (
@@ -90,6 +96,10 @@ export const StatsScreen = () => {
         setIsLoading(false);
     };
 
+    const handleMoreClick = () => {
+        dispatch({ type: "changeScreen", screen: Screen.Credits });
+    };
+
     return (
         <div
             css={{
@@ -105,7 +115,7 @@ export const StatsScreen = () => {
                 css={{
                     inlineSize: "100%",
                     marginBlockStart: "30px",
-                    marginBlockEnd: "48px",
+                    marginBlockEnd: "20px",
                     borderBottomColor: Colors.Border.subtle,
                     borderBottomStyle: "dashed",
                     borderBottomWidth: "2px",
@@ -125,6 +135,14 @@ export const StatsScreen = () => {
                     marginBlockStart: "auto",
                 }}
             >
+                <div css={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button
+                        label={"More"}
+                        size={ButtonSize.Small}
+                        scheme={ButtonScheme.Inverse}
+                        clickCB={handleMoreClick}
+                    />
+                </div>
                 <div
                     css={{
                         marginBlockEnd: "16px",

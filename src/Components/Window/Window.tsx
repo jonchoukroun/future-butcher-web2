@@ -19,6 +19,7 @@ import { Welcome } from "../../Screens/Welcome/Welcome";
 
 import * as Colors from "../../Styles/colors";
 import { getTimeLeft } from "../../Utils/getTimeLeft";
+import { Credits } from "../../Screens/Stats/Credits";
 
 export const Window = () => {
     const { layout, windowSize } = useWindowSize();
@@ -118,6 +119,8 @@ export const Window = () => {
                 )}
 
                 {currentScreen === "gameResult" && <GameResult />}
+
+                {currentScreen === "credits" && <Credits />}
             </div>
         </div>
     );
