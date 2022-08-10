@@ -32,6 +32,7 @@ export const Window = () => {
 
     const turnRef = useRef<number>();
     const hasShownTravelAlertRef = useRef(false);
+    const hasShownBellGardensAlertRef = useRef(false);
     useEffect(() => {
         if (turnRef.current && turnRef.current === turnsLeft) {
             return;
@@ -50,6 +51,16 @@ export const Window = () => {
                 isPersistent: true,
             });
             hasShownTravelAlertRef.current = true;
+        }
+        if (
+            turnRef.current < 21 &&
+            turnRef.current >= 18 &&
+            !hasShownBellGardensAlertRef.current
+        ) {
+            pushAlert({
+                text: BELL_GARDENS_ALERT,
+                isPersistent: true,
+            });
         }
     }, [pushAlert, turnsLeft]);
 
@@ -134,3 +145,6 @@ function getTravelAlert(turnsLeft: number) {
         turnsLeft,
     )} now, and you only have ${turnsLeft} hours left. And remember to pay off your debt on the "INFO" screen.`;
 }
+
+const BELL_GARDENS_ALERT =
+    "Gus's Army Surplus Store is now open in Bell Gardens. They'll hook you up with weapons and bigger packs. Better hurry though, prices go up every hour.";
