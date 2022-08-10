@@ -83,12 +83,6 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
     const [state, dispatch] = React.useReducer(gameStateReducer, {});
 
     useEffect(() => {
-        if (isConnected) return;
-
-        dispatch({ type: "changeScreen", screen: Screen.Error });
-    }, [isConnected]);
-
-    useEffect(() => {
         const handleJoin = async () => {
             if (!playerName || !playerHash) {
                 dispatch({ type: "changeScreen", screen: Screen.Login });

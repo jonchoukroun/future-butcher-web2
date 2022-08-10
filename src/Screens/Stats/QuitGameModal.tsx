@@ -28,7 +28,7 @@ export const QuitGameModal = ({
     const [isLoading, setIsLoading] = useState(false);
 
     const { dispatch } = useGameState();
-    const { handleEndGame } = useChannel();
+    const { handleEndGame, handleInitGame } = useChannel();
     const handleEndGameClick = async () => {
         if (isLoading) return;
 
@@ -46,6 +46,10 @@ export const QuitGameModal = ({
         if (response === undefined) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
+        }
+
+        if ((await handleInitGame()) !== "ok") {
+            dispatch({ type: "changeScreen", screen: Screen.Error });
         }
 
         dispatch({

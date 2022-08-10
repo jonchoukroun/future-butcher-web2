@@ -58,7 +58,10 @@ export const GameResult = () => {
 
     const handleStartOverClick = async () => {
         setIsLoading(true);
-        await handleInitGame();
+        const init = await handleInitGame();
+        if (init !== "ok") {
+            dispatch({ type: "changeScreen", screen: Screen.Error });
+        }
 
         dispatch({
             type: "changeScreen",
