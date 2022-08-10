@@ -105,9 +105,6 @@ export const Market = () => {
                         Meat Market
                     </h2>
                 )}
-                <small css={{ color: Colors.Text.subtle }}>
-                    Buy low (*), sell high.
-                </small>
             </div>
 
             <CutList

@@ -5,8 +5,26 @@ const muggingVictory = [
     "No pity. No remorse. This mugger fucked with the wrong hustler.",
 ];
 
-export function randMuggingVictoryContent() {
+export function getVictoryCopy() {
     const len = muggingVictory.length;
     const i = Math.floor(Math.random() * len);
     return muggingVictory[i];
+}
+
+export function getDefeatCopy(hoursLost: number) {
+    const copy = [
+        `You lay unconscious in the gutter for ${hoursLost} ${pluralize(
+            hoursLost,
+        )} while local kids threw rocks at your sorry ass.`,
+        `They didn't care for your attempt to fight. He gave you the ass kicking of a lifetime and left you bleeding in the street for ${hoursLost} ${pluralize(
+            hoursLost,
+        )}.`,
+        ` You were out cold for ${hoursLost} ${pluralize(hoursLost)}.`,
+    ];
+    const i = Math.floor(Math.random() * copy.length);
+    return copy[i];
+}
+
+function pluralize(time: number): string {
+    return time === 1 ? "hour" : "hours";
 }

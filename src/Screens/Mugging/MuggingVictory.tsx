@@ -2,7 +2,7 @@
 import { jsx } from "@emotion/react";
 
 import { ScreenTemplate } from "../../Components";
-import { randMuggingVictoryContent } from "../../Copy/Mugging";
+import { getVictoryCopy } from "../../Copy/Mugging";
 import { OwnedCutsType, CutType, Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
@@ -54,7 +54,7 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
     );
 
     // TODO: add additional responses and randomize
-    const content = [randMuggingVictoryContent()];
+    const content = [getVictoryCopy()];
     if (cutsCount > 0) {
         content.push(
             ...[

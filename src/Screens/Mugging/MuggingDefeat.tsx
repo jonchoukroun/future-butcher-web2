@@ -2,6 +2,7 @@
 import { jsx } from "@emotion/react";
 
 import { ScreenTemplate } from "../../Components";
+import { getDefeatCopy } from "../../Copy/Mugging";
 import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 
@@ -24,9 +25,7 @@ export const MuggingDefeat = ({
 
     const muggingContent = [
         "The mugger kicked your ass!",
-        `You lay unconscious in the gutter for ${hoursLost} ${pluralize(
-            hoursLost,
-        )} while local kids threw rocks at your sorry ass.`,
+        getDefeatCopy(hoursLost),
         "Next time, bring a better weapon to the fight.",
     ];
 
@@ -41,7 +40,3 @@ export const MuggingDefeat = ({
         />
     );
 };
-
-function pluralize(time: number): string {
-    return time === 1 ? "hour" : "hours";
-}
