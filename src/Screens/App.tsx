@@ -1,5 +1,7 @@
 /** @jsx jsx */
 import { Global, css, jsx } from "@emotion/react";
+import * as Sentry from "@sentry/react";
+import { BrowserTracing } from "@sentry/tracing";
 
 import { AlertServiceProvider } from "../AlertService/AlertServiceProvider";
 import { Window } from "../Components/Window/Window";
@@ -7,6 +9,12 @@ import { WindowSizeProvider } from "../Components/Window/WindowSizeProvider";
 import { ChannelProvider } from "../PhoenixChannel/ChannelProvider";
 import { GameStateProvider } from "../GameData/GameStateProvider";
 import * as Colors from "../Styles/colors";
+
+Sentry.init({
+    dsn: process.env.SENTRY_DSN,
+    integrations: [new BrowserTracing()],
+    tracesSampleRate: 1.0,
+});
 
 export const App = () => {
     return (
