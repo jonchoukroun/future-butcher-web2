@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/react";
 import { KeyboardEvent, useEffect, useRef, useState } from "react";
+import { captureException } from "@sentry/react";
 
 import {
     ButtonPrompt,
@@ -55,6 +56,7 @@ export const Login = () => {
             } else {
                 setErrorMessage("Something went wrong. Try another name.");
             }
+            captureException(errorMessage);
             return;
         }
         dispatch({ type: "changeScreen", screen: Screen.Welcome });

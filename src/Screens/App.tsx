@@ -12,7 +12,9 @@ import * as Colors from "../Styles/colors";
 
 Sentry.init({
     dsn: process.env.SENTRY_DSN,
+    environment: process.env.NODE_ENV,
     integrations: [new BrowserTracing()],
+    autoSessionTracking: true,
     tracesSampleRate: 1.0,
 });
 
