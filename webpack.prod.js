@@ -8,7 +8,12 @@ module.exports = merge(common, {
     devtool: "source-map",
     plugins: [
         new DefinePlugin({
-            "process.env": {},
+            "process.env": {
+                API_URL: JSON.stringify("wss://api.futurebutcher.com/socket"),
+                SENTRY_DSN: JSON.stringify(
+                    "https://8809bb8c7dc0466cbfef54ec16c730de@sentry.io/1341103",
+                ),
+            },
         }),
     ],
 });
