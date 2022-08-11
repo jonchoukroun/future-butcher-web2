@@ -16,7 +16,7 @@ module.exports = merge(common, {
     plugins: [
         new DefinePlugin({
             "process.env": {
-                API_URL: JSON.stringify("ws://localhost:5000/socket"),
+                REACT_APP_API_URL: JSON.stringify("ws://localhost:5000/socket"),
             },
         }),
     ],

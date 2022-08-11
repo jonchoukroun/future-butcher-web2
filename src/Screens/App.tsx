@@ -11,12 +11,13 @@ import { GameStateProvider } from "../GameData/GameStateProvider";
 import * as Colors from "../Styles/colors";
 
 Sentry.init({
-    dsn: process.env.SENTRY_DSN,
+    dsn: process.env.REACT_APP_SENTRY_DSN,
     integrations: [new BrowserTracing()],
     tracesSampleRate: 1.0,
 });
 
 export const App = () => {
+    console.log("!!dsn", process.env.REACT_APP_SENTRY_DSN);
     return (
         <ChannelProvider>
             <WindowSizeProvider>

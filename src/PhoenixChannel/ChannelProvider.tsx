@@ -69,7 +69,7 @@ export const ChannelProvider = ({
 }: {
     children: React.ReactNode;
 }) => {
-    const apiUrl = process.env.API_URL;
+    const apiUrl = process.env.REACT_APP_API_URL;
     if (!apiUrl) throw new Error("API URL is not defined");
 
     const [socket] = useState<Socket>(new Socket(apiUrl, {}));
