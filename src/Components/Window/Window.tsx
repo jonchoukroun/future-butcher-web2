@@ -61,6 +61,7 @@ export const Window = () => {
                 text: BELL_GARDENS_ALERT,
                 isPersistent: true,
             });
+            hasShownBellGardensAlertRef.current = true;
         }
     }, [pushAlert, turnsLeft]);
 
