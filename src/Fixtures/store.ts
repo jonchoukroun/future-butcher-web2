@@ -39,7 +39,7 @@ export const CutSurge: {
         price: 8000,
         messages: [
             "It's the Hannibal Lecter Club's annual convention. Liver and Chianti prices are outta control.",
-            "Locally grown onion is tasting pretty good, so farmer's markets are stocking up on liver.",
+            "Locally grown onion is tasting gooood, so farmers markets are stocking up on liver.",
             "An ancient recipe is trending hard, and the main ingredient is liver.",
         ],
     },

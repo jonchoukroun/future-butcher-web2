@@ -14,11 +14,11 @@ export function Credits() {
             title={"Acknowledgements"}
             content={[
                 "Special thanks to everyone who's made this game possible:",
-                "New client Beta testers: JPM, jitrah, Trtninc",
-                "Top player of all time: Doh",
-                "Future Butcher was designed and devloped by Jon Choukroun. The game runs on Elixir/Phoenix, React, and a lot of hot sauce.",
+                "Beta testers: JPM, jitrah, Dougler, Trtninc",
+                "Top players of all time: Doh & Hannah",
+                "Future Butcher was designed and devloped by Jon Choukroun. The game runs on Elixir/Phoenix and React.",
                 "Copyright 2022",
-                'Inspired by the John E. Dell class "Drug Wars"',
+                'Inspired by the John E. Dell classic "Drug Wars"',
             ]}
             buttonLabel={"Back"}
             isLoading={false}

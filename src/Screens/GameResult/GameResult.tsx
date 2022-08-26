@@ -84,7 +84,7 @@ export const GameResult = () => {
     const loserContent = [
         `You try to give the coyote a measley ${formatMoney(funds)}.`,
         "He glares at you and brandishes a jewel encrusted meat cleaver.",
-        '"Don\'t waste my time, pendejo.," he says.',
+        '"Don\'t waste my time pendejo," he says.',
         "You won't be escaping LA today. Better try again. This time, do better.",
     ];
 
