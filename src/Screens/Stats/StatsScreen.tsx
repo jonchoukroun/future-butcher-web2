@@ -71,6 +71,7 @@ export const StatsScreen = () => {
     };
 
     const handlePayDebtClick = async () => {
+        handleMessage("Sample error via handleMessage", MessageLevel.Error);
         if (isLoading) return;
         if (!debt) {
             handleMessage(
@@ -98,6 +99,7 @@ export const StatsScreen = () => {
 
     const handleMoreClick = () => {
         dispatch({ type: "changeScreen", screen: Screen.Credits });
+        throw new Error("Sample error");
     };
 
     return (
