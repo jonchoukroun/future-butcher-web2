@@ -24,6 +24,7 @@ import {
     WeaponType,
 } from "../GameData";
 import { handleMessage, MessageLevel } from "../Logging/handleMessage";
+import { bribeMugger } from "./bribeMugger";
 
 const { createContext, useCallback, useContext, useEffect, useMemo, useState } =
     React;
@@ -33,6 +34,7 @@ export type CallbackType =
     | "startGame"
     | "restoreState"
     | "travel"
+    | "bribeMugger"
     | "fightMugger"
     | "buyCut"
     | "sellCut"
@@ -155,6 +157,10 @@ export const ChannelProvider = ({
                         channel,
                         payload as { destination: string },
                     );
+                    break;
+
+                case "bribeMugger":
+                    response = bribeMugger(channel, payload);
                     break;
 
                 case "fightMugger":
