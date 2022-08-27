@@ -64,9 +64,7 @@ export const MarketModal = ({
             ? pack[cut]
             : Math.min(quantity, maxAfford, spaceAvailable);
 
-    const [inputValue, setInputValue] = useState<number | undefined>(
-        maxTransact,
-    );
+    const [inputValue, setInputValue] = useState<number>();
     const [isAmountValid, setIsAmountValid] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string>();
     const [isLoading, setIsLoading] = useState(false);
@@ -129,14 +127,14 @@ export const MarketModal = ({
 
     const handleSubmit = async () => {
         if (isLoading) return;
-        if (!isAmountValid) return;
 
         setIsLoading(true);
+        const amount = inputValue || maxTransact;
 
         if (transaction === "buy") {
             const response = await handlePushCallback("buyCut", {
                 cut,
-                amount: inputValue,
+                amount,
             });
             // TODO: API error handling
             if (response === undefined || isApiError(response)) {
@@ -152,7 +150,7 @@ export const MarketModal = ({
         } else {
             const response = await handlePushCallback("sellCut", {
                 cut,
-                amount: inputValue,
+                amount,
             });
             // TODO: API error handling
             if (response === undefined || isApiError(response)) {
@@ -185,12 +183,16 @@ export const MarketModal = ({
 
     const title = `${transaction} ${cut}`;
 
-    const buttonLabel =
-        inputValue === maxTransact
-            ? `${transaction} max (${inputValue} ${pluralize(inputValue)})`
-            : isAmountValid && inputValue
-            ? `${transaction} ${inputValue} ${pluralize(inputValue)} ${cut}`
-            : transaction;
+    let buttonLabel = `Can't ${transaction} that amount`;
+    if (!inputValue || inputValue === maxTransact) {
+        buttonLabel = `${transaction} max (${maxTransact} ${pluralize(
+            maxTransact,
+        )})`;
+    } else if (inputValue && isAmountValid) {
+        buttonLabel = `${transaction} ${inputValue} ${pluralize(
+            inputValue,
+        )} ${cut}`;
+    }
 
     const baseModalStyle = css({
         inlineSize: `${inlineSize - inlineSizeOffset}px`,
@@ -292,7 +294,7 @@ export const MarketModal = ({
                     />
 
                     <TextInput
-                        placeholder={"How many?"}
+                        placeholder={`Click to ${transaction} a different amount`}
                         type={"number"}
                         value={`${inputValue || ""}`}
                         blink={!isAmountValid}
@@ -306,7 +308,7 @@ export const MarketModal = ({
                             label={buttonLabel}
                             size={ButtonPromptSize.Full}
                             blink={isAmountValid}
-                            disabled={!isAmountValid}
+                            disabled={!!inputValue && !isAmountValid}
                             clickCB={handleSubmit}
                         />
                     </div>
