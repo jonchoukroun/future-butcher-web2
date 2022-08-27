@@ -20,9 +20,9 @@ export function Credits() {
                 "Copyright 2022",
                 'Inspired by the John E. Dell classic "Drug Wars"',
             ]}
-            buttonLabel={"Back"}
-            isLoading={false}
-            clickCB={handleBackClick}
+            primaryButtonLabel={"Back"}
+            primaryIsLoading={false}
+            primaryClickCB={handleBackClick}
         />
     );
 }

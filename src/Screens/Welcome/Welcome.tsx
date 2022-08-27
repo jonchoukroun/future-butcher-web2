@@ -122,9 +122,9 @@ export const Welcome = ({ startScreen }: { startScreen?: WelcomeScreen }) => {
                     title={WELCOME_TITLE}
                     subtitle={displayDate}
                     content={INTRO_CONTENT}
-                    buttonLabel={"Next"}
-                    isLoading={false}
-                    clickCB={handleIncrementScreen}
+                    primaryButtonLabel={"Next"}
+                    primaryIsLoading={false}
+                    primaryClickCB={handleIncrementScreen}
                 />
             )}
 
@@ -133,9 +133,9 @@ export const Welcome = ({ startScreen }: { startScreen?: WelcomeScreen }) => {
                     title={WELCOME_TITLE}
                     subtitle={"Compton, 5:00 am"}
                     content={INSTRUCTIONS_CONTENT}
-                    buttonLabel={"Next"}
-                    isLoading={isLoading}
-                    clickCB={handleIncrementScreen}
+                    primaryButtonLabel={"Next"}
+                    primaryIsLoading={isLoading}
+                    primaryClickCB={handleIncrementScreen}
                 />
             )}
 
@@ -143,9 +143,9 @@ export const Welcome = ({ startScreen }: { startScreen?: WelcomeScreen }) => {
                 <ScreenTemplate
                     title={WELCOME_TITLE}
                     content={startContent}
-                    buttonLabel={"Start Game"}
-                    isLoading={isLoading}
-                    clickCB={handleStartClick}
+                    primaryButtonLabel={"Start Game"}
+                    primaryIsLoading={isLoading}
+                    primaryClickCB={handleStartClick}
                 />
             )}
 
@@ -154,9 +154,9 @@ export const Welcome = ({ startScreen }: { startScreen?: WelcomeScreen }) => {
                 <ScreenTemplate
                     title={WELCOME_TITLE}
                     content={START_OVER_CONTENT}
-                    buttonLabel={"Start Game"}
-                    isLoading={isLoading}
-                    clickCB={handleStartClick}
+                    primaryButtonLabel={"Start Game"}
+                    primaryIsLoading={isLoading}
+                    primaryClickCB={handleStartClick}
                 />
             )}
         </Fragment>

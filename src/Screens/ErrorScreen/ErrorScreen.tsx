@@ -24,9 +24,9 @@ export const ErrorScreen = () => {
             content={[
                 "A killer Belgian virus is burning across the globe. The meat economy is at a standstill while people shelter in place.",
             ]}
-            buttonLabel={"Try Again"}
-            isLoading={false}
-            clickCB={handleClick}
+            primaryButtonLabel={"Try Again"}
+            primaryIsLoading={false}
+            primaryClickCB={handleClick}
         />
     );
 };

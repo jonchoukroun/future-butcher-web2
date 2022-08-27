@@ -124,9 +124,9 @@ export const LastTurn = () => {
         <ScreenTemplate
             title={"Ready to Retire?"}
             content={content}
-            buttonLabel={buttonLabel}
-            isLoading={false}
-            clickCB={buttonCB}
+            primaryButtonLabel={buttonLabel}
+            primaryIsLoading={false}
+            primaryClickCB={buttonCB}
         />
     );
 };

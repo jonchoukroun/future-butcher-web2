@@ -12,9 +12,12 @@ interface ScreenTemplateProps {
     subtitle?: string;
     danger?: boolean;
     content: string[];
-    buttonLabel: string;
-    isLoading: boolean;
-    clickCB: () => void;
+    primaryButtonLabel: string;
+    primaryIsLoading: boolean;
+    primaryClickCB: () => void;
+    secondaryButtonLabel?: string;
+    secondaryIsLoading?: boolean;
+    secondaryClickCB?: () => void;
 }
 
 export function ScreenTemplate({
@@ -22,9 +25,12 @@ export function ScreenTemplate({
     subtitle,
     danger = false,
     content,
-    buttonLabel,
-    isLoading = false,
-    clickCB,
+    primaryButtonLabel,
+    primaryIsLoading = false,
+    primaryClickCB,
+    secondaryButtonLabel,
+    secondaryIsLoading = false,
+    secondaryClickCB,
 }: ScreenTemplateProps) {
     const { getContentSize } = useWindowSize();
     const { blockSize, inlineSize } = getContentSize();
@@ -79,13 +85,23 @@ export function ScreenTemplate({
 
                 <div css={{ inlineSize: "100%", marginBlockStart: "20px" }}>
                     <ButtonPrompt
-                        label={buttonLabel}
+                        label={primaryButtonLabel}
                         size={ButtonPromptSize.Full}
                         blink={true}
-                        loading={isLoading}
-                        clickCB={clickCB}
+                        loading={primaryIsLoading}
+                        clickCB={primaryClickCB}
                     />
                 </div>
+
+                {secondaryButtonLabel && secondaryClickCB && (
+                    <ButtonPrompt
+                        label={secondaryButtonLabel}
+                        size={ButtonPromptSize.Full}
+                        blink={true}
+                        loading={secondaryIsLoading}
+                        clickCB={secondaryClickCB}
+                    />
+                )}
             </div>
         </div>
     );

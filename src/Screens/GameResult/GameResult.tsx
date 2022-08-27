@@ -95,9 +95,9 @@ export const GameResult = () => {
                 title={loserTitle}
                 subtitle={deadbeatSubtitle}
                 content={deadbeatContent}
-                buttonLabel={"Start Over"}
-                isLoading={isLoading}
-                clickCB={handleStartOverClick}
+                primaryButtonLabel={"Start Over"}
+                primaryIsLoading={isLoading}
+                primaryClickCB={handleStartOverClick}
             />
         );
     }
@@ -115,9 +115,9 @@ export const GameResult = () => {
                 title={loserTitle}
                 subtitle={loserSubtitle}
                 content={loserContent}
-                buttonLabel={"Start Over"}
-                isLoading={isLoading}
-                clickCB={handleStartOverClick}
+                primaryButtonLabel={"Start Over"}
+                primaryIsLoading={isLoading}
+                primaryClickCB={handleStartOverClick}
             />
         );
     }
