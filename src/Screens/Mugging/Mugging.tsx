@@ -2,6 +2,7 @@
 import { jsx } from "@emotion/react";
 import { useRef, useState } from "react";
 
+import { MuggingBribe } from "./MuggingBribe";
 import { MuggingDefeat } from "./MuggingDefeat";
 import { MuggingVictory } from "./MuggingVictory";
 import { ScreenTemplate } from "../../Components";
@@ -27,21 +28,27 @@ export const Mugging = () => {
 
     const { handlePushCallback } = useChannel();
 
-    const { pack } = player;
+    const { funds, pack, weapon } = player;
 
-    const initialTurnsLeft = useRef(turnsLeft);
-    const initialPack = useRef(pack);
+    const canBribeMugger =
+        funds > 500 || Object.values(pack).find((cut) => cut > 0);
+
+    const initialTurnsLeftRef = useRef(turnsLeft);
+    const initialPackRef = useRef(pack);
+    const initialFundsRef = useRef(funds);
     const currentMuggerRef = useRef(
         muggers === undefined ? "Fred Savage" : muggers[0],
     );
-    const [muggingState, setMuggingState] = useState<"victory" | "defeat">();
+    const [muggingState, setMuggingState] = useState<
+        "victory" | "defeat" | "bribe"
+    >();
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleFightMuggerClick = async () => {
+    const handleClick = async (action: "bribeMugger" | "fightMugger") => {
         if (isLoading) return;
         setIsLoading(true);
 
-        const response = await handlePushCallback("fightMugger", {});
+        const response = await handlePushCallback(action, {});
         // TODO: API error handling
         if (response === undefined || isApiError(response)) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
@@ -49,7 +56,9 @@ export const Mugging = () => {
         }
         dispatch({ type: "updateStateData", stateData: response });
         const outcome =
-            initialTurnsLeft.current > response.rules.turns_left
+            action === "bribeMugger"
+                ? "bribe"
+                : initialTurnsLeftRef.current > response.rules.turns_left
                 ? "defeat"
                 : "victory";
 
@@ -64,11 +73,20 @@ export const Mugging = () => {
     };
 
     if (muggingState === "defeat") {
-        return <MuggingDefeat initialTurnsLeft={initialTurnsLeft.current} />;
+        return <MuggingDefeat initialTurnsLeft={initialTurnsLeftRef.current} />;
     }
 
     if (muggingState === "victory") {
-        return <MuggingVictory initialPack={initialPack.current} />;
+        return <MuggingVictory initialPack={initialPackRef.current} />;
+    }
+
+    if (muggingState === "bribe") {
+        return (
+            <MuggingBribe
+                initialFunds={initialFundsRef.current}
+                initialPack={initialPackRef.current}
+            />
+        );
     }
 
     const muggingContent = [
@@ -76,17 +94,25 @@ export const Mugging = () => {
         "Pulling a well-used blade, they charge you!",
         "You have a split second to react...",
     ];
-    if (!player.weapon)
+    if (!player.weapon) {
         muggingContent.push("...a weapon may have come in handy here...");
+    }
+
+    const buttonLabel =
+        weapon === null ? "Try to hoof it!" : "Fight the mugger!";
 
     return (
         <ScreenTemplate
             title={"A Mugger Attacks!"}
             content={muggingContent}
             danger={true}
-            buttonLabel={"Fight the mugger!"}
-            isLoading={isLoading}
-            clickCB={handleFightMuggerClick}
+            primaryButtonLabel={buttonLabel}
+            primaryIsLoading={isLoading}
+            primaryClickCB={() => handleClick("fightMugger")}
+            secondaryButtonLabel={
+                canBribeMugger ? "Bribe the Mugger" : undefined
+            }
+            secondaryClickCB={() => handleClick("bribeMugger")}
         />
     );
 };

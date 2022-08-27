@@ -34,9 +34,9 @@ export const MuggingDefeat = ({
             title={"You lose!"}
             danger={true}
             content={muggingContent}
-            isLoading={false}
-            buttonLabel={"Get back to work"}
-            clickCB={handleClick}
+            primaryButtonLabel={"Get back to work"}
+            primaryIsLoading={false}
+            primaryClickCB={handleClick}
         />
     );
 };

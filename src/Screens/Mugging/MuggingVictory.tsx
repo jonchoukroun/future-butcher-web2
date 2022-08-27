@@ -5,7 +5,6 @@ import { ScreenTemplate } from "../../Components";
 import { getVictoryCopy } from "../../Copy/Mugging";
 import { OwnedCutsType, CutType, Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
-import { handleMessage, MessageLevel } from "../../Logging/handleMessage";
 
 interface MuggingVictoryProps {
     initialPack: OwnedCutsType;
@@ -20,14 +19,7 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
         throw new Error("State is undefined");
     }
 
-    if (player.weapon === undefined) {
-        handleMessage(
-            "Player defeats mugger without a weapon",
-            MessageLevel.Error,
-        );
-    }
-
-    const { pack } = player;
+    const { pack, weapon } = player;
 
     let cutsCount = 0;
     const harvestedCuts: string = Object.entries(pack).reduce(
@@ -53,8 +45,7 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
         "",
     );
 
-    // TODO: add additional responses and randomize
-    const content = [getVictoryCopy()];
+    const content = [getVictoryCopy(weapon === null)];
     if (cutsCount > 0) {
         content.push(
             ...[
@@ -72,9 +63,9 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
         <ScreenTemplate
             title={"You win!"}
             content={content}
-            isLoading={false}
-            buttonLabel={"Get back to work"}
-            clickCB={handleClick}
+            primaryButtonLabel={"Get back to work"}
+            primaryIsLoading={false}
+            primaryClickCB={handleClick}
         />
     );
 };

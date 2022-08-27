@@ -1,14 +1,19 @@
-const muggingVictory = [
+const muggingRunVictory = [
+    "Who's faster than you? Nobody. Not the mugger you left wheezing in the dust.",
+    "You sprint like death is chasing you. Considering the rabid mugger and his rusty blade, who can blame you?",
+];
+const muggingFightVictory = [
     "Neighborhood kids cheer as you kick the mugger's ass.",
     "Who's badder than you? Nobody. Not the mugger whose ass you laid out.",
     "You're here to hustle meat and kick ass. And you're doing both.",
     "No pity. No remorse. This mugger fucked with the wrong hustler.",
 ];
 
-export function getVictoryCopy() {
-    const len = muggingVictory.length;
+export function getVictoryCopy(didRun: boolean) {
+    const victoryContent = didRun ? muggingRunVictory : muggingFightVictory;
+    const len = victoryContent.length;
     const i = Math.floor(Math.random() * len);
-    return muggingVictory[i];
+    return victoryContent[i];
 }
 
 export function getDefeatCopy(hoursLost: number) {
