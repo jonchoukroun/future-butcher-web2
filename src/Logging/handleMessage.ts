@@ -18,15 +18,12 @@ export function handleMessage(
     switch (level) {
         case MessageLevel.Success:
             console.log(message);
-            captureMessage(message, "info");
             break;
         case MessageLevel.Info:
             console.info(message);
-            captureMessage(message, "warning");
             break;
         case MessageLevel.Error:
             console.error(message);
-            captureMessage(message, "error");
             break;
         default:
             throw new Error("Invalid message handler level");
