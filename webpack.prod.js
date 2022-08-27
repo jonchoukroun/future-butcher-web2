@@ -11,7 +11,7 @@ module.exports = merge(common, {
             "process.env": {
                 API_URL: JSON.stringify("wss://api.futurebutcher.com/socket"),
                 SENTRY_DSN: JSON.stringify(
-                    "https://8809bb8c7dc0466cbfef54ec16c730de@sentry.io/1341103",
+                    "https://9ed2aa2dc4824f69845582808282c525@o213338.ingest.sentry.io/6639536",
                 ),
             },
         }),

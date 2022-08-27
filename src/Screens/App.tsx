@@ -14,6 +14,7 @@ Sentry.init({
     dsn: process.env.SENTRY_DSN,
     environment: process.env.NODE_ENV,
     integrations: [new BrowserTracing()],
+    autoSessionTracking: true,
 });
 
 export const App = () => {
