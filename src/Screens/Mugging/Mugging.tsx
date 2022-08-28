@@ -28,14 +28,14 @@ export const Mugging = () => {
 
     const { handlePushCallback } = useChannel();
 
-    const { funds, pack, weapon } = player;
+    const { cash, pack, weapon } = player;
 
     const canBribeMugger =
-        funds > 500 || Object.values(pack).find((cut) => cut > 0);
+        cash > 500 || Object.values(pack).find((cut) => cut > 0);
 
     const initialTurnsLeftRef = useRef(turnsLeft);
     const initialPackRef = useRef(pack);
-    const initialFundsRef = useRef(funds);
+    const initialcashRef = useRef(cash);
     const currentMuggerRef = useRef(
         muggers === undefined ? "Fred Savage" : muggers[0],
     );
@@ -83,7 +83,7 @@ export const Mugging = () => {
     if (muggingState === "bribe") {
         return (
             <MuggingBribe
-                initialFunds={initialFundsRef.current}
+                initialcash={initialcashRef.current}
                 initialPack={initialPackRef.current}
             />
         );

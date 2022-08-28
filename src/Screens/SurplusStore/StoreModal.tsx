@@ -62,7 +62,7 @@ export function StoreModal({
 
     const isPackListing = isPack(listing);
     const isOwned = alreadyOwned(listing, player);
-    const canAfford = player.funds >= listing.price;
+    const canAfford = player.cash >= listing.price;
     const isPackSoldOut = isPackListing
         ? isOwned || player.totalPackSpace > listing.pack_space
         : false;
@@ -104,7 +104,7 @@ export function StoreModal({
         // TODO: API error handling
         if (isApiError(response)) {
             switch (response.error) {
-                case ":insufficient_funds":
+                case ":insufficient_cash":
                     handleMessage(
                         "Pricing validation failed",
                         MessageLevel.Error,

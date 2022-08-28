@@ -58,7 +58,7 @@ export const MarketModal = ({
     const { price, quantity } = listing;
     const stock = transaction === "buy" ? quantity : pack[cut];
 
-    const maxAfford = Math.floor(player.funds / price);
+    const maxAfford = Math.floor(player.cash / price);
     const maxTransact =
         transaction === "sell"
             ? pack[cut]

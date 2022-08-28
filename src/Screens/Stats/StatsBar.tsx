@@ -41,7 +41,7 @@ export const StatsBar = () => {
                     color: Colors.Text.base,
                 }}
             >
-                {formatMoney(player.funds)}
+                {formatMoney(player.cash)}
                 {player.debt > 0 && (
                     <span css={{ color: Colors.Text.danger }}>!</span>
                 )}

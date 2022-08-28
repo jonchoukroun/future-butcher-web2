@@ -185,7 +185,7 @@ function handleUpdateState(
 ): GameStateType {
     const { currentScreen, muggers } = currentState;
     const {
-        player: { player_name, funds, debt, weapon, pack, pack_space },
+        player: { player_name, cash, debt, weapon, pack, pack_space },
         station: { market, station_name, store },
         rules: { turns_left, state },
     } = apiState;
@@ -198,7 +198,7 @@ function handleUpdateState(
         muggers,
         player: {
             debt,
-            funds,
+            cash,
             health: 100,
             playerName: player_name,
             pack,

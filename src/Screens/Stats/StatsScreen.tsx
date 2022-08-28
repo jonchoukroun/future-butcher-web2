@@ -47,8 +47,8 @@ export const StatsScreen = () => {
 
     const station = StationDetails[currentStation];
 
-    const { debt, funds, pack, totalPackSpace, weapon } = player;
-    const canPayDebt = debt > 0 && funds > debt;
+    const { debt, cash, pack, totalPackSpace, weapon } = player;
+    const canPayDebt = debt > 0 && cash > debt;
 
     const packName = (
         Object.values(PackDetails).find(
@@ -80,7 +80,7 @@ export const StatsScreen = () => {
             return;
         }
 
-        if (debt > funds) {
+        if (debt > cash) {
             handleMessage("Failed debt payment validation", MessageLevel.Error);
             return;
         }
@@ -153,7 +153,7 @@ export const StatsScreen = () => {
                     }}
                 >
                     <PrintLine
-                        text={`Funds: ${formatMoney(funds)}`}
+                        text={`cash: ${formatMoney(cash)}`}
                         size={LineSize.Body}
                         promptScheme={PromptScheme.Past}
                     />
@@ -174,7 +174,7 @@ export const StatsScreen = () => {
                                         : "Can't pay debt"
                                 }
                                 size={ButtonPromptSize.Full}
-                                blink={funds > debt}
+                                blink={cash > debt}
                                 disabled={!canPayDebt}
                                 loading={isLoading}
                                 clickCB={handlePayDebtClick}

@@ -17,7 +17,7 @@ import { WelcomeScreen } from "../Screens/Welcome/Welcome";
 export type ApiStateType = {
     player: {
         debt: number;
-        funds: number;
+        cash: number;
         pack: OwnedCutsType;
         pack_space: number;
         player_name: string;

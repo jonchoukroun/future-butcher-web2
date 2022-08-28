@@ -7,12 +7,12 @@ import { useGameState } from "../../GameData/GameStateProvider";
 import { formatMoney } from "../../Utils/formatMoney";
 
 interface MuggingBribeProps {
-    initialFunds: number;
+    initialcash: number;
     initialPack: OwnedCutsType;
 }
 
 export const MuggingBribe = ({
-    initialFunds,
+    initialcash,
     initialPack,
 }: MuggingBribeProps) => {
     const {
@@ -23,13 +23,13 @@ export const MuggingBribe = ({
         throw new Error("State is undefined");
     }
 
-    const { funds, pack } = player;
+    const { cash, pack } = player;
 
     const content = [
         "Ever the pacifist, you bribe the mugger not to hurt you.",
     ];
 
-    const lostCash = initialFunds - funds;
+    const lostCash = initialcash - cash;
     const lostCut = Object.entries(initialPack).find(
         ([cut, amount]) => amount > 0 && pack[cut as CutType] === 0,
     );

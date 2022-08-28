@@ -36,7 +36,7 @@ export const GameResult = () => {
 
     const playerName = localStorage.getItem("playerName") ?? "Blondie";
 
-    const { debt, funds } = player;
+    const { debt, cash } = player;
 
     useEffect(() => {
         if (topScores || didRequestScoresRef.current) return;
@@ -82,7 +82,7 @@ export const GameResult = () => {
     const loserTitle = "You Lose";
     const loserSubtitle = "Didn't quite make the cut";
     const loserContent = [
-        `You try to give the coyote a measley ${formatMoney(funds)}.`,
+        `You try to give the coyote a measley ${formatMoney(cash)}.`,
         "He glares at you and brandishes a jewel encrusted meat cleaver.",
         '"Don\'t waste my time pendejo," he says.',
         "You won't be escaping LA today. Better try again. This time, do better.",
@@ -104,7 +104,7 @@ export const GameResult = () => {
 
     playerIndexRef.current = topScores
         ? topScores.findIndex(
-              ({ player, score }) => player === playerName && score == funds,
+              ({ player, score }) => player === playerName && score == cash,
           )
         : undefined;
 

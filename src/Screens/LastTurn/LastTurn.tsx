@@ -26,7 +26,7 @@ export const LastTurn = () => {
     );
     const [isLoading, setIsLoading] = useState(false);
 
-    const { debt, funds, pack, totalPackSpace } = player;
+    const { debt, cash, pack, totalPackSpace } = player;
 
     const spaceAvailable = getSpaceAvailable({ pack, totalPackSpace });
     const hasCuts = spaceAvailable < totalPackSpace;
@@ -46,7 +46,7 @@ export const LastTurn = () => {
             return;
         }
 
-        if (debt > funds) {
+        if (debt > cash) {
             handleMessage("Failed debt payment validation", MessageLevel.Error);
             return;
         }
@@ -63,7 +63,7 @@ export const LastTurn = () => {
         dispatch({ type: "updateStateData", stateData: response });
         setContent([...DEFAULT_CONTENT, ...DID_PAY_DEBT_CONTENT]);
         setIsLoading(false);
-    }, [debt, dispatch, funds, handlePushCallback, isLoading]);
+    }, [debt, dispatch, cash, handlePushCallback, isLoading]);
 
     const handleRetireClick = useCallback(async () => {
         if (isLoading) return;
@@ -78,7 +78,7 @@ export const LastTurn = () => {
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
-        const score = debt > 0 ? 0 : funds;
+        const score = debt > 0 ? 0 : cash;
         const highScores = await handleEndGame(hashId, score);
         if (highScores === undefined) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
@@ -86,7 +86,7 @@ export const LastTurn = () => {
         }
         dispatch({ type: "setHighScores", highScores });
         dispatch({ type: "changeScreen", screen: Screen.GameResult });
-    }, [debt, dispatch, funds, handleEndGame, isLoading]);
+    }, [debt, dispatch, cash, handleEndGame, isLoading]);
 
     useEffect(() => {
         if (hasCuts) {
@@ -97,14 +97,12 @@ export const LastTurn = () => {
             setContent([
                 ...DEFAULT_CONTENT,
                 ...HAS_DEBT_CONTENT,
-                ...(funds >= debt ? CAN_PAY_DEBT_CONTENT : []),
+                ...(cash >= debt ? CAN_PAY_DEBT_CONTENT : []),
             ]);
             setButtonLabel(
-                funds >= debt
-                    ? CAN_PAY_DEBT_BUTTON_LABEL
-                    : DEFAULT_BUTTON_LABEL,
+                cash >= debt ? CAN_PAY_DEBT_BUTTON_LABEL : DEFAULT_BUTTON_LABEL,
             );
-            const cb = funds >= debt ? handlePayDebtClick : handleRetireClick;
+            const cb = cash >= debt ? handlePayDebtClick : handleRetireClick;
             setButtonCB(() => cb);
         } else {
             setContent([...DEFAULT_CONTENT, ...NO_LOOSE_ENDS_CONTENT]);
@@ -113,7 +111,7 @@ export const LastTurn = () => {
         }
     }, [
         debt,
-        funds,
+        cash,
         handlePayDebtClick,
         handleRetireClick,
         handleVisitMarketClick,
