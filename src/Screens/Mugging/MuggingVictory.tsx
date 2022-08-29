@@ -7,10 +7,14 @@ import { OwnedCutsType, CutType, Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 
 interface MuggingVictoryProps {
+    initialHealth: number;
     initialPack: OwnedCutsType;
 }
 
-export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
+export const MuggingVictory = ({
+    initialHealth,
+    initialPack,
+}: MuggingVictoryProps) => {
     const {
         dispatch,
         state: { player },
@@ -19,7 +23,7 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
         throw new Error("State is undefined");
     }
 
-    const { pack, weapon } = player;
+    const { health, pack, weapon } = player;
 
     let cutsCount = 0;
     const harvestedCuts: string = Object.entries(pack).reduce(
@@ -46,6 +50,26 @@ export const MuggingVictory = ({ initialPack }: MuggingVictoryProps) => {
     );
 
     const content = [getVictoryCopy(weapon === null)];
+    if (initialHealth > health) {
+        if (weapon === null) {
+            content.push(
+                `You didn't escape unscathed. The mugger sliced you for ${
+                    initialHealth - health
+                } damage.`,
+            );
+        } else {
+            content.push(
+                `The mugger got some good hits in and you took ${
+                    initialHealth - health
+                } damage.`,
+            );
+        }
+        if (health < 50) {
+            content.push(
+                "You're getting weak. Visit the 24 Hour Clinic in Venice Beach to get patched up.",
+            );
+        }
+    }
     if (cutsCount > 0) {
         content.push(
             ...[

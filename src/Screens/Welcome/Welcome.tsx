@@ -20,13 +20,14 @@ const INTRO_CONTENT = [
 const INSTRUCTIONS_CONTENT = [
     "You wake up in Compton, ready to hustle.",
     "A coyote will pick you up in 24 hours to smuggle you across the border to Mexico.",
-    "Use the Subway to nagivate the city's neighborhoods. Buy and sell from the Meat Markets, but watch your back! Gangs run the city, and you don't want to cross them.",
+    "Use the Subway to nagivate the city's neighborhoods. Buy and sell from the Meat Markets, but watch your back! The streets are dangerous.",
     "If you need protection or a bigger pack, Gus's Army Surplus store in Bell Gardens opens at 9am.",
+    "And if you get cut up, the 24 Hour Free Clinic in Venice Beach can get you patched up.",
 ];
 
 const START_CONTENT_BASE = [
     "To get started you hooked up a $5,000 loan from the bank - with a 5% hourly interest rate.",
-    "Yeah, it's steep. Welcome to the People's Republic of Los Angeles...",
+    "Yeah, it's steep. Welcome to the People's Republic of Los Angeles.",
 ];
 
 const START_OVER_CONTENT = [

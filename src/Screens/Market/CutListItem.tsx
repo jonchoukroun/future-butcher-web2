@@ -28,9 +28,9 @@ export const CutListItem = ({
         throw new Error("State is undefined");
     }
 
-    const { funds, pack, totalPackSpace } = player;
+    const { cash, pack, totalPackSpace } = player;
     const spaceAvailable = getSpaceAvailable({ pack, totalPackSpace });
-    const canBuy = funds >= listing.price && spaceAvailable > 0;
+    const canBuy = cash >= listing.price && spaceAvailable > 0;
     const owned = pack[listing.name];
     const inStock = listing.quantity > 0;
 

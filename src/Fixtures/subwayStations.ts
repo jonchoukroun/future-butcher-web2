@@ -37,7 +37,7 @@ export const StationDetails: { [Station in StationType]: StationDetailsType } =
             displayName: "Venice Beach",
             hours: 2,
             stationDescription:
-                "Heal your body and soul with restorative yoga and free substandard medicine.",
+                "Heal your body and soul with restorative yoga and substandard medicine.",
             gangdisplayName: "The 3rd Eye Boys",
             gangDescription:
                 "Roided-out yogis who'll put you in a downward dog... for good.",

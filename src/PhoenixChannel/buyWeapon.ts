@@ -13,7 +13,7 @@ export async function buyWeapon(
             })
             .receive("error", ({ reason }) => {
                 const handledErrors = [
-                    ":insufficient_funds",
+                    ":insufficient_cash",
                     ":already_owns_weapon",
                 ];
                 if (handledErrors.includes(reason)) {

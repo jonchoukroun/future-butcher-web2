@@ -16,7 +16,7 @@ export function getVictoryCopy(didRun: boolean) {
     return victoryContent[i];
 }
 
-export function getDefeatCopy(hoursLost: number) {
+export function getDefeatCopy(hoursLost: number, damageTaken: number) {
     const copy = [
         `You lay unconscious in the gutter for ${hoursLost} ${pluralize(
             hoursLost,
@@ -27,7 +27,12 @@ export function getDefeatCopy(hoursLost: number) {
         ` You were out cold for ${hoursLost} ${pluralize(hoursLost)}.`,
     ];
     const i = Math.floor(Math.random() * copy.length);
-    return copy[i];
+    if (damageTaken > 0) {
+        const str = `You took ${damageTaken} damage. The 24 Hour Free Clinic in Venice Beach can patch you up.`;
+        return [copy[i], str].join(" ");
+    } else {
+        return copy[i];
+    }
 }
 
 function pluralize(time: number): string {

@@ -127,12 +127,19 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                 if (lastState.rules.state === "in_game") {
                     isInGameRef.current = true;
                     dispatch({ type: "updateStateData", stateData: lastState });
+                    let screen: ScreenType;
+                    if (lastState.station.station_name === "bell_gardens") {
+                        screen = Screen.Store;
+                    } else if (
+                        lastState.station.station_name === "venice_beach"
+                    ) {
+                        screen = Screen.Clinic;
+                    } else {
+                        screen = Screen.Market;
+                    }
                     dispatch({
                         type: "changeScreen",
-                        screen:
-                            lastState.station.station_name === "bell_gardens"
-                                ? Screen.Store
-                                : Screen.Market,
+                        screen,
                     });
                     return;
                 }
@@ -185,11 +192,10 @@ function handleUpdateState(
 ): GameStateType {
     const { currentScreen, muggers } = currentState;
     const {
-        player: { player_name, funds, debt, weapon, pack, pack_space },
-        station: { market, station_name, store },
+        player: { player_name, cash, debt, health, weapon, pack, pack_space },
+        station: { clinic_cost, market, station_name, store },
         rules: { turns_left, state },
     } = apiState;
-
     return {
         currentProcess: state,
         currentScreen,
@@ -197,15 +203,16 @@ function handleUpdateState(
         market: market ? serializeMarket(market) : undefined,
         muggers,
         player: {
+            cash,
             debt,
-            funds,
-            health: 100,
+            health,
             playerName: player_name,
             pack,
             totalPackSpace: pack_space,
             weapon,
         },
         store: store ? serializeStore(store) : undefined,
+        clinicCost: clinic_cost ? clinic_cost : undefined,
         turnsLeft: turns_left,
         hasUnseenAlerts: true,
     };

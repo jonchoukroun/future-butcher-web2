@@ -11,6 +11,7 @@ import { joinChannel } from "./joinChannel";
 import { newGame } from "./newGame";
 import { payDebt } from "./payDebt";
 import { replaceWeapon } from "./replaceWeapon";
+import { restoreHealth } from "./restoreHealth";
 import { restoreState } from "./restoreState";
 import { sellCut } from "./sellCut";
 import { startGame } from "./startGame";
@@ -41,6 +42,7 @@ export type CallbackType =
     | "buyPack"
     | "buyWeapon"
     | "replaceWeapon"
+    | "restoreHealth"
     | "payDebt"
     | "endGame";
 
@@ -207,6 +209,10 @@ export const ChannelProvider = ({
                         channel,
                         payload as { weapon: WeaponType },
                     );
+                    break;
+
+                case "restoreHealth":
+                    response = restoreHealth(channel, payload);
                     break;
 
                 default:

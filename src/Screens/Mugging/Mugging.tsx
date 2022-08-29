@@ -28,14 +28,15 @@ export const Mugging = () => {
 
     const { handlePushCallback } = useChannel();
 
-    const { funds, pack, weapon } = player;
+    const { cash, health, pack, weapon } = player;
 
     const canBribeMugger =
-        funds > 500 || Object.values(pack).find((cut) => cut > 0);
+        cash > 500 || Object.values(pack).find((cut) => cut > 0);
 
-    const initialTurnsLeftRef = useRef(turnsLeft);
+    const initialcashRef = useRef(cash);
     const initialPackRef = useRef(pack);
-    const initialFundsRef = useRef(funds);
+    const initialHealthRef = useRef(health);
+    const initialTurnsLeftRef = useRef(turnsLeft);
     const currentMuggerRef = useRef(
         muggers === undefined ? "Fred Savage" : muggers[0],
     );
@@ -55,6 +56,11 @@ export const Mugging = () => {
             return;
         }
         dispatch({ type: "updateStateData", stateData: response });
+        if (response.rules.state === "game_over") {
+            dispatch({ type: "changeScreen", screen: Screen.Death });
+            return null;
+        }
+
         const outcome =
             action === "bribeMugger"
                 ? "bribe"
@@ -73,17 +79,27 @@ export const Mugging = () => {
     };
 
     if (muggingState === "defeat") {
-        return <MuggingDefeat initialTurnsLeft={initialTurnsLeftRef.current} />;
+        return (
+            <MuggingDefeat
+                initialHealth={initialHealthRef.current}
+                initialTurnsLeft={initialTurnsLeftRef.current}
+            />
+        );
     }
 
     if (muggingState === "victory") {
-        return <MuggingVictory initialPack={initialPackRef.current} />;
+        return (
+            <MuggingVictory
+                initialHealth={initialHealthRef.current}
+                initialPack={initialPackRef.current}
+            />
+        );
     }
 
     if (muggingState === "bribe") {
         return (
             <MuggingBribe
-                initialFunds={initialFundsRef.current}
+                initialcash={initialcashRef.current}
                 initialPack={initialPackRef.current}
             />
         );
@@ -91,15 +107,14 @@ export const Mugging = () => {
 
     const muggingContent = [
         `One of the city's relentless muggers, ${currentMuggerRef.current}, follows you from the subway.`,
-        "Pulling a well-used blade, they charge you!",
-        "You have a split second to react...",
+        "Pulling a well-used blade, they charge you! You have a split second to react.",
     ];
     if (!player.weapon) {
         muggingContent.push("...a weapon may have come in handy here...");
     }
 
     const buttonLabel =
-        weapon === null ? "Try to hoof it!" : "Fight the mugger!";
+        weapon === null ? "Run for your life" : "Fight the mugger";
 
     return (
         <ScreenTemplate
@@ -109,9 +124,7 @@ export const Mugging = () => {
             primaryButtonLabel={buttonLabel}
             primaryIsLoading={isLoading}
             primaryClickCB={() => handleClick("fightMugger")}
-            secondaryButtonLabel={
-                canBribeMugger ? "Bribe the Mugger" : undefined
-            }
+            secondaryButtonLabel={canBribeMugger ? "Offer a bribe" : undefined}
             secondaryClickCB={() => handleClick("bribeMugger")}
         />
     );

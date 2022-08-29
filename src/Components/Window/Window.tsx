@@ -6,6 +6,8 @@ import { GameScreen } from "./GameScreen";
 import { useWindowSize } from "./WindowSizeProvider";
 import { useAlertService } from "../../AlertService/AlertServiceProvider";
 import { useGameState } from "../../GameData/GameStateProvider";
+import { Clinic } from "../../Screens/Clinic/Clinic";
+import { Death } from "../../Screens/Death/Death";
 import { ErrorScreen } from "../../Screens/ErrorScreen/ErrorScreen";
 import { GameResult } from "../../Screens/GameResult/GameResult";
 import { LastTurn } from "../../Screens/LastTurn/LastTurn";
@@ -94,6 +96,8 @@ export const Window = () => {
                     <Welcome startScreen={screenProps} />
                 )}
 
+                {currentScreen === "death" && <Death />}
+
                 {currentScreen === "market" && (
                     <GameScreen layout={layout} shouldShowNavBar={true}>
                         <Market />
@@ -109,6 +113,12 @@ export const Window = () => {
                 {currentScreen === "store" && (
                     <GameScreen layout={layout} shouldShowNavBar={true}>
                         <SurplusStore />
+                    </GameScreen>
+                )}
+
+                {currentScreen === "clinic" && (
+                    <GameScreen layout={layout} shouldShowNavBar={true}>
+                        <Clinic />
                     </GameScreen>
                 )}
 
@@ -144,7 +154,7 @@ const MEAT_MARKET_ALERT =
 function getTravelAlert(turnsLeft: number) {
     return `Keep an eye on the clock. It's ${getTimeLeft(
         turnsLeft,
-    )} now, and you only have ${turnsLeft} hours left. And remember to pay off your debt on the "INFO" screen.`;
+    )} now, and you only have ${turnsLeft} hours left. Click the stats bar above to see more details and pay off your debt.`;
 }
 
 const BELL_GARDENS_ALERT =

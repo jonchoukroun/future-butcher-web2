@@ -47,8 +47,8 @@ export const StatsScreen = () => {
 
     const station = StationDetails[currentStation];
 
-    const { debt, funds, pack, totalPackSpace, weapon } = player;
-    const canPayDebt = debt > 0 && funds > debt;
+    const { cash, debt, health, pack, totalPackSpace, weapon } = player;
+    const canPayDebt = debt > 0 && cash > debt;
 
     const packName = (
         Object.values(PackDetails).find(
@@ -80,7 +80,7 @@ export const StatsScreen = () => {
             return;
         }
 
-        if (debt > funds) {
+        if (debt > cash) {
             handleMessage("Failed debt payment validation", MessageLevel.Error);
             return;
         }
@@ -153,34 +153,40 @@ export const StatsScreen = () => {
                     }}
                 >
                     <PrintLine
-                        text={`Funds: ${formatMoney(funds)}`}
+                        text={`Health: ${health}%`}
                         size={LineSize.Body}
                         promptScheme={PromptScheme.Past}
                     />
 
-                    {debt > 0 && (
-                        <Fragment>
-                            <PrintLine
-                                text={`Debt: ${formatMoney(debt)}`}
-                                size={LineSize.Body}
-                                danger={true}
-                                promptScheme={PromptScheme.Past}
-                            />
+                    <PrintLine
+                        text={`Cash: ${formatMoney(cash)}`}
+                        size={LineSize.Body}
+                        promptScheme={PromptScheme.Past}
+                    />
 
-                            <ButtonPrompt
-                                label={
-                                    canPayDebt
-                                        ? "Pay debt with FlayPal"
-                                        : "Can't pay debt"
-                                }
-                                size={ButtonPromptSize.Full}
-                                blink={funds > debt}
-                                disabled={!canPayDebt}
-                                loading={isLoading}
-                                clickCB={handlePayDebtClick}
-                            />
-                        </Fragment>
-                    )}
+                    <Fragment>
+                        <PrintLine
+                            text={`Debt: ${formatMoney(debt)}`}
+                            size={LineSize.Body}
+                            danger={true}
+                            promptScheme={PromptScheme.Past}
+                        />
+
+                        <ButtonPrompt
+                            label={
+                                debt === 0
+                                    ? "Debt is paid off"
+                                    : canPayDebt
+                                    ? "Pay debt with FlayPal"
+                                    : "Can't pay debt"
+                            }
+                            size={ButtonPromptSize.Full}
+                            blink={cash > debt}
+                            disabled={!canPayDebt}
+                            loading={isLoading}
+                            clickCB={handlePayDebtClick}
+                        />
+                    </Fragment>
                 </div>
 
                 <div

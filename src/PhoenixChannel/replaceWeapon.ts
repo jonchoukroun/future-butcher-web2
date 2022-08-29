@@ -13,7 +13,7 @@ export async function replaceWeapon(
             })
             .receive("error", ({ reason }) => {
                 const handledErrors = [
-                    ":insufficient_funds",
+                    ":insufficient_cash",
                     ":same_weapon_type",
                 ];
                 if (handledErrors.includes(reason)) {

@@ -13,7 +13,7 @@ export async function buyPack(
             })
             .receive("error", ({ reason }) => {
                 const handledErrors = [
-                    ":insufficient_funds",
+                    ":insufficient_cash",
                     ":must_upgrade_pack",
                 ];
                 if (handledErrors.includes(reason)) {

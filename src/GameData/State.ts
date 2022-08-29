@@ -16,8 +16,9 @@ import { WelcomeScreen } from "../Screens/Welcome/Welcome";
  */
 export type ApiStateType = {
     player: {
+        cash: number;
         debt: number;
-        funds: number;
+        health: number;
         pack: OwnedCutsType;
         pack_space: number;
         player_name: string;
@@ -31,6 +32,7 @@ export type ApiStateType = {
         market: MarketType | null;
         station_name: StationType;
         store: StoreType | null;
+        clinic_cost: number | null;
     };
 };
 
@@ -66,6 +68,7 @@ export type GameStateType = {
     muggers?: string[];
     player?: PlayerType;
     store?: StoreListing;
+    clinicCost?: number;
     turnsLeft?: number;
     hasUnseenAlerts?: boolean;
     screenProps?: WelcomeScreen;
@@ -78,9 +81,11 @@ export const enum Screen {
     Market = "market",
     Stats = "stats",
     Store = "store",
+    Clinic = "clinic",
     GameResult = "gameResult",
     Mugging = "mugging",
     LastTurn = "lastTurn",
+    Death = "death",
     Error = "error",
     Credits = "credits",
 }

@@ -7,15 +7,19 @@ import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 
 export const MuggingDefeat = ({
+    initialHealth,
     initialTurnsLeft,
 }: {
+    initialHealth: number;
     initialTurnsLeft: number;
 }) => {
     const {
         dispatch,
-        state: { turnsLeft },
+        state: { player, turnsLeft },
     } = useGameState();
-    if (turnsLeft === undefined) throw new Error("State is undefined");
+    if (player === undefined || turnsLeft === undefined) {
+        throw new Error("State is undefined");
+    }
 
     const handleClick = () => {
         dispatch({ type: "changeScreen", screen: Screen.Market });
@@ -25,7 +29,7 @@ export const MuggingDefeat = ({
 
     const muggingContent = [
         "The mugger kicked your ass!",
-        getDefeatCopy(hoursLost),
+        getDefeatCopy(hoursLost, initialHealth - player.health),
         "Next time, bring a better weapon to the fight.",
     ];
 

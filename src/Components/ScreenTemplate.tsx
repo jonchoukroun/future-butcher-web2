@@ -14,9 +14,11 @@ interface ScreenTemplateProps {
     content: string[];
     primaryButtonLabel: string;
     primaryIsLoading: boolean;
+    primaryIsDisabled?: boolean;
     primaryClickCB: () => void;
     secondaryButtonLabel?: string;
     secondaryIsLoading?: boolean;
+    secondaryIsDisabled?: boolean;
     secondaryClickCB?: () => void;
 }
 
@@ -27,9 +29,11 @@ export function ScreenTemplate({
     content,
     primaryButtonLabel,
     primaryIsLoading = false,
+    primaryIsDisabled = false,
     primaryClickCB,
     secondaryButtonLabel,
     secondaryIsLoading = false,
+    secondaryIsDisabled = false,
     secondaryClickCB,
 }: ScreenTemplateProps) {
     const { getContentSize } = useWindowSize();
@@ -89,6 +93,7 @@ export function ScreenTemplate({
                         size={ButtonPromptSize.Full}
                         blink={true}
                         loading={primaryIsLoading}
+                        disabled={primaryIsDisabled}
                         clickCB={primaryClickCB}
                     />
                 </div>
@@ -99,6 +104,7 @@ export function ScreenTemplate({
                         size={ButtonPromptSize.Full}
                         blink={true}
                         loading={secondaryIsLoading}
+                        disabled={secondaryIsDisabled}
                         clickCB={secondaryClickCB}
                     />
                 )}
