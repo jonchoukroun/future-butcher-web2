@@ -47,7 +47,7 @@ export const StatsScreen = () => {
 
     const station = StationDetails[currentStation];
 
-    const { debt, cash, pack, totalPackSpace, weapon } = player;
+    const { cash, debt, health, pack, totalPackSpace, weapon } = player;
     const canPayDebt = debt > 0 && cash > debt;
 
     const packName = (
@@ -152,6 +152,12 @@ export const StatsScreen = () => {
                         borderBottomWidth: "2px",
                     }}
                 >
+                    <PrintLine
+                        text={`Health: ${health}%`}
+                        size={LineSize.Body}
+                        promptScheme={PromptScheme.Past}
+                    />
+
                     <PrintLine
                         text={`cash: ${formatMoney(cash)}`}
                         size={LineSize.Body}

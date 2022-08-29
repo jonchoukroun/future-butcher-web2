@@ -16,8 +16,9 @@ import { WelcomeScreen } from "../Screens/Welcome/Welcome";
  */
 export type ApiStateType = {
     player: {
-        debt: number;
         cash: number;
+        debt: number;
+        health: number;
         pack: OwnedCutsType;
         pack_space: number;
         player_name: string;
@@ -81,6 +82,7 @@ export const enum Screen {
     GameResult = "gameResult",
     Mugging = "mugging",
     LastTurn = "lastTurn",
+    Death = "death",
     Error = "error",
     Credits = "credits",
 }

@@ -50,6 +50,7 @@ export const QuitGameModal = ({
 
         if ((await handleInitGame()) !== "ok") {
             dispatch({ type: "changeScreen", screen: Screen.Error });
+            return;
         }
 
         dispatch({

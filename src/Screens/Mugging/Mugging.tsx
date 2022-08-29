@@ -55,6 +55,11 @@ export const Mugging = () => {
             return;
         }
         dispatch({ type: "updateStateData", stateData: response });
+        if (response.rules.state === "game_over") {
+            dispatch({ type: "changeScreen", screen: Screen.Death });
+            return null;
+        }
+
         const outcome =
             action === "bribeMugger"
                 ? "bribe"

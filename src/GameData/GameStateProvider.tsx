@@ -185,11 +185,10 @@ function handleUpdateState(
 ): GameStateType {
     const { currentScreen, muggers } = currentState;
     const {
-        player: { player_name, cash, debt, weapon, pack, pack_space },
+        player: { player_name, cash, debt, health, weapon, pack, pack_space },
         station: { market, station_name, store },
         rules: { turns_left, state },
     } = apiState;
-
     return {
         currentProcess: state,
         currentScreen,
@@ -197,9 +196,9 @@ function handleUpdateState(
         market: market ? serializeMarket(market) : undefined,
         muggers,
         player: {
-            debt,
             cash,
-            health: 100,
+            debt,
+            health,
             playerName: player_name,
             pack,
             totalPackSpace: pack_space,

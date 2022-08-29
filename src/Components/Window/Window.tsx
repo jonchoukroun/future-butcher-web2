@@ -6,6 +6,7 @@ import { GameScreen } from "./GameScreen";
 import { useWindowSize } from "./WindowSizeProvider";
 import { useAlertService } from "../../AlertService/AlertServiceProvider";
 import { useGameState } from "../../GameData/GameStateProvider";
+import { Death } from "../../Screens/Death/Death";
 import { ErrorScreen } from "../../Screens/ErrorScreen/ErrorScreen";
 import { GameResult } from "../../Screens/GameResult/GameResult";
 import { LastTurn } from "../../Screens/LastTurn/LastTurn";
@@ -93,6 +94,8 @@ export const Window = () => {
                 {currentScreen === "welcome" && (
                     <Welcome startScreen={screenProps} />
                 )}
+
+                {currentScreen === "death" && <Death />}
 
                 {currentScreen === "market" && (
                     <GameScreen layout={layout} shouldShowNavBar={true}>
