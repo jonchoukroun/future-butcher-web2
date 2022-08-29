@@ -6,7 +6,7 @@ import { Prompt } from "../../Components";
 import { StationDetails } from "../../Fixtures/subwayStations";
 import { Screen, StationType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
-import { isApiError } from "../../GameData/State";
+import { isApiError, ScreenType } from "../../GameData/State";
 import { useChannel } from "../../PhoenixChannel/ChannelProvider";
 
 import * as Animations from "../../Styles/animations";
@@ -43,12 +43,14 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
             return;
         }
 
-        const screen =
-            stateData.rules.state === "mugging"
-                ? Screen.Mugging
-                : stateData.station.station_name === "bell_gardens"
-                ? Screen.Store
-                : Screen.Market;
+        let screen: ScreenType;
+        if (stateData.rules.state === "mugging") {
+            screen = Screen.Mugging;
+        } else if (stateData.station.station_name === "bell_gardens") {
+            screen = Screen.Store;
+        } else {
+            screen = Screen.Market;
+        }
         dispatch({ type: "updateStateData", stateData });
         dispatch({ type: "changeScreen", screen });
         setIsLoading(false);

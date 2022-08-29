@@ -79,6 +79,7 @@ export const enum Screen {
     Market = "market",
     Stats = "stats",
     Store = "store",
+    Clinic = "clinic",
     GameResult = "gameResult",
     Mugging = "mugging",
     LastTurn = "lastTurn",

@@ -5,7 +5,7 @@ import { useWindowSize } from "./WindowSizeProvider";
 import { ButtonPrompt, ButtonPromptSize } from "../ButtonPrompt";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { Screen } from "../../GameData";
-import { GameProcessType, ScreenType } from "../../GameData/State";
+import { GameProcessType, ScreenType, StationType } from "../../GameData/State";
 
 export const NavBar = () => {
     const { layout } = useWindowSize();
@@ -23,10 +23,7 @@ export const NavBar = () => {
         throw new Error("State is undefined");
     }
 
-    const label = getButtonLabel(
-        currentScreen,
-        currentStation === "bell_gardens",
-    );
+    const label = getButtonLabel(currentScreen, currentStation);
 
     const screen = getNextScreen(
         currentProcess,
@@ -58,13 +55,17 @@ export const NavBar = () => {
     );
 };
 
-function getButtonLabel(
-    screen: ScreenType | undefined,
-    isBellGardens: boolean,
-) {
+function getButtonLabel(screen: ScreenType | undefined, station: StationType) {
     switch (screen) {
-        case "subway":
-            return isBellGardens ? "Go to the Store" : "Buy or Sell Cuts";
+        case "subway": {
+            if (station === "bell_gardens") {
+                return "Go to the Store";
+            } else if (station === "venice_beach") {
+                return "Go to the Clinic";
+            } else {
+                return "Buy or Sell Cuts";
+            }
+        }
 
         case "market":
             return "Take the Subway";
@@ -87,6 +88,11 @@ function getNextScreen(
     if (station === "bell_gardens") {
         if (screen === "store") return Screen.Subway;
         else return Screen.Store;
+    }
+
+    if (station === "venice_beach") {
+        if (screen === "clinic") return Screen.Subway;
+        else return Screen.Clinic;
     }
 
     if (screen === "market") return Screen.Subway;

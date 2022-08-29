@@ -127,12 +127,19 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                 if (lastState.rules.state === "in_game") {
                     isInGameRef.current = true;
                     dispatch({ type: "updateStateData", stateData: lastState });
+                    let screen: ScreenType;
+                    if (lastState.station.station_name === "bell_gardens") {
+                        screen = Screen.Store;
+                    } else if (
+                        lastState.station.station_name === "venice_beach"
+                    ) {
+                        screen = Screen.Clinic;
+                    } else {
+                        screen = Screen.Market;
+                    }
                     dispatch({
                         type: "changeScreen",
-                        screen:
-                            lastState.station.station_name === "bell_gardens"
-                                ? Screen.Store
-                                : Screen.Market,
+                        screen,
                     });
                     return;
                 }
