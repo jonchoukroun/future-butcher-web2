@@ -32,6 +32,7 @@ export type ApiStateType = {
         market: MarketType | null;
         station_name: StationType;
         store: StoreType | null;
+        clinic_cost: number | null;
     };
 };
 
@@ -67,6 +68,7 @@ export type GameStateType = {
     muggers?: string[];
     player?: PlayerType;
     store?: StoreListing;
+    clinicCost?: number;
     turnsLeft?: number;
     hasUnseenAlerts?: boolean;
     screenProps?: WelcomeScreen;
