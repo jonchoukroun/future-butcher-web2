@@ -65,8 +65,7 @@ export const StatsBar = () => {
             <h4
                 css={{
                     margin: 0,
-                    color:
-                        turnsLeft >= 5 ? Colors.Text.base : Colors.Text.danger,
+                    color: health >= 50 ? Colors.Text.base : Colors.Text.danger,
                 }}
             >
                 Health: {health}%
