@@ -154,7 +154,7 @@ const MEAT_MARKET_ALERT =
 function getTravelAlert(turnsLeft: number) {
     return `Keep an eye on the clock. It's ${getTimeLeft(
         turnsLeft,
-    )} now, and you only have ${turnsLeft} hours left. And remember to pay off your debt on the "INFO" screen.`;
+    )} now, and you only have ${turnsLeft} hours left. Click the stats bar above to see more details and pay off your debt.`;
 }
 
 const BELL_GARDENS_ALERT =
