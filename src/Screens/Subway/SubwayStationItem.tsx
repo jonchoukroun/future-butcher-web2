@@ -48,6 +48,8 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
             screen = Screen.Mugging;
         } else if (stateData.station.station_name === "bell_gardens") {
             screen = Screen.Store;
+        } else if (stateData.station.station_name === "venice_beach") {
+            screen = Screen.Clinic;
         } else {
             screen = Screen.Market;
         }

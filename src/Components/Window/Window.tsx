@@ -6,6 +6,7 @@ import { GameScreen } from "./GameScreen";
 import { useWindowSize } from "./WindowSizeProvider";
 import { useAlertService } from "../../AlertService/AlertServiceProvider";
 import { useGameState } from "../../GameData/GameStateProvider";
+import { Clinic } from "../../Screens/Clinic/Clinic";
 import { Death } from "../../Screens/Death/Death";
 import { ErrorScreen } from "../../Screens/ErrorScreen/ErrorScreen";
 import { GameResult } from "../../Screens/GameResult/GameResult";
@@ -112,6 +113,12 @@ export const Window = () => {
                 {currentScreen === "store" && (
                     <GameScreen layout={layout} shouldShowNavBar={true}>
                         <SurplusStore />
+                    </GameScreen>
+                )}
+
+                {currentScreen === "clinic" && (
+                    <GameScreen layout={layout} shouldShowNavBar={true}>
+                        <Clinic />
                     </GameScreen>
                 )}
 
