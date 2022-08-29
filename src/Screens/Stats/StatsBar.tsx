@@ -39,6 +39,9 @@ export const StatsBar = () => {
                 borderRadius: "0px",
                 borderStyle: "solid",
                 borderWidth: "1px",
+                "& h4": {
+                    fontSize: "16px",
+                },
             }}
             onClick={handleClick}
         >
