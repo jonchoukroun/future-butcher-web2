@@ -174,7 +174,9 @@ export const StatsScreen = () => {
 
                         <ButtonPrompt
                             label={
-                                canPayDebt
+                                debt === 0
+                                    ? "Debt is paid off"
+                                    : canPayDebt
                                     ? "Pay debt with FlayPal"
                                     : "Can't pay debt"
                             }
