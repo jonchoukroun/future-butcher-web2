@@ -1,7 +1,6 @@
 /** @jsx jsx */
 import { jsx } from "@emotion/react";
 
-import { ButtonPrompt, ButtonPromptSize } from "../../Components/ButtonPrompt";
 import { Screen } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { formatMoney } from "../../Utils/formatMoney";
@@ -15,11 +14,17 @@ export const StatsBar = () => {
         state: { player, turnsLeft },
     } = useGameState();
 
-    if (player === undefined || turnsLeft === undefined)
+    if (player === undefined || turnsLeft === undefined) {
         throw new Error("State is undefined");
+    }
+
+    const { cash, debt, health } = player;
+
+    const handleClick = () =>
+        dispatch({ type: "changeScreen", screen: Screen.Stats });
 
     return (
-        <div
+        <button
             css={{
                 blockSize: "40px",
                 inlineSize: "100%",
@@ -28,12 +33,14 @@ export const StatsBar = () => {
                 alignItems: "center",
                 paddingBlock: "2px",
                 paddingInline: "16px",
+                backgroundColor: "transparent",
                 borderColor: "transparent",
                 borderBlockEndColor: Colors.Border.subtle,
                 borderRadius: "0px",
                 borderStyle: "solid",
                 borderWidth: "1px",
             }}
+            onClick={handleClick}
         >
             <h4
                 css={{
@@ -41,11 +48,10 @@ export const StatsBar = () => {
                     color: Colors.Text.base,
                 }}
             >
-                {formatMoney(player.cash)}
-                {player.debt > 0 && (
-                    <span css={{ color: Colors.Text.danger }}>!</span>
-                )}
+                {formatMoney(cash)}
+                {debt > 0 && <span css={{ color: Colors.Text.danger }}>!</span>}
             </h4>
+
             <h4
                 css={{
                     margin: 0,
@@ -55,15 +61,16 @@ export const StatsBar = () => {
             >
                 {getTimeLeft(turnsLeft)}
             </h4>
-            <ButtonPrompt
-                label={"INFO"}
-                size={ButtonPromptSize.Compact}
-                blink={false}
-                showPrompt={false}
-                clickCB={() =>
-                    dispatch({ type: "changeScreen", screen: Screen.Stats })
-                }
-            />
-        </div>
+
+            <h4
+                css={{
+                    margin: 0,
+                    color:
+                        turnsLeft >= 5 ? Colors.Text.base : Colors.Text.danger,
+                }}
+            >
+                Health: {health}%
+            </h4>
+        </button>
     );
 };

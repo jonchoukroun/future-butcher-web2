@@ -159,34 +159,32 @@ export const StatsScreen = () => {
                     />
 
                     <PrintLine
-                        text={`cash: ${formatMoney(cash)}`}
+                        text={`Cash: ${formatMoney(cash)}`}
                         size={LineSize.Body}
                         promptScheme={PromptScheme.Past}
                     />
 
-                    {debt > 0 && (
-                        <Fragment>
-                            <PrintLine
-                                text={`Debt: ${formatMoney(debt)}`}
-                                size={LineSize.Body}
-                                danger={true}
-                                promptScheme={PromptScheme.Past}
-                            />
+                    <Fragment>
+                        <PrintLine
+                            text={`Debt: ${formatMoney(debt)}`}
+                            size={LineSize.Body}
+                            danger={true}
+                            promptScheme={PromptScheme.Past}
+                        />
 
-                            <ButtonPrompt
-                                label={
-                                    canPayDebt
-                                        ? "Pay debt with FlayPal"
-                                        : "Can't pay debt"
-                                }
-                                size={ButtonPromptSize.Full}
-                                blink={cash > debt}
-                                disabled={!canPayDebt}
-                                loading={isLoading}
-                                clickCB={handlePayDebtClick}
-                            />
-                        </Fragment>
-                    )}
+                        <ButtonPrompt
+                            label={
+                                canPayDebt
+                                    ? "Pay debt with FlayPal"
+                                    : "Can't pay debt"
+                            }
+                            size={ButtonPromptSize.Full}
+                            blink={cash > debt}
+                            disabled={!canPayDebt}
+                            loading={isLoading}
+                            clickCB={handlePayDebtClick}
+                        />
+                    </Fragment>
                 </div>
 
                 <div
