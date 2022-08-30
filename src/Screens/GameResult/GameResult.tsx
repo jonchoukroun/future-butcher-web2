@@ -108,22 +108,44 @@ export const GameResult = () => {
           )
         : undefined;
 
-    // Player loses - doesn't make it into top scores
-    if (playerIndexRef.current !== undefined && playerIndexRef.current < 0) {
-        return (
-            <ScreenTemplate
-                title={loserTitle}
-                subtitle={loserSubtitle}
-                content={loserContent}
-                primaryButtonLabel={"Start Over"}
-                primaryIsLoading={isLoading}
-                primaryClickCB={handleStartOverClick}
-            />
-        );
-    }
-
     // Prevent empty scores screen
     if (!topScores || playerIndexRef.current === undefined) return null;
+
+    const lowestScoreIndex = topScores.length - 1;
+
+    // Player loses - doesn't make it into top scores
+    if (playerIndexRef.current !== undefined && playerIndexRef.current < 0) {
+        const title = "Good Effort";
+        const content = [
+            `The coyote takes your ${formatMoney(
+                cash,
+            )} and starts the long drive to Mexico.`,
+            "You've made more money in the past, and you know you can beat your record.",
+            "So you ask the coyote to take you back to the city. Can you make more money this time around?",
+        ];
+        if (cash > topScores[lowestScoreIndex].score) {
+            return (
+                <ScreenTemplate
+                    title={title}
+                    content={content}
+                    primaryButtonLabel={"Start Over"}
+                    primaryIsLoading={isLoading}
+                    primaryClickCB={handleStartOverClick}
+                />
+            );
+        } else {
+            return (
+                <ScreenTemplate
+                    title={loserTitle}
+                    subtitle={loserSubtitle}
+                    content={loserContent}
+                    primaryButtonLabel={"Start Over"}
+                    primaryIsLoading={isLoading}
+                    primaryClickCB={handleStartOverClick}
+                />
+            );
+        }
+    }
 
     let displayScores: DisplayScoreType[];
     if (playerIndexRef.current < 5 && playerIndexRef.current >= 0) {
@@ -142,7 +164,6 @@ export const GameResult = () => {
                 score,
             }));
 
-        const lowestScoreIndex = topScores.length - 1;
         if (playerIndexRef.current === lowestScoreIndex) {
             const offset = lowestScoreIndex - 2;
             displayScores.unshift({
