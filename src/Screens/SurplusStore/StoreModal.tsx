@@ -152,9 +152,9 @@ export function StoreModal({
     };
 
     const itemDetails = getItemDetails(listing);
-    const harvestableCuts = getHarvestableCuts(listing);
-    const harvestDescription = harvestableCuts
-        ? `Can harvest: ${harvestableCuts}.`
+    const canHarvest = getCanHarvestCuts(listing);
+    const harvestDescription = canHarvest
+        ? "This weapon will harvest all cuts from a slain foe."
         : "This weapon can't harvest any cuts. Try a bladed weapon.";
 
     const buttonLabel =
@@ -275,7 +275,7 @@ export function StoreModal({
                         <Fragment>
                             <PrintLine
                                 text={`Damage: ${
-                                    (itemDetails as WeaponDetailsType).damage
+                                    (listing as WeaponListing).damage
                                 }0%`}
                                 size={LineSize.Body}
                                 promptScheme={PromptScheme.Past}
@@ -358,11 +358,11 @@ function getItemDetails<T extends PackListing | WeaponListing>(
     }
 }
 
-function getHarvestableCuts(
+function getCanHarvestCuts(
     listing: PackListing | WeaponListing,
-): string | undefined {
+): boolean | undefined {
     if (isPack(listing)) return undefined;
-    return listing.cuts.join(", ");
+    return listing.can_harvest;
 }
 
 function isPack(item: PackListing | WeaponListing): item is PackListing {

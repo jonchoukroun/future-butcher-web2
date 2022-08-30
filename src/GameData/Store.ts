@@ -1,5 +1,3 @@
-import { CutType } from ".";
-
 export type PackType =
     | "mini_fridge"
     | "shopping_cart"
@@ -16,9 +14,9 @@ export type WeaponType =
     | "machete";
 
 export type WeaponListingType = {
-    cuts: CutType[];
     damage: number;
     price: number;
+    can_harvest: boolean;
 };
 
 export type StoreType = {
