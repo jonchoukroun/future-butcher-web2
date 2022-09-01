@@ -71,6 +71,7 @@ const { useEffect } = React;
 export function GameStateProvider({ children }: GameStateProviderProps) {
     const {
         didJoinChannel,
+        handleEndGame,
         handleInitGame,
         handleJoinChannel,
         handlePushCallback,
@@ -125,6 +126,10 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                     return;
                 }
                 if (lastState.rules.state === "in_game") {
+                    if (lastState.player.health < 0) {
+                        handleEndGame(playerHash || "", 0);
+                        return;
+                    }
                     isInGameRef.current = true;
                     dispatch({ type: "updateStateData", stateData: lastState });
                     let screen: ScreenType;
@@ -155,7 +160,14 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
             }
         };
         if (didJoinChannel) initGame();
-    }, [didJoinChannel, handleInitGame, handlePushCallback, playerName]);
+    }, [
+        didJoinChannel,
+        handleEndGame,
+        handleInitGame,
+        handlePushCallback,
+        playerHash,
+        playerName,
+    ]);
 
     const value = { state, dispatch };
 
