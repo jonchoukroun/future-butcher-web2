@@ -127,7 +127,7 @@ export function GameStateProvider({ children }: GameStateProviderProps) {
                 }
                 if (lastState.rules.state === "in_game") {
                     if (lastState.player.health < 0) {
-                        handleEndGame(playerHash || "", 0);
+                        handleEndGame(playerHash || "");
                         return;
                     }
                     isInGameRef.current = true;

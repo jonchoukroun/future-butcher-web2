@@ -78,15 +78,14 @@ export const LastTurn = () => {
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
-        const score = debt > 0 ? 0 : cash;
-        const highScores = await handleEndGame(hashId, score);
+        const highScores = await handleEndGame(hashId);
         if (highScores === undefined) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
         dispatch({ type: "setHighScores", highScores });
         dispatch({ type: "changeScreen", screen: Screen.GameResult });
-    }, [debt, dispatch, cash, handleEndGame, isLoading]);
+    }, [dispatch, handleEndGame, isLoading]);
 
     useEffect(() => {
         if (hasCuts) {

@@ -42,7 +42,7 @@ export const QuitGameModal = ({
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
-        const response = await handleEndGame(hashId, 0);
+        const response = await handleEndGame(hashId);
         if (response === undefined) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
