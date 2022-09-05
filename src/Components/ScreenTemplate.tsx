@@ -11,7 +11,7 @@ interface ScreenTemplateProps {
     title: string;
     subtitle?: string;
     danger?: boolean;
-    content: string[];
+    content: Array<string | JSX.Element>;
     primaryButtonLabel: string;
     primaryIsLoading: boolean;
     primaryIsDisabled?: boolean;
@@ -47,6 +47,7 @@ export function ScreenTemplate({
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                marginInline: "auto",
                 paddingInline: "10px",
             }}
         >

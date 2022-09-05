@@ -83,10 +83,15 @@ function getNextScreen(
 ) {
     if (process === "mugging") return Screen.Mugging;
 
-    if (turnsLeft === 0 && screen === "market") return Screen.LastTurn;
+    if (
+        turnsLeft === 0 &&
+        (screen === Screen.Market || screen === Screen.Clinic)
+    ) {
+        return Screen.LastTurn;
+    }
 
     if (station === "bell_gardens") {
-        if (screen === "store") return Screen.Subway;
+        if (screen === Screen.Store) return Screen.Subway;
         else return Screen.Store;
     }
 

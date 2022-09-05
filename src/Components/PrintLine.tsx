@@ -20,7 +20,7 @@ export const enum PromptScheme {
 type PromptSchemeType = `${PromptScheme}`;
 
 interface PrintLineProps {
-    text: string;
+    text: string | JSX.Element;
     size: LineSizeType;
     danger?: boolean;
     promptScheme?: PromptSchemeType;
@@ -57,7 +57,11 @@ export function PrintLine({
     );
 }
 
-function buildNode(size: LineSizeType, text: string, color: string) {
+function buildNode(
+    size: LineSizeType,
+    text: string | JSX.Element,
+    color: string,
+) {
     switch (size) {
         case LineSize.Title:
             return (
@@ -78,7 +82,19 @@ function buildNode(size: LineSizeType, text: string, color: string) {
             return <h3 css={{ color, marginBlock: 0 }}>{text}</h3>;
 
         case LineSize.Body:
-            return <h4 css={{ color, marginBlock: 0 }}>{text}</h4>;
+            return (
+                <h4
+                    css={{
+                        color,
+                        marginBlock: 0,
+                        "& a": {
+                            color,
+                        },
+                    }}
+                >
+                    {text}
+                </h4>
+            );
 
         default:
             throw new Error(`Error: Invalid line size: ${size}`);
