@@ -11,7 +11,7 @@ interface ScreenTemplateProps {
     title: string;
     subtitle?: string;
     danger?: boolean;
-    content: string[];
+    content: Array<string | JSX.Element>;
     primaryButtonLabel: string;
     primaryIsLoading: boolean;
     primaryIsDisabled?: boolean;
