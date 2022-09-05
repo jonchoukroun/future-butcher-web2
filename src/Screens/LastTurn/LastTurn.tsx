@@ -13,7 +13,7 @@ import { getSpaceAvailable } from "../../Utils/spaceAvailable";
 export const LastTurn = () => {
     const {
         dispatch,
-        state: { player },
+        state: { currentStation, player },
     } = useGameState();
     if (player === undefined) throw new Error("State is undefined");
 
@@ -88,13 +88,17 @@ export const LastTurn = () => {
     }, [dispatch, handleEndGame, isLoading]);
 
     useEffect(() => {
-        if (hasCuts) {
+        const hasCutsInVenice =
+            currentStation === "venice_beach" ? HAS_CUTS_IN_VENICE : [];
+
+        if (hasCuts && currentStation !== "venice_beach") {
             setContent([...DEFAULT_CONTENT, ...HAS_CUTS_CONTENT]);
             setButtonLabel(HAS_CUTS_BUTTON_LABEL);
             setButtonCB(() => handleVisitMarketClick);
         } else if (debt && debt > 0) {
             setContent([
                 ...DEFAULT_CONTENT,
+                ...hasCutsInVenice,
                 ...HAS_DEBT_CONTENT,
                 ...(cash >= debt ? CAN_PAY_DEBT_CONTENT : []),
             ]);
@@ -104,13 +108,18 @@ export const LastTurn = () => {
             const cb = cash >= debt ? handlePayDebtClick : handleRetireClick;
             setButtonCB(() => cb);
         } else {
-            setContent([...DEFAULT_CONTENT, ...NO_LOOSE_ENDS_CONTENT]);
+            setContent([
+                ...DEFAULT_CONTENT,
+                ...hasCutsInVenice,
+                ...NO_LOOSE_ENDS_CONTENT,
+            ]);
             setButtonLabel(DEFAULT_BUTTON_LABEL);
             setButtonCB(() => handleRetireClick);
         }
     }, [
-        debt,
         cash,
+        currentStation,
+        debt,
         handlePayDebtClick,
         handleRetireClick,
         handleVisitMarketClick,
@@ -139,6 +148,13 @@ const HAS_CUTS_CONTENT = [
     "But you're still carrying meat.",
     "Sell it at the market before you retire.",
 ];
+
+const HAS_CUTS_IN_VENICE = [
+    "",
+    "You're still carrying meat, but Venice Beach doesn't have a Meat Market.",
+    "Next time, make sure you don't run out of time while you're holding cuts",
+];
+
 const HAS_CUTS_BUTTON_LABEL = "Visit the market";
 
 const HAS_DEBT_CONTENT = [
