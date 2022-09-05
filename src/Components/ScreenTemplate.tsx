@@ -47,6 +47,7 @@ export function ScreenTemplate({
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
+                marginInline: "auto",
                 paddingInline: "10px",
             }}
         >
