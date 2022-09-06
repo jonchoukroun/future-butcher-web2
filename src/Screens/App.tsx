@@ -13,7 +13,11 @@ import * as Colors from "../Styles/colors";
 Sentry.init({
     dsn: process.env.SENTRY_DSN,
     environment: process.env.NODE_ENV,
-    integrations: [new BrowserTracing()],
+    integrations: [
+        new BrowserTracing({
+            tracingOrigins: ["api.futurebutcher.com"],
+        }),
+    ],
     autoSessionTracking: true,
 });
 
