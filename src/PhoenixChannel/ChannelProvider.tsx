@@ -105,21 +105,11 @@ export const ChannelProvider = ({
     );
     const handleJoinChannel = useCallback(
         async (playerName: string, playerHash?: string) => {
-            if (socket === undefined || !socket.isConnected()) {
-                handleMessage(
-                    "Tried to join channel with disconnected socket",
-                    MessageLevel.Error,
-                );
-                return;
-            }
+            if (socket === undefined || !socket.isConnected()) return;
             if (
                 channel !== undefined &&
                 (channel.state === "joined" || channel.state === "joining")
             ) {
-                handleMessage(
-                    "Tried to join channel that was already joined or joining",
-                    MessageLevel.Error,
-                );
                 return;
             }
 
@@ -128,7 +118,10 @@ export const ChannelProvider = ({
                 playerHash,
                 socket,
             });
-            handleMessage(`Channel response: ${response}`, MessageLevel.Error);
+            if (response === "Unauthorized") {
+                socket.disconnect();
+                return;
+            }
             if (response === "join crashed") {
                 setChannel(undefined);
                 return response;
