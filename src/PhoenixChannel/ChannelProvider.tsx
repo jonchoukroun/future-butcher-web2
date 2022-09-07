@@ -118,7 +118,6 @@ export const ChannelProvider = ({
                 playerHash,
                 socket,
             });
-            handleMessage(`Channel response: ${response}`, MessageLevel.Error);
             if (response === "join crashed") {
                 setChannel(undefined);
                 return response;
