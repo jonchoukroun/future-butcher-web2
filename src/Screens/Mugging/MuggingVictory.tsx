@@ -3,7 +3,8 @@ import { jsx } from "@emotion/react";
 
 import { ScreenTemplate } from "../../Components";
 import { getVictoryCopy } from "../../Copy/Mugging";
-import { OwnedCutsType, CutType, Screen } from "../../GameData";
+import { WeaponDetails } from "../../Fixtures/store";
+import { OwnedCutsType, CutType, Screen, WeaponType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 
 interface MuggingVictoryProps {
@@ -73,7 +74,9 @@ export const MuggingVictory = ({
     if (cutsCount > 0) {
         content.push(
             ...[
-                `You pull out your trusty ${player.weapon} and get slicing.`,
+                `You pull out your trusty ${
+                    WeaponDetails[player.weapon as WeaponType].displayName
+                } and get slicing.`,
                 `Nice! You just scored some ${harvestedCuts}...`,
             ],
         );

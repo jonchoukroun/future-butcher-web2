@@ -8,10 +8,10 @@ export type PackListingType = { pack_space: number; price: number };
 
 export type WeaponType =
     | "box_cutter"
-    | "brass_knuckles"
     | "hedge_clippers"
-    | "hockey_stick"
-    | "machete";
+    | "katana"
+    | "machete"
+    | "power_claw";
 
 export type WeaponListingType = {
     damage: number;
