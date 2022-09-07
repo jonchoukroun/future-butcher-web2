@@ -60,7 +60,7 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
     const isCurrentStation = stationKey === currentStation;
     const isInRange = station.hours <= turnsLeft;
     const isClosed =
-        stationKey === "bell_gardens" && (turnsLeft > 20 || turnsLeft <= 2);
+        stationKey === "bell_gardens" && (turnsLeft > 20 || turnsLeft <= 6);
     const canTravel = !isCurrentStation && !isClosed && isInRange;
 
     const prompt = getStationPrompt(isCurrentStation, canTravel);
