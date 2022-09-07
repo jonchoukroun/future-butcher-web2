@@ -84,13 +84,37 @@ export const PackDetails: { [Pack in PackType | "backpack"]: PackDetailsType } =
     };
 
 export type WeaponDetailsType = {
-    displayName: string;
     damage: number;
+    description: string;
+    displayName: string;
 };
 export const WeaponDetails: { [Weapon in WeaponType]: WeaponDetailsType } = {
-    box_cutter: { displayName: "Box Cutter", damage: 4 },
-    brass_knuckles: { displayName: "Brass Knuckles", damage: 5 },
-    hedge_clippers: { displayName: "Hedge Clippers", damage: 6 },
-    hockey_stick: { displayName: "Hockey Stick", damage: 8 },
-    machete: { displayName: "Machete", damage: 7 },
+    box_cutter: {
+        displayName: "Box Cutter",
+        description: "A jihadist favorite - small and cheap.",
+        damage: 6,
+    },
+    hedge_clippers: {
+        displayName: "Hedge Clippers",
+        description: "Got a green thumb? These will slice it right off.",
+        damage: 7,
+    },
+    katana: {
+        displayName: "Katana",
+        description:
+            "You'll look more like an incel than a Samurai, but you won't lose a fight.",
+        damage: 10,
+    },
+    machete: {
+        displayName: "Machete",
+        description:
+            "From chopping vines to chopping on Vine, this blade is well-used.",
+        damage: 9,
+    },
+    power_claw: {
+        displayName: "Kreuger Klaw",
+        description:
+            "The props department put real blades on this notorious glove.",
+        damage: 8,
+    },
 };
