@@ -10,7 +10,7 @@ export async function joinChannel({
     playerName: string;
     playerHash?: string;
     socket: Socket;
-}): Promise<Channel | "Unauthorized" | "join crashed" | undefined> {
+}): Promise<Channel | "join crashed" | undefined> {
     const payload: { player_name: string; hash_id?: string } = {
         player_name: playerName,
     };
@@ -30,7 +30,6 @@ export async function joinChannel({
                 return resolve(channel);
             })
             .receive("error", ({ reason }) => {
-                if (reason === "Unauthorized") return resolve(reason);
                 if (reason === "join crashed") return resolve(reason);
 
                 handleMessage(

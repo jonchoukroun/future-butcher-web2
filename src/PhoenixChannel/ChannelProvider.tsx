@@ -118,10 +118,7 @@ export const ChannelProvider = ({
                 playerHash,
                 socket,
             });
-            if (response === "Unauthorized") {
-                socket.disconnect();
-                return;
-            }
+            handleMessage(`Channel response: ${response}`, MessageLevel.Error);
             if (response === "join crashed") {
                 setChannel(undefined);
                 return response;
