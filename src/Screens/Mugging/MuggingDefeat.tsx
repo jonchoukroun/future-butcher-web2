@@ -15,14 +15,20 @@ export const MuggingDefeat = ({
 }) => {
     const {
         dispatch,
-        state: { player, turnsLeft },
+        state: { currentStation, player, turnsLeft },
     } = useGameState();
-    if (player === undefined || turnsLeft === undefined) {
+    if (
+        currentStation === undefined ||
+        player === undefined ||
+        turnsLeft === undefined
+    ) {
         throw new Error("State is undefined");
     }
 
     const handleClick = () => {
-        dispatch({ type: "changeScreen", screen: Screen.Market });
+        const screen =
+            currentStation === "venice_beach" ? Screen.Clinic : Screen.Market;
+        dispatch({ type: "changeScreen", screen });
     };
 
     const hoursLost = initialTurnsLeft - turnsLeft;
