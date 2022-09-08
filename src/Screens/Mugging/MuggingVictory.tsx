@@ -8,19 +8,21 @@ import { OwnedCutsType, CutType, Screen, WeaponType } from "../../GameData";
 import { useGameState } from "../../GameData/GameStateProvider";
 
 interface MuggingVictoryProps {
+    initialHasOil: boolean;
     initialHealth: number;
     initialPack: OwnedCutsType;
 }
 
 export const MuggingVictory = ({
+    initialHasOil,
     initialHealth,
     initialPack,
 }: MuggingVictoryProps) => {
     const {
         dispatch,
-        state: { player },
+        state: { currentStation, player },
     } = useGameState();
-    if (player === undefined) {
+    if (currentStation === undefined || player === undefined) {
         throw new Error("State is undefined");
     }
 
@@ -52,7 +54,11 @@ export const MuggingVictory = ({
 
     const content = [getVictoryCopy(weapon === null)];
     if (initialHealth > health) {
-        if (weapon === null) {
+        if (weapon === null && initialHasOil) {
+            content.push(
+                "You douse yourself in Adrenal Gland Essential Oils and make a break for it. Either it makes you run fast, or the smell was too much for the mugger, but you got away. Too bad you're all out of oil now.",
+            );
+        } else if (weapon === null) {
             content.push(
                 `You didn't escape unscathed. The mugger sliced you for ${
                     initialHealth - health
@@ -83,7 +89,9 @@ export const MuggingVictory = ({
     }
 
     const handleClick = () => {
-        dispatch({ type: "changeScreen", screen: Screen.Market });
+        const screen =
+            currentStation === "venice_beach" ? Screen.Clinic : Screen.Market;
+        dispatch({ type: "changeScreen", screen });
     };
 
     return (
