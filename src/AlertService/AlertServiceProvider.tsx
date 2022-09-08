@@ -12,6 +12,7 @@ export type AlertType = {
 
 type AlertServiceType = {
     queue: Map<number, AlertType>;
+    clearAlerts: () => void;
     pushAlert: ({ text, isPersistent }: AlertType) => void;
     popAlert: (key: number) => void;
 };
@@ -29,6 +30,10 @@ export function AlertServiceProvider({
     const { inlineSize } = getContentSize();
 
     const [queue, updateQueue] = useState<Map<number, AlertType>>(new Map());
+
+    const clearAlerts = () => {
+        updateQueue(new Map());
+    };
 
     const pushAlert = (alert: AlertType) => {
         updateQueue((curr) => {
@@ -48,6 +53,7 @@ export function AlertServiceProvider({
 
     const value = useMemo(
         () => ({
+            clearAlerts,
             popAlert,
             pushAlert,
             queue,

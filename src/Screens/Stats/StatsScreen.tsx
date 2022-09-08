@@ -47,7 +47,7 @@ export const StatsScreen = () => {
 
     const station = StationDetails[currentStation];
 
-    const { cash, debt, health, pack, totalPackSpace, weapon } = player;
+    const { cash, debt, hasOil, health, pack, totalPackSpace, weapon } = player;
     const canPayDebt = debt > 0 && cash > debt;
 
     const packName = (
@@ -239,9 +239,15 @@ export const StatsScreen = () => {
                                 promptScheme={PromptScheme.Past}
                             />
                         </Fragment>
+                    ) : hasOil ? (
+                        <PrintLine
+                            text={"Adrenal Gland Essential Oils"}
+                            size={LineSize.Body}
+                            promptScheme={PromptScheme.Past}
+                        />
                     ) : (
                         <PrintLine
-                            text={"No weapon owned"}
+                            text={"No weapon, no essential oil"}
                             size={LineSize.Body}
                             promptScheme={PromptScheme.Past}
                         />

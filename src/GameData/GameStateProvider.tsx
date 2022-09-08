@@ -204,8 +204,17 @@ function handleUpdateState(
 ): GameStateType {
     const { currentScreen, muggers } = currentState;
     const {
-        player: { player_name, cash, debt, health, weapon, pack, pack_space },
-        station: { clinic_cost, market, station_name, store },
+        player: {
+            player_name,
+            cash,
+            debt,
+            has_oil,
+            health,
+            weapon,
+            pack,
+            pack_space,
+        },
+        station: { clinic_price, market, oil_price, station_name, store },
         rules: { turns_left, state },
     } = apiState;
     return {
@@ -217,6 +226,7 @@ function handleUpdateState(
         player: {
             cash,
             debt,
+            hasOil: has_oil,
             health,
             playerName: player_name,
             pack,
@@ -224,7 +234,8 @@ function handleUpdateState(
             weapon,
         },
         store: store ? serializeStore(store) : undefined,
-        clinicCost: clinic_cost ? clinic_cost : undefined,
+        clinicPrice: clinic_price ? clinic_price : undefined,
+        oilPrice: oil_price ? oil_price : undefined,
         turnsLeft: turns_left,
         hasUnseenAlerts: true,
     };

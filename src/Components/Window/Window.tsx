@@ -3,7 +3,7 @@ import { jsx } from "@emotion/react";
 import { useEffect, useRef } from "react";
 
 import { GameScreen } from "./GameScreen";
-import { useWindowSize } from "./WindowSizeProvider";
+import { LayoutType, useWindowSize } from "./WindowSizeProvider";
 import { useAlertService } from "../../AlertService/AlertServiceProvider";
 import { useGameState } from "../../GameData/GameStateProvider";
 import { Clinic } from "../../Screens/Clinic/Clinic";
@@ -14,14 +14,13 @@ import { LastTurn } from "../../Screens/LastTurn/LastTurn";
 import { Login } from "../../Screens/Login/Login";
 import { Market } from "../../Screens/Market/Market";
 import { Mugging } from "../../Screens/Mugging/Mugging";
+import { Credits } from "../../Screens/Stats/Credits";
 import { StatsScreen } from "../../Screens/Stats/StatsScreen";
 import { Subway } from "../../Screens/Subway/Subway";
 import { SurplusStore } from "../../Screens/SurplusStore/SurplusStore";
 import { Welcome } from "../../Screens/Welcome/Welcome";
-
 import * as Colors from "../../Styles/colors";
 import { getTimeLeft } from "../../Utils/getTimeLeft";
-import { Credits } from "../../Screens/Stats/Credits";
 
 export const Window = () => {
     const { layout, windowSize } = useWindowSize();
@@ -29,7 +28,7 @@ export const Window = () => {
     const { pushAlert } = useAlertService();
 
     const {
-        state: { currentScreen, screenProps, turnsLeft },
+        state: { currentScreen, currentStation, screenProps, turnsLeft },
     } = useGameState();
 
     const turnRef = useRef<number>();
@@ -49,7 +48,7 @@ export const Window = () => {
             });
         } else if (turnRef.current > 20 && !hasShownTravelAlertRef.current) {
             pushAlert({
-                text: getTravelAlert(turnRef.current),
+                text: getTravelAlert(turnRef.current, layout),
                 isPersistent: true,
             });
             hasShownTravelAlertRef.current = true;
@@ -57,6 +56,7 @@ export const Window = () => {
         if (
             turnRef.current < 21 &&
             turnRef.current >= 18 &&
+            currentStation !== "bell_gardens" &&
             !hasShownBellGardensAlertRef.current
         ) {
             pushAlert({
@@ -65,7 +65,7 @@ export const Window = () => {
             });
             hasShownBellGardensAlertRef.current = true;
         }
-    }, [pushAlert, turnsLeft]);
+    }, [currentStation, layout, pushAlert, turnsLeft]);
 
     return (
         <div
@@ -149,13 +149,17 @@ export const Window = () => {
 };
 
 const MEAT_MARKET_ALERT =
-    "You hit the Meat Market in Compton. Prices are usually lower here, especially for Ribs.";
+    "You hit the Meat Market in Compton. Prices are usually lower here, especially for Liver and Ribs.";
 
-function getTravelAlert(turnsLeft: number) {
+function getTravelAlert(turnsLeft: number, layout: LayoutType) {
+    const statsStr =
+        layout === "compact"
+            ? "Click the stats bar above to see more details and pay off your debt."
+            : "Use the stats screen on the left to track your progress and pay off your debt.";
     return `Keep an eye on the clock. It's ${getTimeLeft(
         turnsLeft,
-    )} now, and you only have ${turnsLeft} hours left. Click the stats bar above to see more details and pay off your debt.`;
+    )} now, and you only have ${turnsLeft} hours left. ${statsStr}`;
 }
 
 const BELL_GARDENS_ALERT =
-    "Gus's Army Surplus Store is now open in Bell Gardens. They'll hook you up with weapons and bigger packs. Better hurry though, prices go up every hour.";
+    "Gus's Army Surplus Store is now open in Bell Gardens. They'll hook you up with weapons and bigger packs. Better hurry though, prices go up every hour and they close at midnight.";

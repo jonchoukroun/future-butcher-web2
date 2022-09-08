@@ -28,13 +28,14 @@ export const Mugging = () => {
 
     const { handlePushCallback } = useChannel();
 
-    const { cash, health, pack, weapon } = player;
+    const { cash, hasOil, health, pack, weapon } = player;
 
     const canBribeMugger =
         cash > 500 || Object.values(pack).find((cut) => cut > 0);
 
     const initialcashRef = useRef(cash);
     const initialPackRef = useRef(pack);
+    const initialHasOilRef = useRef(hasOil);
     const initialHealthRef = useRef(health);
     const initialTurnsLeftRef = useRef(turnsLeft);
     const currentMuggerRef = useRef(
@@ -90,6 +91,7 @@ export const Mugging = () => {
     if (muggingState === "victory") {
         return (
             <MuggingVictory
+                initialHasOil={initialHasOilRef.current}
                 initialHealth={initialHealthRef.current}
                 initialPack={initialPackRef.current}
             />
@@ -109,8 +111,13 @@ export const Mugging = () => {
         `One of the city's relentless muggers, ${currentMuggerRef.current}, follows you from the subway.`,
         "Pulling a well-used blade, they charge you! You have a split second to react.",
     ];
-    if (!player.weapon) {
+    if (!player.weapon && !hasOil) {
         muggingContent.push("...a weapon may have come in handy here...");
+    }
+    if (!player.weapon && hasOil) {
+        muggingContent.push(
+            "Good thing you bought some Adrenal Gland Essential Oils!",
+        );
     }
 
     const buttonLabel =

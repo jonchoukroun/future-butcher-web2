@@ -2,6 +2,7 @@
 import { jsx } from "@emotion/react";
 import { useState } from "react";
 
+import { useAlertService } from "../../AlertService/AlertServiceProvider";
 import { Prompt } from "../../Components";
 import { StationDetails } from "../../Fixtures/subwayStations";
 import { Screen, StationType } from "../../GameData";
@@ -23,6 +24,8 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
     } = useGameState();
     if (turnsLeft === undefined) throw new Error("State is undefined");
 
+    const { clearAlerts } = useAlertService();
+
     const { handlePushCallback } = useChannel();
 
     const station = StationDetails[stationKey];
@@ -33,6 +36,8 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
         if (isLoading) return;
 
         setIsLoading(true);
+        clearAlerts();
+
         const stateData = await handlePushCallback("travel", {
             destination: stationKey,
         });
@@ -60,7 +65,7 @@ export const SubwayStationItem = ({ stationKey }: SubwayStationItemProps) => {
     const isCurrentStation = stationKey === currentStation;
     const isInRange = station.hours <= turnsLeft;
     const isClosed =
-        stationKey === "bell_gardens" && (turnsLeft > 20 || turnsLeft <= 2);
+        stationKey === "bell_gardens" && (turnsLeft > 20 || turnsLeft <= 6);
     const canTravel = !isCurrentStation && !isClosed && isInRange;
 
     const prompt = getStationPrompt(isCurrentStation, canTravel);

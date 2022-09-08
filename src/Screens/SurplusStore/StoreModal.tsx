@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/react";
-import { Fragment, useState } from "react";
+import { useState } from "react";
 
 import {
     Button,
@@ -152,10 +152,6 @@ export function StoreModal({
     };
 
     const itemDetails = getItemDetails(listing);
-    const canHarvest = getCanHarvestCuts(listing);
-    const harvestDescription = canHarvest
-        ? "This weapon will harvest all cuts from a slain foe."
-        : "This weapon can't harvest any cuts. Try a bladed weapon.";
 
     const buttonLabel =
         player.weapon && !isPackListing
@@ -243,9 +239,25 @@ export function StoreModal({
                         />
                     )}
 
-                    {isPackListing && (
+                    <PrintLine
+                        text={itemDetails.description}
+                        size={LineSize.Body}
+                        promptScheme={PromptScheme.Past}
+                    />
+
+                    {isPackListing ? (
                         <PrintLine
-                            text={(itemDetails as PackDetailsType).description}
+                            text={`Carrying capacity: ${
+                                (itemDetails as PackDetailsType).packSpace
+                            } lbs`}
+                            size={LineSize.Body}
+                            promptScheme={PromptScheme.Past}
+                        />
+                    ) : (
+                        <PrintLine
+                            text={`Damage: ${
+                                (listing as WeaponListing).damage
+                            }0%`}
                             size={LineSize.Body}
                             promptScheme={PromptScheme.Past}
                         />
@@ -262,32 +274,6 @@ export function StoreModal({
                         size={LineSize.Body}
                         promptScheme={PromptScheme.Past}
                     />
-
-                    {isPackListing ? (
-                        <PrintLine
-                            text={`Carrying capacity: ${
-                                (itemDetails as PackDetailsType).packSpace
-                            } lbs`}
-                            size={LineSize.Body}
-                            promptScheme={PromptScheme.Past}
-                        />
-                    ) : (
-                        <Fragment>
-                            <PrintLine
-                                text={`Damage: ${
-                                    (listing as WeaponListing).damage
-                                }0%`}
-                                size={LineSize.Body}
-                                promptScheme={PromptScheme.Past}
-                            />
-
-                            <PrintLine
-                                text={harvestDescription}
-                                size={LineSize.Body}
-                                promptScheme={PromptScheme.Past}
-                            />
-                        </Fragment>
-                    )}
 
                     {isOwned && (
                         <PrintLine
@@ -356,13 +342,6 @@ function getItemDetails<T extends PackListing | WeaponListing>(
         const details: WeaponDetailsType = WeaponDetails[item.name];
         return details;
     }
-}
-
-function getCanHarvestCuts(
-    listing: PackListing | WeaponListing,
-): boolean | undefined {
-    if (isPack(listing)) return undefined;
-    return listing.can_harvest;
 }
 
 function isPack(item: PackListing | WeaponListing): item is PackListing {

@@ -14,7 +14,7 @@ export const StationDetails: { [Station in StationType]: StationDetailsType } =
     {
         beverly_hills: {
             displayName: "Beverly Hills",
-            hours: 3,
+            hours: 2,
             stationDescription:
                 "High security, expensive meat, and manicured lawns.",
             gangdisplayName: "Rollin' Spa Girls",
@@ -25,9 +25,9 @@ export const StationDetails: { [Station in StationType]: StationDetailsType } =
         },
         downtown: {
             displayName: "Downtown",
-            hours: 2,
+            hours: 1,
             stationDescription:
-                "High rises and high finance, with a taste for fine cuts.",
+                "High rises and high finance, with a taste for fine meat.",
             gangdisplayName: "Balls Fargaux",
             gangDescription: "Mega bank turned organized crime franchise.",
             gangTax: 10000,
@@ -35,19 +35,19 @@ export const StationDetails: { [Station in StationType]: StationDetailsType } =
         },
         venice_beach: {
             displayName: "Venice Beach",
-            hours: 2,
+            hours: 1,
             stationDescription:
                 "Heal your body and soul with restorative yoga and substandard medicine.",
             gangdisplayName: "The 3rd Eye Boys",
             gangDescription:
-                "Roided-out yogis who'll put you in a downward dog... for good.",
+                "Roided-out yogis who'll put you in downward dog... for good.",
             gangTax: 2000,
             uniqueBuilding: "Free Clinic",
         },
         hollywood: {
             displayName: "Hollywood",
             hours: 1,
-            stationDescription: "Cops can be your friend, for a price.",
+            stationDescription: "Dingy and dangerous, home of the stars.",
             gangdisplayName: "Vine Street Raiders",
             gangDescription:
                 "Rampant street kids who'll rob you and leave you their headshot.",
@@ -57,7 +57,7 @@ export const StationDetails: { [Station in StationType]: StationDetailsType } =
         compton: {
             displayName: "Compton",
             hours: 1,
-            stationDescription: "Cheap cuts and cheap tools for any DIY needs.",
+            stationDescription: "Cheap cuts, if you can handle the heat.",
             gangdisplayName: "None",
             gangDescription:
                 "Disorganized maurauders, raiders, and cutthroats.",
