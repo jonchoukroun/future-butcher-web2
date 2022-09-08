@@ -149,7 +149,7 @@ export const Window = () => {
 };
 
 const MEAT_MARKET_ALERT =
-    "You hit the Meat Market in Compton. Prices are usually lower here, especially for Ribs.";
+    "You hit the Meat Market in Compton. Prices are usually lower here, especially for Liver and Ribs.";
 
 function getTravelAlert(turnsLeft: number, layout: LayoutType) {
     const statsStr =
