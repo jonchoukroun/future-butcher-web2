@@ -3,6 +3,7 @@ import { CutType, WeaponType } from ".";
 export type PlayerType = {
     debt: number;
     cash: number;
+    hasOil: boolean;
     health: number;
     playerName: string;
     pack: OwnedCutsType;

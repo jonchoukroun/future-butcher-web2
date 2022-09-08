@@ -18,6 +18,7 @@ export type ApiStateType = {
     player: {
         cash: number;
         debt: number;
+        has_oil: boolean;
         health: number;
         pack: OwnedCutsType;
         pack_space: number;
@@ -32,7 +33,8 @@ export type ApiStateType = {
         market: MarketType | null;
         station_name: StationType;
         store: StoreType | null;
-        clinic_cost: number | null;
+        clinic_price: number | null;
+        oil_price: number | null;
     };
 };
 
@@ -68,7 +70,8 @@ export type GameStateType = {
     muggers?: string[];
     player?: PlayerType;
     store?: StoreListing;
-    clinicCost?: number;
+    clinicPrice?: number;
+    oilPrice?: number;
     turnsLeft?: number;
     hasUnseenAlerts?: boolean;
     screenProps?: WelcomeScreen;
