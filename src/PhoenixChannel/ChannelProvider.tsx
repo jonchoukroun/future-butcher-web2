@@ -2,6 +2,7 @@ import { Channel, Socket } from "phoenix";
 import * as React from "react";
 
 import { buyCut } from "./buyCut";
+import { buyOil } from "./buyOil";
 import { buyPack } from "./buyPack";
 import { buyWeapon } from "./buyWeapon";
 import { endGame } from "./endGame";
@@ -42,6 +43,7 @@ export type CallbackType =
     | "buyPack"
     | "buyWeapon"
     | "replaceWeapon"
+    | "buyOil"
     | "restoreHealth"
     | "payDebt"
     | "endGame";
@@ -208,6 +210,10 @@ export const ChannelProvider = ({
                         channel,
                         payload as { weapon: WeaponType },
                     );
+                    break;
+
+                case "buyOil":
+                    response = buyOil(channel, payload);
                     break;
 
                 case "restoreHealth":
