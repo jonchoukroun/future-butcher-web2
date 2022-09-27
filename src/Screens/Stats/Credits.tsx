@@ -22,7 +22,7 @@ export function Credits() {
             title={"Acknowledgements"}
             content={[
                 "Special thanks to the Beta testers who made this game possible: Dougler, JPM, Trtninc, jitrah.",
-                "Legacy Champion: Doh ($7,388,526)",
+                "Legacy Champ: Doh ($7,388,526)",
                 <Fragment key="home-link">
                     Future Butcher was designed and devloped by Jon Choukroun.
                     The game runs on Elixir/Phoenix and React. Find out more at{" "}
