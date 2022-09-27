@@ -76,7 +76,7 @@ export const GameResult = () => {
         "You get a few miles south of Tijuana and the van pulls over.",
         "The back doors open and you see a couple no-nonsense dudes wearing butcher aprons.",
         "As they drag you from the van, kicking and screaming, you think to yourself...",
-        '"I should have paid off that damn debt"',
+        '"I should have paid off that damn debt."',
     ];
 
     const loserTitle = "You Lose";
@@ -95,6 +95,10 @@ export const GameResult = () => {
                 title={loserTitle}
                 subtitle={deadbeatSubtitle}
                 content={deadbeatContent}
+                showShareLine={true}
+                shareText={
+                    "I got my ass kicked playing Future Butcher. Can you do better?"
+                }
                 primaryButtonLabel={"Start Over"}
                 primaryIsLoading={isLoading}
                 primaryClickCB={handleStartOverClick}
@@ -128,6 +132,10 @@ export const GameResult = () => {
                 <ScreenTemplate
                     title={title}
                     content={content}
+                    showShareLine={true}
+                    shareText={`I just made ${formatMoney(
+                        cash,
+                    )} playing Future Butcher! Can you beat my score?`}
                     primaryButtonLabel={"Start Over"}
                     primaryIsLoading={isLoading}
                     primaryClickCB={handleStartOverClick}
@@ -139,6 +147,10 @@ export const GameResult = () => {
                     title={loserTitle}
                     subtitle={loserSubtitle}
                     content={loserContent}
+                    showShareLine={true}
+                    shareText={
+                        "I got my ass kicked playing Future Butcher. Can you do better?"
+                    }
                     primaryButtonLabel={"Start Over"}
                     primaryIsLoading={isLoading}
                     primaryClickCB={handleStartOverClick}

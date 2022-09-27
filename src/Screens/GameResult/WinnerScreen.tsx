@@ -9,6 +9,7 @@ import { useWindowSize } from "../../Components/Window/WindowSizeProvider";
 import { formatMoney } from "../../Utils/formatMoney";
 
 import * as Colors from "../../Styles/colors";
+import { ShareLine } from "../../ShareButton/ShareLine";
 
 interface WinnerScreenProps {
     displayScores: DisplayScoreType[];
@@ -135,6 +136,21 @@ export function WinnerScreen({
                         </Fragment>
                     ))}
                 </ul>
+
+                {playerIndex === 0 ? (
+                    <ShareLine
+                        shareText={
+                            "I just got 1st place playing Future Butcher. Can you beat my score?"
+                        }
+                    />
+                ) : (
+                    <ShareLine
+                        shareText={`I just made the Future Butcher leaderboard at number ${
+                            playerIndex + 1
+                        }! Can you beat my score?`}
+                    />
+                )}
+
                 <div css={{ inlineSize: "100%", marginBlockStart: "20px" }}>
                     <ButtonPrompt
                         label={"Start Over"}
