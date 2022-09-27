@@ -21,9 +21,8 @@ export function Credits() {
         <ScreenTemplate
             title={"Acknowledgements"}
             content={[
-                "Special thanks to everyone who's made this game possible:",
-                "Beta testers: JPM, jitrah, Dougler, Trtninc",
-                "Top players of all time: Doh & Hannah",
+                "Special thanks to the Beta testers who made this game possible: Dougler, JPM, Trtninc, jitrah.",
+                "Legacy Champion: Doh ($7,388,526)",
                 <Fragment key="home-link">
                     Future Butcher was designed and devloped by Jon Choukroun.
                     The game runs on Elixir/Phoenix and React. Find out more at{" "}
@@ -36,8 +35,7 @@ export function Credits() {
                     </a>
                     {"."}
                 </Fragment>,
-                "Copyright 2022",
-                'Inspired by the John E. Dell classic "Drug Wars."',
+                'Copyright 2022. Inspired by the John E. Dell classic "Drug Wars."',
             ]}
             showShareLine={true}
             primaryButtonLabel={"Back"}
