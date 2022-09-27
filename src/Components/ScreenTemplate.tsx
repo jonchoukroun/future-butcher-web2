@@ -4,6 +4,7 @@ import { jsx } from "@emotion/react";
 import { ButtonPrompt, ButtonPromptSize } from "./ButtonPrompt";
 import { LineSize, PromptScheme, PrintLine } from "./PrintLine";
 import { useWindowSize } from "./Window/WindowSizeProvider";
+import { ShareLine } from "../ShareButton/ShareLine";
 
 import * as Colors from "../Styles/colors";
 
@@ -12,6 +13,8 @@ interface ScreenTemplateProps {
     subtitle?: string;
     danger?: boolean;
     content: Array<string | JSX.Element>;
+    showShareLine?: boolean;
+    shareText?: string;
     primaryButtonLabel: string;
     primaryIsLoading: boolean;
     primaryIsDisabled?: boolean;
@@ -27,6 +30,8 @@ export function ScreenTemplate({
     subtitle,
     danger = false,
     content,
+    showShareLine = false,
+    shareText,
     primaryButtonLabel,
     primaryIsLoading = false,
     primaryIsDisabled = false,
@@ -87,6 +92,8 @@ export function ScreenTemplate({
                         size={LineSize.Body}
                     />
                 ))}
+
+                {showShareLine && <ShareLine shareText={shareText} />}
 
                 <div css={{ inlineSize: "100%", marginBlockStart: "20px" }}>
                     <ButtonPrompt
