@@ -67,12 +67,12 @@ export const Button = ({
                 borderStyle: "solid",
                 borderWidth: "2px",
                 color: fontColor,
+                textAlign: loading && ButtonSize.Full ? "start" : "center",
+                overflowX: "hidden",
                 "&:active": {
                     backgroundColor: backgroundColorActive,
                     color: fontColorActive,
                 },
-                textAlign: loading && ButtonSize.Full ? "start" : "center",
-                overflowX: "hidden",
             })}
             onClick={clickCB}
             disabled={disabled}

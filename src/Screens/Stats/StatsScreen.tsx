@@ -147,7 +147,7 @@ export const StatsScreen = () => {
                     }}
                 >
                     <Button
-                        label={"Top Scores"}
+                        label={"Scores"}
                         size={ButtonSize.Set}
                         scheme={ButtonScheme.Inverse}
                         clickCB={handleHighScoresClick}

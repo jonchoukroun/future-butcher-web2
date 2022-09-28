@@ -19,6 +19,7 @@ export function Prompt({
 }: PromptProps) {
     return (
         <h4
+            className={"prompt-symbol"}
             css={{
                 display: "inline",
                 marginBlock: 0,

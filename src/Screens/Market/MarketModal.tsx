@@ -282,7 +282,9 @@ export const MarketModal = ({
                     <PrintLine
                         text={`${
                             transaction === "buy" ? "In Stock:" : "In Pack:"
-                        } ${stock > 0 ? stock : "Out of stock"}`}
+                        } ${stock > 0 ? stock : "Out of stock"}${
+                            stock > 0 ? " " + pluralize(stock) : ""
+                        }`}
                         size={LineSize.Body}
                         promptScheme={PromptScheme.Past}
                     />
