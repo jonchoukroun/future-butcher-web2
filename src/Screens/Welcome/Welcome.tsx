@@ -26,7 +26,7 @@ const INSTRUCTIONS_CONTENT = [
 ];
 
 const START_CONTENT_BASE = [
-    "The bank hooked you up with a $5,000 loan - with a 15% hourly interest rate.",
+    "The bank hooked you up with a $5,000 loan - at a 15% hourly interest rate.",
     "Yeah, it's steep. Welcome to the People's Republic of Los Angeles. Be sure to pay it off, the bank doesn't fool around.",
 ];
 
