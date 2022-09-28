@@ -40,20 +40,12 @@ export function ButtonPrompt({
 }: ButtonPromptProps) {
     const stylesForSize = getStyleForSize(size);
 
-    const backgroundColor = inverse
-        ? Colors.Background.inverse
-        : Colors.Background.base;
-    const backgroundColorActive = inverse
-        ? Colors.Background.base
-        : Colors.Background.inverse;
-    const color = disabled
-        ? Colors.Text.disable
-        : inverse
-        ? Colors.Text.inverse
-        : danger
-        ? Colors.Text.danger
-        : Colors.Text.base;
-    const colorActive = inverse ? Colors.Text.base : Colors.Text.inverse;
+    const {
+        backgroundColor,
+        backgroundColorActive,
+        fontColor,
+        fontColorActive,
+    } = getColorScheme({ danger, disabled, inverse });
 
     const [loadingLabel, setLoadingLabel] = useState("Loading");
     useEffect(() => {
@@ -75,30 +67,21 @@ export function ButtonPrompt({
                 alignItems: "center",
                 paddingInlineStart: inverse ? "10px" : 0,
                 backgroundColor,
-                color,
+                color: fontColor,
                 border: 0,
                 opacity: hidden ? 0 : 1,
                 "&:active": {
                     backgroundColor: backgroundColorActive,
-                    color: colorActive,
+                    color: fontColorActive,
+                    "& > .prompt-symbol": {
+                        color: fontColorActive,
+                    },
                 },
             })}
             disabled={disabled || hidden}
             onClick={clickCB}
         >
-            <Prompt
-                color={
-                    disabled
-                        ? Colors.Text.disable
-                        : inverse
-                        ? Colors.Text.inverse
-                        : danger
-                        ? Colors.Text.danger
-                        : Colors.Text.base
-                }
-                blink={blink}
-                hidden={!showPrompt}
-            />
+            <Prompt color={fontColor} blink={blink} hidden={!showPrompt} />
 
             {loading ? loadingLabel : label}
         </button>
@@ -150,5 +133,52 @@ function getStyleForSize(size: ButtonPromptSize) {
 
         default:
             return baseButtonStyles;
+    }
+}
+
+function getColorScheme({
+    danger,
+    disabled,
+    inverse,
+}: {
+    danger: boolean;
+    disabled: boolean;
+    inverse: boolean;
+}): {
+    backgroundColor: string;
+    backgroundColorActive: string;
+    fontColor: string;
+    fontColorActive: string;
+} {
+    if (disabled) {
+        return {
+            backgroundColor: Colors.Background.base,
+            backgroundColorActive: Colors.Background.base,
+            fontColor: Colors.Text.disable,
+            fontColorActive: Colors.Text.disable,
+        };
+    }
+
+    if (inverse) {
+        return {
+            backgroundColor: Colors.Background.inverse,
+            backgroundColorActive: Colors.Background.base,
+            fontColor: Colors.Text.inverse,
+            fontColorActive: Colors.Text.base,
+        };
+    } else if (danger) {
+        return {
+            backgroundColor: Colors.Background.base,
+            backgroundColorActive: Colors.Background.danger,
+            fontColor: Colors.Text.danger,
+            fontColorActive: Colors.Text.inverse,
+        };
+    } else {
+        return {
+            backgroundColor: Colors.Background.base,
+            backgroundColorActive: Colors.Background.inverse,
+            fontColor: Colors.Text.base,
+            fontColorActive: Colors.Text.inverse,
+        };
     }
 }
