@@ -61,7 +61,7 @@ const ChannelContext = createContext<
               payload: Record<string, unknown>,
           ) => Promise<ApiStateType | ApiErrorType | undefined>;
           handleEndGame: (
-              hashId: string,
+              playerName: string,
           ) => Promise<HighScoresType | undefined>;
           handleGetScores: () => Promise<HighScoresType | void>;
           isConnected: boolean;
@@ -229,10 +229,10 @@ export const ChannelProvider = ({
     );
 
     const handleEndGame = useCallback(
-        async (hashId: string) => {
+        async (playerName: string) => {
             if (channel === undefined) return;
 
-            return await endGame(channel, { hashId });
+            return await endGame(channel, { playerName });
         },
         [channel],
     );

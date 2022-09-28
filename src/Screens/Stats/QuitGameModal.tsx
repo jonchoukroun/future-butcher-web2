@@ -33,16 +33,16 @@ export const QuitGameModal = ({
         if (isLoading) return;
 
         setIsLoading(true);
-        const hashId = localStorage.getItem("playerHash");
-        if (!hashId) {
+        const playerName = localStorage.getItem("playerName");
+        if (!playerName) {
             handleMessage(
-                "Cannot end game without a hash ID",
+                "Cannot end game without a player name",
                 MessageLevel.Error,
             );
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
-        const response = await handleEndGame(hashId);
+        const response = await handleEndGame(playerName);
         if (response === undefined) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;

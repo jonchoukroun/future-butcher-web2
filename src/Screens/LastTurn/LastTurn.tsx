@@ -69,16 +69,16 @@ export const LastTurn = () => {
         if (isLoading) return;
 
         setIsLoading(true);
-        const hashId = localStorage.getItem("playerHash");
-        if (!hashId) {
+        const playerName = localStorage.getItem("playerName");
+        if (!playerName) {
             handleMessage(
-                "Cannot end game without a hash ID",
+                "Cannot end game without a player name",
                 MessageLevel.Error,
             );
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
         }
-        const highScores = await handleEndGame(hashId);
+        const highScores = await handleEndGame(playerName);
         if (highScores === undefined) {
             dispatch({ type: "changeScreen", screen: Screen.Error });
             return;
