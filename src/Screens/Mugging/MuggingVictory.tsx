@@ -82,8 +82,7 @@ export const MuggingVictory = ({
             ...[
                 `You pull out your trusty ${
                     WeaponDetails[player.weapon as WeaponType].displayName
-                } and get slicing.`,
-                `Nice! You just scored some ${harvestedCuts}...`,
+                } and harvest some ${harvestedCuts}...`,
             ],
         );
     }
