@@ -78,12 +78,6 @@ export function WinnerScreen({
                         promptScheme={PromptScheme.Past}
                     />
                 ))}
-                {playerIndex !== 0 && (
-                    <PrintLine
-                        text={"How do you compare?"}
-                        size={LineSize.Body}
-                    />
-                )}
 
                 <ul
                     css={{
