@@ -22,12 +22,12 @@ const INSTRUCTIONS_CONTENT = [
     "A coyote will pick you up in 24 hours to smuggle you across the border to Mexico.",
     "Use the Subway to nagivate the city's neighborhoods. Buy and sell from the Meat Markets, but watch your back! The streets are dangerous.",
     "If you need protection or a bigger pack, Gus's Army Surplus store in Bell Gardens opens at 9am.",
-    "And if you get cut up, the 24 Hour Free Clinic in Venice Beach can get you patched up.",
+    "Check out the 24 Hour Free Clinic in Venice Beach to get patched up or buy supplements.",
 ];
 
 const START_CONTENT_BASE = [
-    "To get started you hooked up a $5,000 loan from the bank - with a 5% hourly interest rate.",
-    "Yeah, it's steep. Welcome to the People's Republic of Los Angeles.",
+    "The bank hooked you up with a $5,000 loan - with a 15% hourly interest rate.",
+    "Yeah, it's steep. Welcome to the People's Republic of Los Angeles. Be sure to pay it off, the bank doesn't fool around.",
 ];
 
 const START_OVER_CONTENT = [
