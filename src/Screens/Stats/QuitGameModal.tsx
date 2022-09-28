@@ -133,7 +133,7 @@ export const QuitGameModal = ({
                         }}
                     >
                         <Button
-                            label={"Quit!"}
+                            label={"Quit"}
                             scheme={ButtonScheme.Danger}
                             clickCB={handleEndGameClick}
                         />
