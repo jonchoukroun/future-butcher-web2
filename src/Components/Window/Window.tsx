@@ -10,6 +10,7 @@ import { Clinic } from "../../Screens/Clinic/Clinic";
 import { Death } from "../../Screens/Death/Death";
 import { ErrorScreen } from "../../Screens/ErrorScreen/ErrorScreen";
 import { GameResult } from "../../Screens/GameResult/GameResult";
+import { HighScores } from "../../Screens/HighScores/HighScores";
 import { LastTurn } from "../../Screens/LastTurn/LastTurn";
 import { Login } from "../../Screens/Login/Login";
 import { Market } from "../../Screens/Market/Market";
@@ -143,6 +144,8 @@ export const Window = () => {
                 {currentScreen === "gameResult" && <GameResult />}
 
                 {currentScreen === "credits" && <Credits />}
+
+                {currentScreen === "highScores" && <HighScores />}
             </div>
         </div>
     );

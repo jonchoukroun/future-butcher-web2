@@ -96,7 +96,11 @@ export const StatsScreen = () => {
         setIsLoading(false);
     };
 
-    const handleMoreClick = () => {
+    const handleHighScoresClick = () => {
+        dispatch({ type: "changeScreen", screen: Screen.HighScores });
+    };
+
+    const handleCreditsClick = () => {
         dispatch({ type: "changeScreen", screen: Screen.Credits });
     };
 
@@ -135,12 +139,24 @@ export const StatsScreen = () => {
                     marginBlockStart: "auto",
                 }}
             >
-                <div css={{ display: "flex", justifyContent: "flex-end" }}>
+                <div
+                    css={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        marginBlockEnd: "15px",
+                    }}
+                >
                     <Button
-                        label={"More"}
-                        size={ButtonSize.Small}
+                        label={"Top Scores"}
+                        size={ButtonSize.Set}
                         scheme={ButtonScheme.Inverse}
-                        clickCB={handleMoreClick}
+                        clickCB={handleHighScoresClick}
+                    />
+                    <Button
+                        label={"Credits"}
+                        size={ButtonSize.Set}
+                        scheme={ButtonScheme.Inverse}
+                        clickCB={handleCreditsClick}
                     />
                 </div>
                 <div

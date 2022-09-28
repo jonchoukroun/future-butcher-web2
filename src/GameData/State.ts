@@ -91,6 +91,7 @@ export const enum Screen {
     Death = "death",
     Error = "error",
     Credits = "credits",
+    HighScores = "highScores",
 }
 export type ScreenType = `${Screen}`;
 
