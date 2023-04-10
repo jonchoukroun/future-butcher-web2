@@ -84,7 +84,7 @@ export const ChannelProvider = ({
         setIsConnected(socket.isConnected());
     });
     socket.onError(() => {
-        handleMessage("Failed to open socket", MessageLevel.Error);
+        handleMessage("Failed to open socket", MessageLevel.Info);
         setIsConnected(socket.isConnected());
     });
     socket.onClose(() => {
