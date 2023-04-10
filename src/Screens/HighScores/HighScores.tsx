@@ -37,7 +37,6 @@ export function HighScores() {
             }
             if (response) {
                 setTopScores((response as HighScoresType).slice(0, 10));
-                console.log("!!response", topScores);
             }
         };
 
