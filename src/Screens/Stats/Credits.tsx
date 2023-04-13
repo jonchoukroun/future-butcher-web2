@@ -27,7 +27,7 @@ export function Credits() {
                     Future Butcher was designed and devloped by Jon Choukroun.
                     The game runs on Elixir/Phoenix and React. Find out more at{" "}
                     <a
-                        href="https://jonchoukroun.com"
+                        href="https://jonchoukroun.com/future-butcher.html"
                         target="_blank"
                         rel="noreferrer"
                     >
